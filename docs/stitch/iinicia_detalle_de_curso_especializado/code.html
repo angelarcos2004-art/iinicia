@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Machine Learning Aplicado y Arquitecturas de Agentes Autónomos con LLMs | IINICIA</title>
+<!-- Material Symbols & Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#004b6f",
+            "surface-variant": "#dae2fd",
+            "on-surface": "#131b2e",
+            "inverse-on-surface": "#eef0ff",
+            "on-error-container": "#93000a",
+            "text-secondary": "#475569",
+            "secondary-fixed-dim": "#9ccaff",
+            "primary-fixed-dim": "#8aceff",
+            "cyan-vibrant": "#009ee2",
+            "tertiary-fixed-dim": "#aac7fd",
+            "secondary": "#14629c",
+            "surface-container": "#f0f6fa",
+            "surface": "#faf8ff",
+            "on-tertiary-fixed": "#001b3d",
+            "surface-container-high": "#e2e7ff",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "success": "#16a34a",
+            "on-primary-container": "#00314a",
+            "surface-container-low": "#f2f3ff",
+            "primary": "#006492",
+            "on-background": "#131b2e",
+            "cyan-light": "#38bdf8",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#009ee2",
+            "on-error": "#ffffff",
+            "on-primary-fixed": "#001e2f",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#00497a",
+            "outline-variant": "#bec8d2",
+            "cyan-surface": "#e0f2fe",
+            "secondary-fixed": "#d0e4ff",
+            "on-secondary-fixed": "#001d35",
+            "outline": "#6e7881",
+            "surface-subtle": "#f8fafc",
+            "text-primary": "#0f172a",
+            "primary-fixed": "#c9e6ff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#d6e3ff",
+            "on-tertiary-container": "#082d5b",
+            "warning": "#d97706",
+            "on-secondary-container": "#004c7e",
+            "text-muted": "#64748b",
+            "secondary-container": "#80bdfe",
+            "blue-deep": "#005a94",
+            "border-subtle": "#e2e8f0",
+            "blue-institutional": "#002855",
+            "surface-tint": "#006492",
+            "surface-container-highest": "#dae2fd",
+            "error": "#dc2626",
+            "surface-dim": "#d2d9f4",
+            "tertiary": "#415f8f",
+            "background": "#faf8ff",
+            "on-tertiary-fixed-variant": "#284775",
+            "on-secondary": "#ffffff",
+            "surface-canvas": "#ffffff",
+            "on-surface-variant": "#3e4850",
+            "surface-bright": "#faf8ff",
+            "tertiary-container": "#7996c9",
+            "inverse-primary": "#8aceff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "margin-desktop": "3rem",
+            "gutter-mobile": "1rem",
+            "margin-mobile": "1.25rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "gutter-desktop": "2rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "display": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .shadow-ambient-cyan {
+      box-shadow: 0 4px 20px -2px rgba(0, 158, 226, 0.12), 0 2px 6px -1px rgba(0, 40, 85, 0.06);
+    }
+    .shadow-level-1 {
+      box-shadow: 0 1px 3px 0 rgba(0, 90, 148, 0.04), 0 4px 12px -2px rgba(0, 158, 226, 0.06);
+    }
+    .shadow-level-2 {
+      box-shadow: 0 4px 8px -2px rgba(0, 90, 148, 0.06), 0 12px 24px -4px rgba(0, 158, 226, 0.12);
+    }
+  </style>
+</head>
+<body class="bg-surface-canvas text-text-primary font-body-md antialiased selection:bg-cyan-surface selection:text-blue-institutional">
+<!-- ================= TOP APP BAR (Shared Component Execution) ================= -->
+<header class="docked full-width top-0 sticky z-50 bg-surface-canvas/90 dark:bg-blue-institutional/90 backdrop-blur-md border-b border-border-subtle dark:border-blue-deep/30 shadow-sm dark:shadow-md">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand Logo / Product Name -->
+<a class="flex items-center gap-3 transition-all duration-200 ease-in-out active:scale-95 group" href="#">
+<img alt="Logo IINICIA" class="h-11 w-auto object-contain brightness-95 group-hover:brightness-105 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+<div class="flex flex-col">
+<span class="font-title text-title font-extrabold text-blue-institutional dark:text-surface-canvas tracking-tight leading-none">IINICIA</span>
+<span class="text-[9px] font-semibold text-text-muted tracking-wider uppercase mt-0.5">Ciencias Aplicadas</span>
+</div>
+</a>
+<!-- Desktop Navigation Links (Oferta Académica Active based on course intent) -->
+<nav class="hidden lg:flex items-center space-x-8">
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors hover:text-cyan-vibrant" href="#">Inicio</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors hover:text-cyan-vibrant" href="#">Universidad</a>
+<a class="text-cyan-vibrant font-semibold border-b-2 border-cyan-vibrant pb-1 hover:text-cyan-vibrant" href="#">Oferta Académica</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors hover:text-cyan-vibrant" href="#">Admisiones</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors hover:text-cyan-vibrant" href="#">Noticias</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors hover:text-cyan-vibrant" href="#">Contacto</a>
+</nav>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center px-4 py-2 text-sm font-semibold text-blue-deep hover:bg-cyan-surface rounded-lg transition-all duration-200 ease-in-out active:scale-95" href="#">
+<span class="material-symbols-outlined text-[18px] mr-1.5" data-icon="account_circle">account_circle</span>
+          Mi Campus
+        </a>
+<a class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-deep hover:bg-[#004777] rounded-lg shadow-level-1 hover:shadow-level-2 transition-all duration-200 ease-in-out active:scale-95" href="#inscripcion">
+          Registrarme
+        </a>
+</div>
+</div>
+</header>
+<!-- ================= BREADCRUMBS ================= -->
+<div class="w-full bg-surface-subtle border-b border-border-subtle py-3">
+<div class="max-w-[1360px] mx-auto px-6 md:px-12 flex items-center text-xs text-text-muted font-medium overflow-x-auto whitespace-nowrap">
+<a class="hover:text-cyan-vibrant transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="home">home</span>
+        Inicio
+      </a>
+<span class="mx-2 text-outline-variant">/</span>
+<a class="hover:text-cyan-vibrant transition-colors" href="#">Oferta Académica</a>
+<span class="mx-2 text-outline-variant">/</span>
+<a class="hover:text-cyan-vibrant transition-colors" href="#">Cursos Especializados</a>
+<span class="mx-2 text-outline-variant">/</span>
+<span class="text-blue-institutional font-semibold truncate max-w-xs md:max-w-md">Machine Learning Aplicado y Agentes Autónomos</span>
+</div>
+</div>
+<!-- ================= HERO SECTION & STICKY ASIDE CONTAINER ================= -->
+<section class="relative bg-gradient-to-b from-surface-subtle via-white to-surface-subtle pt-10 pb-16 border-b border-border-subtle overflow-hidden">
+<!-- Subtle technical grid background effect -->
+<div class="absolute inset-0 bg-[radial-gradient(#009ee2_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.06] pointer-events-none"></div>
+<div class="max-w-[1360px] mx-auto px-6 md:px-12 relative">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+<!-- Left: Course Main Information (Cols 7) -->
+<div class="lg:col-span-7 flex flex-col space-y-6">
+<!-- Badges cluster -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-surface text-blue-deep border border-[#BAE6FD]">
+<span class="w-2 h-2 rounded-full bg-cyan-vibrant mr-2 animate-pulse"></span>
+              Curso Especializado
+            </span>
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#F1F5F9] text-text-secondary border border-border-subtle">
+              Nivel Avanzado
+            </span>
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-vibrant/10 text-blue-institutional border border-cyan-vibrant/25">
+<span class="material-symbols-outlined text-[14px] mr-1 text-cyan-vibrant" data-icon="videocam">videocam</span>
+              100% En Línea con Clases en Vivo
+            </span>
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-surface-container text-blue-deep border border-border-subtle">
+<span class="material-symbols-outlined text-[14px] mr-1 text-blue-deep" data-icon="verified">verified</span>
+              Aval Institucional IINICIA
+            </span>
+</div>
+<!-- Hero Titles -->
+<div>
+<h1 class="font-headline-lg text-headline-lg text-blue-institutional tracking-tight leading-tight">
+              Machine Learning Aplicado y Arquitecturas de Agentes Autónomos con LLMs
+            </h1>
+<p class="mt-4 font-body-lg text-body-lg text-text-secondary leading-relaxed">
+              Domina el diseño, entrenamiento y despliegue de soluciones cognitivas corporativas. Integra modelos fundacionales, orquestación de agentes con LangChain y AutoGen, bases vectoriales y evaluación con guardrails para producción.
+            </p>
+</div>
+<!-- Key Metrics / Data Panel -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-xl bg-white border border-border-subtle shadow-level-1">
+<div class="flex flex-col border-r border-border-subtle/80 pr-2">
+<span class="flex items-center text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-vibrant mr-1" data-icon="schedule">schedule</span>
+                Duración
+              </span>
+<span class="text-sm font-bold text-blue-institutional">40 horas</span>
+<span class="text-[11px] text-text-secondary">6 semanas intensivas</span>
+</div>
+<div class="flex flex-col border-r border-border-subtle/80 pr-2">
+<span class="flex items-center text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-vibrant mr-1" data-icon="calendar_month">calendar_month</span>
+                Horario
+              </span>
+<span class="text-sm font-bold text-blue-institutional">Mar y Jue</span>
+<span class="text-[11px] text-text-secondary">19:00 - 21:30 CDMX</span>
+</div>
+<div class="flex flex-col border-r border-border-subtle/80 pr-2">
+<span class="flex items-center text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-vibrant mr-1" data-icon="devices">devices</span>
+                Modalidad
+              </span>
+<span class="text-sm font-bold text-blue-institutional">Sincrónica</span>
+<span class="text-[11px] text-text-secondary">Virtual interactivo</span>
+</div>
+<div class="flex flex-col">
+<span class="flex items-center text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-vibrant mr-1" data-icon="workspace_premium">workspace_premium</span>
+                Certificación
+              </span>
+<span class="text-sm font-bold text-blue-institutional">Open Badges</span>
+<span class="text-[11px] text-text-secondary">Con firma blockchain</span>
+</div>
+</div>
+<!-- Academic Guarantees Ribbon -->
+<div class="flex flex-wrap items-center gap-6 pt-2 text-xs text-text-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-success text-[18px]" data-icon="check_circle">check_circle</span>
+<span>Laboratorios prácticos en la nube</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-success text-[18px]" data-icon="check_circle">check_circle</span>
+<span>Grabaciones en 4K disponibles 24/7</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-success text-[18px]" data-icon="check_circle">check_circle</span>
+<span>Mentoría 1:1 de proyecto</span>
+</div>
+</div>
+</div>
+<!-- Right: Fixed/Elevated Enrollment Card (Cols 5) -->
+<div class="lg:col-span-5" id="inscripcion">
+<div class="sticky top-28 bg-white border border-border-subtle rounded-2xl shadow-ambient-cyan p-6 md:p-8 space-y-6">
+<!-- Cohort Status Banner -->
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div class="flex items-center gap-2">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-vibrant opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-vibrant"></span>
+</span>
+<span class="text-xs font-bold uppercase tracking-wider text-blue-institutional">Próxima Convocatoria: Octubre 2025</span>
+</div>
+<span class="text-xs font-semibold text-error bg-error-container/40 px-2.5 py-0.5 rounded-full">
+                Últimos 6 cupos
+              </span>
+</div>
+<!-- Pricing Box -->
+<div class="space-y-1">
+<div class="flex items-baseline gap-3">
+<span class="text-3xl md:text-4xl font-extrabold text-blue-institutional">$14,500 MXN</span>
+<span class="text-sm line-through text-text-muted">$19,200 MXN</span>
+<span class="text-xs font-bold text-success bg-green-50 px-2 py-0.5 rounded">25% DCTO</span>
+</div>
+<p class="text-xs text-text-secondary">O hasta <span class="font-bold text-blue-institutional">6 mensualidades sin intereses</span> de $2,416.60 MXN</p>
+</div>
+<!-- Action CTAs -->
+<div class="space-y-3 pt-2">
+<button class="w-full h-12 bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold rounded-lg shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex items-center justify-center gap-2 group text-base">
+<span>Inscribirme ahora</span>
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full h-11 bg-transparent border-[1.5px] border-blue-deep text-blue-deep font-semibold hover:bg-surface-container rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span>Descargar Folleto del Curso (PDF)</span>
+</button>
+</div>
+<!-- Inclusions list -->
+<div class="pt-4 border-t border-border-subtle space-y-3 text-xs text-text-secondary">
+<p class="font-bold text-blue-institutional uppercase tracking-wider text-[11px]">Tu inscripción incluye:</p>
+<ul class="space-y-2">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant text-[18px] shrink-0" data-icon="cloud_done">cloud_done</span>
+<span>Acceso a clúster de cómputo GPU (NVIDIA A100/H100) en laboratorios.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant text-[18px] shrink-0" data-icon="token">token</span>
+<span>$150 USD en créditos API (OpenAI, Anthropic y Pinecone).</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant text-[18px] shrink-0" data-icon="groups">groups</span>
+<span>Comunidad privada exclusiva de egresados e investigadores IINICIA.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant text-[18px] shrink-0" data-icon="verified_user">verified_user</span>
+<span>Garantía de satisfacción institucional de 7 días.</span>
+</li>
+</ul>
+</div>
+<!-- Academic Support Contact -->
+<div class="p-3 bg-surface-subtle rounded-lg flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-blue-deep" data-icon="support_agent">support_agent</span>
+<span>¿Tienes dudas de financiamiento?</span>
+</div>
+<a class="font-bold text-blue-deep hover:text-cyan-vibrant transition-colors" href="#">Hablar con un asesor</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= MAIN COURSE CONTENT SECTION ================= -->
+<div class="max-w-[1360px] mx-auto px-6 md:px-12 py-16">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<div class="lg:col-span-8 space-y-16">
+<!-- 1. OBJETIVOS DEL CURSO (Bento / Cards format) -->
+<section class="space-y-6" id="objetivos">
+<div class="border-b border-border-subtle pb-4">
+<span class="text-xs font-bold text-cyan-vibrant uppercase tracking-wider">Metas Pedagógicas</span>
+<h2 class="text-2xl font-bold text-blue-institutional tracking-tight mt-1">Objetivos del Curso y Competencias</h2>
+</div>
+<p class="text-text-secondary leading-relaxed">
+            Al concluir este programa de alta especialización, el egresado será capaz de resolver problemas complejos de automatización cognitiva, orquestando infraestructuras seguras y modelos de última generación.
+          </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Objective Card 1 -->
+<div class="p-5 bg-white border border-border-subtle rounded-xl hover:border-cyan-vibrant transition-all shadow-level-1 space-y-3">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+</div>
+<h3 class="font-bold text-blue-institutional text-base">Arquitectura de Agentes Multinivel</h3>
+<p class="text-xs text-text-secondary leading-normal">
+                Diseñar sistemas multi-agente basados en patrones como Plan-and-Solve, ReAct y Reflection, permitiendo que LLMs colaboren y ejecuten tareas especializadas autónomamente.
+              </p>
+<div class="pt-2 flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">LangChain</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">AutoGen</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">CrewAI</span>
+</div>
+</div>
+<!-- Objective Card 2 -->
+<div class="p-5 bg-white border border-border-subtle rounded-xl hover:border-cyan-vibrant transition-all shadow-level-1 space-y-3">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+</div>
+<h3 class="font-bold text-blue-institutional text-base">RAG Empresarial y Bases Vectoriales</h3>
+<p class="text-xs text-text-secondary leading-normal">
+                Implementar Retrieval-Augmented Generation con chunking semántico dinámico, reranking probabilístico y almacenamiento vectorial distribuido de ultra baja latencia.
+              </p>
+<div class="pt-2 flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">Pinecone</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">Qdrant</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">ChromaDB</span>
+</div>
+</div>
+<!-- Objective Card 3 -->
+<div class="p-5 bg-white border border-border-subtle rounded-xl hover:border-cyan-vibrant transition-all shadow-level-1 space-y-3">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+</div>
+<h3 class="font-bold text-blue-institutional text-base">Fine-Tuning y Cuantización Eficiente</h3>
+<p class="text-xs text-text-secondary leading-normal">
+                Adaptar modelos de código abierto (Llama 3, Mistral) utilizando técnicas PEFT, LoRA y QLoRA para dominios corporativos con hardware restringido.
+              </p>
+<div class="pt-2 flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">QLoRA</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">HuggingFace</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">Unsloth</span>
+</div>
+</div>
+<!-- Objective Card 4 -->
+<div class="p-5 bg-white border border-border-subtle rounded-xl hover:border-cyan-vibrant transition-all shadow-level-1 space-y-3">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</div>
+<h3 class="font-bold text-blue-institutional text-base">Evaluación, Guardrails y Despliegue</h3>
+<p class="text-xs text-text-secondary leading-normal">
+                Incorporar defensas contra Prompt Injection, moderación en tiempo real con NeMo Guardrails y métricas objetivas (Ragas, TruLens) con APIs en FastAPI y Docker.
+              </p>
+<div class="pt-2 flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">NeMo Guardrails</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">FastAPI</span>
+<span class="px-2 py-0.5 bg-surface-subtle text-[10px] font-semibold text-text-muted rounded border border-border-subtle">Docker</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. REQUISITOS PREVIOS -->
+<section class="p-6 rounded-2xl bg-surface-container border border-border-subtle">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-blue-deep text-2xl" data-icon="fact_check">fact_check</span>
+<h2 class="text-xl font-bold text-blue-institutional">Requisitos Previos Recomendados</h2>
+</div>
+<p class="text-sm text-text-secondary mb-4">
+            Este curso se enfoca en técnicas avanzadas de ingeniería y desarrollo. Para maximizar el aprovechamiento académico, se requiere:
+          </p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+<div class="p-3 bg-white rounded-lg border border-border-subtle flex items-start gap-2.5">
+<span class="material-symbols-outlined text-cyan-vibrant text-base shrink-0 mt-0.5" data-icon="terminal">terminal</span>
+<div>
+<span class="font-bold text-blue-institutional block">Python Intermedio/Avanzado</span>
+<span class="text-text-secondary">Manejo de programación orientada a objetos, funciones async y APIs REST.</span>
+</div>
+</div>
+<div class="p-3 bg-white rounded-lg border border-border-subtle flex items-start gap-2.5">
+<span class="material-symbols-outlined text-cyan-vibrant text-base shrink-0 mt-0.5" data-icon="analytics">analytics</span>
+<div>
+<span class="font-bold text-blue-institutional block">Fundamentos de ML &amp; Datos</span>
+<span class="text-text-secondary">Familiaridad con NumPy, Pandas y conceptos de álgebra lineal básica.</span>
+</div>
+</div>
+<div class="p-3 bg-white rounded-lg border border-border-subtle flex items-start gap-2.5">
+<span class="material-symbols-outlined text-cyan-vibrant text-base shrink-0 mt-0.5" data-icon="developer_board">developer_board</span>
+<div>
+<span class="font-bold text-blue-institutional block">Entorno de Desarrollo</span>
+<span class="text-text-secondary">Uso habitual de Jupyter Notebooks, Git y terminal de comandos (Linux/macOS/WSL).</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. TEMARIO POR MÓDULOS (Acordeón Interactivo con JS) -->
+<section class="space-y-6" id="temario">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-border-subtle pb-4 gap-2">
+<div>
+<span class="text-xs font-bold text-cyan-vibrant uppercase tracking-wider">Plan de Estudios Oficial</span>
+<h2 class="text-2xl font-bold text-blue-institutional tracking-tight mt-1">Estructura Curricular por Módulos</h2>
+</div>
+<span class="text-xs font-semibold text-text-muted bg-surface-subtle px-3 py-1 rounded border border-border-subtle">
+              Total: 5 Módulos / 40 Horas de Cátedra
+            </span>
+</div>
+<div class="space-y-3" id="accordion-group">
+<!-- MÓDULO 1 -->
+<div class="border border-border-subtle rounded-xl overflow-hidden bg-white shadow-level-1 transition-all">
+<button class="w-full p-5 text-left flex items-center justify-between bg-white hover:bg-surface-subtle transition-colors focus:outline-none" onclick="toggleAccordion('mod-1')">
+<div class="flex items-center gap-4">
+<span class="w-8 h-8 rounded-lg bg-blue-institutional text-white flex items-center justify-center font-bold text-sm shrink-0">1</span>
+<div>
+<h3 class="font-bold text-blue-institutional text-base">Módulo 1: Fundamentos de Redes Neuronales y Embeddings</h3>
+<p class="text-xs text-text-secondary">Representaciones vectoriales de alta dimensión, transformadores y self-attention.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="hidden sm:inline-block text-xs font-semibold text-blue-deep bg-cyan-surface px-2.5 py-1 rounded-full">8 Horas</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-300" data-icon="expand_more" id="icon-mod-1">expand_more</span>
+</div>
+</button>
+<div class="hidden px-6 pb-6 pt-2 border-t border-border-subtle bg-surface-subtle/50 text-xs text-text-secondary space-y-3" id="content-mod-1">
+<ul class="space-y-2 list-disc list-inside">
+<li><strong>Arquitectura Transformer desde cero:</strong> Codificadores, decodificadores y cálculo de matrices QKV (Query, Key, Value).</li>
+<li><strong>Generación de embeddings densos:</strong> Modelos Word2Vec a Sentence-Transformers y modelos de embedding multimodales (CLIP).</li>
+<li><strong>Métricas de proximidad:</strong> Coseno, distancia euclidiana y producto punto en espacios hiperdimensionales.</li>
+<li><strong>Taller de laboratorio:</strong> Implementación en PyTorch de un clasificador de similitud semántica empresarial.</li>
+</ul>
+<div class="pt-2 flex items-center gap-2 text-[11px] font-semibold text-blue-deep">
+<span class="material-symbols-outlined text-[14px]" data-icon="lab_profile">lab_profile</span>
+<span>Caso práctico: Búsqueda semántica cruzada de documentos legales y regulatorios.</span>
+</div>
+</div>
+</div>
+<!-- MÓDULO 2 -->
+<div class="border border-border-subtle rounded-xl overflow-hidden bg-white shadow-level-1 transition-all">
+<button class="w-full p-5 text-left flex items-center justify-between bg-white hover:bg-surface-subtle transition-colors focus:outline-none" onclick="toggleAccordion('mod-2')">
+<div class="flex items-center gap-4">
+<span class="w-8 h-8 rounded-lg bg-blue-institutional text-white flex items-center justify-center font-bold text-sm shrink-0">2</span>
+<div>
+<h3 class="font-bold text-blue-institutional text-base">Módulo 2: Fine-Tuning y Modelos de Lenguaje Avanzados</h3>
+<p class="text-xs text-text-secondary">Adaptación paramétrica eficiente, cuantización 4-bit y dataset curation.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="hidden sm:inline-block text-xs font-semibold text-blue-deep bg-cyan-surface px-2.5 py-1 rounded-full">8 Horas</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-300" data-icon="expand_more" id="icon-mod-2">expand_more</span>
+</div>
+</button>
+<div class="hidden px-6 pb-6 pt-2 border-t border-border-subtle bg-surface-subtle/50 text-xs text-text-secondary space-y-3" id="content-mod-2">
+<ul class="space-y-2 list-disc list-inside">
+<li><strong>Preparación de datasets de instrucción:</strong> Filtrado sintáctico, deduplicación y alineamiento RLHF/DPO.</li>
+<li><strong>Mecanismos PEFT:</strong> LoRA, Prefix-Tuning y cuantización normal flotante (NF4) con BitsAndBytes.</li>
+<li><strong>Optimización de inferencia:</strong> vLLM, TensorRT-LLM y técnicas de Continuous Batching.</li>
+<li><strong>Taller de laboratorio:</strong> Fine-tuning de Llama 3 8B Instruct para extracción estructurada JSON de registros médicos.</li>
+</ul>
+<div class="pt-2 flex items-center gap-2 text-[11px] font-semibold text-blue-deep">
+<span class="material-symbols-outlined text-[14px]" data-icon="lab_profile">lab_profile</span>
+<span>Caso práctico: Despliegue de un modelo fine-tuneado especializado en terminología financiera.</span>
+</div>
+</div>
+</div>
+<!-- MÓDULO 3 -->
+<div class="border border-border-subtle rounded-xl overflow-hidden bg-white shadow-level-1 transition-all">
+<button class="w-full p-5 text-left flex items-center justify-between bg-white hover:bg-surface-subtle transition-colors focus:outline-none" onclick="toggleAccordion('mod-3')">
+<div class="flex items-center gap-4">
+<span class="w-8 h-8 rounded-lg bg-blue-institutional text-white flex items-center justify-center font-bold text-sm shrink-0">3</span>
+<div>
+<h3 class="font-bold text-blue-institutional text-base">Módulo 3: Arquitecturas RAG y Bases de Datos Vectoriales</h3>
+<p class="text-xs text-text-secondary">Chunking avanzado, búsqueda híbrida (BM25 + Dense) y Reranking con Cohere.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="hidden sm:inline-block text-xs font-semibold text-blue-deep bg-cyan-surface px-2.5 py-1 rounded-full">8 Horas</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-300" data-icon="expand_more" id="icon-mod-3">expand_more</span>
+</div>
+</button>
+<div class="hidden px-6 pb-6 pt-2 border-t border-border-subtle bg-surface-subtle/50 text-xs text-text-secondary space-y-3" id="content-mod-3">
+<ul class="space-y-2 list-disc list-inside">
+<li><strong>Estrategias de fragmentación (Chunking):</strong> Semantic chunking, recursive splitters y parent-document retrievers.</li>
+<li><strong>Indexación vectorial escalable:</strong> Algoritmos HNSW, IVF y cuantización de producto (PQ) en Pinecone y Qdrant.</li>
+<li><strong>Mitigación de alucinaciones:</strong> Técnicas HyDE (Hypothetical Document Embeddings) y Cross-Encoder Rerankers.</li>
+<li><strong>Taller de laboratorio:</strong> Construcción de pipeline RAG corporativo con ingesta automatizada de PDFs y DOCX.</li>
+</ul>
+<div class="pt-2 flex items-center gap-2 text-[11px] font-semibold text-blue-deep">
+<span class="material-symbols-outlined text-[14px]" data-icon="lab_profile">lab_profile</span>
+<span>Caso práctico: Motor de respuesta con citas bibliográficas verificables en tiempo real.</span>
+</div>
+</div>
+</div>
+<!-- MÓDULO 4 -->
+<div class="border border-border-subtle rounded-xl overflow-hidden bg-white shadow-level-1 transition-all">
+<button class="w-full p-5 text-left flex items-center justify-between bg-white hover:bg-surface-subtle transition-colors focus:outline-none" onclick="toggleAccordion('mod-4')">
+<div class="flex items-center gap-4">
+<span class="w-8 h-8 rounded-lg bg-blue-institutional text-white flex items-center justify-center font-bold text-sm shrink-0">4</span>
+<div>
+<h3 class="font-bold text-blue-institutional text-base">Módulo 4: Creación de Agentes y Automatización de Workflows</h3>
+<p class="text-xs text-text-secondary">Function calling, loops de razonamiento, memoria a largo plazo y orquestación multi-agente.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="hidden sm:inline-block text-xs font-semibold text-blue-deep bg-cyan-surface px-2.5 py-1 rounded-full">8 Horas</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-300" data-icon="expand_more" id="icon-mod-4">expand_more</span>
+</div>
+</button>
+<div class="hidden px-6 pb-6 pt-2 border-t border-border-subtle bg-surface-subtle/50 text-xs text-text-secondary space-y-3" id="content-mod-4">
+<ul class="space-y-2 list-disc list-inside">
+<li><strong>Arquitecturas ReAct y Tool Calling:</strong> Vinculación dinámica con APIs externas, bases SQL y web scrapers.</li>
+<li><strong>Multi-Agent Patterns:</strong> Coordinación jerárquica, debate dialéctico y división de trabajo con AutoGen y CrewAI.</li>
+<li><strong>Memoria contextual:</strong> Gestión de memoria episódica, semántica y buffer condicional.</li>
+<li><strong>Taller de laboratorio:</strong> Agente autónomo analista bursátil con acceso a Yahoo Finance y generación de reportes en PDF.</li>
+</ul>
+<div class="pt-2 flex items-center gap-2 text-[11px] font-semibold text-blue-deep">
+<span class="material-symbols-outlined text-[14px]" data-icon="lab_profile">lab_profile</span>
+<span>Caso práctico: Sistema de atención técnica L2 con capacidad de ejecución de consultas SQL validadas.</span>
+</div>
+</div>
+</div>
+<!-- MÓDULO 5 -->
+<div class="border border-border-subtle rounded-xl overflow-hidden bg-white shadow-level-1 transition-all">
+<button class="w-full p-5 text-left flex items-center justify-between bg-white hover:bg-surface-subtle transition-colors focus:outline-none" onclick="toggleAccordion('mod-5')">
+<div class="flex items-center gap-4">
+<span class="w-8 h-8 rounded-lg bg-blue-institutional text-white flex items-center justify-center font-bold text-sm shrink-0">5</span>
+<div>
+<h3 class="font-bold text-blue-institutional text-base">Módulo 5: Proyecto Integrador Final y Despliegue en Producción</h3>
+<p class="text-xs text-text-secondary">Observabilidad, tracing con LangSmith, evaluación continua y contenedorización.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="hidden sm:inline-block text-xs font-semibold text-blue-deep bg-cyan-surface px-2.5 py-1 rounded-full">8 Horas</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-300" data-icon="expand_more" id="icon-mod-5">expand_more</span>
+</div>
+</button>
+<div class="hidden px-6 pb-6 pt-2 border-t border-border-subtle bg-surface-subtle/50 text-xs text-text-secondary space-y-3" id="content-mod-5">
+<ul class="space-y-2 list-disc list-inside">
+<li><strong>Observabilidad LLMOps:</strong> Trazabilidad paso a paso, latencia de tokens, costos por llamada y detección de cuellos de botella con LangSmith.</li>
+<li><strong>Seguridad y Compliance:</strong> Detección de jailbreaks, fuga de PII y políticas de red teaming.</li>
+<li><strong>Empaquetamiento y CI/CD:</strong> Creación de microservicios con FastAPI, Docker y orquestación con Kubernetes/AWS ECS.</li>
+<li><strong>Sustentación de Proyecto:</strong> Defensa individual del sistema agente frente al comité técnico de IINICIA.</li>
+</ul>
+<div class="pt-2 flex items-center gap-2 text-[11px] font-semibold text-blue-deep">
+<span class="material-symbols-outlined text-[14px]" data-icon="lab_profile">lab_profile</span>
+<span>Caso práctico: Entrega de arquitectura integral lista para operar en entornos bancarios o de salud.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. DOCENTE RESPONSABLE -->
+<section class="space-y-6">
+<div class="border-b border-border-subtle pb-4">
+<span class="text-xs font-bold text-cyan-vibrant uppercase tracking-wider">Cuerpo Académico de Excelencia</span>
+<h2 class="text-2xl font-bold text-blue-institutional tracking-tight mt-1">Docente Responsable</h2>
+</div>
+<div class="p-6 md:p-8 bg-white border border-border-subtle rounded-2xl shadow-level-1 flex flex-col md:flex-row gap-6 items-start">
+<div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden shrink-0 border-2 border-cyan-vibrant/40 shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="A distinguished male AI research scientist in his late thirties with glasses and modern tech attire, smiling confidently in front of a modern scientific laboratory with ambient cyan and deep indigo lighting in an academic institution setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwQyPM7owoqa55kTCFtKdt0Ra8SJ6n1cKswPwn64CE0Uj8k1V1iZVmrThem5C2qj78GsMruh2X15A7ezAaiR1uDrasrQD7u_s78iJmDp_ZX2aR_DBlfoGT058hxnvBPvB9atmJ4Pm8AmZ_myVLxd62QmGAmPMcHcKyogVWuh-wpIjKsX49mq8bgIdEnJS_rSgaxYU04309NlaSO0xMUlb99zRikLjJolmo4nH6RNF9k15RhnsYp1nmSA"/>
+</div>
+<div class="space-y-3 flex-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div>
+<h3 class="text-xl font-bold text-blue-institutional">Dr. Alejandro M. Valenzuela</h3>
+<p class="text-xs font-semibold text-cyan-vibrant">Senior AI Architect &amp; Investigador Asociado IINICIA</p>
+</div>
+<div class="flex items-center gap-2">
+<a class="w-8 h-8 rounded-full bg-surface-subtle hover:bg-cyan-surface border border-border-subtle flex items-center justify-center text-blue-deep transition-colors" href="#" title="Perfil Profesional">
+<span class="material-symbols-outlined text-[16px]" data-icon="share">share</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-surface-subtle hover:bg-cyan-surface border border-border-subtle flex items-center justify-center text-blue-deep transition-colors" href="#" title="Publicaciones Académicas">
+<span class="material-symbols-outlined text-[16px]" data-icon="school">school</span>
+</a>
+</div>
+</div>
+<p class="text-xs text-text-secondary leading-relaxed">
+                Doctor en Ciencias de la Computación por el Politécnico de Zúrich (ETH Zürich). Ex-Senior Staff Machine Learning Engineer en Amazon AWS, donde lideró la optimización de clústeres de inferencia distribuida. Cuenta con más de 12 papers arbitrados en NeurIPS e ICML sobre cuantización de transformadores y arquitecturas de agentes reactivos.
+              </p>
+<div class="pt-2 flex flex-wrap gap-2 text-[11px]">
+<span class="px-2.5 py-1 bg-surface-container rounded-md font-medium text-blue-institutional border border-border-subtle">
+                  ✓ OpenAI Research Collaborator
+                </span>
+<span class="px-2.5 py-1 bg-surface-container rounded-md font-medium text-blue-institutional border border-border-subtle">
+                  ✓ Ex-Amazon AWS Principal ML
+                </span>
+<span class="px-2.5 py-1 bg-surface-container rounded-md font-medium text-blue-institutional border border-border-subtle">
+                  ✓ SNII Nivel II (México)
+                </span>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. CERTIFICADO E INSIGNIA DIGITAL -->
+<section class="space-y-6">
+<div class="border-b border-border-subtle pb-4">
+<span class="text-xs font-bold text-cyan-vibrant uppercase tracking-wider">Acreditación con Validez Global</span>
+<h2 class="text-2xl font-bold text-blue-institutional tracking-tight mt-1">Certificado Oficial e Insignia Digital</h2>
+</div>
+<div class="p-6 md:p-8 bg-gradient-to-br from-surface-subtle to-white border border-border-subtle rounded-2xl shadow-level-1">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<!-- Certificate Realistic Preview Mockup -->
+<div class="md:col-span-7 bg-white p-6 rounded-xl border border-border-subtle shadow-ambient-cyan relative">
+<div class="border-2 border-dashed border-cyan-vibrant/30 p-5 rounded-lg space-y-4 text-center relative bg-surface-canvas">
+<!-- Decorative Institutional seal watermark -->
+<div class="flex items-center justify-between border-b border-border-subtle pb-3">
+<div class="flex items-center gap-2">
+<img alt="Logo IINICIA" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+<span class="text-[10px] font-extrabold text-blue-institutional tracking-wider uppercase">IINICIA</span>
+</div>
+<span class="text-[9px] font-bold text-cyan-vibrant uppercase tracking-widest">Acreditación Oficial</span>
+</div>
+<div class="py-2 space-y-1">
+<span class="text-[10px] uppercase font-semibold text-text-muted tracking-wider">Otorga el presente Diploma de Especialización a:</span>
+<h4 class="text-base font-bold text-blue-institutional font-display">[Nombre del Egresado]</h4>
+<p class="text-[10px] text-text-secondary px-4">Por haber cursado y aprobado satisfactoriamente el programa de posgrado continuo en:</p>
+<p class="text-xs font-bold text-blue-deep">Machine Learning Aplicado y Arquitecturas de Agentes Autónomos con LLMs</p>
+</div>
+<div class="pt-3 border-t border-border-subtle flex items-end justify-between text-left">
+<div>
+<div class="h-6 border-b border-text-secondary/50 w-24 mb-1"></div>
+<span class="text-[8px] text-text-muted block">Dirección Académica IINICIA</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-subtle px-2 py-1 rounded border border-border-subtle">
+<span class="material-symbols-outlined text-[20px] text-blue-institutional" data-icon="qr_code_2">qr_code_2</span>
+<div class="text-[7px] text-text-muted">
+<span class="font-bold text-blue-institutional block">Blockchain Verified</span>
+<span>Hash: 0x8F3...9C2B</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Open Badges & Value props -->
+<div class="md:col-span-5 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-cyan-surface flex items-center justify-center text-blue-deep border border-[#BAE6FD] shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="military_tech">military_tech</span>
+</div>
+<div>
+<h4 class="font-bold text-blue-institutional text-sm">Open Badges 2.0</h4>
+<p class="text-xs text-text-secondary">Compatible con LinkedIn y Credly</p>
+</div>
+</div>
+<p class="text-xs text-text-secondary leading-relaxed">
+                  Al completar el proyecto integrador con calificación superior a 80/100, recibirás un certificado verificable instantáneamente por empleadores mediante registro inmutable en Ethereum/Polygon, así como la insignia digital técnica.
+                </p>
+<div class="space-y-2 text-xs">
+<div class="flex items-center gap-2 text-blue-institutional">
+<span class="material-symbols-outlined text-cyan-vibrant text-[18px]" data-icon="verified">verified</span>
+<span class="font-semibold">Código QR de autenticidad perpetua</span>
+</div>
+<div class="flex items-center gap-2 text-blue-institutional">
+<span class="material-symbols-outlined text-cyan-vibrant text-[18px]" data-icon="share">share</span>
+<span class="font-semibold">Añadible con 1 clic a tu perfil de LinkedIn</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. PREGUNTAS FRECUENTES -->
+<section class="space-y-6">
+<div class="border-b border-border-subtle pb-4">
+<span class="text-xs font-bold text-cyan-vibrant uppercase tracking-wider">Aclaraciones Rápidas</span>
+<h2 class="text-2xl font-bold text-blue-institutional tracking-tight mt-1">Preguntas Frecuentes</h2>
+</div>
+<div class="space-y-3">
+<details class="group border border-border-subtle rounded-xl bg-white p-5 cursor-pointer">
+<summary class="font-bold text-sm text-blue-institutional flex justify-between items-center list-none">
+<span>¿Qué sucede si no puedo conectarme en vivo a una sesión?</span>
+<span class="material-symbols-outlined text-text-muted group-open:rotate-180 transition-transform" data-icon="expand_more">expand_more</span>
+</summary>
+<p class="text-xs text-text-secondary mt-3 leading-relaxed">
+                Todas las clases sincrónicas se transmiten en vivo y se graban en alta definición. En menos de 2 horas tras concluir la sesión, el video, los notebooks de Jupyter y el material complementario quedan disponibles en tu plataforma virtual de Mi Campus para consulta ilimitada durante un año.
+              </p>
+</details>
+<details class="group border border-border-subtle rounded-xl bg-white p-5 cursor-pointer">
+<summary class="font-bold text-sm text-blue-institutional flex justify-between items-center list-none">
+<span>¿Necesito una tarjeta gráfica GPU potente en mi computadora?</span>
+<span class="material-symbols-outlined text-text-muted group-open:rotate-180 transition-transform" data-icon="expand_more">expand_more</span>
+</summary>
+<p class="text-xs text-text-secondary mt-3 leading-relaxed">
+                No. IINICIA provee entornos en la nube preconfigurados en Google Cloud y clústeres dedicados con GPUs NVIDIA Tesla/A100 para todos los talleres y laboratorios prácticos. Solo necesitas un navegador web moderno y conexión estable a internet.
+              </p>
+</details>
+<details class="group border border-border-subtle rounded-xl bg-white p-5 cursor-pointer">
+<summary class="font-bold text-sm text-blue-institutional flex justify-between items-center list-none">
+<span>¿Ofrecen factura fiscal para empresas o deducción de impuestos?</span>
+<span class="material-symbols-outlined text-text-muted group-open:rotate-180 transition-transform" data-icon="expand_more">expand_more</span>
+</summary>
+<p class="text-xs text-text-secondary mt-3 leading-relaxed">
+                Sí. Emitimos Comprobante Fiscal Digital por Internet (CFDI 4.0) con validez oficial del SAT en México, deducible bajo el rubro de capacitación técnica especializada o servicios educativos. También procesamos pagos internacionales vía Stripe y Transferencia Swift.
+              </p>
+</details>
+<details class="group border border-border-subtle rounded-xl bg-white p-5 cursor-pointer">
+<summary class="font-bold text-sm text-blue-institutional flex justify-between items-center list-none">
+<span>¿Existe beca o descuento para estudiantes y egresados?</span>
+<span class="material-symbols-outlined text-text-muted group-open:rotate-180 transition-transform" data-icon="expand_more">expand_more</span>
+</summary>
+<p class="text-xs text-text-secondary mt-3 leading-relaxed">
+                Contamos con un fondo institucional de apoyo que cubre hasta un 35% de beca por mérito académico o investigación aplicada. Contacta a un asesor de admisiones para postular tu perfil antes del cierre de convocatoria.
+              </p>
+</details>
+</div>
+</section>
+</div>
+<!-- Right column spacer on desktop to balance sticky aside -->
+<div class="hidden lg:block lg:col-span-4"></div>
+</div>
+</div>
+<!-- ================= INVITACIÓN FINAL / ACCELERATOR STRIP ================= -->
+<section class="bg-blue-institutional text-white py-12 relative overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(#009ee2_1px,transparent_1px)] [background-size:20px_20px] opacity-10 pointer-events-none"></div>
+<div class="max-w-[1360px] mx-auto px-6 md:px-12 relative flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="space-y-2 text-center md:text-left">
+<h3 class="text-2xl font-bold font-headline-md tracking-tight">Comienza a construir el futuro de la Inteligencia Artificial</h3>
+<p class="text-sm text-surface-variant/80 max-w-xl">Asegura tu lugar en la cohorte de mayor rigor técnico en América Latina con el aval de IINICIA.</p>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<a class="px-6 py-3.5 bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold rounded-lg shadow-level-2 transition-all duration-200 text-sm" href="#inscripcion">
+          Inscribirme al programa
+        </a>
+</div>
+</div>
+</section>
+<!-- ================= FOOTER (Shared Component Execution) ================= -->
+<footer class="docked full-width bottom bg-blue-institutional dark:bg-inverse-surface border-t border-blue-deep/40 text-surface-canvas">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 py-12 md:py-16">
+<!-- Top Grid Footer layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-blue-deep/30">
+<!-- Brand Info -->
+<div class="md:col-span-5 space-y-4">
+<div class="flex items-center gap-3">
+<img alt="Logo IINICIA" class="h-10 w-auto object-contain brightness-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+<span class="font-title text-headline-sm font-bold text-surface-canvas tracking-tight">IINICIA</span>
+</div>
+<p class="text-xs text-surface-variant/80 max-w-sm leading-relaxed">
+            Instituto de Innovación y Ciencias Aplicadas. Formación académica de frontera, vinculación científica y desarrollo de tecnologías emergentes para el ecosistema global.
+          </p>
+<div class="flex items-center gap-3 pt-2">
+<a class="w-8 h-8 rounded-lg bg-blue-deep/40 hover:bg-cyan-vibrant hover:text-blue-institutional flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="terminal">terminal</span>
+</a>
+<a class="w-8 h-8 rounded-lg bg-blue-deep/40 hover:bg-cyan-vibrant hover:text-blue-institutional flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="code">code</span>
+</a>
+<a class="w-8 h-8 rounded-lg bg-blue-deep/40 hover:bg-cyan-vibrant hover:text-blue-institutional flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="hub">hub</span>
+</a>
+</div>
+</div>
+<!-- Academic Links from Shared JSON -->
+<div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6 text-xs">
+<div>
+<h4 class="font-bold text-cyan-vibrant uppercase tracking-wider mb-3">Normativa</h4>
+<ul class="space-y-2 text-surface-variant/80">
+<li><a class="hover:text-surface-canvas transition-colors" href="#">Aviso de Privacidad</a></li>
+<li><a class="hover:text-surface-canvas transition-colors" href="#">Términos y Condiciones</a></li>
+<li><a class="hover:text-surface-canvas transition-colors" href="#">Reglamento Institucional</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-cyan-vibrant uppercase tracking-wider mb-3">Acreditaciones</h4>
+<ul class="space-y-2 text-surface-variant/80">
+<li><a class="hover:text-surface-canvas transition-colors" href="#">Validez SEP / RVOE</a></li>
+<li><a class="hover:text-surface-canvas transition-colors" href="#">Portal de Transparencia</a></li>
+<li><a class="hover:text-surface-canvas transition-colors" href="#">Bolsa de Trabajo</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-cyan-vibrant uppercase tracking-wider mb-3">Campus Central</h4>
+<p class="text-surface-variant/80 text-[11px] leading-relaxed">
+              Insurgentes Sur 1602, Crédito Constructor, Benito Juárez, 03940 Ciudad de México, CDMX.<br/>
+<span class="text-cyan-light mt-1 block">contacto@iinicia.edu.mx</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Bottom Copyright Ribbon -->
+<div class="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-surface-variant/80 gap-4">
+<p class="text-center md:text-left">
+          © 2025 IINICIA - Instituto de Innovación y Ciencias Aplicadas. Todos los derechos reservados. Planes con Reconocimiento de Validez Oficial de Estudios (RVOE SEP).
+        </p>
+<div class="flex items-center gap-6 shrink-0">
+<span class="inline-flex items-center gap-1 text-[11px] text-cyan-light">
+<span class="w-2 h-2 rounded-full bg-cyan-vibrant"></span>
+            Sistemas Académicos Operacionales
+          </span>
+</div>
+</div>
+</div>
+</footer>
+<!-- Vanilla Micro-Interactions Script for Course Accordion -->
+<script>
+    function toggleAccordion(id) {
+      const content = document.getElementById('content-' + id);
+      const icon = document.getElementById('icon-' + id);
+      
+      if (!content || !icon) return;
+
+      const isHidden = content.classList.contains('hidden');
+      
+      // Close all other accordions for neatness
+      ['mod-1', 'mod-2', 'mod-3', 'mod-4', 'mod-5'].forEach(item => {
+        const itemContent = document.getElementById('content-' + item);
+        const itemIcon = document.getElementById('icon-' + item);
+        if (itemContent && itemIcon) {
+          itemContent.classList.add('hidden');
+          itemIcon.classList.remove('rotate-180');
+        }
+      });
+
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // Default open the first module
+    document.addEventListener('DOMContentLoaded', () => {
+      toggleAccordion('mod-1');
+    });
+  </script>
+</body></html>

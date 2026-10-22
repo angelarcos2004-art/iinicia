@@ -1,0 +1,883 @@
+<!DOCTYPE html><html class="h-full bg-background" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Seguimiento de Grupo | Portal Docente IINICIA</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#2c4678",
+            "secondary-fixed-dim": "#aac7ff",
+            "inverse-primary": "#aec6ff",
+            "on-secondary-fixed-variant": "#00458d",
+            "on-surface-variant": "#44474f",
+            "outline": "#747780",
+            "on-primary-fixed": "#001a42",
+            "inverse-surface": "#263143",
+            "primary": "#00163a",
+            "surface-container-highest": "#d8e3fb",
+            "on-tertiary-fixed": "#281900",
+            "surface-container": "#e7eeff",
+            "surface-bright": "#f9f9ff",
+            "primary-fixed": "#d8e2ff",
+            "secondary-container": "#7aacff",
+            "on-tertiary-fixed-variant": "#604100",
+            "on-secondary": "#ffffff",
+            "on-primary": "#ffffff",
+            "secondary-fixed": "#d6e3ff",
+            "tertiary-container": "#3d2800",
+            "on-primary-container": "#7a93ca",
+            "surface-tint": "#455e91",
+            "on-background": "#111c2d",
+            "primary-container": "#0b2a5b",
+            "error": "#ba1a1a",
+            "tertiary": "#231500",
+            "tertiary-fixed-dim": "#ffba3b",
+            "on-error-container": "#93000a",
+            "error-container": "#ffdad6",
+            "surface-dim": "#cfdaf2",
+            "inverse-on-surface": "#ecf1ff",
+            "secondary": "#235eac",
+            "on-surface": "#111c2d",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#001b3e",
+            "surface": "#f9f9ff",
+            "tertiary-fixed": "#ffdead",
+            "outline-variant": "#c4c6d0",
+            "background": "#f9f9ff",
+            "primary-fixed-dim": "#aec6ff",
+            "on-tertiary-container": "#c48800",
+            "surface-container-low": "#f0f3ff",
+            "on-error": "#ffffff",
+            "surface-variant": "#d8e3fb",
+            "surface-container-high": "#dee8ff",
+            "on-secondary-container": "#003e80",
+            "surface-container-lowest": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "1.25rem",
+            "gutter": "1.5rem",
+            "gutter-desktop": "2rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "margin": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "margin-desktop": "3rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "display": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["1.75rem", {"lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+            "headline-sm": ["1.25rem", {"lineHeight": "1.75rem", "fontWeight": "600"}],
+            "label-lg": ["0.9375rem", {"lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "headline-md": ["1.5rem", {"lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "title": ["1.125rem", {"lineHeight": "1.625rem", "fontWeight": "600"}],
+            "body-md": ["1rem", {"lineHeight": "1.625rem", "fontWeight": "400"}],
+            "display": ["3.5rem", {"lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+            "headline-lg": ["2.25rem", {"lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-sm": ["0.875rem", {"lineHeight": "1.375rem", "fontWeight": "400"}],
+            "label-md": ["0.8125rem", {"lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600"}],
+            "body-lg": ["1.125rem", {"lineHeight": "1.75rem", "fontWeight": "400"}],
+            "display-mobile": ["2.5rem", {"lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800"}],
+            "label-sm": ["0.6875rem", {"lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      vertical-align: middle;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F0F3FF;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    .shadow-ambient {
+      box-shadow: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+    }
+    .shadow-ambient-lg {
+      box-shadow: 0 10px 25px -5px rgba(11, 42, 91, 0.08), 0 8px 10px -6px rgba(11, 42, 91, 0.04);
+    }
+  </style>
+</head>
+<body class="h-full bg-background text-on-surface antialiased flex overflow-hidden font-body-md text-body-md">
+<!-- 1. SIDEBAR INSTITUCIONAL DOCENTE -->
+<aside class="w-72 bg-primary-container text-on-primary flex flex-col flex-shrink-0 z-30 select-none border-r border-primary/20">
+<!-- Brand / Header -->
+<div class="p-6 border-b border-white/10 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center p-1 border border-white/15 flex-shrink-0"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="Logo IINICIA" class="w-full h-full object-contain brightness-0 invert"></div>
+<div>
+<span class="text-headline-sm font-headline-sm text-surface-container-lowest tracking-tight font-extrabold block leading-none">IINICIA</span>
+<span class="text-label-sm font-label-sm text-secondary-fixed-dim uppercase tracking-wider block mt-1">Instituto de Innovación</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="bg-white/10 text-secondary-fixed border border-white/15 px-2 py-0.5 rounded text-label-sm font-label-sm">PORTAL DOCENTE v2.4</span>
+<span class="bg-tertiary-fixed-dim/20 text-tertiary-fixed border border-tertiary-fixed-dim/30 px-2 py-0.5 rounded text-label-sm font-label-sm">RVOE-SEP</span>
+</div>
+</div>
+<!-- Navegación Primaria -->
+<div class="flex-1 overflow-y-auto custom-scroll py-4 px-3 flex flex-col gap-6">
+<div>
+<span class="px-3 text-label-sm font-label-sm text-on-primary-container uppercase tracking-wider block mb-2">Gestión Académica</span>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">home</span>
+<span class="">Inicio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">menu_book</span>
+<span class="">Mis cursos</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline-variant">rate_review</span>
+<span class="">Por calificar</span>
+</div>
+<span class="bg-error text-on-error text-label-sm font-label-sm px-2 py-0.5 rounded-full font-bold">14</span>
+</a>
+<!-- ÍTEM ACTIVO: Estudiantes -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md shadow-sm border-l-4 border-tertiary-fixed-dim" href="#">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-bold">Estudiantes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">calendar_today</span>
+<span class="">Calendario</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">campaign</span>
+<span class="">Avisos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">badge</span>
+<span class="">Perfil y Firma</span>
+</a>
+</nav>
+</div>
+<div>
+<span class="px-3 text-label-sm font-label-sm text-on-primary-container uppercase tracking-wider block mb-2">Herramientas Docentes</span>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">post_add</span>
+<span class="">Captura de Kárdex</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-primary/75 hover:bg-white/5 hover:text-on-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-outline-variant">verified</span>
+<span class="">Repositorio RVOE</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Ficha inferior del Catedrático -->
+<div class="p-4 border-t border-white/10 bg-primary/40 flex items-center gap-3">
+<div class="relative">
+<img class="w-11 h-11 rounded-full object-cover border-2 border-secondary-fixed" data-alt="Fotografía institucional de perfil masculino de un profesor académico con gafas finas y camisa blanca de cuello formal en un campus moderno y luminoso con fondos desenfocados en tonos azules marinos y neutros claros." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqYgNrvipV-bMomuiNaX6sRKSfhHbNEo5hFUo0vtlu5Hipqvh2QJqaG2YCudUyNYyGauB8BSiJ3hFMD6mJN4E5GEOWV0Doymx1UCJV0tTXH7mkEmpeOZPK9KzzXe-jW9d5y_NZRq_2KovIMeFliglgVRzYOfuMD5KTMdV6DObsW003_gYM_wS7WH_Y8slCiII6_lcw8U5z00d78RRFZXLm-KjR-zcVZCnIjo57VlzCssIiuiW8dsB1pA">
+<span class="w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-primary-container absolute bottom-0 right-0" title="En línea"></span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-label-md font-label-md text-surface-container-lowest font-bold truncate">Dr. Alejandro Mendoza Ruiz</p>
+<p class="text-body-sm font-body-sm text-on-primary-container text-xs truncate">Catedrático Titular • IA</p>
+<span class="text-label-sm font-label-sm text-secondary-fixed-dim/90 block text-[10px]">DOC-2022-419</span>
+</div>
+<button class="text-on-primary-container hover:text-on-primary p-1.5 rounded transition-colors" title="Cerrar sesión">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</aside>
+<!-- 2. CONTENIDO PRINCIPAL Y APP CANVAS -->
+<div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-surface-container-low">
+<!-- Top Bar Superior -->
+<header class="h-16 bg-surface-container-lowest border-b border-outline-variant/30 px-6 flex items-center justify-between gap-4 z-20 flex-shrink-0">
+<!-- Breadcrumb y Ciclo -->
+<div class="flex items-center gap-4 min-w-0">
+<nav class="flex items-center gap-1.5 text-label-sm font-label-sm text-on-surface-variant truncate">
+<span class="hover:text-secondary cursor-pointer">Mi IINICIA</span>
+<span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
+<span class="hover:text-secondary cursor-pointer">Mis Cursos</span>
+<span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
+<span class="truncate max-w-[200px] text-on-surface font-semibold">Fundamentos de IA y Agentes Inteligentes</span>
+<span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
+<span class="text-secondary font-bold">Seguimiento de Grupo</span>
+</nav>
+<div class="hidden xl:flex items-center gap-1.5 px-3 py-1 bg-surface-container-high rounded-full border border-outline-variant/40">
+<span class="material-symbols-outlined text-secondary text-[16px]">event_repeat</span>
+<span class="text-label-sm font-label-sm font-semibold text-primary">Ciclo 2026-1 (Febrero - Mayo)</span>
+</div>
+</div>
+<!-- Buscador y Acciones Superiores -->
+<div class="flex items-center gap-3">
+<!-- Buscador Universal -->
+<div class="relative w-64 lg:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-background border border-outline-variant/40 rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/15 transition-all" placeholder="Buscar por nombre o matrícula..." type="text">
+</div>
+<!-- Botón de Acción Ámbar -->
+<button class="bg-tertiary-fixed-dim hover:bg-amber-400 text-primary-container px-4 py-2 rounded-lg font-label-md text-label-md font-bold flex items-center gap-2 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-[18px]">add_comment</span>
+<span class="whitespace-nowrap">+ Enviar aviso a este grupo</span>
+</button>
+<div class="h-6 w-px bg-outline-variant/30"></div>
+<!-- Accesos directos -->
+<button class="p-2 text-on-surface-variant hover:text-secondary hover:bg-surface-container rounded-lg transition-colors relative" title="Biblioteca Digital IINICIA">
+<span class="material-symbols-outlined">local_library</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-secondary hover:bg-surface-container rounded-lg transition-colors relative" title="Notificaciones del Grupo">
+<span class="material-symbols-outlined">notifications</span>
+<span class="w-2 h-2 bg-error rounded-full absolute top-1.5 right-1.5"></span>
+</button>
+</div>
+</header>
+<!-- Canvas de Trabajo con Scroll -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Contenedor Izquierdo: Encabezado + Filtros + Tabla Principal -->
+<main class="flex-1 overflow-y-auto custom-scroll p-6 flex flex-col gap-6">
+<!-- 3. ENCABEZADO DEL CURSO Y COHORTE -->
+<section class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/30 shadow-ambient flex flex-col gap-5">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="space-y-2">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-primary-container text-on-primary text-label-sm font-label-sm tracking-wide font-bold">IA-301 • LICENCIATURA</span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary text-label-sm font-label-sm font-semibold">Cohorte: SW-2026-A</span>
+<span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-label-sm font-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  100% En Línea
+                </span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">32 Estudiantes Matriculados</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary/10 text-secondary text-label-sm font-label-sm font-bold">Semana 6 de 14</span>
+</div>
+<h1 class="text-headline-md font-headline-md font-extrabold text-primary tracking-tight">
+                Fundamentos de Inteligencia Artificial y Agentes Inteligentes
+              </h1>
+</div>
+<!-- Acciones Superiores del Curso -->
+<div class="flex items-center gap-3 self-start lg:self-center">
+<button class="px-3.5 py-2 rounded-lg border border-outline-variant/50 hover:bg-surface-container text-secondary text-label-md font-label-md font-semibold flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="">Reporte (Excel/PDF)</span>
+</button>
+<a class="px-4 py-2 rounded-lg bg-primary hover:bg-secondary text-on-primary text-label-md font-label-md font-bold flex items-center gap-2 transition-colors shadow-sm" href="#">
+<span class="">Abrir Aula Virtual Moodle</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Métricas Rápidas del Grupo en Bento horizontal -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2 border-t border-outline-variant/20">
+<div class="bg-surface-container-low p-3.5 rounded-lg border border-outline-variant/20 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">grade</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm font-bold text-primary block leading-none">8.7</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-xs">Promedio general</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-3.5 rounded-lg border border-outline-variant/20 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm font-bold text-primary block leading-none">68%</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-xs">Avance temático</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-3.5 rounded-lg border border-outline-variant/20 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm font-bold text-primary block leading-none">84%</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-xs">Entregas a tiempo</span>
+</div>
+</div>
+<div class="bg-amber-50 p-3.5 rounded-lg border border-amber-200 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed-dim/30 flex items-center justify-center text-amber-900">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm font-bold text-amber-950 block leading-none">5</span>
+<span class="text-body-sm font-body-sm text-amber-800 text-xs font-semibold">Alumnos en riesgo</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. BARRA DE FILTROS Y BÚSQUEDA INTERACTIVA -->
+<section class="flex flex-col gap-3">
+<!-- Chips de Filtro -->
+<div class="flex flex-wrap items-center justify-between gap-3">
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-3.5 py-1.5 rounded-full text-label-sm font-label-sm font-bold bg-primary text-on-primary shadow-sm transition-transform active:scale-95">
+                Todos (32)
+              </button>
+<button class="px-3.5 py-1.5 rounded-full text-label-sm font-label-sm font-bold bg-error-container text-on-error-container hover:bg-red-200 border border-error/20 flex items-center gap-1.5 transition-colors">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                En riesgo (5)
+              </button>
+<button class="px-3.5 py-1.5 rounded-full text-label-sm font-label-sm font-medium bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant/40 transition-colors">
+                Sin entregas recientes (3)
+              </button>
+<button class="px-3.5 py-1.5 rounded-full text-label-sm font-label-sm font-medium bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant/40 transition-colors">
+                Destacados / Promedio &gt;9.5 (9)
+              </button>
+<button class="px-3.5 py-1.5 rounded-full text-label-sm font-label-sm font-medium bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container border border-outline-variant/40 transition-colors">
+                Con prórroga activa (2)
+              </button>
+</div>
+<!-- Acciones Masivas -->
+<div class="flex items-center gap-2">
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest border border-outline-variant/40 text-on-surface pl-3 pr-8 py-1.5 rounded-lg text-label-sm font-label-sm font-semibold focus:outline-none focus:border-secondary">
+<option>Unidad 2: Agentes Basados en Conocimiento y Lógica</option>
+<option>Unidad 1: Introducción a Agentes Inteligentes</option>
+<option>Unidad 3: Razonamiento Probabilístico</option>
+<option>Todas las Unidades Académicas</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-outline text-[16px]">expand_more</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/40 bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">checklist</span>
+<span class="">Acciones masivas</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 5. TABLA DE ESTUDIANTES (INTERACTIVA) -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-ambient overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant/30 text-on-surface-variant text-label-sm font-label-sm uppercase tracking-wider">
+<th class="py-3.5 pl-4 pr-2 w-10">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox">
+</th>
+<th class="py-3.5 px-4 font-bold">Estudiante</th>
+<th class="py-3.5 px-4 font-bold">Progreso</th>
+<th class="py-3.5 px-4 font-bold">Última conexión</th>
+<th class="py-3.5 px-4 font-bold">Actividades</th>
+<th class="py-3.5 px-4 font-bold">Calificación</th>
+<th class="py-3.5 px-4 font-bold">Estado</th>
+<th class="py-3.5 pr-4 pl-2 text-right font-bold">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 text-body-sm font-body-sm">
+<!-- FILA SELECCIONADA ACTIVA: Valeria Mendoza Sánchez -->
+<tr class="bg-amber-50/70 border-l-4 border-l-tertiary-fixed-dim hover:bg-amber-50 transition-colors cursor-pointer">
+<td class="py-4 pl-4 pr-2">
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox">
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-amber-400" data-alt="Retrato fotográfico nítido de estudio de una joven estudiante universitaria mexicana de unos 21 años mirando al frente con expresión seria pero amigable, vestimenta sobria y fondo neutro con matices azul marino institucionales." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB17EGQ3pxprkjEvFQ-m6K0MoPdOYDjGrD-iGvOqfbhINP34NEF5xRsGcvRMfoGzV3hVYbHv9MbTpcnqSS_9VORkw2tr4aGOhK58Vllcuyyo1z3wE-pBt_vXU-SNguMGOkEtoU6N2AMVJif1RmXOXEoFxZjByJFaq6Oh5ptA2-vvolF6NPKRrPosgObYUq8kwb_Q57gD4EKz1KBrbtf-FfAvyrsPKf8owbi8Bb85oBstjZsF_vdos3RAQ">
+<span class="w-2.5 h-2.5 bg-amber-500 rounded-full border-2 border-white absolute bottom-0 right-0"></span>
+</div>
+<div>
+<span class="font-bold text-on-surface text-label-md font-label-md block leading-tight">Valeria Mendoza Sánchez</span>
+<span class="text-xs text-outline font-mono">EST-2024-0842</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="w-32">
+<div class="flex justify-between items-center mb-1 text-xs font-semibold text-on-surface">
+<span class="">42%</span>
+<span class="text-[10px] text-amber-700 font-bold">Bajo</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-xs font-medium text-amber-900">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-amber-600">history</span>
+<span class="">Hace 8 días - Inactivo</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                      5 entregadas / 3 pendientes
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5">
+<span class="text-title font-title font-extrabold text-error">6.1</span>
+<span class="material-symbols-outlined text-error text-[16px]" title="Por debajo del mínimo probatorio de 7.0">priority_high</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-error-container text-on-error-container border border-error/30 flex items-center gap-1 w-max">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                      En Riesgo Académico
+                    </span>
+</td>
+<td class="py-4 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 hover:bg-amber-100 rounded text-primary transition-colors" title="Ver detalle del estudiante">
+<span class="material-symbols-outlined text-[20px] text-secondary">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-amber-100 rounded text-primary transition-colors" title="Enviar mensaje">
+<span class="material-symbols-outlined text-[20px] text-secondary">chat</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 2: Rodrigo Alarcón -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 pl-4 pr-2">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox">
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Fotografía frontal tipo credencial de un estudiante varón joven con chamarra universitaria azul, fondo blanco con iluminación difusa de estudio y estilo sobrio y corporativo." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDurFsU9L7QXauSfd0LX-Zdbh_DTR9fo-1jZewXaq5pfhm9Y0J-XZO-LBT8i3ddsZtjldxCw4WQwqmq2q-9TNNLH8d43Z-0fiNh5HbfFFx97DqTgcAYnuzr3xEu88UnvsR8ziNBnGevZfBfYBv5xLP3FlWiMcXGNVwfrD4gw3RtVE_EuYsm2c4IuelU27uMEazTSLxsr03nej1RA1-jdfz0w_yU-yv5UPoN7ch6BnJz9U5ozxeRUAs0Dw">
+<div>
+<span class="font-bold text-on-surface text-label-md font-label-md block leading-tight">Rodrigo Alarcón Morales</span>
+<span class="text-xs text-outline font-mono">EST-2024-8849</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="w-32">
+<div class="flex justify-between items-center mb-1 text-xs font-semibold text-on-surface">
+<span class="">92%</span>
+<span class="text-[10px] text-emerald-700 font-bold">Óptimo</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 92%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="">Hoy, hace 25 min</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-container-high text-on-surface">
+                      12 entregadas / 0 pendientes
+                    </span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1.5">
+<span class="text-title font-title font-extrabold text-primary">9.8</span>
+<span class="material-symbols-outlined text-amber-500 text-[16px]" style="font-variation-settings: 'FILL' 1;" title="Mención Honorífica de Cohorte">star</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 w-max">
+                      Excelente
+                    </span>
+</td>
+<td class="py-4 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 3: Sofía Garza -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 pl-4 pr-2">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox">
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Fotografía de perfil de una estudiante universitaria latina sonriente con cabello oscuro recogida en una coleta, vestimenta formal casual clara en ambiente de biblioteca académica con ventanales altos." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD5ciAZolua7QkPVaZLMAsgHIIMSznMnLDO6J3KA9jAcwhO1Yoo8e9eSUaXn72Yae75JO9JlMmOn1hAlnWGG4i2l7MZSogiHsMr791d2Jf2d18MARajIxnLjWTzwq5lvuZWgJOO9lXcD33NvvEzCy3LLg201wXgNRPv93Kln0o6TQlQi5hOpbo4oBkvTnzJdDzw_bDIZxhBUV53WTwT0NmF06lsIQyV5KdE1iecvHSPBk48nbozVKj9g">
+<div>
+<span class="font-bold text-on-surface text-label-md font-label-md block leading-tight">Sofía Garza Treviño</span>
+<span class="text-xs text-outline font-mono">EST-2024-3102</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="w-32">
+<div class="flex justify-between items-center mb-1 text-xs font-semibold text-on-surface">
+<span class="">74%</span>
+<span class="text-[10px] text-secondary font-bold">En curso</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 74%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+<span class="">Ayer 21:40</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-container-high text-on-surface">
+                      10 entregadas / 1 pendiente
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-title font-title font-extrabold text-primary">8.6</span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-secondary-fixed/40 text-on-secondary-fixed-variant border border-secondary-fixed w-max">
+                      Regular
+                    </span>
+</td>
+<td class="py-4 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 4: Carlos Eduardo Morales -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 pl-4 pr-2">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox">
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Fotografía de busto de un estudiante universitario mexicano joven con gafas cuadradas, camisa polo azul marino en un espacio universitario moderno y luminoso con estética arquitectónica limpia." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5KB_STdLFtKF2KC7jtPmJUxqMbjzrnxi6wJtgv8i75p0aQxU2wO5t7Zyt-USJXDKEErFDH0PRdbq9kAAj0wJb7d49oYEuuEQlwlwxjgaYppbtqn06gnbfOZvnsucsCKNQh5bLmFAYJBv1DGiPsmaaLos51X7cdfD_xPPnHMvJrdI5fW9wwawr8eqmVTLHdAgY2DILEGysCEtCQ_7U-N23-C3wKF78EDLi4yYuEA_vsBxyIkI-ClQhDg">
+<div>
+<span class="font-bold text-on-surface text-label-md font-label-md block leading-tight">Carlos Eduardo Morales Cruz</span>
+<span class="text-xs text-outline font-mono">EST-2023-7719</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="w-32">
+<div class="flex justify-between items-center mb-1 text-xs font-semibold text-on-surface">
+<span class="">60%</span>
+<span class="text-[10px] text-amber-700 font-bold">Atención</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+<div class="bg-amber-400 h-full rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+<span class="">Hace 3 días</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-900 border border-amber-200">
+                      8 entregadas / 2 pendientes
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-title font-title font-extrabold text-primary">7.3</span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 w-max">
+                      Prórroga Activa
+                    </span>
+</td>
+<td class="py-4 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 5: Mariana Torres -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 pl-4 pr-2">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox">
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Retrato académico de una alumna joven en un laboratorio de informática, iluminación natural brillante con luz de ventana y fondo desenfocado en tonos azules y grises claros." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdpDR4O11cxUm4ZcIFqLaRP7jCNeiqcI-vts0HYxnhyxsaBD9NJThYWYQgjj_HKwu4-wMxanawCymhwN21wG6o3rOKy8xNrlCMTRfTvfLYuuaDMw7Bin2T92SWErJFzYYwQVXsqaG_7tYVqw7rLOch6iLtgZwocpZ6L7INaRnGsb75EnHPG05fXJGQt9Gh2C9DVhw3gDZWo9cxgvLVKrsSLkJ1k5jkrI2YysGpS_w8fcPW2dt_4Xoupg">
+<div>
+<span class="font-bold text-on-surface text-label-md font-label-md block leading-tight">Mariana Torres Beltrán</span>
+<span class="text-xs text-outline font-mono">EST-2024-9120</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="w-32">
+<div class="flex justify-between items-center mb-1 text-xs font-semibold text-on-surface">
+<span class="">88%</span>
+<span class="text-[10px] text-emerald-700 font-bold">Avanzado</span>
+</div>
+<div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 88%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+<span class="">Hoy, 09:15</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-container-high text-on-surface">
+                      11 entregadas / 1 pendiente
+                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-title font-title font-extrabold text-primary">9.4</span>
+</td>
+<td class="py-4 px-4">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 w-max">
+                      Excelente
+                    </span>
+</td>
+<td class="py-4 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container rounded text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paginación y Resumen -->
+<div class="px-6 py-3.5 bg-surface-container-low border-t border-outline-variant/30 flex items-center justify-between text-xs text-on-surface-variant">
+<span class="">Mostrando <strong class="text-on-surface">1 - 5</strong> de <strong class="text-on-surface">32</strong> estudiantes inscritos</span>
+<div class="flex items-center gap-2">
+<button class="p-1.5 rounded border border-outline-variant/40 bg-surface-container-lowest hover:bg-surface-container disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="px-2 font-bold text-on-surface">Página 1 de 7</span>
+<button class="p-1.5 rounded border border-outline-variant/40 bg-surface-container-lowest hover:bg-surface-container">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- 6. PANEL LATERAL DE DETALLE DEL ESTUDIANTE SELECCIONADO (DRAWER DERECHO ~420px) -->
+<aside class="w-[420px] bg-surface-container-lowest border-l border-outline-variant/30 flex flex-col flex-shrink-0 z-20 shadow-ambient-lg overflow-hidden">
+<!-- Encabezado del Drawer -->
+<div class="p-5 border-b border-outline-variant/30 flex items-start justify-between bg-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[24px]">account_box</span>
+<div>
+<h2 class="text-label-lg font-label-lg font-extrabold text-primary">Expediente de Seguimiento</h2>
+<span class="text-xs text-on-surface-variant font-mono">Cohorte SW-2026-A • Licenciatura</span>
+</div>
+</div>
+<button class="p-1 text-outline hover:text-primary hover:bg-white rounded-md transition-colors" title="Cerrar panel">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Contenido scrolleable del estudiante -->
+<div class="flex-1 overflow-y-auto custom-scroll p-5 space-y-6">
+<!-- Foto, Identidad y Alerta -->
+<div class="flex flex-col items-center text-center p-4 bg-surface rounded-xl border border-outline-variant/30">
+<div class="relative mb-3">
+<img class="w-20 h-20 rounded-full object-cover border-4 border-amber-300 shadow-sm" data-alt="Fotografía detallada en primer plano de una alumna universitaria de 21 años con expresión enfocada y neutra, en un entorno de aprendizaje digital de alta tecnología con tenue iluminación ambiental azul institucional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGWn32eD9GqZLSn_tSQWVcwi0jBP-K-EqnUHhCYc53iFiOwgGijxS2BvpORidK6-0nXINhzQw4zhdLTz16YTVcno02wCK-LUd7kjcZ6abUxwOKkB1PvHDCsWrz9NS9S4HW5lg78ORwxRZXTO_q3lWdR30Nyk2kUBsWSliExe7Oqi28gp2D8l2-TZ4CGx5OzuhLkQn-euS7B3EkQVXeSYAtakqXsz2sKKEyGWYlFRbr2zB6RXup-qkJ4A">
+<span class="w-4 h-4 bg-amber-500 rounded-full border-2 border-white absolute bottom-1 right-1" title="Inactiva"></span>
+</div>
+<h3 class="text-title font-title font-extrabold text-primary leading-snug">Valeria Mendoza Sánchez</h3>
+<span class="text-xs font-mono text-outline font-medium">EST-2024-0842</span>
+<a class="text-xs text-secondary hover:underline mt-0.5" href="mailto:valeria.mendoza@alumnos.iinicia.edu.mx">valeria.mendoza@alumnos.iinicia.edu.mx</a>
+<div class="mt-3.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-xs font-bold border border-error/20">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span class="">En Riesgo Académico (&gt;7 días inactiva)</span>
+</div>
+</div>
+<!-- Métricas Rápidas del Alumno -->
+<div class="grid grid-cols-3 gap-2.5">
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/20 text-center">
+<span class="text-xs text-on-surface-variant block font-medium">Asistencia</span>
+<span class="text-label-lg font-label-lg font-extrabold text-primary block mt-0.5">50%</span>
+<span class="text-[10px] text-amber-700 font-semibold block">Síncronas</span>
+</div>
+<div class="bg-red-50 p-3 rounded-lg border border-red-200 text-center">
+<span class="text-xs text-red-700 block font-medium">Promedio</span>
+<span class="text-label-lg font-label-lg font-extrabold text-error block mt-0.5">6.1</span>
+<span class="text-[10px] text-red-600 font-semibold block">Reprobatorio</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/20 text-center">
+<span class="text-xs text-on-surface-variant block font-medium">Puntualidad</span>
+<span class="text-label-lg font-label-lg font-extrabold text-primary block mt-0.5">40%</span>
+<span class="text-[10px] text-outline font-semibold block">Entregas</span>
+</div>
+</div>
+<!-- Avance por Unidad Temática -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="text-label-md font-label-md font-bold text-primary uppercase tracking-wider text-xs">Avance por Unidad Curricular</h4>
+<span class="text-[11px] text-outline font-medium">RVOE-2024-IA</span>
+</div>
+<div class="space-y-2.5">
+<!-- Unidad 1 -->
+<div class="p-3 bg-surface rounded-lg border border-outline-variant/30">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-bold text-on-surface">Unidad 1: Introducción a Agentes</span>
+<span class="text-emerald-700 font-bold">100% • Nota: 8.5</span>
+</div>
+<div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<!-- Unidad 2 -->
+<div class="p-3 bg-amber-50/60 rounded-lg border border-amber-300">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-bold text-amber-950">Unidad 2: Heurística y Algoritmo A*</span>
+<span class="text-amber-800 font-bold">35% • 1 atrasada</span>
+</div>
+<div class="w-full bg-amber-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<!-- Unidad 3 -->
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/20 opacity-70">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-medium text-outline">Unidad 3: Razonamiento Probabilístico</span>
+<span class="text-[11px] text-outline">0% • Bloqueada</span>
+</div>
+<div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-slate-300 h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Historial de Entregas y Actividades -->
+<div class="space-y-3">
+<h4 class="text-label-md font-label-md font-bold text-primary uppercase tracking-wider text-xs">Historial de Entregas y Tareas</h4>
+<div class="space-y-2.5">
+<!-- Actividad 1 -->
+<div class="p-3 rounded-lg border border-outline-variant/30 bg-surface flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-2">
+<span class="text-label-sm font-label-sm font-bold text-primary">Proyecto Práctico 1: Agente Reactivo</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Calificada</span>
+</div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant">
+<span class="">Entregado en tiempo formal</span>
+<span class="font-extrabold text-primary font-mono text-xs">8.5 / 10</span>
+</div>
+</div>
+<!-- Actividad 2 (Crítica con Botón Moodle) -->
+<div class="p-3.5 rounded-lg border-2 border-amber-300 bg-amber-50/80 flex flex-col gap-2.5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-amber-950 block">Tarea 2.1: Árboles Minimax</span>
+<span class="text-[11px] text-error font-bold flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">alarm</span>
+                      Pendiente • Vencido hace 3 días
+                    </span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900 border border-amber-400">Sin calificar</span>
+</div>
+<!-- Botón de Calificar en Campus Moodle -->
+<a class="w-full py-2 px-3 rounded-lg bg-tertiary-fixed-dim hover:bg-amber-400 text-primary-container text-label-sm font-label-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">school</span>
+<span class="">Calificar en el Campus (Moodle)</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+<!-- Actividad 3 -->
+<div class="p-3 rounded-lg border border-outline-variant/30 bg-surface flex flex-col gap-1.5">
+<div class="flex items-start justify-between gap-2">
+<span class="text-label-sm font-label-sm font-bold text-on-surface">Foro 2: Ética en Agentes Autónomos</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-outline">0 / 1 aportes</span>
+</div>
+<div class="flex items-center justify-between text-xs text-error font-semibold">
+<span class="">Sin participación registrada</span>
+<span class="text-outline text-[11px]">Cierra en 2 días</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Acciones al pie del Drawer Lateral -->
+<div class="p-4 border-t border-outline-variant/30 bg-surface-container-low flex flex-col gap-2.5">
+<button class="w-full py-2.5 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-bold flex items-center justify-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+<span class="">Enviar mensaje directo</span>
+</button>
+<div class="flex items-center justify-between pt-1 text-center">
+<a class="text-xs text-secondary hover:underline font-bold mx-auto flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">folder_shared</span>
+<span class="">Ver Kárdex y Expediente Completo</span>
+</a>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Sello RVOE Institucional flotante sutil de validación -->
+<div class="fixed bottom-2 left-72 ml-4 pointer-events-none z-10 hidden xl:flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-outline-variant/40 px-3 py-1 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[14px]">verified_user</span>
+<span class="text-[10px] font-mono font-medium text-outline">RVOE-SEP No. 2024-ACAD-091 • Validez Oficial Federal</span>
+</div>
+
+
+</body></html>

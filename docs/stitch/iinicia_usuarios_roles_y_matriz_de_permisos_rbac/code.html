@@ -1,0 +1,1244 @@
+<!DOCTYPE html><html class="h-full bg-surface" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>IINICIA Campus Admin - Usuarios y Roles (RBAC)</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms & Container Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#00163a",
+            "secondary-fixed-dim": "#aac7ff",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#604100",
+            "secondary": "#235eac",
+            "on-surface-variant": "#44474f",
+            "tertiary-fixed-dim": "#ffba3b",
+            "surface-bright": "#f9f9ff",
+            "on-primary-fixed": "#001a42",
+            "on-primary-fixed-variant": "#2c4678",
+            "outline": "#747780",
+            "surface-variant": "#d8e3fb",
+            "secondary-container": "#7aacff",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#c48800",
+            "on-background": "#111c2d",
+            "surface-tint": "#455e91",
+            "on-tertiary-fixed": "#281900",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "surface-container": "#e7eeff",
+            "tertiary-container": "#3d2800",
+            "tertiary": "#231500",
+            "on-surface": "#111c2d",
+            "background": "#f9f9ff",
+            "outline-variant": "#c4c6d0",
+            "surface-container-low": "#f0f3ff",
+            "error-container": "#ffdad6",
+            "surface": "#f9f9ff",
+            "inverse-primary": "#aec6ff",
+            "surface-container-high": "#dee8ff",
+            "on-secondary-fixed-variant": "#00458d",
+            "secondary-fixed": "#d6e3ff",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#cfdaf2",
+            "primary-container": "#0b2a5b",
+            "tertiary-fixed": "#ffdead",
+            "on-primary-container": "#7a93ca",
+            "on-secondary-container": "#003e80",
+            "error": "#ba1a1a",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#001b3e",
+            "primary-fixed": "#d8e2ff",
+            "inverse-on-surface": "#ecf1ff",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#263143",
+            "primary-fixed-dim": "#aec6ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1.25rem",
+            "gutter-mobile": "1rem",
+            "space-md": "1rem",
+            "margin": "1.5rem",
+            "gutter": "1.5rem",
+            "gutter-desktop": "2rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f0f3ff;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c4c6d0;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #747780;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-body-md text-on-surface bg-background antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TOPNAVBAR (Shared Component: TopNavBar) -->
+<header class="w-full h-16 px-gutter flex items-center justify-between sticky top-0 bg-surface-container-lowest z-40 border-b border-outline-variant shadow-sm shrink-0">
+<!-- Left Section: Institutional Branding & Quick Search -->
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="h-9 flex items-center justify-center shrink-0"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="IINICIA Campus Admin" class="h-9 w-auto object-contain"></div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">IINICIA Campus Admin</span>
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Gestión Institucional Central</span>
+</div>
+</div>
+<!-- Search Bar on Left -->
+<div class="relative hidden lg:block w-80">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg pointer-events-none">search</span>
+<input class="w-full h-10 pl-9 pr-12 text-body-sm font-body-sm bg-surface-container-low text-on-surface border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 placeholder:text-outline transition-all" placeholder="Buscar expedientes, roles, matrícula... (⌘K)" type="text">
+<span class="absolute right-2.5 top-2.5 px-1.5 py-0.5 text-[10px] font-semibold bg-surface-container-highest text-on-surface-variant rounded border border-outline-variant">⌘K</span>
+</div>
+</div>
+<!-- Right Section: Role Tag, Action Buttons, Help, Notifications, Superadmin Profile -->
+<div class="flex items-center gap-space-md">
+<!-- Role Badge: Superadmin in purple tone -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-100 text-purple-900 border border-purple-200 shadow-xs">
+<span class="w-2 h-2 rounded-full bg-purple-600 animate-pulse"></span>
+<span class="text-label-sm font-label-sm uppercase font-bold tracking-wide">Superadmin Activo</span>
+</div>
+<!-- Trailing Primary Action: Cambiar Rol -->
+<button class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-secondary transition-colors duration-150 active:scale-[0.99]">
+<span class="material-symbols-outlined text-base">switch_account</span>
+<span class="">Cambiar Rol</span>
+</button>
+<!-- New User Action -->
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-secondary text-on-secondary text-label-md font-label-md hover:bg-secondary/90 shadow-sm transition-all active:scale-[0.99]">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span class="">+ Nuevo Usuario</span>
+</button>
+<!-- Separator -->
+<div class="h-6 w-px bg-outline-variant mx-0.5"></div>
+<!-- Icon Actions -->
+<div class="flex items-center gap-1">
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-secondary transition-colors" title="Notificaciones del Sistema">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error border-2 border-surface-container-lowest"></span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-secondary transition-colors" title="Centro de Ayuda y Normativa">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<!-- Superadmin Profile Widget -->
+<div class="flex items-center gap-2.5 pl-2 border-l border-outline-variant cursor-pointer group">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs ring-2 ring-primary/20 group-hover:ring-secondary transition-all">
+          RM
+        </div>
+<div class="hidden xl:flex flex-col text-left">
+<span class="text-label-md font-label-md text-on-surface leading-tight font-bold">Lic. Roberto Morales</span>
+<span class="text-label-sm font-label-sm text-outline leading-tight">Superadministrador</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface text-base transition-colors">expand_more</span>
+</div>
+</div>
+</header>
+<!-- BODY CONTENT WRAPPER (SIDEBAR + MAIN CANVAS) -->
+<div class="flex-1 flex overflow-hidden">
+<!-- SIDENAVBAR (Shared Component: SideNavBar) -->
+<aside class="w-72 h-full flex flex-col justify-between py-space-md px-space-sm border-r border-outline-variant bg-surface-container-low sticky top-0 z-30 shrink-0 custom-scroll overflow-y-auto">
+<div>
+<!-- Institutional Header Anchor -->
+<div class="px-space-md pb-space-md mb-space-sm border-b border-outline-variant/60 flex items-center gap-space-sm">
+<div class="h-10 flex items-center justify-center shrink-0"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="IINICIA" class="h-10 w-auto object-contain"></div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">IINICIA</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Gestión Académica Central</p>
+</div>
+</div>
+<!-- Section 1: Académico -->
+<div class="mb-space-md">
+<div class="px-space-md py-1 text-[11px] font-bold text-outline uppercase tracking-wider">Gestión Académica</div>
+<nav class="space-y-0.5 mt-1">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="">Programas</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">date_range</span>
+<span class="">Cohortes y periodos</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="">Aspirantes</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="">Matrículas</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="">Estudiantes</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">cast_for_education</span>
+<span class="">Docentes</span>
+</a>
+</nav>
+</div>
+<!-- Section 2: Contenidos y Portal -->
+<div class="mb-space-md">
+<div class="px-space-md py-1 text-[11px] font-bold text-outline uppercase tracking-wider">Contenidos y Portal</div>
+<nav class="space-y-0.5 mt-1">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">web</span>
+<span class="">Páginas</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">newspaper</span>
+<span class="">Noticias</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="">Oferta académica</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="">Preguntas frecuentes</span>
+</a>
+</nav>
+</div>
+<!-- Section 3: Sistema y Gobierno (Active Context: Usuarios y roles) -->
+<div class="mb-space-md">
+<div class="px-space-md py-1 text-[11px] font-bold text-outline uppercase tracking-wider">Sistema y Gobierno</div>
+<nav class="space-y-0.5 mt-1">
+<!-- ACTIVE ITEM: Usuarios y roles with style_active_navigation and RBAC badge -->
+<a class="bg-surface-container-highest text-secondary font-semibold rounded-lg px-space-md py-space-sm flex items-center justify-between text-label-md font-label-md shadow-xs border-l-4 border-secondary" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">manage_accounts</span>
+<span class="">Usuarios y roles</span>
+</div>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-secondary/15 text-secondary">RBAC</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">integration_instructions</span>
+<span class="">Integraciones SEP/LMS</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="">Auditoría</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="">Configuración</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Drawer Footer & CTAs -->
+<div class="pt-space-md border-t border-outline-variant/70 space-y-2">
+<button class="w-full py-2 px-3 rounded-lg bg-surface-container-highest text-primary hover:bg-primary hover:text-on-primary text-label-md font-label-md font-semibold flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">support_agent</span>
+<span class="">Soporte Campus</span>
+</button>
+<a class="w-full py-1.5 px-3 rounded-lg text-outline hover:text-error hover:bg-error/10 text-label-sm font-label-sm font-medium flex items-center gap-2 transition-colors" href="#">
+<span class="material-symbols-outlined text-base">logout</span>
+<span class="">Cerrar sesión</span>
+</a>
+</div>
+</aside>
+<!-- MAIN CONTENT CANVAS -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Central Interactive Canvas -->
+<section class="flex-1 flex flex-col h-full overflow-y-auto custom-scroll bg-background p-6 lg:p-8">
+<!-- CABECERA PRINCIPAL -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-outline-variant">
+<div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline mb-1">
+<span class="">Sistema</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-secondary font-semibold">Seguridad y Permisos</span>
+</div>
+<h2 class="text-headline-md font-headline-md font-bold text-primary tracking-tight">Gestión de Usuarios y Matriz de Roles (RBAC)</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1 max-w-3xl">
+              Control centralizado de identidades, perfiles académicos y administrativos, directivas obligatorias de doble factor (2FA/MFA) y trazabilidad bajo lineamientos SEP y NOM-151.
+            </p>
+</div>
+<div class="flex items-center gap-3 self-start md:self-auto">
+<button class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-xs">
+<span class="material-symbols-outlined text-base">file_download</span>
+<span class="">Exportar Registro de Accesos</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container shadow-sm transition-all active:scale-[0.99]">
+<span class="material-symbols-outlined text-base">fitbit_push_ups</span>
+<span class="">+ Invitar Usuario</span>
+</button>
+</div>
+</div>
+<!-- SELECTOR DE PESTAÑAS PRINCIPALES & AVISO DE SEGURIDAD -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mt-6">
+<!-- Navigation Tabs -->
+<div class="flex items-center gap-2 border-b border-outline-variant lg:border-b-0 w-full lg:w-auto">
+<button class="pb-3 px-4 text-label-md font-label-md font-bold text-secondary border-b-2 border-secondary flex items-center gap-2 transition-colors" id="tab-btn-directory" onclick="switchTab('directory')">
+<span class="material-symbols-outlined text-base">group</span>
+<span class="">Directorio de Usuarios</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-fixed text-on-secondary-fixed">3,420</span>
+</button>
+<button class="pb-3 px-4 text-label-md font-label-md font-medium text-on-surface-variant hover:text-on-surface flex items-center gap-2 transition-colors" id="tab-btn-matrix" onclick="switchTab('matrix')">
+<span class="material-symbols-outlined text-base">grid_view</span>
+<span class="">Matriz de Permisos RBAC</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container-high text-on-surface-variant">8 Roles</span>
+</button>
+</div>
+<!-- Subtle Security Notice Banner -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/60 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-base" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="text-xs">
+<strong class="font-semibold text-primary">Aviso de Gobernanza:</strong> Autenticación en dos pasos (MFA) obligatoria para roles con privilegios administrativos.
+            </span>
+</div>
+</div>
+<!-- TAB CONTENT 1: DIRECTORIO DE USUARIOS -->
+<div class="mt-5 flex-1 flex flex-col space-y-4" id="tab-content-directory">
+<!-- FILTROS Y BUSQUEDA -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-xs flex flex-wrap items-center justify-between gap-3">
+<div class="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+<!-- Search Input -->
+<div class="relative flex-1 max-w-md min-w-[220px]">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg">search</span>
+<input class="w-full h-10 pl-9 pr-3 text-body-sm font-body-sm bg-surface-container-low border border-outline-variant rounded-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 placeholder:text-outline text-on-surface" placeholder="Filtrar por nombre, ID o @iinicia.edu.mx..." type="text">
+</div>
+<!-- Filter: Rol -->
+<div class="w-44">
+<select class="w-full h-10 px-3 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant rounded-md focus:border-secondary text-on-surface">
+<option value="">Rol: Todos los roles</option>
+<option value="superadmin">Superadmin</option>
+<option value="admin_tech">Admin técnico</option>
+<option value="admin_acad">Admin académico</option>
+<option selected="" value="coord">Coordinador (64)</option>
+<option value="teacher">Docente (412)</option>
+<option value="student">Estudiante (2,890)</option>
+<option value="support">Soporte (18)</option>
+</select>
+</div>
+<!-- Filter: Estado -->
+<div class="w-36">
+<select class="w-full h-10 px-3 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant rounded-md focus:border-secondary text-on-surface">
+<option value="">Estado: Todos</option>
+<option value="active">Activo</option>
+<option value="suspended">Suspendido</option>
+<option value="pending">Invitación pendiente</option>
+</select>
+</div>
+<!-- Filter: MFA -->
+<div class="w-36">
+<select class="w-full h-10 px-3 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant rounded-md focus:border-secondary text-on-surface">
+<option value="">MFA: Todos</option>
+<option value="mfa_on">MFA Activo</option>
+<option value="mfa_off">MFA Pendiente</option>
+</select>
+</div>
+</div>
+<!-- Total counter and quick view toggle -->
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">Mostrando 8 de 3,420</span>
+<button class="p-2 border border-outline-variant rounded-md hover:bg-surface-container-low text-on-surface-variant" title="Recargar lista">
+<span class="material-symbols-outlined text-base">refresh</span>
+</button>
+</div>
+</div>
+<!-- TABLA COMPLETA DE USUARIOS -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex-1">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-[11px] font-bold text-outline uppercase tracking-wider">
+<th class="py-3 px-4 w-10 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</th>
+<th class="py-3 px-4 font-headline-sm text-xs">Usuario e Identificador</th>
+<th class="py-3 px-4 font-headline-sm text-xs">Correo Electrónico</th>
+<th class="py-3 px-4 font-headline-sm text-xs">Rol Institucional</th>
+<th class="py-3 px-4 font-headline-sm text-xs text-center">Estado</th>
+<th class="py-3 px-4 font-headline-sm text-xs text-center">Seguridad MFA</th>
+<th class="py-3 px-4 font-headline-sm text-xs">Último Acceso</th>
+<th class="py-3 px-4 font-headline-sm text-xs text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60 text-body-sm">
+<!-- Selected User Row (Open in Drawer: Ing. Claudia Vega) -->
+<tr class="bg-secondary-fixed/20 border-l-4 border-l-secondary hover:bg-secondary-fixed/30 cursor-pointer transition-colors" onclick="selectUser('claudia')">
+<td class="py-3.5 px-4 text-center">
+<input checked="" class="rounded border-secondary text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary font-bold flex items-center justify-center text-xs ring-2 ring-secondary/30">
+                          CV
+                        </div>
+<div>
+<div class="font-bold text-primary flex items-center gap-1.5">
+<span class="">Ing. Claudia Vega Solís</span>
+<span class="material-symbols-outlined text-secondary text-sm" title="Usuario en edición">edit_note</span>
+</div>
+<div class="text-[11px] text-outline font-mono">EMP-2021-0842 • Coord. Software e IA</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant font-medium">
+                      c.vega@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-300">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                        Coordinador
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-xs">lock</span>
+                        Activado (App)
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">Hoy, 10:42 hrs</div>
+<div class="text-[11px] text-outline">IP: 187.190.44.12</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Lic. Roberto Morales (Superadmin) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer" onclick="selectUser('roberto')">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center text-xs">
+                          RM
+                        </div>
+<div>
+<div class="font-bold text-on-surface">Lic. Roberto Morales Soria</div>
+<div class="text-[11px] text-outline font-mono">DIR-ADMIN-001 • Dirección General TI</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant font-medium">
+                      r.morales@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-900 border border-purple-300">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-700"></span>
+                        Superadmin
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-xs">verified_user</span>
+                        Hardware FIDO2
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">En línea ahora</div>
+<div class="text-[11px] text-outline">IP: 201.144.102.5</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Admin Técnico -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-cyan-700 text-white font-bold flex items-center justify-center text-xs">
+                          MR
+                        </div>
+<div>
+<div class="font-bold text-on-surface">Mtro. Miguel Ruiz Tapia</div>
+<div class="text-[11px] text-outline font-mono">SYS-2022-019 • DevOps &amp; LMS Lead</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                      m.ruiz@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-100 text-cyan-900 border border-cyan-300">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-700"></span>
+                        Admin técnico
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-xs">lock</span>
+                        Activado (SMS)
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">Ayer, 18:20 hrs</div>
+<div class="text-[11px] text-outline">IP: 189.201.32.90</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Admin Académico -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container font-bold flex items-center justify-center text-xs">
+                          DZ
+                        </div>
+<div>
+<div class="font-bold text-on-surface">Dra. Diana Zambrano Leyva</div>
+<div class="text-[11px] text-outline font-mono">ACAD-2019-003 • Jefatura Curricular</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                      d.zambrano@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-900 border border-blue-300">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-700"></span>
+                        Admin académico
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-xs">lock</span>
+                        Activado (App)
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">Hace 3 días</div>
+<div class="text-[11px] text-outline">IP: 200.68.140.11</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Docente (MFA Pendiente) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-900 font-bold flex items-center justify-center text-xs">
+                          FC
+                        </div>
+<div>
+<div class="font-bold text-on-surface">Dr. Fernando Cano Rivas</div>
+<div class="text-[11px] text-outline font-mono">DOC-2023-112 • Catedrático SNI II</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                      f.cano@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-900 border border-indigo-200">
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-700"></span>
+                        Docente
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-900 border border-amber-300">
+<span class="material-symbols-outlined text-xs text-amber-700">warning</span>
+                        Pendiente
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">24 May, 09:15 hrs</div>
+<div class="text-[11px] text-outline">IP: 187.160.91.4</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 6: Soporte Campus -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-xs">
+                          LE
+                        </div>
+<div>
+<div class="font-bold text-on-surface">Lic. Laura Espinosa Cruz</div>
+<div class="text-[11px] text-outline font-mono">SUP-2022-008 • Mesa de Ayuda N2</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                      l.espinosa@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-900 border border-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-700"></span>
+                        Soporte
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-xs">lock</span>
+                        Activado (App)
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">Hoy, 08:00 hrs</div>
+<div class="text-[11px] text-outline">IP: 201.122.80.3</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 7: Suspendido User -->
+<tr class="hover:bg-surface-container-low transition-colors bg-red-50/30">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-300 text-slate-700 font-bold flex items-center justify-center text-xs">
+                          HA
+                        </div>
+<div>
+<div class="font-bold text-on-surface line-through">Ing. Héctor Arismendi</div>
+<div class="text-[11px] text-outline font-mono">EMP-2018-021 • Baja Temporal</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-outline line-through">
+                      h.arismendi@iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
+                        Docente
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-100 text-red-800 border border-red-300">
+                        Suspendido
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">
+                        Inactivo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-outline">
+<div class="">12 Ene 2024</div>
+<div class="text-[11px] text-outline">Revocado por Admin</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 8: Estudiante Representante -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary/20 h-4 w-4" type="checkbox">
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 text-on-surface font-bold flex items-center justify-center text-xs">
+                          AP
+                        </div>
+<div>
+<div class="font-bold text-on-surface">Andrea Peralta Montes</div>
+<div class="text-[11px] text-outline font-mono">MAT-2023-9082 • Maestría Ciencia de Datos</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-xs text-on-surface-variant">
+                      a.peralta@alumnos.iinicia.edu.mx
+                    </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-300">
+                        Estudiante
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        Activo
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-xs">lock</span>
+                        Activado (App)
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-xs text-on-surface-variant">
+<div class="">Hace 1 hora</div>
+<div class="text-[11px] text-outline">IP: 189.155.10.99</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="p-1.5 text-on-surface-variant hover:text-secondary rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- PAGINACION INFERIOR -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-3 text-body-sm font-body-sm">
+<span class="text-on-surface-variant text-xs">
+                Mostrando <strong class="font-semibold text-primary">1 - 8</strong> de <strong class="font-semibold text-primary">3,420</strong> usuarios registrados
+              </span>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1.5 rounded border border-outline-variant text-outline hover:bg-surface-container-low disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded bg-secondary text-on-secondary font-bold text-xs">1</button>
+<button class="px-3 py-1 rounded border border-outline-variant hover:bg-surface-container-low text-xs font-medium">2</button>
+<button class="px-3 py-1 rounded border border-outline-variant hover:bg-surface-container-low text-xs font-medium">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="px-3 py-1 rounded border border-outline-variant hover:bg-surface-container-low text-xs font-medium">428</button>
+<button class="px-2.5 py-1.5 rounded border border-outline-variant text-on-surface hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB CONTENT 2: MATRIZ DE PERMISOS RBAC (Oculto inicialmente o interactivo) -->
+<div class="mt-5 hidden flex-1 flex-col space-y-4" id="tab-content-matrix">
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-outline-variant">
+<div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary">Matriz de Privilegios por Perfil Institucional</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Mapa de autorizaciones granulares categorizadas para auditoría y control de cumplimiento SEP.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant text-label-md font-label-md hover:bg-surface-container-low flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">print</span>
+<span class="">Imprimir Dictamen</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-secondary text-on-secondary text-label-md font-label-md hover:bg-secondary/90 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">add_moderator</span>
+<span class="">Definir Nuevo Rol</span>
+</button>
+</div>
+</div>
+<!-- Tabla Matricial RBAC -->
+<div class="overflow-x-auto mt-4">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-surface-container-low border-b-2 border-outline-variant text-on-surface">
+<th class="py-3 px-4 font-headline-sm text-xs sticky left-0 bg-surface-container-low min-w-[240px]">Capacidad / Permiso del Sistema</th>
+<th class="py-3 px-2 text-center font-bold text-purple-900 bg-purple-50/50">Superadmin</th>
+<th class="py-3 px-2 text-center font-bold text-cyan-900 bg-cyan-50/50">Admin Técnico</th>
+<th class="py-3 px-2 text-center font-bold text-blue-900 bg-blue-50/50">Admin Académico</th>
+<th class="py-3 px-2 text-center font-bold text-amber-900 bg-amber-50/50">Coordinador</th>
+<th class="py-3 px-2 text-center font-bold text-indigo-900">Profesor</th>
+<th class="py-3 px-2 text-center font-bold text-slate-800">Estudiante</th>
+<th class="py-3 px-2 text-center font-bold text-slate-600">Aspirante</th>
+<th class="py-3 px-2 text-center font-bold text-emerald-900">Soporte</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60">
+<!-- Category 1: Gestión Académica -->
+<tr class="bg-surface-container-high/40 font-bold text-primary">
+<td class="py-2.5 px-4 uppercase text-[11px] tracking-wider flex items-center gap-2" colspan="9">
+<span class="material-symbols-outlined text-base">school</span>
+<span class="">Gestión Académica</span>
+</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Dictaminar aspirantes y emitir folios</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold" title="Solo en su programa asignado">Limitado</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Asignar docentes a cohortes y grupos</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Modificar planes de estudio / RVOE</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold" title="Requiere doble firma">Según política</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Emitir actas y asentar calificaciones finales</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">Limitado</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<!-- Category 2: Administración de Plataforma -->
+<tr class="bg-surface-container-high/40 font-bold text-primary">
+<td class="py-2.5 px-4 uppercase text-[11px] tracking-wider flex items-center gap-2" colspan="9">
+<span class="material-symbols-outlined text-base">settings_suggest</span>
+<span class="">Administración de Plataforma</span>
+</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Gestión de roles y asignación de permisos</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">Según política</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Configuración de integraciones SEP / Moodle</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Visualización de logs de auditoría forense</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">Limitado</span></td>
+</tr>
+<!-- Category 3: Contenidos y Portal -->
+<tr class="bg-surface-container-high/40 font-bold text-primary">
+<td class="py-2.5 px-4 uppercase text-[11px] tracking-wider flex items-center gap-2" colspan="9">
+<span class="material-symbols-outlined text-base">web</span>
+<span class="">Contenidos y Portal</span>
+</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Publicar noticias y comunicados institucionales</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">Limitado</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Modificar catálogo de oferta académica</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">Limitado</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+<!-- Category 4: Soporte y Campus -->
+<tr class="bg-surface-container-high/40 font-bold text-primary">
+<td class="py-2.5 px-4 uppercase text-[11px] tracking-wider flex items-center gap-2" colspan="9">
+<span class="material-symbols-outlined text-base">support</span>
+<span class="">Soporte y Campus</span>
+</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Impersonar usuarios (Login As)</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">Según política</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold" title="Auditado y con token temporal">Limitado</span></td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium sticky left-0 bg-surface-container-lowest">Descargar respaldos de base de datos cifrada</td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Sí</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+<td class="text-center py-2"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">No</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- DRAWER DERECHO: EDITAR USUARIO Y PERMISOS -->
+<aside class="w-96 xl:w-[420px] h-full bg-surface-container-lowest border-l border-outline-variant flex flex-col justify-between shadow-2xl shrink-0 custom-scroll overflow-y-auto transition-transform duration-200" id="user-drawer">
+<div>
+<!-- Drawer Header -->
+<div class="p-5 border-b border-outline-variant flex items-center justify-between bg-surface-container-low sticky top-0 z-10">
+<div>
+<div class="flex items-center gap-1.5 text-xs text-outline font-semibold">
+<span class="material-symbols-outlined text-sm">tune</span>
+<span class="">Configuración de Identidad</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary mt-0.5">Editar Privilegios de Usuario</h3>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-md hover:bg-surface-container-high text-on-surface-variant" title="Maximizar panel">
+<span class="material-symbols-outlined text-base">open_in_full</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-surface-container-high text-on-surface-variant" onclick="toggleDrawer()" title="Cerrar panel">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</div>
+<!-- User Quick Profile Card -->
+<div class="p-5 border-b border-outline-variant/70">
+<div class="flex items-start gap-3.5">
+<div class="w-14 h-14 rounded-xl bg-secondary text-on-secondary font-headline-md font-bold flex items-center justify-center text-base shadow-sm ring-2 ring-secondary/20 shrink-0">
+                CV
+              </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-sm font-bold text-primary truncate">Ing. Claudia Vega Solís</h4>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Activo</span>
+</div>
+<p class="text-xs font-mono text-outline truncate mt-0.5">c.vega@iinicia.edu.mx</p>
+<div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-outline">calendar_today</span>
+                    Alta: 14 Ago 2021
+                  </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-outline">location_on</span>
+                    Campus Virtual CDMX
+                  </span>
+</div>
+</div>
+</div>
+<!-- Login Security Stamp -->
+<div class="mt-3.5 p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/60 flex items-center justify-between text-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-base">verified</span>
+<div>
+<span class="text-outline">Última sesión IP:</span>
+<span class="font-mono font-semibold text-on-surface">187.190.44.12</span>
+</div>
+</div>
+<span class="text-[10px] font-medium text-outline">Hace 25 min</span>
+</div>
+</div>
+<!-- Configuration Form Body -->
+<div class="p-5 space-y-5">
+<!-- Selector de Rol -->
+<div>
+<label class="block text-label-md font-label-md text-primary font-bold mb-1.5">
+                Rol Institucional Asignado
+              </label>
+<select class="w-full h-11 px-3 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-on-surface font-semibold" id="role-select" onchange="handleRoleChange(this.value)">
+<option value="superadmin">Superadministrador (Acceso Total)</option>
+<option value="admin_tech">Administrador Técnico de Plataforma</option>
+<option value="admin_acad">Administrador Académico y RVOE</option>
+<option selected="" value="coord">Coordinador Académico de Programa</option>
+<option value="teacher">Docente Titular</option>
+<option value="student">Estudiante Matriculado</option>
+<option value="support">Soporte Técnico Campus</option>
+</select>
+<p class="text-[11px] text-outline mt-1">Los roles determinan las capacidades sobre actas, expedientes y base de datos.</p>
+</div>
+<!-- Callout de Alerta Crítica (Privileged Warning) -->
+<div class="p-3.5 rounded-lg bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-2.5" id="privileged-warning">
+<span class="material-symbols-outlined text-amber-600 text-lg mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div class="text-xs leading-relaxed">
+<strong class="font-bold block text-amber-900">Atención de Privilegios Elevados:</strong>
+                Cualquier cambio a roles de nivel <span class="font-semibold underline">Superadmin</span> o <span class="font-semibold underline">Admin Técnico</span> otorga acceso irrevocable a llaves API SEP, bases de datos y finanzas. Requiere aprobación 2FA de dos administradores.
+              </div>
+</div>
+<!-- Campo de 'Alcance del Rol' (Scope Territorial / Académico) -->
+<div id="scope-container">
+<label class="block text-label-md font-label-md text-primary font-bold mb-1.5">
+                Alcance Académico (Scope de Gestión)
+              </label>
+<select class="w-full h-11 px-3 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-on-surface">
+<option selected="" value="sw_ia">Licenciatura en Ingeniería de Software e IA</option>
+<option value="data_sci">Posgrados de Ciencia de Datos y Analítica</option>
+<option value="ciber">Especialidad en Ciberseguridad Institucional</option>
+<option value="global">Acceso Institucional Global (Todas las Unidades)</option>
+</select>
+<p class="text-[11px] text-outline mt-1">El usuario solo podrá autorizar calificaciones y cohortes dentro de este programa.</p>
+</div>
+<!-- MFA Management -->
+<div class="p-3.5 rounded-lg border border-outline-variant bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-700 text-base">phonelink_lock</span>
+<span class="text-xs font-bold text-primary">Autenticador 2FA (TOTP)</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Verificado</span>
+</div>
+<p class="text-[11px] text-on-surface-variant">Configurado mediante Microsoft Authenticator el 15/09/2023.</p>
+<button class="text-label-sm font-label-sm text-secondary hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">restart_alt</span>
+<span class="">Restablecer token de seguridad 2FA</span>
+</button>
+</div>
+<!-- Estado de la Cuenta & Toggle -->
+<div class="pt-2 border-t border-outline-variant/60">
+<div class="flex items-center justify-between">
+<div>
+<span class="text-label-md font-label-md font-bold text-on-surface block">Estado de Acceso</span>
+<span class="text-[11px] text-outline">Habilita o revoca credenciales de inicio</span>
+</div>
+<!-- Interactive Toggle -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<div class="mt-3">
+<button class="w-full py-2 px-3 rounded-lg border border-error/30 text-error hover:bg-error/10 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-sm">block</span>
+<span class="">Suspender acceso inmediatamente</span>
+</button>
+</div>
+</div>
+<!-- Historial de Auditoría Breve -->
+<div class="pt-3 border-t border-outline-variant/60">
+<h5 class="text-label-sm font-label-sm uppercase font-bold text-outline tracking-wider mb-2">Trazabilidad de Cambios</h5>
+<div class="space-y-2 text-xs">
+<div class="flex items-start gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5"></div>
+<div>
+<span class="font-semibold text-on-surface">Asignación de cohorte 2024-1</span>
+<p class="text-[11px] text-outline">Por Superadmin (RM) • 12 Abr 2024</p>
+</div>
+</div>
+<div class="flex items-start gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-outline mt-1.5"></div>
+<div>
+<span class="font-semibold text-on-surface">Renovación de llave MFA institucional</span>
+<p class="text-[11px] text-outline">Por Ing. Claudia Vega • 15 Ene 2024</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Action Footer Sticky -->
+<div class="p-4 bg-surface-container-low border-t border-outline-variant flex items-center justify-end gap-3 sticky bottom-0 z-10">
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-label-md font-label-md text-on-surface hover:bg-surface-container-high transition-colors" onclick="toggleDrawer()">
+            Cancelar
+          </button>
+<button class="px-5 py-2 rounded-lg bg-secondary text-on-secondary text-label-md font-label-md font-bold hover:bg-secondary/90 shadow-sm transition-all active:scale-[0.99] flex items-center gap-1.5" onclick="saveUserChanges()">
+<span class="material-symbols-outlined text-sm">save</span>
+<span class="">Guardar Cambios de Rol</span>
+</button>
+</div>
+</aside>
+</main>
+</div>
+<!-- Notification Toast Simulation -->
+<div class="fixed bottom-5 right-5 bg-primary text-on-primary px-4 py-3 rounded-xl shadow-2xl border border-secondary flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 z-50" id="toast">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">check_circle</span>
+<div>
+<div class="text-xs font-bold">Cambios Aplicados</div>
+<div class="text-[11px] text-surface-container-highest">Los privilegios del usuario se actualizaron en la matriz RBAC.</div>
+</div>
+</div>
+<!-- JavaScript for Tabs, Drawer and Role Interaction -->
+<script>
+    function switchTab(tab) {
+      const dirTab = document.getElementById('tab-content-directory');
+      const matTab = document.getElementById('tab-content-matrix');
+      const dirBtn = document.getElementById('tab-btn-directory');
+      const matBtn = document.getElementById('tab-btn-matrix');
+
+      if (tab === 'directory') {
+        dirTab.classList.remove('hidden');
+        matTab.classList.add('hidden');
+        
+        dirBtn.className = "pb-3 px-4 text-label-md font-label-md font-bold text-secondary border-b-2 border-secondary flex items-center gap-2 transition-colors";
+        matBtn.className = "pb-3 px-4 text-label-md font-label-md font-medium text-on-surface-variant hover:text-on-surface flex items-center gap-2 transition-colors";
+      } else {
+        dirTab.classList.add('hidden');
+        matTab.classList.remove('hidden');
+
+        matBtn.className = "pb-3 px-4 text-label-md font-label-md font-bold text-secondary border-b-2 border-secondary flex items-center gap-2 transition-colors";
+        dirBtn.className = "pb-3 px-4 text-label-md font-label-md font-medium text-on-surface-variant hover:text-on-surface flex items-center gap-2 transition-colors";
+      }
+    }
+
+    function toggleDrawer() {
+      const drawer = document.getElementById('user-drawer');
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+      }
+    }
+
+    function selectUser(userKey) {
+      const drawer = document.getElementById('user-drawer');
+      drawer.classList.remove('hidden');
+    }
+
+    function handleRoleChange(role) {
+      const warningBox = document.getElementById('privileged-warning');
+      const scopeBox = document.getElementById('scope-container');
+
+      if (role === 'superadmin' || role === 'admin_tech') {
+        warningBox.classList.remove('hidden');
+        scopeBox.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        warningBox.classList.add('hidden');
+        scopeBox.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    function saveUserChanges() {
+      const toast = document.getElementById('toast');
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+
+
+</body></html>

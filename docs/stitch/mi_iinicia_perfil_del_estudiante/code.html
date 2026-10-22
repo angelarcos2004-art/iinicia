@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-subtle" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mi IINICIA – Perfil del Estudiante | Instituto de Innovación y Ciencias Aplicadas</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface": "#131b2e",
+            "outline-variant": "#bec8d2",
+            "on-primary-container": "#00314a",
+            "on-tertiary-container": "#082d5b",
+            "tertiary-fixed-dim": "#aac7fd",
+            "on-tertiary": "#ffffff",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "surface-container": "#eaedff",
+            "blue-institutional": "#002855",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#00497a",
+            "secondary-fixed": "#d0e4ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#faf8ff",
+            "on-secondary-fixed": "#001d35",
+            "secondary-fixed-dim": "#9ccaff",
+            "text-muted": "#64748b",
+            "surface-tint": "#006492",
+            "inverse-primary": "#8aceff",
+            "blue-deep": "#005a94",
+            "tertiary-container": "#7996c9",
+            "secondary-container": "#80bdfe",
+            "on-tertiary-fixed-variant": "#284775",
+            "on-primary-fixed-variant": "#004b6f",
+            "success": "#16a34a",
+            "primary-fixed-dim": "#8aceff",
+            "secondary": "#14629c",
+            "surface-canvas": "#ffffff",
+            "surface-subtle": "#f8fafc",
+            "on-secondary-container": "#004c7e",
+            "on-error-container": "#93000a",
+            "on-background": "#131b2e",
+            "on-error": "#ffffff",
+            "cyan-vibrant": "#009ee2",
+            "primary": "#006492",
+            "on-tertiary-fixed": "#001b3d",
+            "outline": "#6e7881",
+            "surface-variant": "#dae2fd",
+            "text-secondary": "#475569",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#c9e6ff",
+            "border-subtle": "#e2e8f0",
+            "surface": "#faf8ff",
+            "inverse-on-surface": "#eef0ff",
+            "surface-container-low": "#f2f3ff",
+            "surface-container-highest": "#dae2fd",
+            "warning": "#d97706",
+            "cyan-surface": "#e0f2fe",
+            "primary-container": "#009ee2",
+            "surface-container-high": "#e2e7ff",
+            "on-primary-fixed": "#001e2f",
+            "tertiary": "#415f8f",
+            "cyan-light": "#38bdf8",
+            "background": "#faf8ff",
+            "tertiary-fixed": "#d6e3ff",
+            "surface-dim": "#d2d9f4",
+            "on-surface-variant": "#3e4850",
+            "text-primary": "#0f172a",
+            "error": "#dc2626"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "margin-mobile": "1.25rem",
+            "space-md": "1rem",
+            "gutter-mobile": "1rem",
+            "gutter": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "gutter-desktop": "2rem",
+            "space-lg": "1.5rem",
+            "margin-desktop": "3rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-surface-subtle text-text-primary font-body-md antialiased flex flex-col">
+<!-- ================= TOP NAV BAR (SHARED COMPONENT) ================= -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-space-lg md:px-margin-desktop h-16 bg-surface-container-lowest border-b border-border-subtle shadow-sm transition-all duration-200 ease-in-out">
+<!-- Left: Logo & Search -->
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-3">
+<img alt="Logotipo Oficial IINICIA" class="h-10 w-10 object-contain rounded-md shadow-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApjhbM7XqDwKD6SYfUUyr2SNkjUymKCy1UmHJCMIuUBIB74HuSqwU4bbjuTNzTDutw70ZWBzlAZdtdvVipFF_ZOAuO4wAOmn6vhnx5wbVJn1k9ez9W38ndjOS-qKHOtiqWXy0hgDb7eReosz9gvrPeIscXW3AyJkPVY8iLZdNWhACIYilh1Zv6MoOiPyqbPVddju0xt9Yb8fXz3uX8k3eghWMWHiZEx-ItQfCeYUBgfRBfoE7iXlLmlu3UvUqfX9QU9ek"/>
+<div class="flex flex-col">
+<span class="text-title font-title tracking-tight text-blue-institutional">IINICIA</span>
+<span class="text-label-sm font-label-sm text-text-secondary leading-none hidden sm:inline">Innovación &amp; Ciencias Aplicadas</span>
+</div>
+</div>
+<!-- Search Bar on Left -->
+<div class="hidden lg:flex items-center relative">
+<span class="material-symbols-outlined absolute left-3 text-text-secondary text-lg" data-icon="search">search</span>
+<input class="pl-9 pr-4 py-1.5 w-72 text-body-sm font-body-sm bg-surface-subtle border border-border-subtle rounded-lg focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" placeholder="Buscar trámites, kárdex, reglamentos..." type="text"/>
+</div>
+</div>
+<!-- Center: Navigation Links -->
+<nav class="hidden xl:flex items-center gap-space-lg">
+<a class="text-text-secondary font-label-md text-label-md hover:text-primary hover:bg-cyan-surface px-space-sm py-1 rounded transition-colors duration-150" href="#">Campus Virtual</a>
+<a class="text-text-secondary font-label-md text-label-md hover:text-primary hover:bg-cyan-surface px-space-sm py-1 rounded transition-colors duration-150" href="#">Biblioteca Digital</a>
+<a class="text-text-secondary font-label-md text-label-md hover:text-primary hover:bg-cyan-surface px-space-sm py-1 rounded transition-colors duration-150" href="#">Investigación</a>
+<a class="text-text-secondary font-label-md text-label-md hover:text-primary hover:bg-cyan-surface px-space-sm py-1 rounded transition-colors duration-150" href="#">Trámites</a>
+</nav>
+<!-- Right: Trailing Actions, Secondary Action, Notifications & Profile -->
+<div class="flex items-center gap-space-sm sm:gap-space-md">
+<!-- Ayuda Académica -->
+<a class="hidden md:inline-flex items-center gap-1.5 text-text-secondary hover:text-blue-deep font-label-md text-label-md px-2.5 py-1.5 rounded-lg border border-border-subtle hover:bg-surface-subtle transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="help">help</span>
+        Ayuda Académica
+      </a>
+<!-- Trailing Icon Actions -->
+<button aria-label="Notificaciones" class="relative p-2 rounded-lg text-text-secondary hover:text-blue-institutional hover:bg-cyan-surface transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-vibrant rounded-full ring-2 ring-surface-container-lowest"></span>
+</button>
+<button aria-label="Aplicaciones del Campus" class="p-2 rounded-lg text-text-secondary hover:text-blue-institutional hover:bg-cyan-surface transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="apps">apps</span>
+</button>
+<div class="h-6 w-px bg-border-subtle hidden sm:block"></div>
+<!-- Trailing Primary Action: Mi IINICIA Student Badge -->
+<div class="flex items-center gap-2.5 pl-1">
+<div class="w-9 h-9 rounded-full ring-2 ring-cyan-vibrant/30 p-0.5 overflow-hidden bg-surface-subtle flex-shrink-0">
+<img alt="Fotografía de perfil de estudiante institucional IINICIA" class="w-full h-full object-cover rounded-full" data-alt="Fotografía de perfil de estudiante institucional IINICIA en alta resolución. Un joven profesional sonriendo de forma amigable y confiada en un campus universitario contemporáneo, iluminación natural nítida y elegante con atmósfera de innovación científica y paleta en sintonía con azul cian." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxjzMSGenes_XwUCLSsTjQa6pkhPPPVJuahNrJhvYY1BWTOsnd71-VsAKyL9B4Nf6NaiWcBrgjWyajLSBPuazNFcHlyUm6Dg4pIQYHhIXbMJuWw9v51jnJvM7RSrnGtbsZp7gT_h-XYbXC3CO9d30lfHKlT3fHqDWZJ9A7AvxkGNaL5-hbK96lPFhIRluMCPIURxD4OHGo82xZjQoXPVLmyXOfAqRvgMNBiJDX7JQPBaOKKsqmPodgZg"/>
+</div>
+<div class="hidden sm:flex flex-col text-left">
+<span class="text-label-md font-label-md text-blue-institutional leading-none">Mi IINICIA</span>
+<span class="text-label-sm font-label-sm text-cyan-vibrant leading-tight">C. Mendoza V.</span>
+</div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 relative overflow-hidden">
+<!-- ================= SIDE NAV BAR (PORTAL SIDEBAR) ================= -->
+<aside class="w-72 bg-surface-canvas border-r border-border-subtle hidden lg:flex flex-col justify-between p-space-md flex-shrink-0 shadow-sm z-40">
+<!-- Top Branding & Navigation -->
+<div class="space-y-space-md">
+<!-- Sidebar Header / Student Branding -->
+<div class="p-space-sm bg-gradient-to-br from-surface-subtle to-cyan-surface/30 rounded-xl border border-border-subtle flex items-center gap-3">
+<img alt="Isotipo y logotipo del Instituto de Innovación y Ciencias Aplicadas IINICIA" class="h-10 w-10 object-contain rounded-lg bg-surface-canvas p-1 shadow-xs border border-border-subtle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApjhbM7XqDwKD6SYfUUyr2SNkjUymKCy1UmHJCMIuUBIB74HuSqwU4bbjuTNzTDutw70ZWBzlAZdtdvVipFF_ZOAuO4wAOmn6vhnx5wbVJn1k9ez9W38ndjOS-qKHOtiqWXy0hgDb7eReosz9gvrPeIscXW3AyJkPVY8iLZdNWhACIYilh1Zv6MoOiPyqbPVddju0xt9Yb8fXz3uX8k3eghWMWHiZEx-ItQfCeYUBgfRBfoE7iXlLmlu3UvUqfX9QU9ek"/>
+<div>
+<h2 class="text-title font-title text-blue-institutional leading-tight">Mi IINICIA</h2>
+<p class="text-label-sm font-label-sm text-text-secondary leading-snug">Portal Institucional del Estudiante</p>
+</div>
+</div>
+<!-- Tab Items -->
+<nav class="space-y-1">
+<!-- 1: Panel Principal -->
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+            Panel Principal
+          </a>
+<!-- 2: Plan de Estudios -->
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="school">school</span>
+            Plan de Estudios
+          </a>
+<!-- 3: Calificaciones y Kárdex -->
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="assignment">assignment</span>
+            Calificaciones y Kárdex
+          </a>
+<!-- 4: Inscripciones -->
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="how_to_reg">how_to_reg</span>
+            Inscripciones
+          </a>
+<!-- 5: Servicios Escolares -->
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="domain">domain</span>
+            Servicios Escolares
+          </a>
+<!-- 6: Finanzas y Pagos -->
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="account_balance_wallet">account_balance_wallet</span>
+            Finanzas y Pagos
+          </a>
+<!-- Contextual ACTIVE State: Perfil del Estudiante -->
+<div class="pt-2 pb-1">
+<div class="h-px bg-border-subtle my-1"></div>
+<span class="px-space-md text-[10px] uppercase font-bold tracking-wider text-text-muted">Ajustes &amp; Cuenta</span>
+</div>
+<a class="flex items-center gap-space-sm bg-cyan-surface text-blue-institutional font-label-md text-label-md rounded-lg px-space-md py-space-sm border-l-4 border-cyan-vibrant transition-all" href="#perfil">
+<span class="material-symbols-outlined text-lg text-cyan-vibrant" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+            Perfil del Estudiante
+          </a>
+</nav>
+</div>
+<!-- Bottom Actions & Credencial CTA -->
+<div class="pt-space-md space-y-space-md border-t border-border-subtle">
+<!-- Credencial Digital Quick Card -->
+<button class="w-full flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-institutional to-blue-deep text-surface-container-lowest shadow-sm hover:shadow-md transition-all group" type="button">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-cyan-light group-hover:scale-110 transition-transform" data-icon="badge">badge</span>
+<div class="text-left">
+<span class="block text-label-sm font-label-sm leading-tight text-secondary-fixed">Credencial Digital</span>
+<span class="block text-[11px] text-primary-fixed opacity-90">ID: MAT-2024-78921</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-sm text-secondary-fixed opacity-70 group-hover:translate-x-0.5 transition-transform" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</button>
+<!-- Footer Navigation Items -->
+<div class="space-y-1">
+<a class="flex items-center gap-space-sm text-text-secondary font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:text-blue-institutional hover:bg-surface-subtle transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="contact_support">contact_support</span>
+            Soporte Técnico
+          </a>
+<a class="flex items-center gap-space-sm text-error font-label-md text-label-md rounded-lg px-space-md py-space-sm hover:bg-error-container/30 transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
+            Cerrar Sesión
+          </a>
+</div>
+</div>
+</aside>
+<!-- ================= MAIN CONTENT CANVAS ================= -->
+<main class="flex-1 overflow-y-auto custom-scroll p-space-md sm:p-space-lg lg:p-space-xl">
+<div class="max-w-6xl mx-auto space-y-space-xl pb-16">
+<!-- Breadcrumb & Top Bar Section Title -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+<div>
+<nav class="flex items-center gap-2 text-label-sm font-label-sm text-text-muted mb-1">
+<a class="hover:text-primary transition-colors" href="#">Portal Mi IINICIA</a>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-blue-deep font-semibold">Perfil del Estudiante</span>
+</nav>
+<h1 class="text-headline-lg font-headline-lg text-blue-institutional tracking-tight">Expediente y Perfil del Estudiante</h1>
+</div>
+<!-- Quick Action Buttons -->
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-border-subtle bg-surface-canvas text-text-secondary text-label-md font-label-md hover:bg-surface-subtle transition-all shadow-xs" type="button">
+<span class="material-symbols-outlined text-base" data-icon="file_download">file_download</span>
+              Descargar Kárdex
+            </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-deep text-white text-label-md font-label-md hover:bg-blue-institutional transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-base text-cyan-light" data-icon="print">print</span>
+              Constancia de Estudios
+            </button>
+</div>
+</div>
+<!-- ================= HERO PROFILE CARD ================= -->
+<div class="relative bg-surface-canvas border border-border-subtle rounded-2xl shadow-sm overflow-hidden">
+<!-- Subtle Decorative Tech Pattern Bar -->
+<div class="h-28 bg-gradient-to-r from-blue-institutional via-blue-deep to-cyan-vibrant relative">
+<div class="absolute inset-0 opacity-15" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="absolute right-6 top-4 flex items-center gap-2 bg-blue-institutional/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-white text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-cyan-light animate-pulse"></span>
+              Ciclo Académico Activo: 2024-B
+            </div>
+</div>
+<div class="px-space-lg sm:px-space-xl pb-space-lg pt-0 relative">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-14 sm:-mt-16">
+<!-- Avatar & Name Cluster -->
+<div class="flex flex-col sm:flex-row items-center sm:items-end gap-5 text-center sm:text-left">
+<!-- Large Avatar with Hover Overlay & Photo Change CTA -->
+<div class="relative group">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl ring-4 ring-surface-canvas shadow-lg overflow-hidden bg-surface-subtle border border-border-subtle flex-shrink-0">
+<img alt="Avatar oficial de Carlos Mendoza Villarreal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Retrato fotográfico nítido y profesional de Carlos Mendoza Villarreal, estudiante universitario de ingeniería de software e inteligencia artificial. Mirada inteligente, fondo sutilmente desenfocado de aula tecnológica luminosa con cristales pulcros y líneas geométricas contemporáneas." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGAFDG9qjJ-aliPnQ1vfSf89MHVaWmU-xn91fUkUlrtZEc0KNLc9tiZKVB8iX0C7egvAwVUSl7-ZZJMufd_ZjATE04mQJcwM6Yw40LcQLWrrRxEoBOUzL-vUAg6e1xUzaD8MBDumgTd00A4Ay_tLAjdy2d2iHRp3JtOC7frwgiV1SsUtphj1B4HUsGD6K6ri_xhrV4UANaBIg8xfk9U7tcb3Av2ghz7ru7ZSlqijd1SQJfsN0EPEZMfA"/>
+</div>
+<!-- Change Photo Trigger Overlay -->
+<label class="cursor-pointer absolute inset-0 bg-blue-institutional/70 rounded-2xl opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-200" for="avatar-upload">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="photo_camera">photo_camera</span>
+<span class="text-[11px] font-semibold text-cyan-light text-center px-2">Cambiar fotografía</span>
+</label>
+<input accept="image/png, image/jpeg" class="hidden" id="avatar-upload" type="file"/>
+</div>
+<!-- Identity Details -->
+<div class="space-y-1.5 pb-1">
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+<h2 class="text-headline-md font-headline-md text-blue-institutional tracking-tight">Carlos Mendoza Villarreal</h2>
+<!-- Emerald/Green Status Badge -->
+<span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      Alumno Regular Activo
+                    </span>
+</div>
+<p class="text-body-md font-body-md text-text-secondary">
+                    Licenciatura en Ingeniería de Software e Inteligencia Artificial
+                  </p>
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-label-sm font-label-sm text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="tag">tag</span>
+                      Matrícula: <strong class="text-blue-institutional font-semibold">MAT-2024-78921</strong>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="schedule">schedule</span>
+                      Último acceso al portal: Hoy, 10:42 AM
+                    </span>
+</div>
+</div>
+</div>
+<!-- Secondary Header Info Action -->
+<div class="flex flex-col sm:flex-row md:flex-col items-center sm:items-end justify-center gap-2">
+<button class="inline-flex items-center gap-2 px-4 py-2 text-label-md font-label-md text-blue-deep bg-cyan-surface/70 hover:bg-cyan-surface border border-cyan-vibrant/40 rounded-lg transition-colors" onclick="document.getElementById('avatar-upload').click();" type="button">
+<span class="material-symbols-outlined text-base" data-icon="upload_file">upload_file</span>
+                  Cambiar fotografía
+                </button>
+<span class="text-[11px] text-text-muted text-center sm:text-right">Formatos PNG o JPG (Máx. 5MB)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= BENTO GRID / MAIN MODULES ================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- ================= MODULE 1: DATOS ACADÉMICOS (SOLO LECTURA) ================= -->
+<div class="lg:col-span-12 bg-surface-canvas border border-border-subtle rounded-xl p-space-lg shadow-sm hover:border-cyan-vibrant transition-all duration-200">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-md border-b border-border-subtle gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined text-2xl" data-icon="verified">verified</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-blue-institutional">Datos Académicos Institucionales</h3>
+<p class="text-body-sm font-body-sm text-text-secondary">Información curricular oficial validada por la Dirección de Servicios Escolares.</p>
+</div>
+</div>
+<!-- Lock / Read-only badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-subtle text-text-secondary border border-border-subtle text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm text-outline" data-icon="lock">lock</span>
+                Registros Oficiales de Solo Lectura
+              </div>
+</div>
+<!-- Academic Info Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md pt-space-md">
+<!-- Item 1: Programa -->
+<div class="p-3.5 bg-surface-subtle/80 rounded-lg border border-border-subtle flex flex-col justify-between">
+<span class="text-label-sm font-label-sm text-text-muted uppercase tracking-wider">Programa Académico</span>
+<span class="text-body-md font-title text-blue-institutional mt-1 font-semibold">Licenciatura en Ingeniería de Software e Inteligencia Artificial</span>
+<span class="text-label-sm font-label-sm text-cyan-vibrant mt-2 inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="school">school</span>
+                  Facultad de Tecnologías Avanzadas
+                </span>
+</div>
+<!-- Item 2: Cohorte -->
+<div class="p-3.5 bg-surface-subtle/80 rounded-lg border border-border-subtle flex flex-col justify-between">
+<span class="text-label-sm font-label-sm text-text-muted uppercase tracking-wider">Cohorte de Ingreso</span>
+<span class="text-body-md font-title text-blue-institutional mt-1 font-semibold">2024-B (Otoño 2024)</span>
+<span class="text-label-sm font-label-sm text-text-secondary mt-2 inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="calendar_month">calendar_month</span>
+                  Semestre actual: 2do Semestre
+                </span>
+</div>
+<!-- Item 3: Matrícula -->
+<div class="p-3.5 bg-surface-subtle/80 rounded-lg border border-border-subtle flex flex-col justify-between">
+<span class="text-label-sm font-label-sm text-text-muted uppercase tracking-wider">Matrícula Oficial</span>
+<span class="text-headline-sm font-headline-sm text-blue-deep mt-1 font-mono tracking-tight">MAT-2024-78921</span>
+<span class="text-label-sm font-label-sm text-emerald-700 mt-2 inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span>
+                  Identificador Único Activo
+                </span>
+</div>
+<!-- Item 4: Modalidad -->
+<div class="p-3.5 bg-surface-subtle/80 rounded-lg border border-border-subtle flex flex-col justify-between">
+<span class="text-label-sm font-label-sm text-text-muted uppercase tracking-wider">Modalidad Educativa</span>
+<span class="text-body-md font-title text-blue-institutional mt-1 font-semibold">100% En Línea con Acompañamiento</span>
+<span class="text-label-sm font-label-sm text-text-secondary mt-2 inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="laptop_chromebook">laptop_chromebook</span>
+                  Tutor Académico: Dra. Elena Salgado
+                </span>
+</div>
+<!-- Item 5: Estatus SEP & RVOE -->
+<div class="p-3.5 bg-cyan-surface/30 rounded-lg border border-cyan-vibrant/30 flex flex-col justify-between md:col-span-2">
+<div class="flex items-start justify-between">
+<span class="text-label-sm font-label-sm text-blue-deep font-semibold uppercase tracking-wider">Estatus Oficial SEP</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-label-sm font-label-sm font-bold">
+                    VALIDADO
+                  </span>
+</div>
+<div class="mt-1">
+<span class="text-body-md font-title text-blue-institutional font-semibold">Expediente Validado RVOE No. 20211425</span>
+<p class="text-body-sm font-body-sm text-text-secondary mt-0.5">
+                    Certificación de antecedentes de Bachillerato y cotejo de CURP acreditados ante el Sistema de Información y Gestión Educativa (SIGED).
+                  </p>
+</div>
+<span class="text-label-sm font-label-sm text-blue-deep mt-2 inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="account_balance">account_balance</span>
+                  Secretaría de Educación Pública – Validez Nacional
+                </span>
+</div>
+</div>
+</div>
+<!-- ================= MODULE 2: DATOS PERSONALES EDITABLES ================= -->
+<div class="lg:col-span-7 bg-surface-canvas border border-border-subtle rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center gap-3 pb-space-md border-b border-border-subtle">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined text-2xl" data-icon="badge">badge</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-blue-institutional">Datos Personales Editables</h3>
+<p class="text-body-sm font-body-sm text-text-secondary">Mantén actualizados tus datos de contacto y localización para avisos prioritarios.</p>
+</div>
+</div>
+<!-- Form -->
+<form class="pt-space-md space-y-space-md" id="form-personal" onsubmit="event.preventDefault(); showSavedFeedback();">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<!-- Nombre(s) -->
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1.5" for="input-nombres">Nombre(s) <span class="text-error">*</span></label>
+<input class="w-full h-12 px-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" id="input-nombres" type="text" value="Carlos"/>
+</div>
+<!-- Apellidos -->
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1.5" for="input-apellidos">Apellidos <span class="text-error">*</span></label>
+<input class="w-full h-12 px-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" id="input-apellidos" type="text" value="Mendoza Villarreal"/>
+</div>
+<!-- Correo Institucional (Locked reference) -->
+<div>
+<label class="block text-label-md font-label-md text-text-muted mb-1.5">Correo Institucional (No editable)</label>
+<div class="flex items-center h-12 px-3.5 bg-surface-subtle border border-border-subtle rounded-lg text-body-sm font-body-sm text-text-muted">
+<span class="material-symbols-outlined text-sm mr-2" data-icon="lock">lock</span>
+                    carlos.mendoza@alumnos.iinicia.edu.mx
+                  </div>
+</div>
+<!-- Correo personal alternativo -->
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1.5" for="input-correo-personal">Correo personal alternativo <span class="text-error">*</span></label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" id="input-correo-personal" type="email" value="carlos.mendoza.tech@gmail.com"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-text-secondary text-lg" data-icon="mail">mail</span>
+</div>
+</div>
+<!-- Teléfono móvil con WhatsApp para alertas -->
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1.5" for="input-telefono">
+                    Teléfono móvil (WhatsApp) <span class="text-error">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" id="input-telefono" type="tel" value="+52 55 4192 8834"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-emerald-600 text-lg" data-icon="chat">chat</span>
+</div>
+<span class="text-[11px] text-text-muted mt-1 block">Utilizado para confirmación 2FA y avisos urgentes.</span>
+</div>
+<!-- Dirección / Ciudad -->
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1.5" for="input-ciudad">Dirección / Ciudad de Residencia</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" id="input-ciudad" type="text" value="Ciudad de México, Benito Juárez, CDMX"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-text-secondary text-lg" data-icon="location_on">location_on</span>
+</div>
+</div>
+</div>
+<!-- Button & Feedback banner -->
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="hidden items-center gap-2 text-emerald-700 bg-emerald-50 px-3.5 py-2 rounded-lg border border-emerald-200 text-body-sm font-body-sm animate-fade-in" id="save-feedback">
+<span class="material-symbols-outlined text-emerald-600 text-base" data-icon="check_circle">check_circle</span>
+<span>¡Cambios personales actualizados con éxito en la base institucional!</span>
+</div>
+<div class="sm:ml-auto w-full sm:w-auto">
+<button class="w-full sm:w-auto h-12 px-space-lg bg-blue-deep hover:bg-blue-institutional text-white font-label-md text-label-md rounded-lg shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-cyan-light text-lg" data-icon="save">save</span>
+                    Guardar cambios personales
+                  </button>
+</div>
+</div>
+</form>
+</div>
+<!-- ================= MODULE 3: PREFERENCIAS DE NOTIFICACIONES ================= -->
+<div class="lg:col-span-5 bg-surface-canvas border border-border-subtle rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 pb-space-md border-b border-border-subtle">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined text-2xl" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-blue-institutional">Preferencias de Notificaciones</h3>
+<p class="text-body-sm font-body-sm text-text-secondary">Configura los canales y recordatorios que deseas recibir.</p>
+</div>
+</div>
+<div class="pt-space-md space-y-4">
+<!-- Toggle 1: Avisos académicos y entregas -->
+<div class="flex items-start justify-between gap-3 p-3 rounded-lg hover:bg-surface-subtle transition-colors">
+<div class="space-y-0.5">
+<label class="text-label-md font-label-md text-blue-institutional cursor-pointer" for="toggle-academic">Avisos académicos y entregas de tareas</label>
+<p class="text-body-sm font-body-sm text-text-secondary">Recordatorio 24h antes del cierre de rúbricas y proyectos.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
+<input checked="" class="sr-only peer" id="toggle-academic" type="checkbox"/>
+<div class="w-11 h-6 bg-border-subtle peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-cyan-surface rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-vibrant"></div>
+</label>
+</div>
+<!-- Toggle 2: Notificaciones de calificaciones en Campus Virtual -->
+<div class="flex items-start justify-between gap-3 p-3 rounded-lg hover:bg-surface-subtle transition-colors">
+<div class="space-y-0.5">
+<label class="text-label-md font-label-md text-blue-institutional cursor-pointer" for="toggle-grades">Calificaciones en Campus Virtual</label>
+<p class="text-body-sm font-body-sm text-text-secondary">Alertas inmediatas al publicar notas parciales y retroalimentaciones.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
+<input checked="" class="sr-only peer" id="toggle-grades" type="checkbox"/>
+<div class="w-11 h-6 bg-border-subtle peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-cyan-surface rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-vibrant"></div>
+</label>
+</div>
+<!-- Toggle 3: Recordatorios de pago de colegiatura -->
+<div class="flex items-start justify-between gap-3 p-3 rounded-lg hover:bg-surface-subtle transition-colors">
+<div class="space-y-0.5">
+<label class="text-label-md font-label-md text-blue-institutional cursor-pointer" for="toggle-payments">Recordatorios de colegiatura y pagos</label>
+<p class="text-body-sm font-body-sm text-text-secondary">Alertas 5 días antes de la fecha límite para evitar recargos.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
+<input checked="" class="sr-only peer" id="toggle-payments" type="checkbox"/>
+<div class="w-11 h-6 bg-border-subtle peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-cyan-surface rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-vibrant"></div>
+</label>
+</div>
+<!-- Toggle 4: Mensajes de profesores por WhatsApp y correo -->
+<div class="flex items-start justify-between gap-3 p-3 rounded-lg hover:bg-surface-subtle transition-colors">
+<div class="space-y-0.5">
+<label class="text-label-md font-label-md text-blue-institutional cursor-pointer" for="toggle-professors">Mensajes directos de docentes</label>
+<p class="text-body-sm font-body-sm text-text-secondary">Reenvío prioritario de dudas y citas de asesoría a WhatsApp.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
+<input checked="" class="sr-only peer" id="toggle-professors" type="checkbox"/>
+<div class="w-11 h-6 bg-border-subtle peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-cyan-surface rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-vibrant"></div>
+</label>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-label-sm font-label-sm text-text-muted">
+<span>Sincronización en tiempo real</span>
+<span class="text-cyan-vibrant font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="cloud_done">cloud_done</span>
+                Guardado automático
+              </span>
+</div>
+</div>
+<!-- ================= MODULE 4: SEGURIDAD DE LA CUENTA ================= -->
+<div class="lg:col-span-12 bg-surface-canvas border border-border-subtle rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center gap-3 pb-space-md border-b border-border-subtle">
+<div class="w-10 h-10 rounded-lg bg-cyan-surface flex items-center justify-center text-blue-deep">
+<span class="material-symbols-outlined text-2xl" data-icon="security">security</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-blue-institutional">Seguridad de la Cuenta Institucional</h3>
+<p class="text-body-sm font-body-sm text-text-secondary">Gestión de credenciales de acceso unificado (SSO) y control de dispositivos autorizados.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg pt-space-md">
+<!-- Left side: Password change form -->
+<div class="lg:col-span-6 space-y-space-md">
+<h4 class="text-title font-title text-blue-institutional flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant text-lg" data-icon="key">key</span>
+                  Cambio de Contraseña Institucional
+                </h4>
+<form class="space-y-3.5" onsubmit="event.preventDefault(); alert('Contraseña institucional actualizada.');">
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1">Contraseña actual</label>
+<input class="w-full h-11 px-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1">Nueva contraseña</label>
+<input class="w-full h-11 px-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" placeholder="Mínimo 8 caracteres" type="password"/>
+</div>
+<div>
+<label class="block text-label-md font-label-md text-text-primary mb-1">Confirmar nueva contraseña</label>
+<input class="w-full h-11 px-3.5 bg-surface-canvas border border-border-subtle rounded-lg text-body-md font-body-md text-text-primary focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-surface focus:outline-none transition-all" placeholder="Repite la contraseña" type="password"/>
+</div>
+</div>
+<!-- Notice regarding unified Moodle / App login -->
+<div class="p-3 bg-surface-subtle border border-border-subtle rounded-lg flex items-start gap-2.5">
+<span class="material-symbols-outlined text-blue-deep text-lg flex-shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="text-body-sm font-body-sm text-text-secondary">
+<strong>Nota importante:</strong> Al actualizar esta contraseña, se modificará automáticamente tu acceso a <strong>Campus Moodle</strong>, a la <strong>Biblioteca Digital</strong> y a la <strong>App Móvil IINICIA</strong>.
+                    </p>
+</div>
+<button class="px-5 py-2.5 bg-blue-deep hover:bg-blue-institutional text-white font-label-md text-label-md rounded-lg transition-colors shadow-xs flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-base" data-icon="lock_reset">lock_reset</span>
+                    Actualizar Contraseña
+                  </button>
+</form>
+</div>
+<!-- Right side: Active sessions list -->
+<div class="lg:col-span-6 space-y-space-md lg:border-l lg:border-border-subtle lg:pl-space-lg">
+<div class="flex items-center justify-between">
+<h4 class="text-title font-title text-blue-institutional flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant text-lg" data-icon="devices">devices</span>
+                    Sesiones Activas
+                  </h4>
+<span class="text-label-sm font-label-sm text-text-muted">2 Dispositivos conectados</span>
+</div>
+<div class="space-y-3">
+<!-- Session 1: Current Session -->
+<div class="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/40 flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-canvas border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
+<span class="material-symbols-outlined text-xl" data-icon="laptop_mac">laptop_mac</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-blue-institutional">Chrome en macOS</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                            Sesión actual
+                          </span>
+</div>
+<p class="text-body-sm font-body-sm text-text-secondary">Ciudad de México, México • Dirección IP: 189.215.82.***</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-600 text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Session 2: Mobile App -->
+<div class="p-3.5 rounded-xl border border-border-subtle bg-surface-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-canvas border border-border-subtle flex items-center justify-center text-blue-deep shadow-xs">
+<span class="material-symbols-outlined text-xl" data-icon="smartphone">smartphone</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-blue-institutional">App Móvil IINICIA en Pixel 7</span>
+<span class="text-label-sm font-label-sm text-text-muted">v2.4.1</span>
+</div>
+<p class="text-body-sm font-body-sm text-text-secondary">Activo hace 2 horas • Red Celular 5G</p>
+</div>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle text-text-secondary hover:text-error hover:border-error/30 hover:bg-error-container/20 text-label-sm font-label-sm transition-colors" onclick="this.closest('.flex-col').remove();" type="button">
+<span class="material-symbols-outlined text-base" data-icon="logout">logout</span>
+                      Cerrar sesión en este dispositivo
+                    </button>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-subtle/50 border border-border-subtle text-center">
+<a class="text-label-sm font-label-sm text-blue-deep hover:text-cyan-vibrant font-semibold transition-colors" href="#">
+                    ¿No reconoces algún dispositivo? Cerrar todas las sesiones remotas →
+                  </a>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= MODULE 5: APP MÓVIL IINICIA BANNER ================= -->
+<div class="lg:col-span-12 rounded-2xl bg-gradient-to-r from-blue-institutional via-blue-deep to-[#004777] text-white p-space-lg sm:p-space-xl relative overflow-hidden shadow-lg border border-cyan-vibrant/20">
+<!-- Decorative atmospheric glows -->
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-cyan-vibrant/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute left-1/3 top-0 w-64 h-64 bg-cyan-light/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-space-xl">
+<!-- Left content: Value proposition -->
+<div class="space-y-space-md max-w-2xl text-center lg:text-left">
+<div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-vibrant/20 border border-cyan-light/30 text-cyan-light text-label-sm font-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-base" data-icon="verified_user">verified_user</span>
+                  Ecosistema Académico 24/7
+                </div>
+<h3 class="text-headline-lg font-headline-lg text-surface-container-lowest tracking-tight">
+                  Lleva tu universidad en el bolsillo con la <span class="text-cyan-light underline decoration-cyan-vibrant/40 decoration-4">App Móvil IINICIA</span>
+</h3>
+<p class="text-body-lg font-body-lg text-secondary-fixed">
+                  Accede a tu <strong>Credencial Digital Institucional</strong> para laboratorios y bibliotecas, sincroniza tus clases para verlas <strong>sin conexión a internet</strong> y recibe alertas instantáneas de tareas y calificaciones.
+                </p>
+<!-- Value pills -->
+<div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+<div class="flex items-center gap-1.5 bg-blue-institutional/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-body-sm font-body-sm text-surface-container-lowest">
+<span class="material-symbols-outlined text-cyan-light text-base" data-icon="badge">badge</span>
+                    Credencial Digital con QR Dinámico
+                  </div>
+<div class="flex items-center gap-1.5 bg-blue-institutional/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-body-sm font-body-sm text-surface-container-lowest">
+<span class="material-symbols-outlined text-cyan-light text-base" data-icon="cloud_off">cloud_off</span>
+                    Modo Lectura Offline
+                  </div>
+<div class="flex items-center gap-1.5 bg-blue-institutional/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-body-sm font-body-sm text-surface-container-lowest">
+<span class="material-symbols-outlined text-cyan-light text-base" data-icon="video_camera_front">video_camera_front</span>
+                    Acceso directo a Clases en Vivo
+                  </div>
+</div>
+<!-- Download Badges -->
+<div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+<!-- Google Play Store Badge -->
+<a class="inline-flex items-center gap-3 bg-white text-blue-institutional px-4 py-2.5 rounded-xl hover:bg-cyan-surface transition-all shadow-md group" href="#">
+<span class="material-symbols-outlined text-3xl text-emerald-600 group-hover:scale-110 transition-transform" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<div class="text-left">
+<span class="block text-[10px] text-text-secondary leading-tight uppercase font-bold tracking-wider">Disponible en</span>
+<span class="block text-label-lg font-label-lg font-bold leading-none">Google Play</span>
+</div>
+</a>
+<!-- Apple App Store Badge -->
+<a class="inline-flex items-center gap-3 bg-white text-blue-institutional px-4 py-2.5 rounded-xl hover:bg-cyan-surface transition-all shadow-md group" href="#">
+<span class="material-symbols-outlined text-3xl text-blue-deep group-hover:scale-110 transition-transform" data-icon="phone_iphone">phone_iphone</span>
+<div class="text-left">
+<span class="block text-[10px] text-text-secondary leading-tight uppercase font-bold tracking-wider">Descárgalo en</span>
+<span class="block text-label-lg font-label-lg font-bold leading-none">App Store</span>
+</div>
+</a>
+</div>
+</div>
+<!-- Right: Interactive QR Code Module -->
+<div class="flex flex-col items-center p-space-md bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg text-center flex-shrink-0">
+<span class="text-label-sm font-label-sm text-secondary-fixed mb-2 font-semibold">ESCANEA PARA DESCARGAR</span>
+<!-- Quick Access QR Placeholder Box -->
+<div class="w-36 h-36 bg-surface-canvas rounded-xl p-2.5 shadow-inner flex flex-col items-center justify-center border-2 border-dashed border-cyan-vibrant/60">
+<!-- Visual stylized QR SVG simulation with IINICIA branding -->
+<div class="w-full h-full bg-blue-institutional rounded-lg p-2 flex flex-col justify-between relative overflow-hidden">
+<div class="flex justify-between">
+<div class="w-6 h-6 border-2 border-cyan-light flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-cyan-light"></div>
+</div>
+<div class="w-6 h-6 border-2 border-cyan-light flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-cyan-light"></div>
+</div>
+</div>
+<!-- Center Mini Logo mark -->
+<div class="self-center flex items-center justify-center w-8 h-8 rounded bg-surface-canvas p-0.5 shadow-sm">
+<img alt="IINICIA Mini" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApjhbM7XqDwKD6SYfUUyr2SNkjUymKCy1UmHJCMIuUBIB74HuSqwU4bbjuTNzTDutw70ZWBzlAZdtdvVipFF_ZOAuO4wAOmn6vhnx5wbVJn1k9ez9W38ndjOS-qKHOtiqWXy0hgDb7eReosz9gvrPeIscXW3AyJkPVY8iLZdNWhACIYilh1Zv6MoOiPyqbPVddju0xt9Yb8fXz3uX8k3eghWMWHiZEx-ItQfCeYUBgfRBfoE7iXlLmlu3UvUqfX9QU9ek"/>
+</div>
+<div class="flex justify-between">
+<div class="w-6 h-6 border-2 border-cyan-light flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-cyan-light"></div>
+</div>
+<div class="flex gap-1 items-end">
+<div class="w-2 h-2 bg-cyan-light"></div>
+<div class="w-2 h-4 bg-cyan-vibrant"></div>
+</div>
+</div>
+</div>
+</div>
+<span class="text-[11px] text-primary-fixed mt-2">Compatible con iOS 15+ y Android 10+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ================= INSTITUTIONAL FOOTER (SHARED COMPONENT) ================= -->
+<footer class="w-full py-space-xl px-space-lg md:px-margin-desktop flex flex-col items-center justify-center text-center gap-space-md bg-blue-institutional border-t border-blue-deep text-surface-container-lowest">
+<!-- Footer Brand & Mark -->
+<div class="flex items-center gap-3">
+<img alt="Logotipo IINICIA Footer" class="h-9 w-9 object-contain brightness-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApjhbM7XqDwKD6SYfUUyr2SNkjUymKCy1UmHJCMIuUBIB74HuSqwU4bbjuTNzTDutw70ZWBzlAZdtdvVipFF_ZOAuO4wAOmn6vhnx5wbVJn1k9ez9W38ndjOS-qKHOtiqWXy0hgDb7eReosz9gvrPeIscXW3AyJkPVY8iLZdNWhACIYilh1Zv6MoOiPyqbPVddju0xt9Yb8fXz3uX8k3eghWMWHiZEx-ItQfCeYUBgfRBfoE7iXlLmlu3UvUqfX9QU9ek"/>
+<span class="text-headline-sm font-headline-sm text-surface-container-lowest">IINICIA</span>
+</div>
+<!-- Institutional Mandatory Links -->
+<nav class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-outline-variant font-label-sm text-label-sm hover:text-cyan-light transition-colors duration-150" href="#">Aviso de Privacidad Institucional</a>
+<span class="text-outline-variant text-xs hidden sm:inline">•</span>
+<a class="text-outline-variant font-label-sm text-label-sm hover:text-cyan-light transition-colors duration-150" href="#">Estatuto General</a>
+<span class="text-outline-variant text-xs hidden sm:inline">•</span>
+<a class="text-outline-variant font-label-sm text-label-sm hover:text-cyan-light transition-colors duration-150" href="#">Reglamento Académico</a>
+<span class="text-outline-variant text-xs hidden sm:inline">•</span>
+<a class="text-outline-variant font-label-sm text-label-sm hover:text-cyan-light transition-colors duration-150" href="#">Validación de Documentos Oficiales</a>
+<span class="text-outline-variant text-xs hidden sm:inline">•</span>
+<a class="text-outline-variant font-label-sm text-label-sm hover:text-cyan-light transition-colors duration-150" href="#">Transparencia y RVOE SEP</a>
+</nav>
+<!-- RVOE and Copyright Notice -->
+<div class="max-w-4xl text-body-sm font-body-sm text-outline-variant opacity-85 leading-relaxed pt-2">
+      © 2025 Instituto de Innovación y Ciencias Aplicadas (IINICIA). Institución de Educación Superior con Reconocimiento de Validez Oficial de Estudios (RVOE) de la Secretaría de Educación Pública. Todos los derechos reservados.
+    </div>
+</footer>
+<!-- Inline Script for Interactive Feedback -->
+<script>
+    function showSavedFeedback() {
+      const banner = document.getElementById('save-feedback');
+      if (banner) {
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+        setTimeout(() => {
+          banner.classList.add('hidden');
+          banner.classList.remove('flex');
+        }, 4000);
+      }
+    }
+  </script>
+</body></html>

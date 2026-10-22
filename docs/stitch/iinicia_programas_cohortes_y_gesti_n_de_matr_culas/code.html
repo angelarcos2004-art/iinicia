@@ -1,0 +1,1170 @@
+<!DOCTYPE html><html class="h-full bg-background" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>IINICIA Campus Admin - Programas, Cohortes y Matrículas</title>
+<!-- Material Symbols Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with custom plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-primary": "#aec6ff",
+            "surface-container-highest": "#d8e3fb",
+            "secondary-container": "#7aacff",
+            "background": "#f9f9ff",
+            "on-secondary-container": "#003e80",
+            "secondary-fixed": "#d6e3ff",
+            "tertiary-fixed-dim": "#ffba3b",
+            "primary": "#00163a",
+            "tertiary-container": "#3d2800",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#d8e2ff",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#7a93ca",
+            "on-surface": "#111c2d",
+            "surface-container-lowest": "#ffffff",
+            "inverse-on-surface": "#ecf1ff",
+            "on-error-container": "#93000a",
+            "error-container": "#ffdad6",
+            "primary-container": "#0b2a5b",
+            "on-tertiary-fixed": "#281900",
+            "on-secondary-fixed": "#001b3e",
+            "outline-variant": "#c4c6d0",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "secondary-fixed-dim": "#aac7ff",
+            "surface-dim": "#cfdaf2",
+            "on-surface-variant": "#44474f",
+            "surface-container": "#e7eeff",
+            "surface-bright": "#f9f9ff",
+            "outline": "#747780",
+            "on-primary-fixed-variant": "#2c4678",
+            "surface-container-low": "#f0f3ff",
+            "inverse-surface": "#263143",
+            "primary-fixed-dim": "#aec6ff",
+            "on-tertiary-fixed-variant": "#604100",
+            "tertiary-fixed": "#ffdead",
+            "on-tertiary-container": "#c48800",
+            "secondary": "#235eac",
+            "on-background": "#111c2d",
+            "on-error": "#ffffff",
+            "surface-variant": "#d8e3fb",
+            "surface-container-high": "#dee8ff",
+            "surface-tint": "#455e91",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#00458d",
+            "tertiary": "#231500",
+            "on-primary-fixed": "#001a42"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "margin-mobile": "1.25rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "gutter-desktop": "2rem",
+            "margin-desktop": "3rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "title": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["0.8125rem", { lineHeight: "1.125rem", letterSpacing: "0.02em", fontWeight: "600" }],
+            "display": ["3.5rem", { lineHeight: "4.25rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "headline-lg": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-md": ["1rem", { lineHeight: "1.625rem", fontWeight: "400" }],
+            "title": ["1.125rem", { lineHeight: "1.625rem", fontWeight: "600" }],
+            "headline-lg-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.015em", fontWeight: "700" }],
+            "label-sm": ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.04em", fontWeight: "700" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.75rem", fontWeight: "400" }],
+            "body-sm": ["0.875rem", { lineHeight: "1.375rem", fontWeight: "400" }],
+            "label-lg": ["0.9375rem", { lineHeight: "1.375rem", letterSpacing: "0.01em", fontWeight: "600" }],
+            "headline-sm": ["1.25rem", { lineHeight: "1.75rem", fontWeight: "600" }],
+            "display-mobile": ["2.5rem", { lineHeight: "3rem", letterSpacing: "-0.025em", fontWeight: "800" }],
+            "headline-md": ["1.5rem", { lineHeight: "2rem", letterSpacing: "-0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c4c6d0;
+      border-radius: 4px;
+    }
+    .elevation-1 {
+      box-shadow: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+    }
+    .elevation-2 {
+      box-shadow: 0 4px 6px -2px rgba(11, 42, 91, 0.05), 0 10px 15px -3px rgba(11, 42, 91, 0.08);
+    }
+    .elevation-3 {
+      box-shadow: 0 10px 25px -5px rgba(11, 42, 91, 0.12), 0 20px 25px -5px rgba(11, 42, 91, 0.08);
+    }
+  </style>
+</head>
+<body class="h-full font-body-md text-on-surface antialiased flex flex-col overflow-hidden bg-background">
+<!-- TOPNAV BAR (SHARED COMPONENT IMPLEMENTATION) -->
+<header class="w-full h-16 px-gutter flex items-center justify-between sticky top-0 bg-surface-container-lowest dark:bg-primary-container z-40 border-b border-outline-variant dark:border-outline shadow-sm flex-shrink-0">
+<!-- Brand & Search Bar -->
+<div class="flex items-center gap-space-lg flex-1 max-w-2xl">
+<div class="flex items-center gap-space-sm">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="IINICIA Logo" class="h-9 w-auto object-contain flex-shrink-0">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary tracking-tight whitespace-nowrap">
+          IINICIA Campus Admin
+        </span>
+<span class="font-label-sm text-label-sm text-secondary px-2 py-0.5 rounded-full bg-secondary-fixed/50 font-bold border border-secondary-container/50 ml-1">
+          v2.4
+        </span>
+</div>
+<!-- Global Search with ⌘K -->
+<div class="relative w-full max-w-md hidden md:block">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+</span>
+<input class="w-full h-10 pl-9 pr-12 text-body-sm font-body-sm bg-surface-container-low border border-outline-variant/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Buscar programas, cohortes, RVOE o matrículas... (⌘K)" type="text">
+<span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+<kbd class="px-1.5 py-0.5 text-[10px] font-semibold text-on-surface-variant bg-surface-container-highest/60 border border-outline-variant rounded">⌘K</kbd>
+</span>
+</div>
+</div>
+<!-- Actions & User Profile Cluster -->
+<div class="flex items-center gap-space-md">
+<!-- Amber Action CTA -->
+<button class="h-10 px-space-md bg-tertiary-fixed-dim hover:brightness-95 active:scale-[0.99] text-primary font-label-lg font-bold rounded-lg flex items-center gap-1.5 shadow-sm transition-all duration-150">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+<span class="">+ Nuevo Programa / Cohorte</span>
+</button>
+<!-- Role Selector & Badge -->
+<div class="hidden lg:flex items-center gap-2 pl-2 border-l border-outline-variant/40">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="IINICIA Logo" class="h-9 w-auto object-contain flex-shrink-0">
+<button class="font-label-md text-label-md text-secondary hover:text-primary transition-colors flex items-center gap-0.5">
+<span class="">Cambiar Rol</span>
+<span class="material-symbols-outlined text-base" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- Icon Actions -->
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="relative p-2 rounded-lg hover:bg-surface-container-high transition-colors" title="Notificaciones del campus">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors" title="Centro de Ayuda">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<!-- User Profile Header Node -->
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant/40">
+<div class="text-right hidden sm:block">
+<div class="font-label-md text-label-md font-bold text-on-surface leading-tight">Dr. Fernando Rivas</div>
+<div class="font-label-sm text-[11px] text-on-surface-variant leading-tight">Director Académico</div>
+</div>
+<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-surface-container-highest">
+          FR
+        </div>
+</div>
+</div>
+</header>
+<!-- SUB-BANNER / PERMISSION CONTEXT -->
+<div class="w-full bg-surface-container-low px-gutter py-1.5 border-b border-outline-variant/40 flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant flex-shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="verified_user">verified_user</span>
+<span class=""><strong>Privilegios Activos:</strong> Plan de estudios oficial RVOE SEP, calendarización de cohortes activas y enrolamiento automático vía Moodle API v4.2.</span>
+</div>
+<div class="flex items-center gap-3 text-xs">
+<span class="inline-flex items-center gap-1 text-green-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-green-500"></span> Moodle LMS Conectado (latencia 18ms)
+      </span>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Ciclo Escolar: <strong>2026-1</strong></span>
+</div>
+</div>
+<!-- MAIN APP CONTAINER (SIDEBAR + MAIN CANVAS) -->
+<div class="flex-1 flex overflow-hidden">
+<!-- SIDEBAR NAVIGATION DRAWER (EXACT BLUEPRINT FROM JSON) -->
+<aside class="w-72 h-full flex flex-col justify-between py-space-md px-space-sm border-r border-outline-variant dark:border-outline bg-surface-container-low dark:bg-primary z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
+<div class="space-y-4">
+<!-- Sidebar Institutional Header -->
+<div class="px-space-sm pb-3 border-b border-outline-variant/40 flex items-center gap-3">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="IINICIA Logo" class="h-9 w-auto object-contain flex-shrink-0">
+<div>
+<div class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary leading-tight">IINICIA</div>
+<div class="text-[11px] font-label-md text-on-surface-variant">Gestión Académica Central</div>
+</div>
+</div>
+<!-- Section: Académico -->
+<div>
+<div class="px-3 pb-1 text-[10px] font-label-sm font-bold text-on-surface-variant uppercase tracking-wider">Gestión Académica</div>
+<nav class="space-y-0.5">
+<!-- Active item from JSON: "Programas" -->
+<a class="bg-surface-container-highest dark:bg-primary-container text-secondary dark:text-secondary-fixed font-semibold rounded-lg px-space-md py-space-sm flex items-center gap-space-sm transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="school" data-weight="fill">school</span>
+<span class="text-label-md font-label-md flex-1">Programas</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface dark:hover:text-surface-lowest hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="date_range">date_range</span>
+<span class="text-label-md font-label-md">Cohortes y periodos</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface dark:hover:text-surface-lowest hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="text-label-md font-label-md flex-1">Aspirantes</span>
+<span class="text-[10px] bg-secondary-fixed text-on-secondary-fixed font-bold px-1.5 py-0.5 rounded-full">148</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface dark:hover:text-surface-lowest hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span class="text-label-md font-label-md">Matrículas</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface dark:hover:text-surface-lowest hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="text-label-md font-label-md">Estudiantes</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface dark:hover:text-surface-lowest hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="cast_for_education">cast_for_education</span>
+<span class="text-label-md font-label-md">Docentes</span>
+</a>
+</nav>
+</div>
+<!-- Section: Contenidos Institucionales -->
+<div>
+<div class="px-3 pb-1 text-[10px] font-label-sm font-bold text-on-surface-variant uppercase tracking-wider">Contenidos y Portal</div>
+<nav class="space-y-0.5">
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="web">web</span>
+<span class="text-label-md font-label-md">Páginas</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="newspaper">newspaper</span>
+<span class="text-label-md font-label-md">Noticias</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Oferta académica</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="text-label-md font-label-md">Preguntas frecuentes</span>
+</a>
+</nav>
+</div>
+<!-- Section: Sistema e Infraestructura -->
+<div>
+<div class="px-3 pb-1 text-[10px] font-label-sm font-bold text-on-surface-variant uppercase tracking-wider">Gobernanza &amp; TI</div>
+<nav class="space-y-0.5">
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+<span class="text-label-md font-label-md">Usuarios y roles</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="integration_instructions">integration_instructions</span>
+<span class="text-label-md font-label-md">Integraciones SEP/LMS</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+<span class="text-label-md font-label-md">Auditoría</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Configuración</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Footer CTA and Logout -->
+<div class="pt-4 border-t border-outline-variant/40 space-y-2">
+<div class="p-3 bg-surface-container rounded-lg border border-outline-variant/30 text-xs">
+<div class="flex items-center gap-2 font-bold text-primary mb-1">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="support_agent">support_agent</span>
+<span class="">Soporte Campus</span>
+</div>
+<p class="text-on-surface-variant text-[11px] leading-tight">Mesa técnica directiva disponible 24/7 para incidencias SEP.</p>
+</div>
+<button class="w-full text-on-surface-variant font-medium rounded-lg px-space-md py-2 flex items-center gap-space-sm hover:text-error hover:bg-error-container/20 transition-all text-label-md">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="">Cerrar sesión</span>
+</button>
+</div>
+</aside>
+<!-- CONTENT CANVAS -->
+<main class="flex-1 flex flex-col overflow-hidden bg-background">
+<!-- PAGE HEADER & NAVIGATION TABS -->
+<div class="px-gutter pt-space-lg pb-0 bg-surface-container-lowest border-b border-outline-variant/40 flex-shrink-0">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-space-md">
+<div>
+<div class="flex items-center gap-2 text-xs font-label-sm text-secondary font-bold uppercase tracking-wider mb-1">
+<span class="">Vicerrectoría Académica</span>
+<span class="">•</span>
+<span class="">Coordinación de Matrículas e Integración LMS</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg font-bold text-primary tracking-tight">
+              Programas, Cohortes y Matrículas
+            </h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+              Administración unificada de oferta curricular, periodos de apertura y vinculación de estudiantes con aulas virtuales Moodle.
+            </p>
+</div>
+<!-- Quick Stats Indicators -->
+<div class="flex items-center gap-3">
+<div class="px-3.5 py-2 rounded-xl bg-surface-container-low border border-outline-variant/50 text-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Total Programas</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">28</span>
+</div>
+<div class="px-3.5 py-2 rounded-xl bg-surface-container-low border border-outline-variant/50 text-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Cohortes Activas</span>
+<span class="text-headline-sm font-headline-sm font-bold text-secondary">64</span>
+</div>
+<div class="px-3.5 py-2 rounded-xl bg-surface-container-low border border-outline-variant/50 text-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Estudiantes LMS</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">1,842</span>
+</div>
+</div>
+</div>
+<!-- Tab Group Navigation -->
+<div class="flex items-center gap-8 border-b border-outline-variant/60 -mb-[1px]">
+<button class="pb-3 text-label-lg font-label-lg font-bold text-secondary border-b-2 border-secondary flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="auto_stories">auto_stories</span>
+<span class="">Programas Académicos y Cohortes</span>
+<span class="px-2 py-0.5 rounded-full text-xs bg-secondary-fixed text-on-secondary-fixed font-bold">28</span>
+</button>
+<button class="pb-3 text-label-lg font-label-lg font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent hover:border-outline-variant flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="sync_saved_locally">sync_saved_locally</span>
+<span class="">Gestión Operativa de Matrículas y Moodle</span>
+<span class="px-2 py-0.5 rounded-full text-xs bg-surface-container-high text-on-surface-variant font-bold">Lote #380</span>
+</button>
+</div>
+</div>
+<!-- WORKSPACE SCROLLABLE SPLIT LAYOUT -->
+<div class="flex-1 flex overflow-hidden">
+<!-- CANVAS LEFT & CENTER (PROGRAM SELECTOR & COHORTS GRID) -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-gutter space-y-space-lg">
+<!-- FILTER PILLS FOR PROGRAM TYPES -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-surface-container-lowest p-3 rounded-xl border border-outline-variant/50 elevation-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md bg-primary-container text-on-primary font-bold shadow-sm">
+                Todos (28)
+              </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors font-semibold">
+                Licenciaturas (8)
+              </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors font-semibold">
+                Diplomados (12)
+              </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors font-semibold">
+                Certificaciones (5)
+              </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors font-semibold">
+                Cursos Especializados (3)
+              </button>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase font-bold">Filtrar por RVOE:</span>
+<span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-surface-container text-on-surface border border-outline-variant/40 flex items-center gap-1">
+                SEP Vigente
+                <span class="material-symbols-outlined text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+</span>
+</div>
+</div>
+<!-- PROGRAM LIST HORIZONTAL CAROUSEL / BENTO SELECTOR -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Selected Card 1 -->
+<div class="relative bg-surface-container-lowest p-4 rounded-xl border-2 border-secondary shadow-md cursor-pointer transition-all">
+<div class="absolute top-3 right-3">
+<span class="w-3 h-3 rounded-full bg-secondary inline-block"></span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-label-sm uppercase bg-primary-container/10 text-primary-container font-bold">
+                  Licenciatura
+                </span>
+<span class="text-xs font-mono font-bold text-secondary">RVOE SEP-2023091</span>
+</div>
+<h3 class="font-title text-title font-bold text-primary leading-tight mb-2">
+                Lic. en Ingeniería de Software e Inteligencia Artificial
+              </h3>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant pt-2 border-t border-outline-variant/30">
+<span class="flex items-center gap-1 font-semibold text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="layers">layers</span> 6 Cohortes
+                </span>
+<span class="font-medium text-on-surface">380 Alumnos</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 hover:border-secondary/50 elevation-1 transition-all cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-label-sm uppercase bg-primary-container/10 text-primary-container font-bold">
+                  Licenciatura
+                </span>
+<span class="text-xs font-mono text-on-surface-variant">RVOE SEP-2023092</span>
+</div>
+<h3 class="font-title text-title font-semibold text-on-surface leading-tight mb-2">
+                Lic. en Ciencia de Datos y Analítica Avanzada
+              </h3>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant pt-2 border-t border-outline-variant/30">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="layers">layers</span> 4 Cohortes
+                </span>
+<span class="font-medium text-on-surface">240 Alumnos</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 hover:border-secondary/50 elevation-1 transition-all cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-label-sm uppercase bg-amber-100 text-amber-900 font-bold">
+                  Diplomado
+                </span>
+<span class="text-xs font-mono text-on-surface-variant">Cert. DGAIR</span>
+</div>
+<h3 class="font-title text-title font-semibold text-on-surface leading-tight mb-2">
+                Diplomado Ejecutivo en Ciberseguridad Cloud
+              </h3>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant pt-2 border-t border-outline-variant/30">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="layers">layers</span> 3 Cohortes
+                </span>
+<span class="font-medium text-on-surface">95 Alumnos</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 hover:border-secondary/50 elevation-1 transition-all cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-label-sm uppercase bg-blue-100 text-blue-900 font-bold">
+                  Certificación
+                </span>
+<span class="text-xs font-mono text-on-surface-variant">Oficial SEP</span>
+</div>
+<h3 class="font-title text-title font-semibold text-on-surface leading-tight mb-2">
+                Certificación Profesional Prompt Engineering &amp; LLMs
+              </h3>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant pt-2 border-t border-outline-variant/30">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="layers">layers</span> 2 Cohortes
+                </span>
+<span class="font-medium text-on-surface">68 Alumnos</span>
+</div>
+</div>
+</div>
+<!-- DETAILED OVERVIEW OF THE ACTIVE SELECTED PROGRAM -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 elevation-1 p-space-lg">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between pb-space-md border-b border-outline-variant/40 gap-4">
+<div>
+<div class="flex items-center gap-2 text-xs font-mono text-secondary mb-1">
+<span class="bg-secondary-fixed px-2 py-0.5 rounded font-bold">PLAN DE ESTUDIOS: LIS-IA-2023</span>
+<span class="">•</span>
+<span class="">Registro RVOE Federal 2023091 del 14/11/2023</span>
+</div>
+<h2 class="text-headline-md font-headline-md font-bold text-primary">
+                  Licenciatura en Ingeniería de Software e Inteligencia Artificial
+                </h2>
+<div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-body-sm font-body-sm text-on-surface-variant mt-2">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="award_star">award_star</span>
+<strong>320 Créditos</strong> SATCA
+                  </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="calendar_month">calendar_month</span>
+                    Periodicidad: <strong>Cuatrimestral (9 Ciclos)</strong>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="person_outline">person_outline</span>
+                    Director: <strong>Mtro. Alejandro Carvajal P.</strong>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="lan">lan</span>
+                    Moodle Category: <strong>/Pregrado/Ingenieria-IA/</strong>
+</span>
+</div>
+</div>
+<!-- Period Filter / Selector -->
+<div class="flex items-center gap-3">
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Periodo de Visualización</span>
+<div class="relative inline-block">
+<select class="h-10 pl-3 pr-8 text-label-md font-label-md font-bold text-primary bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary">
+<option selected="">Ciclo 2026-1 (Febrero - Mayo 2026)</option>
+<option>Ciclo 2025-3 (Septiembre - Diciembre 2025)</option>
+<option>Ciclo 2025-2 (Mayo - Agosto 2025)</option>
+</select>
+</div>
+</div>
+<button class="h-10 px-3 border border-secondary text-secondary hover:bg-surface-container-low rounded-lg font-label-md font-semibold flex items-center gap-1 self-end transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="tune">tune</span>
+<span class="">Ajustes Plan</span>
+</button>
+</div>
+</div>
+<!-- COHORTS GRID (4 DETAILED COHORTS) -->
+<div class="pt-space-md">
+<div class="flex items-center justify-between mb-space-md">
+<h3 class="font-title text-title font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="groups">groups</span>
+                  Cohortes Activas y en Convocatoria (Ciclo 2026-1)
+                </h3>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Mostrando 4 de 6 cohortes registradas</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- COHORTE 1 -->
+<div class="p-space-md rounded-xl border border-outline-variant/60 bg-surface-container-lowest hover:border-secondary transition-all elevation-1">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm font-bold text-primary">Cohorte SW-2026-A</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-800">
+                          En Curso
+                        </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Generación 2026 • 1er Cuatrimestre</p>
+</div>
+<span class="px-2 py-1 bg-surface-container text-secondary text-xs font-mono font-bold rounded">
+                      ID #COH-9841
+                    </span>
+</div>
+<!-- Date range and sync indicator -->
+<div class="mt-3 py-2 px-3 bg-surface-container-low rounded-lg flex items-center justify-between text-xs font-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="event">event</span>
+                      09 Feb 2026 — 29 May 2026
+                    </span>
+<span class="flex items-center gap-1 font-semibold text-green-700">
+<span class="material-symbols-outlined text-sm" data-icon="cloud_done">cloud_done</span>
+                      Moodle 100% Sincronizado
+                    </span>
+</div>
+<!-- Capacity bar -->
+<div class="mt-3">
+<div class="flex justify-between text-xs font-label-md mb-1">
+<span class="text-on-surface-variant">Capacidad y Cupo:</span>
+<span class="font-bold text-primary">32 / 35 estudiantes (91% ocupación)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 91%"></div>
+</div>
+</div>
+<!-- Moodle Linked Courses chips -->
+<div class="mt-3">
+<span class="text-[11px] font-label-sm font-bold uppercase text-on-surface-variant block mb-1.5">
+                      4 Aulas Virtuales Moodle Vinculadas:
+                    </span>
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40" title="Fundamentos de IA">IA-301</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40" title="Matemáticas Discretas">MAT-101</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40" title="Programación Orientada a Objetos">PROG-201</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40" title="Bases de Datos Relacionales">BD-101</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="mt-4 pt-3 border-t border-outline-variant/40 flex items-center justify-between">
+<button class="text-secondary font-label-md font-semibold text-xs hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+                      Ver Grupo en Moodle
+                    </button>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-label-md font-semibold border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg">
+                        Ver Grupo
+                      </button>
+<button class="px-3 py-1.5 text-xs font-label-md font-bold bg-primary-container text-on-primary hover:bg-secondary rounded-lg transition-colors">
+                        Matricular Alumnos
+                      </button>
+</div>
+</div>
+</div>
+<!-- COHORTE 2 -->
+<div class="p-space-md rounded-xl border border-outline-variant/60 bg-surface-container-lowest hover:border-secondary transition-all elevation-1">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm font-bold text-primary">Cohorte SW-2025-C</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-800">
+                          En Curso
+                        </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Generación 2025 • 2do Cuatrimestre</p>
+</div>
+<span class="px-2 py-1 bg-surface-container text-secondary text-xs font-mono font-bold rounded">
+                      ID #COH-8921
+                    </span>
+</div>
+<div class="mt-3 py-2 px-3 bg-surface-container-low rounded-lg flex items-center justify-between text-xs font-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="event">event</span>
+                      09 Feb 2026 — 29 May 2026
+                    </span>
+<span class="flex items-center gap-1 font-semibold text-green-700">
+<span class="material-symbols-outlined text-sm" data-icon="cloud_done">cloud_done</span>
+                      Moodle Sincronizado
+                    </span>
+</div>
+<div class="mt-3">
+<div class="flex justify-between text-xs font-label-md mb-1">
+<span class="text-on-surface-variant">Capacidad y Cupo:</span>
+<span class="font-bold text-primary">28 / 35 estudiantes (80% ocupación)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-[11px] font-label-sm font-bold uppercase text-on-surface-variant block mb-1.5">
+                      5 Aulas Virtuales Moodle Vinculadas:
+                    </span>
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">EST-201</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">ALGO-202</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">REDES-101</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">WEB-301</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">ETICA-101</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40 flex items-center justify-between">
+<button class="text-secondary font-label-md font-semibold text-xs hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+                      Ver Grupo en Moodle
+                    </button>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-label-md font-semibold border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg">
+                        Ver Grupo
+                      </button>
+<button class="px-3 py-1.5 text-xs font-label-md font-bold bg-primary-container text-on-primary hover:bg-secondary rounded-lg transition-colors">
+                        Matricular Alumnos
+                      </button>
+</div>
+</div>
+</div>
+<!-- COHORTE 3 -->
+<div class="p-space-md rounded-xl border border-outline-variant/60 bg-surface-container-lowest hover:border-secondary transition-all elevation-1">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm font-bold text-primary">Cohorte SW-2024-B</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-800">
+                          En Curso
+                        </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Generación 2024 • 4to Cuatrimestre</p>
+</div>
+<span class="px-2 py-1 bg-surface-container text-secondary text-xs font-mono font-bold rounded">
+                      ID #COH-7340
+                    </span>
+</div>
+<div class="mt-3 py-2 px-3 bg-surface-container-low rounded-lg flex items-center justify-between text-xs font-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="event">event</span>
+                      09 Feb 2026 — 29 May 2026
+                    </span>
+<span class="flex items-center gap-1 font-semibold text-green-700">
+<span class="material-symbols-outlined text-sm" data-icon="cloud_done">cloud_done</span>
+                      Moodle Sincronizado
+                    </span>
+</div>
+<div class="mt-3">
+<div class="flex justify-between text-xs font-label-md mb-1">
+<span class="text-on-surface-variant">Capacidad y Cupo:</span>
+<span class="font-bold text-primary">30 / 35 estudiantes (85% ocupación)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-[11px] font-label-sm font-bold uppercase text-on-surface-variant block mb-1.5">
+                      5 Aulas Virtuales Moodle Vinculadas:
+                    </span>
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">ML-401</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">DEV-402</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">CLOUD-301</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">SEC-201</span>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface text-xs font-mono rounded border border-outline-variant/40">MET-401</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40 flex items-center justify-between">
+<button class="text-secondary font-label-md font-semibold text-xs hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+                      Ver Grupo en Moodle
+                    </button>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-label-md font-semibold border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg">
+                        Ver Grupo
+                      </button>
+<button class="px-3 py-1.5 text-xs font-label-md font-bold bg-primary-container text-on-primary hover:bg-secondary rounded-lg transition-colors">
+                        Matricular Alumnos
+                      </button>
+</div>
+</div>
+</div>
+<!-- COHORTE 4 -->
+<div class="p-space-md rounded-xl border border-secondary/40 bg-surface-container-low/40 hover:border-secondary transition-all elevation-1">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm font-bold text-primary">Cohorte SW-2026-B</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                          Convocatoria Abierta
+                        </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Próxima Apertura • Mayo 2026</p>
+</div>
+<span class="px-2 py-1 bg-surface-container text-secondary text-xs font-mono font-bold rounded">
+                      ID #COH-9912
+                    </span>
+</div>
+<div class="mt-3 py-2 px-3 bg-surface-container-lowest rounded-lg flex items-center justify-between text-xs font-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-sm text-tertiary-fixed-dim" data-icon="pending_actions">pending_actions</span>
+                      01 Jun 2026 — 18 Sep 2026
+                    </span>
+<span class="flex items-center gap-1 font-semibold text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="edit_calendar">edit_calendar</span>
+                      Inscripciones Activas
+                    </span>
+</div>
+<div class="mt-3">
+<div class="flex justify-between text-xs font-label-md mb-1">
+<span class="text-on-surface-variant">Preinscripciones y Disponibilidad:</span>
+<span class="font-bold text-primary">14 / 35 cupos asignados (40%)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-[11px] font-label-sm font-bold uppercase text-on-surface-variant block mb-1.5">
+                      4 Aulas Virtuales Moodle Configuras:
+                    </span>
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface text-xs font-mono rounded border border-outline-variant/40">IA-301</span>
+<span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface text-xs font-mono rounded border border-outline-variant/40">MAT-101</span>
+<span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface text-xs font-mono rounded border border-outline-variant/40">PROG-201</span>
+<span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface text-xs font-mono rounded border border-outline-variant/40">BD-101</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40 flex items-center justify-between">
+<span class="text-xs text-on-surface-variant font-medium">Apertura en 42 días</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-label-md font-semibold border border-outline-variant text-on-surface hover:bg-surface-container rounded-lg">
+                        Ver Prospectos
+                      </button>
+<button class="px-3 py-1.5 text-xs font-label-md font-bold bg-tertiary-fixed-dim text-primary hover:brightness-95 rounded-lg transition-all">
+                        Asignar Aspirantes
+                      </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- INTEGRATED MATRÍCULAS & MOODLE SYNC TABLE SECTION -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 elevation-1 overflow-hidden">
+<!-- Table Header Toolbar -->
+<div class="p-space-md border-b border-outline-variant/40 space-y-3">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="font-title text-title font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="badge">badge</span>
+                    Gestión Directa de Matrículas y Enrolamiento Moodle
+                  </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                    Sincronización de credenciales institucionales, altas RVOE y enrolamiento directo en base de datos Moodle.
+                  </p>
+</div>
+<!-- Action buttons -->
+<div class="flex items-center gap-2 flex-wrap">
+<button class="h-9 px-3 text-label-md font-label-md font-bold bg-secondary text-on-secondary rounded-lg hover:bg-primary transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="group_add">group_add</span>
+<span class="">+ Asignación Masiva a Cohorte</span>
+</button>
+<button class="h-9 px-3 text-label-md font-label-md font-semibold border border-secondary text-secondary hover:bg-surface-container-low rounded-lg transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="sync">sync</span>
+<span class="">Sincronizar Lote con Moodle</span>
+</button>
+</div>
+</div>
+<!-- Search and Filters row -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2">
+<div class="md:col-span-5 relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+</span>
+<input class="w-full h-9 pl-9 pr-3 text-body-sm bg-surface-container-low border border-outline-variant/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary" placeholder="Filtrar por nombre, matrícula oficial o correo..." type="text">
+</div>
+<div class="md:col-span-4">
+<select class="w-full h-9 px-3 text-body-sm bg-surface-container-low border border-outline-variant/60 rounded-lg text-on-surface focus:outline-none focus:ring-1 focus:ring-secondary">
+<option selected="">Cohorte: Cohorte SW-2026-A (Activa)</option>
+<option>Cohorte: Cohorte SW-2025-C</option>
+<option>Cohorte: Cohorte SW-2024-B</option>
+<option>Todas las cohortes del programa</option>
+</select>
+</div>
+<div class="md:col-span-3 flex items-center justify-end gap-2 text-body-sm text-on-surface-variant">
+<span class="text-xs font-semibold">Seleccionados: <strong>1 de 32</strong></span>
+<button class="p-1 hover:bg-surface-container rounded" title="Descargar CSV">
+<span class="material-symbols-outlined text-base" data-icon="download">download</span>
+</button>
+<button class="p-1 hover:bg-surface-container rounded" title="Refrescar tabla">
+<span class="material-symbols-outlined text-base" data-icon="refresh">refresh</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Table Responsive -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-body-sm font-body-sm">
+<thead>
+<tr class="bg-surface-container text-on-surface-variant font-label-sm uppercase tracking-wider text-[11px] border-b border-outline-variant/50">
+<th class="p-3 w-10 text-center">
+<input class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+</th>
+<th class="p-3">Estudiante / Matrícula Oficial</th>
+<th class="p-3">Programa y Cohorte Actual</th>
+<th class="p-3">Estado Matrícula</th>
+<th class="p-3">Sincronización LMS Moodle</th>
+<th class="p-3">Último Acceso LMS</th>
+<th class="p-3 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- ROW 1 - SELECTED (VALERIA MENDOZA) -->
+<tr class="bg-secondary-fixed/30 hover:bg-secondary-fixed/50 transition-colors border-l-4 border-secondary">
+<td class="p-3 text-center">
+<input checked="" class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+</td>
+<td class="p-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center text-xs">
+                          VM
+                        </div>
+<div>
+<div class="font-bold text-primary leading-tight">Valeria Mendoza Sánchez</div>
+<div class="text-xs font-mono text-secondary font-semibold">EST-2024-0842 • valeria.mendoza@iincia.edu.mx</div>
+</div>
+</div>
+</td>
+<td class="p-3">
+<div class="font-semibold text-on-surface">Lic. Software e IA</div>
+<div class="text-xs text-on-surface-variant font-medium">Cohorte SW-2026-A (1er Cuat.)</div>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800">
+<span class="w-1.5 h-1.5 rounded-full bg-green-600"></span> Activa / Regular
+                      </span>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-surface-container text-secondary border border-outline-variant/40">
+<span class="material-symbols-outlined text-xs text-green-600" data-icon="check_circle">check_circle</span>
+                        Moodle User #4092 (4/4 Cursos)
+                      </span>
+</td>
+<td class="p-3 text-xs text-on-surface-variant">
+<span class="font-medium text-on-surface">Hoy, 10:14 AM</span>
+<div class="text-[10px]">Alta: 12 Ene 2026</div>
+</td>
+<td class="p-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="px-2 py-1 text-xs font-label-md font-bold text-error bg-error-container/40 hover:bg-error-container text-on-error-container rounded transition-colors" title="Gestionar Baja / Suspensión">
+                          Gestionar Baja
+                        </button>
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3 text-center">
+<input class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+</td>
+<td class="p-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-primary font-bold flex items-center justify-center text-xs">
+                          CR
+                        </div>
+<div>
+<div class="font-semibold text-primary leading-tight">Carlos Rodrigo Ortiz Luna</div>
+<div class="text-xs font-mono text-on-surface-variant">EST-2024-0843 • c.ortiz@iincia.edu.mx</div>
+</div>
+</div>
+</td>
+<td class="p-3">
+<div class="font-medium text-on-surface">Lic. Software e IA</div>
+<div class="text-xs text-on-surface-variant">Cohorte SW-2026-A (1er Cuat.)</div>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800">
+<span class="w-1.5 h-1.5 rounded-full bg-green-600"></span> Activa / Regular
+                      </span>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-surface-container text-secondary border border-outline-variant/40">
+<span class="material-symbols-outlined text-xs text-green-600" data-icon="check_circle">check_circle</span>
+                        Moodle User #4093 (4/4 Cursos)
+                      </span>
+</td>
+<td class="p-3 text-xs text-on-surface-variant">
+<span class="font-medium text-on-surface">Ayer, 18:40 PM</span>
+<div class="text-[10px]">Alta: 12 Ene 2026</div>
+</td>
+<td class="p-3 text-right">
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3 text-center">
+<input class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+</td>
+<td class="p-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-primary font-bold flex items-center justify-center text-xs">
+                          AM
+                        </div>
+<div>
+<div class="font-semibold text-primary leading-tight">Andrea Morales Godínez</div>
+<div class="text-xs font-mono text-on-surface-variant">EST-2024-0849 • a.morales@iincia.edu.mx</div>
+</div>
+</div>
+</td>
+<td class="p-3">
+<div class="font-medium text-on-surface">Lic. Software e IA</div>
+<div class="text-xs text-on-surface-variant">Cohorte SW-2026-A (1er Cuat.)</div>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> Pendiente Doc. SEP
+                      </span>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-amber-50 text-amber-900 border border-amber-300">
+<span class="material-symbols-outlined text-xs text-amber-700" data-icon="sync_problem">sync_problem</span>
+                        Pendiente enrolar (3/4 Cursos)
+                      </span>
+</td>
+<td class="p-3 text-xs text-on-surface-variant">
+<span class="font-medium text-on-surface">Hace 3 días</span>
+<div class="text-[10px]">Alta: 14 Ene 2026</div>
+</td>
+<td class="p-3 text-right">
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 4 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3 text-center">
+<input class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+</td>
+<td class="p-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-primary font-bold flex items-center justify-center text-xs">
+                          LH
+                        </div>
+<div>
+<div class="font-semibold text-primary leading-tight">Luis Hernández Castañeda</div>
+<div class="text-xs font-mono text-on-surface-variant">EST-2024-0855 • l.hernandez@iincia.edu.mx</div>
+</div>
+</div>
+</td>
+<td class="p-3">
+<div class="font-medium text-on-surface">Lic. Software e IA</div>
+<div class="text-xs text-on-surface-variant">Cohorte SW-2026-A (1er Cuat.)</div>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-900">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> En Trámite
+                      </span>
+</td>
+<td class="p-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-blue-50 text-blue-900 border border-blue-200">
+<span class="material-symbols-outlined text-xs text-blue-600" data-icon="schedule">schedule</span>
+                        En cola de sync (Batch #18)
+                      </span>
+</td>
+<td class="p-3 text-xs text-on-surface-variant">
+<span class="italic text-on-surface-variant">Sin acceso previo</span>
+<div class="text-[10px]">Alta: 18 Ene 2026</div>
+</td>
+<td class="p-3 text-right">
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination -->
+<div class="px-space-md py-3 bg-surface-container-low border-t border-outline-variant/40 flex items-center justify-between text-xs text-on-surface-variant">
+<span class="">Mostrando <strong>1 - 4</strong> de <strong>32</strong> matrículas registradas en esta cohorte</span>
+<div class="flex items-center gap-1">
+<button class="px-2 py-1 border border-outline-variant/50 rounded bg-surface-container-lowest disabled:opacity-50" disabled="">Anterior</button>
+<button class="px-2 py-1 border border-secondary bg-secondary text-on-secondary rounded font-bold">1</button>
+<button class="px-2 py-1 border border-outline-variant/50 rounded bg-surface-container-lowest">2</button>
+<button class="px-2 py-1 border border-outline-variant/50 rounded bg-surface-container-lowest">Siguiente</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT PANEL: GESTIÓN DE BAJA Y SUSPENSIÓN DE MATRÍCULA (SLIDING FLYOUT) -->
+<aside class="w-96 border-l border-outline-variant/60 bg-surface-container-lowest flex flex-col justify-between shadow-xl z-20 flex-shrink-0 overflow-y-auto custom-scrollbar">
+<div class="p-space-lg space-y-space-md">
+<!-- Panel Header -->
+<div class="flex items-start justify-between pb-space-sm border-b border-outline-variant/40">
+<div>
+<div class="flex items-center gap-1.5 text-xs font-label-sm font-bold text-error uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-base" data-icon="warning">warning</span>
+<span class="">Trámite Escolar Crítico</span>
+</div>
+<h3 class="font-title text-title font-bold text-primary">
+                  Gestión de Estado de Matrícula
+                </h3>
+</div>
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded-lg hover:bg-surface-container" title="Cerrar panel">
+<span class="material-symbols-outlined text-lg" data-icon="close">close</span>
+</button>
+</div>
+<!-- Student Summary Card -->
+<div class="p-3 rounded-lg bg-surface-container-low border border-outline-variant/50 space-y-1.5">
+<span class="text-[11px] font-label-sm uppercase font-bold text-on-surface-variant">Estudiante Seleccionado:</span>
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center text-sm shadow-sm">
+                  VM
+                </div>
+<div>
+<div class="font-bold text-on-surface text-sm">Valeria Mendoza Sánchez</div>
+<div class="text-xs font-mono text-secondary">Matrícula: EST-2024-0842</div>
+</div>
+</div>
+<div class="text-[11px] text-on-surface-variant pt-1 border-t border-outline-variant/30 flex justify-between">
+<span class="">Cohorte SW-2026-A</span>
+<span class="text-green-700 font-semibold">Actualmente Regular</span>
+</div>
+</div>
+<!-- Action Type Radio Selector -->
+<div class="space-y-2">
+<label class="text-label-md font-label-md font-bold text-primary block">
+                Tipo de Acción Institucional:
+              </label>
+<div class="space-y-2">
+<label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-outline-variant/60 hover:border-secondary cursor-pointer bg-surface-container-lowest transition-colors">
+<input class="mt-0.5 text-secondary focus:ring-secondary" name="baja_type" type="radio">
+<div>
+<div class="text-xs font-bold text-primary">Suspensión Temporal (Permiso Escolar)</div>
+<p class="text-[11px] text-on-surface-variant">Congela materias hasta por 2 cuatrimestres sin perder estatus RVOE.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-2.5 rounded-lg border-2 border-error/50 bg-error-container/10 cursor-pointer transition-colors">
+<input checked="" class="mt-0.5 text-error focus:ring-error" name="baja_type" type="radio">
+<div>
+<div class="text-xs font-bold text-error">Baja Definitiva del Programa (SEP RVOE)</div>
+<p class="text-[11px] text-on-surface-variant">Revocación formal de matrícula y reporte a la Dirección General SEP.</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Motivo Dropdown (Required) -->
+<div class="space-y-1">
+<label class="text-label-sm font-label-sm font-bold text-on-surface block">
+                Motivo Obligatorio del Movimiento <span class="text-error">*</span>
+</label>
+<select class="w-full h-10 px-3 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary">
+<option disabled="" value="">Seleccione una causa justificada...</option>
+<option selected="">Académico (Reprobación consecutiva de asignaturas)</option>
+<option>Administrativo / Documental (Incumplimiento certificado)</option>
+<option>Económico / Deserción voluntaria</option>
+<option>Solicitud expresa del estudiante con formato firmado</option>
+</select>
+</div>
+<!-- Folio de Acta Input -->
+<div class="space-y-1">
+<label class="text-label-sm font-label-sm font-bold text-on-surface block">
+                Folio de Acta o Justificante Oficial <span class="text-error">*</span>
+</label>
+<input class="w-full h-10 px-3 font-mono text-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Ej. ACT-SEP-2026-0481" type="text" value="ACT-SEP-2026-0491-B">
+<span class="text-[10px] text-on-surface-variant">Debe coincidir con el expediente digital en Control Escolar.</span>
+</div>
+<!-- Observaciones / Bitácora Textarea -->
+<div class="space-y-1">
+<label class="text-label-sm font-label-sm font-bold text-on-surface block">
+                Observaciones y Bitácora de Auditoría
+              </label>
+<textarea class="w-full p-2.5 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary text-xs" placeholder="Detalle los antecedentes de la comisión dictaminadora y acuerdos con el estudiante..." rows="3">Se formaliza baja tras vencimiento de prórroga concedida el 15/01/2026. Dictamen avalado por Dirección Académica.</textarea>
+</div>
+<!-- Automated LMS Impact Checkboxes -->
+<div class="p-3 bg-surface-container-low rounded-lg space-y-2 border border-outline-variant/40">
+<span class="text-[10px] font-label-sm font-bold uppercase text-on-surface-variant block">Acciones Automáticas en Sistema:</span>
+<label class="flex items-start gap-2 text-xs text-on-surface cursor-pointer">
+<input checked="" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+<span class="">Desactivar cuenta y suspender enrolamientos en Moodle LMS de forma inmediata.</span>
+</label>
+<label class="flex items-start gap-2 text-xs text-on-surface cursor-pointer">
+<input checked="" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+<span class="">Notificar automáticamente a Coordinación Escolar y Docentes titulares.</span>
+</label>
+<label class="flex items-start gap-2 text-xs text-on-surface cursor-pointer">
+<input class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox">
+<span class="">Emitir Certificado Parcial de Estudios (Kardex Digital).</span>
+</label>
+</div>
+</div>
+<!-- Flyout Footer Action Buttons -->
+<div class="p-space-md border-t border-outline-variant/40 bg-surface-container space-y-2">
+<button class="w-full h-11 bg-error hover:brightness-95 active:scale-[0.99] text-on-error font-label-lg font-bold rounded-lg shadow transition-all duration-150 flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-lg" data-icon="person_remove">person_remove</span>
+<span class="">Confirmar y Aplicar Baja de Matrícula</span>
+</button>
+<button class="w-full h-9 bg-transparent hover:bg-surface-container-highest text-on-surface font-label-md font-semibold rounded-lg transition-colors">
+              Cancelar y Cerrar
+            </button>
+</div>
+</aside>
+</div>
+</main>
+</div>
+
+
+</body></html>

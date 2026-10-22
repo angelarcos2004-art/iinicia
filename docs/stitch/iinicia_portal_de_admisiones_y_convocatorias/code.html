@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admisiones 2026 | IINICIA - Instituto de Innovación y Ciencias Aplicadas</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container-Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#004b6f",
+            "surface-variant": "#dae2fd",
+            "on-surface": "#131b2e",
+            "inverse-on-surface": "#eef0ff",
+            "on-error-container": "#93000a",
+            "text-secondary": "#475569",
+            "secondary-fixed-dim": "#9ccaff",
+            "primary-fixed-dim": "#8aceff",
+            "cyan-vibrant": "#009ee2",
+            "tertiary-fixed-dim": "#aac7fd",
+            "secondary": "#14629c",
+            "surface-container": "#f0f6fa",
+            "surface": "#faf8ff",
+            "on-tertiary-fixed": "#001b3d",
+            "surface-container-high": "#e2e7ff",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "success": "#16a34a",
+            "on-primary-container": "#00314a",
+            "surface-container-low": "#f2f3ff",
+            "primary": "#006492",
+            "on-background": "#131b2e",
+            "cyan-light": "#38bdf8",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#009ee2",
+            "on-error": "#ffffff",
+            "on-primary-fixed": "#001e2f",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#00497a",
+            "outline-variant": "#bec8d2",
+            "cyan-surface": "#e0f2fe",
+            "secondary-fixed": "#d0e4ff",
+            "on-secondary-fixed": "#001d35",
+            "outline": "#6e7881",
+            "surface-subtle": "#f8fafc",
+            "text-primary": "#0f172a",
+            "primary-fixed": "#c9e6ff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#d6e3ff",
+            "on-tertiary-container": "#082d5b",
+            "warning": "#d97706",
+            "on-secondary-container": "#004c7e",
+            "text-muted": "#64748b",
+            "secondary-container": "#80bdfe",
+            "blue-deep": "#005a94",
+            "border-subtle": "#e2e8f0",
+            "blue-institutional": "#002855",
+            "surface-tint": "#006492",
+            "surface-container-highest": "#dae2fd",
+            "error": "#dc2626",
+            "surface-dim": "#d2d9f4",
+            "tertiary": "#415f8f",
+            "background": "#faf8ff",
+            "on-tertiary-fixed-variant": "#284775",
+            "on-secondary": "#ffffff",
+            "surface-canvas": "#ffffff",
+            "on-surface-variant": "#3e4850",
+            "surface-bright": "#faf8ff",
+            "tertiary-container": "#7996c9",
+            "inverse-primary": "#8aceff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "margin-desktop": "3rem",
+            "gutter-mobile": "1rem",
+            "margin-mobile": "1.25rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "gutter-desktop": "2rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "display": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface text-text-primary antialiased selection:bg-cyan-vibrant selection:text-blue-institutional font-body-md text-body-md">
+<!-- ================= TOP APP BAR (Shared Component Anchor) ================= -->
+<header class="docked full-width top-0 sticky z-50 bg-surface-canvas/90 dark:bg-blue-institutional/90 backdrop-blur-md shadow-sm dark:shadow-md">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand Anchor with Official Logo -->
+<a class="flex items-center gap-3 group transition-all duration-200 ease-in-out active:scale-95" href="#">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-institutional p-1.5 shadow-sm">
+<img alt="IINICIA - Instituto de Innovación y Ciencias Aplicadas" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title text-title font-extrabold text-blue-institutional dark:text-surface-canvas tracking-tight">IINICIA</span>
+<span class="font-label-sm text-label-sm text-text-muted hidden sm:block tracking-wide uppercase">Ciencias Aplicadas</span>
+</div>
+</a>
+<!-- Desktop Navigation Links (Admisiones Active) -->
+<nav class="hidden md:flex items-center space-x-7">
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Inicio</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Universidad</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Oferta Académica</a>
+<a class="text-cyan-vibrant font-semibold border-b-2 border-cyan-vibrant pb-1 font-label-md text-label-md" href="#">Admisiones</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Noticias</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Contacto</a>
+</nav>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center justify-center font-label-md text-label-md text-blue-deep hover:bg-cyan-surface rounded-lg px-4 py-2 transition-all duration-200 ease-in-out" href="#mi-campus">
+<span class="material-symbols-outlined text-lg mr-1.5" data-icon="vpn_key">vpn_key</span>
+          Mi Campus
+        </a>
+<a class="inline-flex items-center justify-center font-label-md text-label-md bg-blue-deep text-on-primary hover:bg-[#004777] rounded-lg px-5 py-2.5 transition-all duration-200 ease-in-out shadow-sm active:scale-95 font-semibold" href="#formulario-admision">
+          Registrarme
+        </a>
+</div>
+</div>
+</header>
+<main>
+<!-- ================= HERO SECTION ================= -->
+<section class="relative overflow-hidden bg-gradient-to-b from-surface-canvas via-surface-container to-surface pt-12 pb-20 md:py-24">
+<!-- High-tech atmospheric grid glow -->
+<div class="absolute inset-0 pointer-events-none opacity-40 bg-[radial-gradient(#009ee2_1px,transparent_1px)] [background-size:24px_24px]"></div>
+<div class="absolute -top-32 right-0 w-96 h-96 bg-cyan-vibrant/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 left-1/4 w-80 h-80 bg-blue-deep/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7 space-y-6">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-surface border border-[#BAE6FD] text-blue-deep">
+<span class="material-symbols-outlined text-base text-cyan-vibrant" data-icon="verified">verified</span>
+<span class="font-label-sm text-label-sm font-bold tracking-wider uppercase">Convocatoria Oficial 2026 Abierta</span>
+</div>
+<h1 class="font-display-mobile md:font-display text-display-mobile md:text-display text-blue-institutional leading-tight tracking-tight">
+              Inicia tu futuro académico en <span class="text-cyan-vibrant">IINICIA</span>
+</h1>
+<p class="font-body-lg text-body-lg text-text-secondary max-w-2xl">
+              Admisiones abiertas para la convocatoria 2026. Fórmate en programas tecnológicos, científicos y de innovación con reconocimiento de validez oficial SEP (RVOE), mentorías aplicadas y tecnología de vanguardia.
+            </p>
+<!-- Conversion Action Bar -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+<a class="h-12 px-7 rounded-lg bg-cyan-vibrant text-blue-institutional font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md hover:bg-[#008bc7] hover:shadow-lg transition-all duration-200 active:scale-95" href="#formulario-admision">
+<span class="material-symbols-outlined text-xl" data-icon="how_to_reg">how_to_reg</span>
+                Registrarme
+              </a>
+<a class="h-12 px-6 rounded-lg border-[1.5px] border-blue-deep text-blue-deep font-label-lg text-label-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#F0F6FA] transition-all duration-200" href="https://wa.me/525500000000?text=Hola%20IINICIA,%20deseo%20informes%20de%20admisiones%202026" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-xl text-[#25D366]" data-icon="chat">chat</span>
+                Contactar a un Asesor por WhatsApp
+              </a>
+</div>
+<!-- Quick Trust Badges -->
+<div class="pt-6 grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-border-subtle">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-cyan-vibrant" data-icon="school">school</span>
+<div>
+<div class="font-label-md text-label-md text-text-primary font-bold">RVOE Federal</div>
+<div class="font-label-sm text-label-sm text-text-muted">Validez SEP 100%</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-cyan-vibrant" data-icon="schedule">schedule</span>
+<div>
+<div class="font-label-md text-label-md text-text-primary font-bold">48 a 72 Horas</div>
+<div class="font-label-sm text-label-sm text-text-muted">Dictamen de ingreso</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5 col-span-2 sm:col-span-1">
+<span class="material-symbols-outlined text-cyan-vibrant" data-icon="devices">devices</span>
+<div>
+<div class="font-label-md text-label-md text-text-primary font-bold">Virtual &amp; Híbrido</div>
+<div class="font-label-sm text-label-sm text-text-muted">Flexibilidad global</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero High-End Visual Card Deck -->
+<div class="lg:col-span-5">
+<div class="relative mx-auto max-w-md lg:max-w-none">
+<!-- Ambient background layer -->
+<div class="absolute -inset-2 bg-gradient-to-tr from-cyan-vibrant/20 to-blue-deep/30 rounded-2xl blur-xl"></div>
+<div class="relative bg-surface-canvas rounded-xl border border-border-subtle p-6 shadow-xl space-y-6">
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-blue-institutional text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-xl" data-icon="assignment_ind">assignment_ind</span>
+</div>
+<div>
+<h2 class="font-title text-title text-blue-institutional font-bold">Estado Convocatoria</h2>
+<p class="font-label-sm text-label-sm text-text-muted">Ciclo Académico Otoño 2026-A</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-emerald-50 text-success border border-emerald-200 font-label-sm text-label-sm uppercase font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span> Activo
+                  </span>
+</div>
+<!-- Bento mini-metrics -->
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-subtle p-4 rounded-lg border border-border-subtle">
+<span class="font-label-sm text-label-sm text-text-muted block">Cupos Disponibles</span>
+<span class="font-headline-md text-headline-md font-bold text-blue-institutional">42%</span>
+<div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-cyan-vibrant h-full rounded-full" style="width: 58%"></div>
+</div>
+</div>
+<div class="bg-surface-subtle p-4 rounded-lg border border-border-subtle">
+<span class="font-label-sm text-label-sm text-text-muted block">Cierre de Admisión</span>
+<span class="font-headline-md text-headline-md font-bold text-blue-deep">30 Abr</span>
+<span class="font-label-sm text-label-sm text-text-muted block mt-1">Convocatoria 2026</span>
+</div>
+</div>
+<!-- Visual imagery representation -->
+<div class="relative rounded-lg overflow-hidden border border-border-subtle group">
+<img class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern research laboratory at an applied sciences university, with graduate students working with high-tech computational displays and robotics interfaces. High-key natural lighting illuminates clean glass surfaces and laboratory workstations. The color palette incorporates deep institutional navy blue and electric cyan accents, evoking an atmosphere of advanced technological education and scientific rigor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQxZprFWjl58UljoYeBd14RU5XlFvqq7JKEngGIdW8o0E01IouKl4g6QtYUt16H5_3HT58Awu4mSrftflb5ov0kpbw-D_luL8iOXyaerMPsXfJWaluPR7xrYeviWsQDHIPJ6hJ3wg9yrv10lnWWqM4sUZd90H3HToQTbFwlY_qRpGpLSot_pE-TCYFIMczsvMTB1AP0vLD1yWt0HSaYiQkaZdjwmeFh_ebS9MiQEaO1sF6ThA2u0CrBQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-blue-institutional/80 via-transparent to-transparent flex items-end p-4">
+<p class="text-white font-label-md text-label-md font-semibold">Campus de Innovación &amp; Laboratorios de Computación Cuántica</p>
+</div>
+</div>
+<div class="bg-cyan-surface/50 border border-cyan-light/40 rounded-lg p-3.5 flex items-start gap-3">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="font-body-sm text-body-sm text-on-primary-fixed-variant leading-relaxed">
+                    Evaluación por comité en modalidad 100% digital. Recibe acompañamiento personalizado durante toda tu postulación.
+                  </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= PROCESO DE ADMISIÓN EN PASOS ================= -->
+<section class="py-20 bg-surface-canvas relative border-y border-border-subtle">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-subtle border border-border-subtle text-text-secondary font-label-sm text-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="route">route</span>
+            Ruta de Ingreso Simplificada
+          </div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-blue-institutional font-bold">
+            Proceso de Admisión en 4 Pasos
+          </h2>
+<p class="font-body-md text-body-md text-text-secondary">
+            Nuestra plataforma te guía paso a paso con trazabilidad en tiempo real y asistencia técnica permanente.
+          </p>
+</div>
+<!-- 4 Step Flow Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+<!-- Step 1 -->
+<div class="bg-surface rounded-xl border border-border-subtle p-6 hover:shadow-lg hover:border-cyan-vibrant transition-all duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-5">
+<span class="w-12 h-12 rounded-lg bg-blue-institutional text-white font-headline-sm text-headline-sm font-extrabold flex items-center justify-center group-hover:bg-cyan-vibrant group-hover:text-blue-institutional transition-colors">
+                  01
+                </span>
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="app_registration">app_registration</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional mb-2 font-bold">Registro en línea</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Crea tu perfil institucional único, selecciona tu programa de interés (Licenciatura, Maestría o Diplomado) y obtén tus credenciales de aspirante.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-cyan-vibrant font-label-sm text-label-sm font-bold uppercase tracking-wider">
+<span>Tiempo estimado: 10 mins</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface rounded-xl border border-border-subtle p-6 hover:shadow-lg hover:border-cyan-vibrant transition-all duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-5">
+<span class="w-12 h-12 rounded-lg bg-blue-institutional text-white font-headline-sm text-headline-sm font-extrabold flex items-center justify-center group-hover:bg-cyan-vibrant group-hover:text-blue-institutional transition-colors">
+                  02
+                </span>
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional mb-2 font-bold">Carga de expediente</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Sube tus documentos oficiales escaneados en formato PDF legible. Nuestro validador automatizado revisará que la resolución cumpla con la normativa SEP.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-cyan-vibrant font-label-sm text-label-sm font-bold uppercase tracking-wider">
+<span>Validación OCR automática</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface rounded-xl border border-border-subtle p-6 hover:shadow-lg hover:border-cyan-vibrant transition-all duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-5">
+<span class="w-12 h-12 rounded-lg bg-blue-institutional text-white font-headline-sm text-headline-sm font-extrabold flex items-center justify-center group-hover:bg-cyan-vibrant group-hover:text-blue-institutional transition-colors">
+                  03
+                </span>
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="fact_check">fact_check</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional mb-2 font-bold">Dictamen del comité</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                El Comité Académico evalúa tu perfil curricular. En programas de posgrado se coordina una entrevista diagnóstica en video. Resolución en 48 a 72 horas.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-cyan-vibrant font-label-sm text-label-sm font-bold uppercase tracking-wider">
+<span>Resolución formal por correo</span>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="bg-surface rounded-xl border border-border-subtle p-6 hover:shadow-lg hover:border-cyan-vibrant transition-all duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-5">
+<span class="w-12 h-12 rounded-lg bg-blue-institutional text-white font-headline-sm text-headline-sm font-extrabold flex items-center justify-center group-hover:bg-cyan-vibrant group-hover:text-blue-institutional transition-colors">
+                  04
+                </span>
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="badge">badge</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional mb-2 font-bold">Matrícula &amp; Campus</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Completa tu formalización de inscripción, accede a tu correo institucional @iinicia.edu.mx y recibe el curso introductorio al Campus Virtual IINICIA.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-cyan-vibrant font-label-sm text-label-sm font-bold uppercase tracking-wider">
+<span>¡Bienvenido a la comunidad!</span>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<p class="font-body-sm text-body-sm text-text-muted">
+            ¿Tienes dudas con la digitalización de tus certificados? <a class="text-blue-deep font-semibold underline hover:text-cyan-vibrant" href="#contacto-admisiones">Agenda una asesoría técnica remota sin costo</a>.
+          </p>
+</div>
+</div>
+</section>
+<!-- ================= REQUISITOS Y DOCUMENTOS POR PROGRAMA ================= -->
+<section class="py-20 bg-surface">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div class="max-w-2xl space-y-3">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm uppercase tracking-wider font-bold">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="folder_special">folder_special</span>
+              Expediente Digital
+            </div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-blue-institutional font-bold">
+              Requisitos y Documentos por Programa
+            </h2>
+<p class="font-body-md text-body-md text-text-secondary">
+              Consulta la documentación oficial necesaria de acuerdo al grado de estudios que deseas cursar en IINICIA.
+            </p>
+</div>
+<!-- Tab Selector Trigger Elements (Vanilla JS Operated) -->
+<div class="inline-flex p-1.5 bg-surface-canvas rounded-xl border border-border-subtle shadow-sm self-start md:self-auto" id="programTabs">
+<button class="px-5 py-2.5 rounded-lg font-label-md text-label-md font-bold transition-all duration-200 bg-blue-institutional text-white shadow-sm" id="tab-licenciaturas" onclick="switchProgramTab('licenciaturas')">
+              Licenciaturas
+            </button>
+<button class="px-5 py-2.5 rounded-lg font-label-md text-label-md font-bold transition-all duration-200 text-text-secondary hover:text-blue-institutional" id="tab-maestrias" onclick="switchProgramTab('maestrias')">
+              Maestrías y Posgrados
+            </button>
+<button class="px-5 py-2.5 rounded-lg font-label-md text-label-md font-bold transition-all duration-200 text-text-secondary hover:text-blue-institutional" id="tab-diplomados" onclick="switchProgramTab('diplomados')">
+              Diplomados
+            </button>
+</div>
+</div>
+<!-- PROGRAM TAB 1: LICENCIATURAS -->
+<div class="tab-pane block" id="content-licenciaturas">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 bg-surface-canvas rounded-xl border border-border-subtle p-8 shadow-sm space-y-6">
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-blue-institutional">Requisitos para Nivel Licenciatura</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Válido para Ingeniería en IA, Ciencias de Datos e Innovación Digital</p>
+</div>
+<span class="px-3 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm uppercase font-bold border border-cyan-light/40">
+                  RVOE Federal SEP
+                </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Certificado de Bachillerato</span>
+<span class="font-body-sm text-body-sm text-text-muted">Legalizado si fue expedido por gobierno estatal o equivalente.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Acta de Nacimiento</span>
+<span class="font-body-sm text-body-sm text-text-muted">Formato digital actualizado con código QR emitido por el Registro Civil.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">CURP Oficial</span>
+<span class="font-body-sm text-body-sm text-text-muted">Descarga reciente y validada ante el portal de RENAPO.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Identificación Oficial (INE/Pasaporte)</span>
+<span class="font-body-sm text-body-sm text-text-muted">Vigente en ambos lados, nítida y legible.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Fotografía Infantil Digital</span>
+<span class="font-body-sm text-body-sm text-text-muted">Fondo blanco, vestimenta formal, rostro descubierto.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Comprobante de Domicilio</span>
+<span class="font-body-sm text-body-sm text-text-muted">No mayor a 3 meses (luz, agua o servicio telefónico).</span>
+</div>
+</div>
+</div>
+<!-- Important Note Banner -->
+<div class="p-4 rounded-lg bg-amber-50 border border-amber-200 flex items-start gap-3">
+<span class="material-symbols-outlined text-warning shrink-0" data-icon="warning">warning</span>
+<p class="font-body-sm text-body-sm text-amber-900 leading-relaxed">
+<strong>Aspirantes por egresar:</strong> Puedes iniciar tu proceso de inscripción presentando una constancia oficial de terminación de estudios con desglose de promedio general.
+                </p>
+</div>
+</div>
+<!-- Technical & Legal Specs Card -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-canvas rounded-xl border border-border-subtle p-6 shadow-sm space-y-4">
+<h4 class="font-title text-title text-blue-institutional font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant" data-icon="verified_user">verified_user</span>
+                  Validez SEP / RVOE
+                </h4>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                  Todos los planes de estudio de nivel superior cuentan con Reconocimiento de Validez Oficial de Estudios (RVOE) otorgado por la Secretaría de Educación Pública de México, facultando la expedición de Cédula Profesional Federal con validez nacional e internacional.
+                </p>
+<div class="pt-2 border-t border-border-subtle">
+<a class="inline-flex items-center gap-1 font-label-md text-label-md font-bold text-cyan-vibrant hover:text-blue-deep" href="#contacto">
+                    Verificar claves de acuerdo RVOE
+                    <span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="bg-blue-institutional text-white rounded-xl p-6 shadow-md space-y-3">
+<div class="flex items-center gap-2 text-cyan-vibrant">
+<span class="material-symbols-outlined text-xl" data-icon="laptop_chromebook">laptop_chromebook</span>
+<span class="font-label-md text-label-md uppercase font-bold tracking-wider">Requisitos Técnicos</span>
+</div>
+<h4 class="font-title text-title font-bold text-white">Entorno Virtual de Aprendizaje</h4>
+<ul class="font-body-sm text-body-sm text-surface-variant/90 space-y-2">
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-vibrant"></span>
+                    Conexión de banda ancha min. 10 Mbps
+                  </li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-vibrant"></span>
+                    Equipo de cómputo con 8GB RAM o superior
+                  </li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-vibrant"></span>
+                    Navegador Chrome / Firefox actualizado
+                  </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- PROGRAM TAB 2: MAESTRÍAS (Hidden by default) -->
+<div class="tab-pane hidden" id="content-maestrias">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 bg-surface-canvas rounded-xl border border-border-subtle p-8 shadow-sm space-y-6">
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-blue-institutional">Requisitos para Posgrados &amp; Maestrías</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Maestría en Ciencia de Datos, Ciberseguridad y Gestión de la Innovación</p>
+</div>
+<span class="px-3 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm uppercase font-bold border border-cyan-light/40">
+                  Posgrado RVOE SEP
+                </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Título de Licenciatura</span>
+<span class="font-body-sm text-body-sm text-text-muted">Copia certificada o título electrónico con firma digital SAT/SEP.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Cédula Profesional Federal</span>
+<span class="font-body-sm text-body-sm text-text-muted">Expedida por la Dirección General de Profesiones.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Currículum Vitae Actualizado</span>
+<span class="font-body-sm text-body-sm text-text-muted">Detallando trayectoria profesional, proyectos y publicaciones.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Carta de Exposición de Motivos</span>
+<span class="font-body-sm text-body-sm text-text-muted">Máximo 2 cuartillas dirigida al Comité Académico de IINICIA.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Certificado Total de Estudios</span>
+<span class="font-body-sm text-body-sm text-text-muted">Con promedio mínimo ponderado de 8.0 o equivalente.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Entrevista de Admisión</span>
+<span class="font-body-sm text-body-sm text-text-muted">Sesión virtual de 25 minutos con el director del programa.</span>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-cyan-surface/60 border border-cyan-light/40 flex items-start gap-3">
+<span class="material-symbols-outlined text-blue-deep shrink-0" data-icon="lightbulb">lightbulb</span>
+<p class="font-body-sm text-body-sm text-blue-institutional leading-relaxed">
+<strong>Titulación por Posgrado:</strong> Si tu universidad de origen autoriza la titulación mediante el 50% de créditos de maestría, puedes ingresar presentando tu carta de pasante y oficio de autorización institucional.
+                </p>
+</div>
+</div>
+<div class="lg:col-span-4 bg-surface-canvas rounded-xl border border-border-subtle p-6 shadow-sm space-y-4">
+<h4 class="font-title text-title text-blue-institutional font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant" data-icon="workspace_premium">workspace_premium</span>
+                Beneficios de Posgrado
+              </h4>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Nuestros programas de maestría integran certificaciones internacionales de la industria tecnológica (AWS, Microsoft Azure, TensorFlow) sin costo adicional de examen.
+              </p>
+<div class="pt-4 border-t border-border-subtle space-y-2">
+<div class="flex items-center gap-2 text-text-primary font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-cyan-vibrant text-base" data-icon="schedule">schedule</span>
+                  Horarios ejecutivos 100% asincrónicos
+                </div>
+<div class="flex items-center gap-2 text-text-primary font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-cyan-vibrant text-base" data-icon="groups">groups</span>
+                  Networking con líderes científicos
+                </div>
+</div>
+</div>
+</div>
+</div>
+<!-- PROGRAM TAB 3: DIPLOMADOS (Hidden by default) -->
+<div class="tab-pane hidden" id="content-diplomados">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 bg-surface-canvas rounded-xl border border-border-subtle p-8 shadow-sm space-y-6">
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-blue-institutional">Requisitos para Diplomados y Certificaciones</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Educación Continua, Bootcamps Intensivos y Especializaciones Técnicas</p>
+</div>
+<span class="px-3 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm uppercase font-bold border border-cyan-light/40">
+                  Educación Continua
+                </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Identificación Oficial con Fotografía</span>
+<span class="font-body-sm text-body-sm text-text-muted">INE, Cédula Profesional o Pasaporte vigente.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Comprobante de Estudios Previos</span>
+<span class="font-body-sm text-body-sm text-text-muted">Constancia mínima de bachillerato concluido o licenciatura en curso.</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Comprobante de Domicilio</span>
+<span class="font-body-sm text-body-sm text-text-muted">Reciente (no mayor a tres meses).</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-label-md text-label-md font-bold text-text-primary block">Formulario de Registro Digital</span>
+<span class="font-body-sm text-body-sm text-text-muted">Completado con datos de contacto y facturación.</span>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-surface-subtle border border-border-subtle flex items-start gap-3">
+<span class="material-symbols-outlined text-cyan-vibrant shrink-0" data-icon="bolt">bolt</span>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+<strong>Inscripción Inmediata:</strong> Los diplomados no requieren trámite de cotejo ante SEP federal previa; la confirmación y acceso al campus virtual se efectúa en menos de 24 horas tras acreditar el pago.
+                </p>
+</div>
+</div>
+<div class="lg:col-span-4 bg-surface-canvas rounded-xl border border-border-subtle p-6 shadow-sm space-y-4">
+<h4 class="font-title text-title text-blue-institutional font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-vibrant" data-icon="badge">badge</span>
+                Insignias Digitales
+              </h4>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Al concluir satisfactoriamente cualquier diplomado, obtienes un diploma con código de verificación criptográfica Blockchain acreditable en LinkedIn y portafolios internacionales.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= CALENDARIO DE CONVOCATORIAS & FECHAS DE INICIO ================= -->
+<section class="py-20 bg-surface-canvas border-y border-border-subtle">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div class="max-w-2xl space-y-3">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm uppercase tracking-wider font-bold">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="calendar_month">calendar_month</span>
+              Calendario Oficial de Convocatorias
+            </div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-blue-institutional font-bold">
+              Fechas de Inicio y Próximas Generaciones
+            </h2>
+<p class="font-body-md text-body-md text-text-secondary">
+              Planifica tu inicio de clases. Contamos con cohortes semestrales y cuatrimestrales estructuradas para el máximo rendimiento.
+            </p>
+</div>
+<!-- Dynamic countdown pill -->
+<div class="bg-blue-institutional text-white px-5 py-3 rounded-xl flex items-center gap-4 shadow-sm">
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="timer">timer</span>
+<div>
+<span class="font-label-sm text-label-sm text-surface-variant/80 uppercase block">Cierre de Convocatoria 2026-A</span>
+<span class="font-headline-sm text-headline-sm font-extrabold text-cyan-light tracking-wide" id="countdownTimer">48 Días Restantes</span>
+</div>
+</div>
+</div>
+<!-- Curricula & Cohort Table Pattern -->
+<div class="bg-surface-canvas rounded-xl border border-border-subtle shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-border-subtle">
+<th class="py-4 px-6 font-label-md text-label-md text-blue-deep uppercase font-bold">Ciclo / Cohorte</th>
+<th class="py-4 px-6 font-label-md text-label-md text-blue-deep uppercase font-bold">Nivel Académico</th>
+<th class="py-4 px-6 font-label-md text-label-md text-blue-deep uppercase font-bold">Cierre de Registro</th>
+<th class="py-4 px-6 font-label-md text-label-md text-blue-deep uppercase font-bold">Inicio de Clases</th>
+<th class="py-4 px-6 font-label-md text-label-md text-blue-deep uppercase font-bold">Disponibilidad</th>
+<th class="py-4 px-6 font-label-md text-label-md text-blue-deep uppercase font-bold text-right">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle font-body-sm text-body-sm">
+<!-- Cohort 1: Primary Current -->
+<tr class="hover:bg-cyan-surface/20 transition-colors">
+<td class="py-4 px-6">
+<div class="font-bold text-blue-institutional font-headline-sm text-title">Ciclo Otoño 2026-A</div>
+<span class="text-text-muted font-label-sm text-label-sm">Convocatoria Principal Nacional</span>
+</td>
+<td class="py-4 px-6 text-text-primary font-medium">Licenciaturas e Ingenierías</td>
+<td class="py-4 px-6">
+<span class="font-semibold text-error">30 de Abril 2026</span>
+</td>
+<td class="py-4 px-6 font-bold text-blue-deep">18 de Mayo 2026</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-label-sm text-label-sm font-bold">
+                        Últimos 14 Cupos
+                      </span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-deep text-white font-label-sm text-label-sm font-bold hover:bg-[#004777] transition-all" href="#formulario-admision">
+                      Postular
+                    </a>
+</td>
+</tr>
+<!-- Cohort 2 -->
+<tr class="hover:bg-cyan-surface/20 transition-colors bg-surface-subtle/50">
+<td class="py-4 px-6">
+<div class="font-bold text-blue-institutional font-headline-sm text-title">Ciclo Verano 2026</div>
+<span class="text-text-muted font-label-sm text-label-sm">Cohorte Intensiva Ejecutiva</span>
+</td>
+<td class="py-4 px-6 text-text-primary font-medium">Maestrías y Posgrados</td>
+<td class="py-4 px-6">
+<span class="font-semibold text-text-primary">15 de Junio 2026</span>
+</td>
+<td class="py-4 px-6 font-bold text-blue-deep">06 de Julio 2026</td>
+<td class="py-4 px-6">
+<span class="px-2.5 py-1 rounded-full bg-emerald-50 text-success border border-emerald-200 font-label-sm text-label-sm font-bold">
+                      Cupo Abierto (65%)
+                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center px-4 py-2 rounded-lg border border-blue-deep text-blue-deep font-label-sm text-label-sm font-bold hover:bg-cyan-surface transition-all" href="#formulario-admision">
+                      Postular
+                    </a>
+</td>
+</tr>
+<!-- Cohort 3 -->
+<tr class="hover:bg-cyan-surface/20 transition-colors">
+<td class="py-4 px-6">
+<div class="font-bold text-blue-institutional font-headline-sm text-title">Ciclo Continuo Mensual</div>
+<span class="text-text-muted font-label-sm text-label-sm">Admisión Continua</span>
+</td>
+<td class="py-4 px-6 text-text-primary font-medium">Diplomados y Certificaciones</td>
+<td class="py-4 px-6">
+<span class="font-semibold text-text-primary">25 de cada mes</span>
+</td>
+<td class="py-4 px-6 font-bold text-blue-deep">Primer lunes de mes</td>
+<td class="py-4 px-6">
+<span class="px-2.5 py-1 rounded-full bg-cyan-surface text-blue-deep border border-cyan-light/40 font-label-sm text-label-sm font-bold">
+                      Inscripción Inmediata
+                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<a class="inline-flex items-center px-4 py-2 rounded-lg border border-blue-deep text-blue-deep font-label-sm text-label-sm font-bold hover:bg-cyan-surface transition-all" href="#formulario-admision">
+                      Inscribirme
+                    </a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= PREGUNTAS FRECUENTES EN ACORDEÓN ================= -->
+<section class="py-20 bg-surface">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm uppercase tracking-wider font-bold">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="help">help</span>
+            Resolución de Dudas
+          </div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-blue-institutional font-bold">
+            Preguntas Frecuentes de Admisiones
+          </h2>
+<p class="font-body-md text-body-md text-text-secondary">
+            Encuentra respuestas claras y normativas a las consultas más habituales de nuestros aspirantes.
+          </p>
+</div>
+<div class="max-w-4xl mx-auto space-y-4">
+<!-- FAQ Item 1 -->
+<div class="faq-item bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm transition-all duration-200">
+<button class="w-full p-6 text-left flex items-center justify-between gap-4 font-headline-sm text-headline-sm font-bold text-blue-institutional hover:text-cyan-vibrant transition-colors" onclick="toggleFaq(this)">
+<span>¿Los programas tienen Reconocimiento de Validez Oficial (RVOE)?</span>
+<span class="material-symbols-outlined transform transition-transform duration-200 text-cyan-vibrant text-2xl faq-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-content hidden px-6 pb-6 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50 leading-relaxed">
+              Sí. Todos los programas académicos de Licenciatura e Ingeniería de IINICIA cuentan con Reconocimiento de Validez Oficial de Estudios (RVOE) emitido por la Secretaría de Educación Pública (SEP) a nivel federal. Esto garantiza la legalidad total de tus estudios y te permite tramitar tu Cédula Profesional con validez en toda la República Mexicana y apostilla para el extranjero.
+            </div>
+</div>
+<!-- FAQ Item 2 -->
+<div class="faq-item bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm transition-all duration-200">
+<button class="w-full p-6 text-left flex items-center justify-between gap-4 font-headline-sm text-headline-sm font-bold text-blue-institutional hover:text-cyan-vibrant transition-colors" onclick="toggleFaq(this)">
+<span>¿Cómo entrego mis documentos físicos originales para el cotejo?</span>
+<span class="material-symbols-outlined transform transition-transform duration-200 text-cyan-vibrant text-2xl faq-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-content hidden px-6 pb-6 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50 leading-relaxed">
+              El proceso inicial de admisión se realiza 100% digital a través del expediente electrónico en formato PDF. Para el cotejo normativo definitivo exigido por las autoridades educativas, dispones de una prórroga de hasta 90 días naturales posteriores al inicio de clases para enviarlos mediante mensajería especializada asegurada o entregarlos en las oficinas de Servicios Escolares.
+            </div>
+</div>
+<!-- FAQ Item 3 -->
+<div class="faq-item bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm transition-all duration-200">
+<button class="w-full p-6 text-left flex items-center justify-between gap-4 font-headline-sm text-headline-sm font-bold text-blue-institutional hover:text-cyan-vibrant transition-colors" onclick="toggleFaq(this)">
+<span>¿Cuáles son las modalidades y facilidades de pago?</span>
+<span class="material-symbols-outlined transform transition-transform duration-200 text-cyan-vibrant text-2xl faq-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-content hidden px-6 pb-6 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50 leading-relaxed">
+              IINICIA ofrece planes de colegiatura mensuales sin intereses, planes semestrales con hasta un 15% de bonificación por pago anticipado, y domiciliación bancaria. Aceptamos transferencias SPEI, tarjetas de débito/crédito nacionales e internacionales (Visa, Mastercard, American Express) y pagos en ventanilla bancaria autorizada.
+            </div>
+</div>
+<!-- FAQ Item 4 -->
+<div class="faq-item bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm transition-all duration-200">
+<button class="w-full p-6 text-left flex items-center justify-between gap-4 font-headline-sm text-headline-sm font-bold text-blue-institutional hover:text-cyan-vibrant transition-colors" onclick="toggleFaq(this)">
+<span>¿Puedo revalidar o convalidar materias de otra universidad?</span>
+<span class="material-symbols-outlined transform transition-transform duration-200 text-cyan-vibrant text-2xl faq-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-content hidden px-6 pb-6 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50 leading-relaxed">
+              Sí. Realizamos dictámenes de equivalencia y convalidación de materias cursadas en instituciones educativas nacionales o extranjeras con validez oficial. Para un pre-dictamen gratuito, debes adjuntar tu Certificado Parcial de Estudios o historial académico con sellos institucionales al registrar tu solicitud.
+            </div>
+</div>
+<!-- FAQ Item 5 -->
+<div class="faq-item bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm transition-all duration-200">
+<button class="w-full p-6 text-left flex items-center justify-between gap-4 font-headline-sm text-headline-sm font-bold text-blue-institutional hover:text-cyan-vibrant transition-colors" onclick="toggleFaq(this)">
+<span>¿Cómo puedo solicitar una beca o apoyo financiero institucional?</span>
+<span class="material-symbols-outlined transform transition-transform duration-200 text-cyan-vibrant text-2xl faq-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-content hidden px-6 pb-6 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50 leading-relaxed">
+              Contamos con el Programa de Talento e Innovación Científica, que otorga becas del 20% al 50% de descuento en colegiaturas con base en promedio académico previo (mínimo 8.5) y estudio socioeconómico. La postulación se realiza simultáneamente con el registro de aspirante en el Paso 1.
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= BLOQUE FINAL DE CONVERSIÓN & FORMULARIO ================= -->
+<section class="py-20 bg-blue-institutional text-white relative overflow-hidden" id="formulario-admision">
+<!-- Ambient light effect -->
+<div class="absolute -top-40 -right-40 w-96 h-96 bg-cyan-vibrant/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-deep/30 rounded-full blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 relative">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Column: Copy & Support Channels -->
+<div class="lg:col-span-5 space-y-8">
+<div class="space-y-4">
+<span class="px-3 py-1 rounded-full bg-cyan-vibrant/20 text-cyan-light border border-cyan-vibrant/40 font-label-sm text-label-sm uppercase font-bold tracking-wider inline-block">
+                Inscripciones 2026
+              </span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold tracking-tight text-white">
+                Comienza hoy tu trayectoria en ciencias aplicadas
+              </h2>
+<p class="font-body-md text-body-md text-surface-variant/90 leading-relaxed">
+                Completa el formulario de pre-registro. Un asesor de admisiones se pondrá en contacto contigo en un plazo menor a 24 horas hábiles.
+              </p>
+</div>
+<!-- Support Cluster -->
+<div class="space-y-4 pt-4 border-t border-white/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-cyan-light shrink-0">
+<span class="material-symbols-outlined text-2xl" data-icon="call">call</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-surface-variant/70 uppercase">Línea de Atención Directa</div>
+<a class="font-title text-title font-bold text-white hover:text-cyan-light transition-colors" href="tel:+525580004464">+52 (55) 8000-IINICIA</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-cyan-light shrink-0">
+<span class="material-symbols-outlined text-2xl" data-icon="mail">mail</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-surface-variant/70 uppercase">Correo Electrónico Institucional</div>
+<a class="font-title text-title font-bold text-white hover:text-cyan-light transition-colors" href="mailto:admisiones@iinicia.edu.mx">admisiones@iinicia.edu.mx</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-cyan-light shrink-0">
+<span class="material-symbols-outlined text-2xl text-[#25D366]" data-icon="chat">chat</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-surface-variant/70 uppercase">Chat en Tiempo Real</div>
+<a class="font-title text-title font-bold text-white hover:text-cyan-light transition-colors" href="https://wa.me/525500000000" rel="noopener noreferrer" target="_blank">WhatsApp Soporte Inmediato</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Pre-registration Card -->
+<div class="lg:col-span-7">
+<div class="bg-surface-canvas text-text-primary rounded-xl p-8 shadow-2xl border border-white/20">
+<div class="mb-6">
+<h3 class="font-headline-md text-headline-md font-bold text-blue-institutional">Pre-Registro de Aspirante</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Paso inicial para iniciar tu expediente y agendar entrevista diagnóstica.</p>
+</div>
+<form class="space-y-4" onsubmit="handleRegistrationSubmit(event)">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold">Nombre Completo *</label>
+<input class="w-full h-12 px-4 rounded-lg border border-border-subtle bg-surface-canvas text-text-primary font-body-md text-body-md focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 outline-none transition-all" placeholder="Ej. Ana Sofía Martínez" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold">Correo Electrónico *</label>
+<input class="w-full h-12 px-4 rounded-lg border border-border-subtle bg-surface-canvas text-text-primary font-body-md text-body-md focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 outline-none transition-all" placeholder="tu.correo@ejemplo.com" required="" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold">Teléfono Celular / WhatsApp *</label>
+<input class="w-full h-12 px-4 rounded-lg border border-border-subtle bg-surface-canvas text-text-primary font-body-md text-body-md focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 outline-none transition-all" placeholder="+52 55 1234 5678" required="" type="tel"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold">Programa Académico *</label>
+<select class="w-full h-12 px-4 rounded-lg border border-border-subtle bg-surface-canvas text-text-primary font-body-md text-body-md focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 outline-none transition-all" required="">
+<option disabled="" selected="" value="">Selecciona una opción</option>
+<option value="lic-ia">Lic. en Inteligencia Artificial y Datos</option>
+<option value="lic-software">Ingeniería en Desarrollo de Software</option>
+<option value="lic-ciber">Lic. en Ciberseguridad Aplicada</option>
+<option value="mst-ciencias">Maestría en Ciencias Computacionales</option>
+<option value="mst-innovacion">Maestría en Gestión Tecnológica</option>
+<option value="dip-fintech">Diplomado en Finanzas Cuantitativas</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold">Modalidad de Interés</label>
+<select class="w-full h-12 px-4 rounded-lg border border-border-subtle bg-surface-canvas text-text-primary font-body-md text-body-md focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 outline-none transition-all">
+<option value="virtual">100% Virtual Asíncrono</option>
+<option value="hibrido">Híbrida (Masterclasses en vivo)</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold">¿Deseas postular a Beca?</label>
+<select class="w-full h-12 px-4 rounded-lg border border-border-subtle bg-surface-canvas text-text-primary font-body-md text-body-md focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 outline-none transition-all">
+<option value="si">Sí, Beca al Talento Académico</option>
+<option value="no">No, Colegiatura Regular</option>
+</select>
+</div>
+</div>
+<div class="pt-2">
+<label class="flex items-start gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant mt-0.5" required="" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-text-secondary leading-tight">
+                      Acepto el <a class="text-blue-deep font-semibold underline" href="#">Aviso de Privacidad</a> y autorizo a IINICIA a comunicarse conmigo respecto a la convocatoria de admisiones 2026.
+                    </span>
+</label>
+</div>
+<button class="w-full h-12 bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-headline-sm text-title font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 active:scale-98 flex items-center justify-center gap-2 mt-4" type="submit">
+<span class="material-symbols-outlined text-xl" data-icon="send">send</span>
+                  Registrarme
+                </button>
+</form>
+<!-- Success Alert Placeholder (Revealed via JS) -->
+<div class="hidden mt-4 p-4 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-900 font-body-sm text-body-sm flex items-center gap-3" id="formSuccessMessage">
+<span class="material-symbols-outlined text-success text-2xl" data-icon="check_circle">check_circle</span>
+<div>
+<strong>¡Pre-registro recibido exitosamente!</strong> Revisa tu bandeja de entrada; hemos enviado tu folio de aspirante.
+                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- ================= FOOTER INSTITUCIONAL (Shared Component Anchor) ================= -->
+<footer class="docked full-width bottom bg-blue-institutional dark:bg-inverse-surface border-t border-blue-deep/40 text-surface-canvas">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 py-12 md:py-16">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-12 border-b border-blue-deep/30">
+<!-- Brand & Description Column with Official Logo -->
+<div class="lg:col-span-5 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-white/10 p-1.5">
+<img alt="IINICIA Logo Oficial" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+</div>
+<div>
+<span class="font-title text-headline-sm font-bold text-surface-canvas">IINICIA</span>
+<p class="font-label-sm text-label-sm text-cyan-vibrant font-semibold uppercase tracking-wider">Instituto de Innovación y Ciencias Aplicadas</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-surface-variant/80 max-w-sm leading-relaxed">
+            Institución de educación superior y posgrados orientada a la investigación tecnológica, computación avanzada e innovación científica con acreditación de validez oficial.
+          </p>
+<div class="flex items-center gap-3 pt-2">
+<span class="px-2.5 py-1 rounded bg-blue-deep text-cyan-light font-label-sm text-label-sm font-bold">RVOE SEP Federal</span>
+<span class="px-2.5 py-1 rounded bg-white/10 text-surface-variant font-label-sm text-label-sm">ISO 9001:2015</span>
+</div>
+</div>
+<!-- Links Column 1: Academic Links -->
+<div class="lg:col-span-3 space-y-3">
+<h5 class="font-title text-title font-semibold text-cyan-vibrant">Navegación Institucional</h5>
+<ul class="space-y-2 font-body-sm text-body-sm text-surface-variant/80">
+<li><a class="hover:text-cyan-light transition-colors" href="#">Oferta Académica</a></li>
+<li><a class="text-cyan-vibrant font-semibold" href="#">Admisiones 2026</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Campus Virtual</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Centro de Investigación Cuántica</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Becas Institucionales</a></li>
+</ul>
+</div>
+<!-- Links Column 2: Legal Anchors Exact from JSON -->
+<div class="lg:col-span-4 space-y-3">
+<h5 class="font-title text-title font-semibold text-cyan-vibrant">Transparencia y Legal</h5>
+<ul class="space-y-2 font-body-sm text-body-sm text-surface-variant/80">
+<li><a class="hover:text-cyan-light transition-colors" href="#">Aviso de Privacidad</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Términos y Condiciones</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Reglamento Institucional</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Validez SEP / RVOE</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Bolsa de Trabajo</a></li>
+<li><a class="hover:text-cyan-light transition-colors" href="#">Portal de Transparencia</a></li>
+</ul>
+</div>
+</div>
+<!-- Copyright Sub-bar matching JSON verbatim -->
+<div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+<p class="font-body-sm text-body-sm text-surface-variant/70 leading-relaxed max-w-4xl">
+          © 2025 IINICIA - Instituto de Innovación y Ciencias Aplicadas. Todos los derechos reservados. Planes con Reconocimiento de Validez Oficial de Estudios (RVOE SEP).
+        </p>
+<div class="flex items-center gap-4 text-surface-variant/60">
+<span class="material-symbols-outlined text-lg hover:text-cyan-vibrant cursor-pointer transition-colors" data-icon="language">language</span>
+<span class="material-symbols-outlined text-lg hover:text-cyan-vibrant cursor-pointer transition-colors" data-icon="lock">lock</span>
+<span class="material-symbols-outlined text-lg hover:text-cyan-vibrant cursor-pointer transition-colors" data-icon="verified">verified</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- ================= INLINE LOGIC FOR INTERACTIVITY ================= -->
+<script>
+    // Tab switching for Requirements by Program Type
+    function switchProgramTab(tabKey) {
+      // Hide all panes
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      
+      // Reset button styles
+      const tabs = ['licenciaturas', 'maestrias', 'diplomados'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+          btn.className = 'px-5 py-2.5 rounded-lg font-label-md text-label-md font-bold transition-all duration-200 text-text-secondary hover:text-blue-institutional';
+        }
+      });
+
+      // Activate chosen pane and button
+      const activeContent = document.getElementById(`content-${tabKey}`);
+      const activeBtn = document.getElementById(`tab-${tabKey}`);
+      if (activeContent) activeContent.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.className = 'px-5 py-2.5 rounded-lg font-label-md text-label-md font-bold transition-all duration-200 bg-blue-institutional text-white shadow-sm';
+      }
+    }
+
+    // Interactive Accordion for FAQs
+    function toggleFaq(button) {
+      const parent = button.parentElement;
+      const content = parent.querySelector('.faq-content');
+      const icon = button.querySelector('.faq-icon');
+      
+      const isHidden = content.classList.contains('hidden');
+      
+      // Close all others
+      document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+      document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate-180'));
+      
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // Mock form submission
+    function handleRegistrationSubmit(event) {
+      event.preventDefault();
+      const successDiv = document.getElementById('formSuccessMessage');
+      if (successDiv) {
+        successDiv.classList.remove('hidden');
+        event.target.reset();
+        setTimeout(() => {
+          successDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    }
+  </script>
+</body></html>

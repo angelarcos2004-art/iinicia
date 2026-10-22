@@ -1,0 +1,814 @@
+<!DOCTYPE html><html class="h-full bg-surface" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mi IINICIA - Portal del Estudiante | Instituto de Innovación y Ciencias Aplicadas</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline-variant": "#c4c6d0",
+            "surface-tint": "#455e91",
+            "on-tertiary-fixed-variant": "#604100",
+            "primary-fixed": "#d8e2ff",
+            "surface-container": "#e7eeff",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#00458d",
+            "on-primary-container": "#7a93ca",
+            "error": "#ba1a1a",
+            "on-secondary-container": "#003e80",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed": "#001b3e",
+            "tertiary-fixed-dim": "#ffba3b",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#d8e3fb",
+            "secondary-fixed": "#d6e3ff",
+            "primary": "#00163a",
+            "inverse-primary": "#aec6ff",
+            "tertiary": "#231500",
+            "on-tertiary-container": "#c48800",
+            "surface-container-low": "#f0f3ff",
+            "on-surface-variant": "#44474f",
+            "surface": "#f9f9ff",
+            "primary-container": "#0b2a5b",
+            "secondary-container": "#7aacff",
+            "inverse-surface": "#263143",
+            "surface-container-highest": "#d8e3fb",
+            "surface-bright": "#f9f9ff",
+            "on-error": "#ffffff",
+            "outline": "#747780",
+            "on-primary-fixed": "#001a42",
+            "background": "#f9f9ff",
+            "secondary": "#235eac",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#ffdead",
+            "surface-container-high": "#dee8ff",
+            "inverse-on-surface": "#ecf1ff",
+            "tertiary-container": "#3d2800",
+            "on-tertiary-fixed": "#281900",
+            "surface-dim": "#cfdaf2",
+            "on-primary": "#ffffff",
+            "on-primary-fixed-variant": "#2c4678",
+            "secondary-fixed-dim": "#aac7ff",
+            "on-background": "#111c2d",
+            "primary-fixed-dim": "#aec6ff",
+            "on-surface": "#111c2d",
+            "error-container": "#ffdad6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "gutter": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "3rem",
+            "gutter-desktop": "2rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .shadow-level-1 {
+      box-shadow: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+    }
+    .shadow-level-2 {
+      box-shadow: 0 4px 6px -2px rgba(11, 42, 91, 0.05), 0 10px 15px -3px rgba(11, 42, 91, 0.08);
+    }
+  </style>
+</head>
+<body class="h-full font-body-md text-on-surface bg-background flex flex-col md:flex-row antialiased overflow-x-hidden">
+<!-- SIDEBAR DE NAVEGACIÓN -->
+<aside class="w-full md:w-72 bg-primary-container text-on-primary flex-shrink-0 flex flex-col justify-between border-r border-outline-variant/20 shadow-level-2 z-40">
+<div>
+<!-- Cabecera Sidebar con Logo -->
+<div class="px-space-lg py-space-md flex items-center justify-between border-b border-white/10">
+<div class="flex items-center space-x-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-lowest p-1.5 flex items-center justify-center shadow-sm">
+<img alt="IINICIA Logo" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UWW0Ram5pU-Q88cq1Cn9Hkj83kIW2YQmvczTpMCOOJinKfn4ANuAyZW6EEFoUot6eBmXwA5BUK9xGCIk0QkoBAPmTVYnw8sdPbvfh6DvWUr7vvBFypnfIkF0VNNwkBkdzyQrc9q59_S4hNuEXGFd5HyoaJTM_mmaM3jQRBGMbHqA0-4aRgAIqvXpug2hvv4SzyE38OpJIY9d5fW2vdMirrPr3XZ8pn3YuPhaDOP6wXOAzUlS7l_Jhgdesf">
+</div>
+<div>
+<span class="block font-headline-sm text-headline-sm text-on-primary leading-tight font-bold tracking-tight">IINICIA</span>
+<span class="block font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider">Campus Virtual</span>
+</div>
+</div>
+<span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary/30 text-primary-fixed border border-secondary/40">
+          v2.4
+        </span>
+</div>
+<!-- Menú de Navegación Lateral -->
+<nav class="p-space-md space-y-1.5">
+<div class="px-space-sm pb-1 pt-2">
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider font-bold">Menú Académico</span>
+</div>
+<!-- Inicio (Activo) -->
+<a class="flex items-center justify-between px-space-md py-3 rounded-lg bg-primary-container text-white shadow-sm transition-all duration-150 font-label-md text-label-md" href="#"><div class="flex items-center space-x-space-sm"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span><span class="">Inicio</span></div><span class="w-2 h-2 rounded-full bg-secondary-container"></span></a>
+<!-- Mis Cursos -->
+<a class="flex items-center justify-between px-space-md py-3 rounded-lg text-primary-fixed hover:bg-white/10 hover:text-on-primary transition-colors duration-150 font-label-md text-label-md" href="#">
+<div class="flex items-center space-x-space-sm">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="">Mis cursos</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container text-on-secondary-container font-bold">4</span>
+</a>
+<!-- Calendario -->
+<a class="flex items-center justify-between px-space-md py-3 rounded-lg text-primary-fixed hover:bg-white/10 hover:text-on-primary transition-colors duration-150 font-label-md text-label-md" href="#">
+<div class="flex items-center space-x-space-sm">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="">Calendario</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+</a>
+<!-- Calificaciones y Kárdex -->
+<a class="flex items-center justify-between px-space-md py-3 rounded-lg text-primary-fixed hover:bg-white/10 hover:text-on-primary transition-colors duration-150 font-label-md text-label-md" href="#">
+<div class="flex items-center space-x-space-sm">
+<span class="material-symbols-outlined">grade</span>
+<span class="">Calificaciones y Kárdex</span>
+</div>
+</a>
+<!-- Avisos Institucionales -->
+<a class="flex items-center justify-between px-space-md py-3 rounded-lg text-primary-fixed hover:bg-white/10 hover:text-on-primary transition-colors duration-150 font-label-md text-label-md" href="#">
+<div class="flex items-center space-x-space-sm">
+<span class="material-symbols-outlined">campaign</span>
+<span class="">Avisos Institucionales</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed-dim text-on-tertiary-fixed font-bold">2 nuevos</span>
+</a>
+<div class="px-space-sm pb-1 pt-4">
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider font-bold">Servicios</span>
+</div>
+<!-- Perfil del Estudiante -->
+<a class="flex items-center space-x-space-sm px-space-md py-3 rounded-lg text-primary-fixed hover:bg-white/10 hover:text-on-primary transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="">Perfil del Estudiante</span>
+</a>
+<!-- Soporte y Mesa de Ayuda -->
+<a class="flex items-center space-x-space-sm px-space-md py-3 rounded-lg text-primary-fixed hover:bg-white/10 hover:text-on-primary transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">help_center</span>
+<span class="">Soporte y Mesa de Ayuda</span>
+</a>
+</nav>
+</div>
+<!-- Mini Perfil del Alumno (Inferior del Sidebar) -->
+<div class="p-space-md border-t border-white/10 bg-black/15">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-tertiary-fixed-dim" data-alt="A portrait photograph of a confident 22-year-old Mexican male software engineering student smiling gently, wearing clean dark casual academic attire, shot in a softly lit modern university lab with high clarity and natural warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDebEHPOQj6JD2UyXjY5VIMSiaIOY07AxANHisSqkgEjSR7UOdQd9JuVPzGIpCyMH8C05lPiIVQ_nspm79CEsHyCSjo7sV9fFcpof2AoEngp7u6fzj83UAppFip13FcHzP9NxYeX5GOkuubExHQqoHny2LE8fdG2Dv74545S8SM-O2hGJifA3zJzlAp2MahDaCXoFjkOyJdUSmU03hpL4BAJcgSYLQxVGqeWeqf8K5Dalxzac1zX9KnkQ">
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-primary-container" title="Conectado"></span>
+</div>
+<div class="overflow-hidden">
+<span class="block font-label-md text-label-md font-bold text-on-primary truncate">Rodrigo Silva Montes</span>
+<span class="block font-label-sm text-label-sm text-primary-fixed truncate">EST-2024-8849</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="font-label-sm text-label-sm text-emerald-300 font-medium">Alumno Regular</span>
+</div>
+</div>
+</div>
+<button class="text-on-primary-container hover:text-on-primary p-1.5 rounded-md hover:bg-white/10 transition-colors" title="Ajustes y salida">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- CONTENEDOR PRINCIPAL -->
+<div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+<!-- BARRA SUPERIOR DE ENCABEZADO (TOP BAR) -->
+<header class="sticky top-0 z-30 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/30 px-space-md md:px-space-xl py-space-sm flex flex-col md:flex-row md:items-center md:justify-between gap-space-sm">
+<!-- Breadcrumb & Búsqueda -->
+<div class="flex flex-1 items-center gap-space-md">
+<div class="hidden lg:flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="font-semibold text-primary">Mi IINICIA</span>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 16px;">chevron_right</span>
+<span class="">Inicio</span>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 16px;">chevron_right</span>
+<span class="text-secondary font-bold">Cuatrimestre 3</span>
+</div>
+<!-- Buscador Rápido -->
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface text-body-sm font-body-sm text-on-surface rounded-lg border border-outline-variant/40 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all" placeholder="Buscar recursos, lecturas, tareas o claves RVOE..." type="text">
+</div>
+</div>
+<!-- Acciones Derecha -->
+<div class="flex items-center justify-between md:justify-end gap-space-md">
+<!-- Selector de Cuatrimestre -->
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">date_range</span>
+<span class="font-label-md text-label-md font-bold text-primary">Enero - Abril 2026</span>
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 16px;">arrow_drop_down</span>
+</div>
+<!-- Biblioteca Digital -->
+<a class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-secondary text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">local_library</span>
+<span class="">Biblioteca Digital</span>
+</a>
+<!-- Notificaciones -->
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Notificaciones del Campus">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-error ring-2 ring-surface-container-lowest"></span>
+</button>
+<!-- Servidor Campus Status -->
+<div class="hidden xl:flex items-center gap-1.5 px-2 py-1 bg-surface-container-low rounded-md border border-outline-variant/30 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="">Campus Operativo (CDMX)</span>
+</div>
+</div>
+</header>
+<!-- ÁREA PRINCIPAL DEL DASHBOARD -->
+<main class="flex-1 p-space-md md:p-space-xl max-w-7xl w-full mx-auto space-y-space-xl">
+<!-- SALUDO PERSONALIZADO -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">
+            ¡Bienvenido de vuelta, Rodrigo! 👋
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            Ciudad de México, Lunes 23 de Febrero de 2026 • <span class="text-secondary font-semibold">Semana 6 del Cuatrimestre</span>. Mantén el ritmo, estás en el 65% de avance de tus entregas parciales.
+          </p>
+</div>
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/40 shadow-level-1 hover:shadow-level-2 text-primary font-label-md text-label-md transition-all">
+<span class="material-symbols-outlined text-secondary">download</span>
+<span class="">Descargar Kárdex Oficial</span>
+</button>
+</div>
+</section>
+<!-- TARJETA DE RESUMEN DEL PROGRAMA Y ESTADO ACADÉMICO -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-level-1 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-96 h-96 bg-surface-container rounded-full blur-3xl opacity-40 -mr-20 -mt-20 pointer-events-none"></div>
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md border-b border-outline-variant/20 pb-space-md">
+<div>
+<div class="flex flex-wrap items-center gap-2 mb-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-primary-container text-on-primary font-bold uppercase tracking-wider">
+                RVOE Federal No. 2024-0111
+              </span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container/40 text-on-secondary-container font-semibold">
+                Modalidad Ejecutiva Digital
+              </span>
+</div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">
+              Licenciatura en Ingeniería en Software e Inteligencia Artificial
+            </h2>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-3 py-1.5 rounded-full text-label-sm font-label-sm bg-amber-100 text-amber-900 border border-amber-300 font-bold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-amber-700" style="font-size: 16px;">verified</span>
+              Beca Académica 35% Activa
+            </span>
+</div>
+</div>
+<!-- Métricas Académicas Clave en Widgets -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-space-md pt-space-md">
+<!-- Widget 1: Promedio -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Promedio General</span>
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">military_tech</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary">9.4</span>
+<span class="text-label-sm font-label-sm text-emerald-600 font-semibold">+0.2 vs C2</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Escala 0 a 10 • Cuadro de Honor</span>
+</div>
+<!-- Widget 2: Créditos -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Créditos Acumulados</span>
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">school</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary">88</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">/ 300 créditos</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-bold">29.3% de la licenciatura</span>
+</div>
+<!-- Widget 3: Cuatrimestre -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Periodo en Curso</span>
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">timelapse</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary">3°</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">de 9 cuatrimestres</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fin de ciclo: Abril 2026</span>
+</div>
+<!-- Widget 4: Materias Aprobadas -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Materias Acreditadas</span>
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">fact_check</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary">12</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">de 42 asignaturas</span>
+</div>
+<span class="font-label-sm text-label-sm text-emerald-600 font-bold">Sin adeudos académicos</span>
+</div>
+</div>
+<!-- Barra de Progreso General -->
+<div class="mt-space-md pt-space-md border-t border-outline-variant/20">
+<div class="flex items-center justify-between font-label-sm text-label-sm mb-1.5">
+<span class="text-on-surface-variant font-semibold">Progreso Curricular Total</span>
+<span class="text-primary font-bold">29.3% completado</span>
+</div>
+<div class="w-full bg-outline-variant/20 h-2.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 29.3%;"></div>
+</div>
+</div>
+</section>
+<!-- GRID PRINCIPAL DE CONTENIDO: CURSOS (IZQ 8 COLS) + AGENDA / AVISOS (DER 4 COLS) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+<!-- SECCIÓN IZQUIERDA: MIS CURSOS EN CURSO (8 Cols) -->
+<section class="lg:col-span-8 space-y-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">class</span>
+                Mis Cursos en Curso
+              </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                3er Cuatrimestre • 4 asignaturas tecnológicas autorizadas con créditos oficiales.
+              </p>
+</div>
+<button class="inline-flex items-center gap-1 font-label-md text-label-md text-secondary hover:text-primary transition-colors font-bold">
+<span class="">Ver plan de estudios completo</span>
+<span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+</button>
+</div>
+<!-- Cuadrícula de Tarjetas de Cursos -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Curso 1 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-level-1 hover:shadow-level-2 transition-all flex flex-col justify-between overflow-hidden">
+<div>
+<div class="relative h-36 w-full overflow-hidden bg-primary">
+<img class="w-full h-full object-cover opacity-85" data-alt="High quality academic banner visualizing neural network nodes with glowing deep navy and gold mathematical connections, representing advanced machine learning and artificial intelligence studies." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW5fvL-sMxlH6Iu3HZoBtEZO0xGxXJDo7QkSbQEInUff_iLJqZ6xX7VtM4UXpgVMfoFnI3w8-b6distV-LIN6U9GbEWHb56VqTcmlSR38MuXkzLzUl7l1hjSdXzeAI4NRug66YX8kDN9oxrm-mV3a9D-rZYJE8QdbmiLBjDFUZMDDFOUuixrV2Y0rDmNp05pqqPE5fsd5Jtpo8c9HzVRcT8RKnpVcQjWAOqsME7tzh6WN2ZyP9Rk0PhQ">
+<span class="absolute top-3 left-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-primary-container/90 text-on-primary font-bold backdrop-blur-sm">
+                    IA-301 • 8 Créditos
+                  </span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-emerald-700 text-white font-bold backdrop-blur-sm">
+                    En curso
+                  </span>
+</div>
+<div class="p-space-md space-y-space-sm">
+<h3 class="font-title text-title font-bold text-primary leading-snug">
+                    Fundamentos de Inteligencia Artificial y Agentes Inteligentes
+                  </h3>
+<!-- Docente -->
+<div class="flex items-center gap-2 pt-1">
+<img class="w-7 h-7 rounded-full object-cover" data-alt="Professional headshot of a middle-aged Mexican university professor with glasses and polite smile in an academic institute office setting with clean bright natural illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBugBpThHRIol2YSv2O5I-8sF9DRxBO8ORbG5qlD_kuVI8Bf8eOTpH4yExZ1UEinhcZ7RAYGrsCktH22bSlljWXkva0nj9E6a50prmeOvUBPBbmCih0uHYLPFFBWPWpoFyP2tUxmc603P57lH-uFg1rHB-gbnLEFaDhD1wSnorsopZPMBMxjbbhW8gU3NLZRSdIU9-djb71daK_JUkSSwjuzbuQVMLNxdG3NF_u7aX7X0yrQeX8E8c6ow">
+<div class="overflow-hidden">
+<span class="block font-label-sm text-label-sm font-semibold text-primary truncate">Dr. Alejandro Mendoza</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant text-[11px]">Tutoría: Martes 17:00 hrs</span>
+</div>
+</div>
+<!-- Barra de Progreso del Curso -->
+<div class="pt-2">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mb-1">
+<span class="">Avance de la materia</span>
+<span class="font-bold text-primary">68%</span>
+</div>
+<div class="w-full bg-outline-variant/20 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 68%;"></div>
+</div>
+</div>
+<!-- Próxima Entrega -->
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/30 flex items-start gap-2">
+<span class="material-symbols-outlined text-amber-600 mt-0.5" style="font-size: 18px;">assignment_late</span>
+<div>
+<span class="block font-label-sm text-label-sm font-bold text-primary">Próxima entrega crítica:</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant text-[13px]">Tarea 3: Redes Neuronales Convolucionales</span>
+<span class="font-label-sm text-label-sm text-error font-bold">Vence: Mañana, 23:59 hrs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Tarjeta con Botón de Acción Principal -->
+<div class="p-space-md pt-0">
+<a class="w-full h-11 flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-bold shadow-level-1 transition-all" href="#"><span class="material-symbols-outlined" style="font-size: 20px;">meeting_room</span><span class="">Entrar al Aula Virtual</span></a>
+</div>
+</article>
+<!-- Curso 2 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-level-1 hover:shadow-level-2 transition-all flex flex-col justify-between overflow-hidden">
+<div>
+<div class="relative h-36 w-full overflow-hidden bg-primary">
+<img class="w-full h-full object-cover opacity-85" data-alt="Modern server rack datacenter with clean blue atmospheric illumination and cloud computing network infrastructure symbols representing enterprise software architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnNb2yP-vTILIjpivu1PmbkzBDtmA0alvsHFLJ0SL43UgaLFB0pHb13iSSljTvP-dyzd7kSHHN03MumkQRppvJKuGQpb6iUMePtTHV4KwwN1Qx7mvR2uVRxjkF3w3sB6oXFStJYJwz_ZKPPZW7YbVgxm8kpaXXBZsk6wg-CDr6ceuEmzw4Tu2VR61mvd4qjDWHFjA-bKk-a_FD3VMJrm_dcqNP1_i8c5u-bNc7LyBdA7vpuebxO0lyOA">
+<span class="absolute top-3 left-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-primary-container/90 text-on-primary font-bold backdrop-blur-sm">
+                    CLD-302 • 8 Créditos
+                  </span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-emerald-700 text-white font-bold backdrop-blur-sm">
+                    En curso
+                  </span>
+</div>
+<div class="p-space-md space-y-space-sm">
+<h3 class="font-title text-title font-bold text-primary leading-snug">
+                    Fundamentos de Cómputo en la Nube (AWS &amp; Azure)
+                  </h3>
+<!-- Docente -->
+<div class="flex items-center gap-2 pt-1">
+<img class="w-7 h-7 rounded-full object-cover" data-alt="Portrait of a female Latina cloud architect and university lecturer in professional business casual attire inside a bright contemporary tech institute auditorium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWL_e8B6Z25PYiq8ZINB6YDiVfyaQ_e1knfZcF9CBw7V_ZQ7Mzi6Bbx6XiWiPRIKeTpnZz_HFITeYjBlLiN6a697Fl8G6oHWHV_C2bSJL5BLtKAljN3loWHv8iIA8Vsg4j4mvSbP0rETI-x_sEukd1zfL9x6-_iXd4gnsXhKHmOluH2WGhzEYBt9vgT7rEosUL6fWAO9cDre9ZN-DUYJigIlpS2hcltGw3QwqM2EoF0XEjlH_SpZVhmA">
+<div class="overflow-hidden">
+<span class="block font-label-sm text-label-sm font-semibold text-primary truncate">Mtra. Sofía Valenzuela</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant text-[11px]">Tutoría: Miércoles 18:30 hrs</span>
+</div>
+</div>
+<!-- Barra de Progreso del Curso -->
+<div class="pt-2">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mb-1">
+<span class="">Avance de la materia</span>
+<span class="font-bold text-primary">54%</span>
+</div>
+<div class="w-full bg-outline-variant/20 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 54%;"></div>
+</div>
+</div>
+<!-- Próxima Entrega -->
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/30 flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary mt-0.5" style="font-size: 18px;">terminal</span>
+<div>
+<span class="block font-label-sm text-label-sm font-bold text-primary">Laboratorio Práctico:</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant text-[13px]">Lab 4: Despliegue en Kubernetes Cluster</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Viernes, 18:00 hrs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Tarjeta con Botón de Acción Principal -->
+<div class="p-space-md pt-0">
+<a class="w-full h-11 flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-bold shadow-level-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">meeting_room</span>
+<span class="">Entrar al Aula Virtual</span>
+</a>
+</div>
+</article>
+<!-- Curso 3 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-level-1 hover:shadow-level-2 transition-all flex flex-col justify-between overflow-hidden">
+<div>
+<div class="relative h-36 w-full overflow-hidden bg-primary">
+<img class="w-full h-full object-cover opacity-85" data-alt="Technical visual of operating systems architecture and fiber optic high speed networking nodes represented with clean deep navy and subtle amber digital graphics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeLFiah8XrmXBd_sKcuf-hhvsZs2GoIz6NeDxZeF5vO7o_qX4RQICKYHFvvv1W03-20PbQMNVQ6MJ9HVp-1X6p-PblcXkE6zOPYV9yxSthWHCbxRuYz7y7EIg_MQP6dKobfzqFblvPkGjtTlJyUmKSWtjmuayRyoz8YkIMUyxBcjkHayQdfJqFzJVQZzLyQtIG6EokTb6uhhzFIpUi6zTYNGkhDVVKSQ4DX9ghsryhtkIN3Jgor1Pv9g">
+<span class="absolute top-3 left-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-primary-container/90 text-on-primary font-bold backdrop-blur-sm">
+                    RED-303 • 7 Créditos
+                  </span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-emerald-700 text-white font-bold backdrop-blur-sm">
+                    En curso
+                  </span>
+</div>
+<div class="p-space-md space-y-space-sm">
+<h3 class="font-title text-title font-bold text-primary leading-snug">
+                    Sistemas Operativos Distribuidos y Redes
+                  </h3>
+<!-- Docente -->
+<div class="flex items-center gap-2 pt-1">
+<img class="w-7 h-7 rounded-full object-cover" data-alt="Professional headshot of a Hispanic male software engineer and college professor with a neat trimmed beard in front of an educational research laboratory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKyPeGF9yoPiVN429g5W08toeUYvNyGWdASB06Y8moSxy1WGGfN299krM1BPqzVwyPz_tT2wpkWvG_6IK0JAI-fKxnbmk3yl9G6VzJwX9OKO3PaDOrv-IZJt9I91inaC1UL6zoJwqXHedf3CjitstuNDgAm-nMVoNzkeOIUch1THuGa55sru6KEjC7TMXi3XKysW5TQu020DRzdeYec7JlxO9zvo4DGf1xOPkMSFpyci9shNS0m4XvRQ">
+<div class="overflow-hidden">
+<span class="block font-label-sm text-label-sm font-semibold text-primary truncate">Ing. Roberto Méndez</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant text-[11px]">Tutoría: Jueves 16:00 hrs</span>
+</div>
+</div>
+<!-- Barra de Progreso del Curso -->
+<div class="pt-2">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mb-1">
+<span class="">Avance de la materia</span>
+<span class="font-bold text-primary">72%</span>
+</div>
+<div class="w-full bg-outline-variant/20 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 72%;"></div>
+</div>
+</div>
+<!-- Próxima Entrega / Sesión -->
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/30 flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary mt-0.5" style="font-size: 18px;">video_camera_front</span>
+<div>
+<span class="block font-label-sm text-label-sm font-bold text-primary">Sesión Síncrona en Vivo:</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant text-[13px]">Sockets y Protocolos de Enrutamiento</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Jueves, 19:00 hrs (Teams)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Tarjeta con Botón de Acción Principal -->
+<div class="p-space-md pt-0">
+<a class="w-full h-11 flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-bold shadow-level-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">meeting_room</span>
+<span class="">Entrar al Aula Virtual</span>
+</a>
+</div>
+</article>
+<!-- Curso 4 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-level-1 hover:shadow-level-2 transition-all flex flex-col justify-between overflow-hidden">
+<div>
+<div class="relative h-36 w-full overflow-hidden bg-primary">
+<img class="w-full h-full object-cover opacity-85" data-alt="Abstract modern depiction of clean code architecture diagrams, object oriented software design patterns and modular system modeling in a scholarly technological aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfnbBQf4Iw948hSUXzJRy33dpwXcnSV4HbzSGaqdHifOqDwNJ8Ub5_a-jjK47iGLOF2i9jDMAU1kKpZzlpdPJjSrrlNQki7-0ovvsvFvjWkKorKaVM-s7BzPVajROttjR4CfrTfD6l5RnKgYXpLDyuetEel_wkJPOAVzZvjdfO9YlZKWEEp5HyhvCRqUgdOf9sQx3wFhueYScLijUtMqLgFrDupUQEQPBS6ylRaKKVnIkUTpOGNtA3-A">
+<span class="absolute top-3 left-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-primary-container/90 text-on-primary font-bold backdrop-blur-sm">
+                    ISW-304 • 8 Créditos
+                  </span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded text-label-sm font-label-sm bg-emerald-700 text-white font-bold backdrop-blur-sm">
+                    En curso
+                  </span>
+</div>
+<div class="p-space-md space-y-space-sm">
+<h3 class="font-title text-title font-bold text-primary leading-snug">
+                    Ingeniería de Software y Patrones de Diseño
+                  </h3>
+<!-- Docente -->
+<div class="flex items-center gap-2 pt-1">
+<img class="w-7 h-7 rounded-full object-cover" data-alt="Portrait of an esteemed female Mexican professor of computer science smiling with modern eyeglasses, in an academic software research department." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlJUUU_b0rByf3_I7SFbRPwNSVWWuHKGiTmVcE3egotVJ-2e119GlWLJXLCMLU6daYtPrhFF5trj2w6Xq25dV8LAvqYpaPMaW68bY4s-RJzpnu9Tn1lkVpK9uf-71ebVzRnJQ9Wcev_ZOM2OhctBy4E7EiJEEEtCZz2KYgu56ZnCi74lEXuSz45eqyp1ERTt8Dbe9a8WFnPs2JsCK8D0TQ2VLizhIsAiL7WwavmgS4fp3qUPAhPVreIg">
+<div class="overflow-hidden">
+<span class="block font-label-sm text-label-sm font-semibold text-primary truncate">Dra. Claudia Navarrete</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant text-[11px]">Tutoría: Lunes 15:00 hrs</span>
+</div>
+</div>
+<!-- Barra de Progreso del Curso -->
+<div class="pt-2">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mb-1">
+<span class="">Avance de la materia</span>
+<span class="font-bold text-primary">40%</span>
+</div>
+<div class="w-full bg-outline-variant/20 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 40%;"></div>
+</div>
+</div>
+<!-- Próxima Entrega -->
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/30 flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary mt-0.5" style="font-size: 18px;">menu_book</span>
+<div>
+<span class="block font-label-sm text-label-sm font-bold text-primary">Entrega de Proyecto:</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant text-[13px]">Caso de Estudio MVC y Microfrontends</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Lunes próx, 23:59 hrs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Tarjeta con Botón de Acción Principal -->
+<div class="p-space-md pt-0">
+<a class="w-full h-11 flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-secondary text-on-primary font-label-md text-label-md font-bold shadow-level-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">meeting_room</span>
+<span class="">Entrar al Aula Virtual</span>
+</a>
+</div>
+</article>
+</div>
+<!-- BANNER DESTACADO PARA DESCARGAR LA APP OFICIAL IINICIA (ANDROID) -->
+<div class="rounded-2xl bg-gradient-to-r from-primary-container to-primary text-on-primary p-space-lg relative overflow-hidden shadow-level-2">
+<div class="absolute -right-10 -bottom-10 w-72 h-72 bg-secondary/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-lg relative z-10">
+<div class="space-y-space-sm max-w-xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container/20 text-secondary-container border border-secondary-container/40 font-label-sm text-label-sm font-bold uppercase tracking-wider"><span class="material-symbols-outlined" style="font-size: 16px;">phone_android</span><span class="">Nuevo: Versión 3.2 para Android</span></div>
+<h3 class="font-headline-md text-headline-md font-bold leading-tight">
+                  Lleva tu universidad en el bolsillo: Descarga la App Oficial IINICIA
+                </h3>
+<p class="font-body-sm text-body-sm text-primary-fixed">
+                  Consulta tus clases sin conexión, recibe recordatorios push 1 hora antes de cada entrega y muestra tu credencial digital con validez oficial RVOE.
+                </p>
+<div class="flex flex-wrap gap-2 pt-1"><span class="px-2.5 py-1 rounded-md bg-white/10 text-label-sm font-label-sm font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-secondary-container" style="font-size: 16px;">offline_pin</span> Modo Sin Conexión</span><span class="px-2.5 py-1 rounded-md bg-white/10 text-label-sm font-label-sm font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-secondary-container" style="font-size: 16px;">notifications_active</span> Alertas Inmediatas</span><span class="px-2.5 py-1 rounded-md bg-white/10 text-label-sm font-label-sm font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-secondary-container" style="font-size: 16px;">badge</span> Credencial RVOE</span></div>
+</div>
+<div class="flex flex-col sm:flex-row md:flex-col items-start gap-3 flex-shrink-0">
+<a class="inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-primary-container text-white hover:brightness-95 font-label-md text-label-md font-bold shadow-md transition-transform hover:scale-105 border border-secondary-container/40" href="#"><span class="material-symbols-outlined text-2xl text-secondary-container">download</span><div class="text-left leading-none"><span class="block text-[10px] uppercase font-bold tracking-wider opacity-80">Disponible en</span><span class="block text-sm font-extrabold">Google Play Store</span></div></a>
+<span class="text-label-sm font-label-sm text-on-primary-container">Compatible con Android 9.0 o superior • 42 MB</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECCIÓN DERECHA: AGENDA Y AVISOS INSTITUCIONALES (4 Cols) -->
+<section class="lg:col-span-4 space-y-space-lg">
+<!-- PRÓXIMAS ACTIVIDADES (AGENDA) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/30 shadow-level-1">
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-3 mb-space-md">
+<h3 class="font-title text-title font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">event_note</span>
+                Próximas Actividades
+              </h3>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-low text-secondary font-bold">
+                Esta semana
+              </span>
+</div>
+<!-- Filtros rápidos de agenda -->
+<div class="flex gap-1 mb-space-md overflow-x-auto pb-1">
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-secondary text-on-secondary font-bold">Todas (3)</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">Tareas</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">En vivo</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">Exámenes</button>
+</div>
+<!-- Lista Cronológica -->
+<div class="space-y-space-md">
+<!-- Item 1: Urgente / Hoy -->
+<div class="p-3 rounded-lg border-l-4 border-error bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-bold text-error uppercase">Hoy, 23:59 hrs</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-error/10 text-error">Alta Prioridad</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold text-primary">Proyecto Práctico: Microservicios Docker</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[13px] mt-0.5">Materia: Fundamentos Cómputo Nube</p>
+<div class="mt-2 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">upload_file</span>
+                    Formato .ZIP o Repo GitHub
+                  </span>
+<a class="font-label-sm text-label-sm text-secondary hover:underline font-bold" href="#">Subir entrega</a>
+</div>
+</div>
+<!-- Item 2: Masterclass en vivo -->
+<div class="p-3 rounded-lg border-l-4 border-secondary bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-bold text-secondary uppercase">Mañana, 19:00 hrs</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-secondary/10 text-secondary">En Vivo</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold text-primary">Masterclass con Mentor AWS: Despliegues Cloud</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[13px] mt-0.5">Sesión síncrona obligatoria con Q&amp;A</p>
+<div class="mt-2 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">videocam</span>
+                    Microsoft Teams
+                  </span>
+<a class="px-2 py-1 rounded bg-secondary text-on-secondary text-label-sm font-label-sm font-bold" href="#">Unirse a sala</a>
+</div>
+</div>
+<!-- Item 3: Examen / Cuestionario -->
+<div class="p-3 rounded-lg border-l-4 border-amber-500 bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-bold text-amber-800 uppercase">Viernes 20 Feb, 18:00 hrs</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-800">Evaluación</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold text-primary">Cuestionario Cuatrimestral Unidad 2</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[13px] mt-0.5">Materia: Inteligencia Artificial</p>
+<div class="mt-2 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
+                    60 min • 25 reactivos
+                  </span>
+<a class="font-label-sm text-label-sm text-secondary hover:underline font-bold" href="#">Guía de estudio</a>
+</div>
+</div>
+</div>
+<div class="mt-space-md text-center pt-2 border-t border-outline-variant/20">
+<a class="font-label-md text-label-md text-secondary hover:text-primary font-bold flex items-center justify-center gap-1" href="#">
+<span class="">Ver calendario mensual completo</span>
+<span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- AVISOS INSTITUCIONALES -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/30 shadow-level-1">
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-3 mb-space-md">
+<h3 class="font-title text-title font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-600">campaign</span>
+                Avisos de Rectoría y Campus
+              </h3>
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+</div>
+<div class="space-y-space-md">
+<!-- Aviso 1: Becas -->
+<div class="border-b border-outline-variant/20 pb-space-sm last:border-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-100 text-amber-900 border border-amber-300">Convocatoria Oficial</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">18 Feb</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold text-primary hover:text-secondary cursor-pointer">
+                  Renovación de Becas Académicas Ciclo 2026
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[13px] mt-1">
+                  Abierto el periodo de recepción de comprobantes de promedio para mantener tu 35% de beca institucional. Límite: 15 de Marzo.
+                </p>
+<a class="mt-2 inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary font-bold hover:underline" href="#">
+<span class="">Ver requisitos y cargar documentos</span>
+<span class="material-symbols-outlined" style="font-size: 14px;">open_in_new</span>
+</a>
+</div>
+<!-- Aviso 2: Mantenimiento -->
+<div class="border-b border-outline-variant/20 pb-space-sm last:border-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-surface-container-high text-on-surface-variant">Sistemas TI</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ayer</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold text-primary">
+                  Mantenimiento programado de servidores
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[13px] mt-1">
+                  El campus virtual estará en ventana de actualización técnica este domingo de 02:00 a 05:00 hrs. Programa tus entregas con antelación.
+                </p>
+</div>
+<!-- Aviso 3: Taller extracurricular -->
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800">Taller Gratuito</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">15 Feb</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold text-primary hover:text-secondary cursor-pointer">
+                  Prompt Engineering avanzado y LLMs para desarrolladores
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[13px] mt-1">
+                  Impartido por egresados investigadores de IINICIA. Certificado con valor curricular de 20 horas académicas.
+                </p>
+<a class="mt-2 inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary font-bold hover:underline" href="#">
+<span class="">Inscribirme sin costo</span>
+<span class="material-symbols-outlined" style="font-size: 14px;">chevron_right</span>
+</a>
+</div>
+</div>
+</div>
+<!-- MESA DE AYUDA Y CONTACTO DIRECTO -->
+<div class="bg-surface-container-low rounded-xl p-space-md border border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<div>
+<span class="block font-label-md text-label-md font-bold text-primary">¿Dudas con una materia?</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">Atención por WhatsApp y ticket</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary font-label-sm text-label-sm font-bold transition-colors">
+              Abrir Ticket
+            </button>
+</div>
+</section>
+</div>
+</main>
+<!-- FOOTER INSTITUCIONAL COMPLETO (Desde el Shared Components JSON) -->
+<footer class="bg-primary text-on-primary border-t border-outline-variant/20 mt-space-xl">
+<div class="w-full max-w-7xl mx-auto px-margin-desktop py-space-xl">
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-lg border-b border-white/10 pb-space-lg mb-space-lg">
+<div class="flex items-center space-x-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center">
+<img alt="IINICIA Logo" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UWW0Ram5pU-Q88cq1Cn9Hkj83kIW2YQmvczTpMCOOJinKfn4ANuAyZW6EEFoUot6eBmXwA5BUK9xGCIk0QkoBAPmTVYnw8sdPbvfh6DvWUr7vvBFypnfIkF0VNNwkBkdzyQrc9q59_S4hNuEXGFd5HyoaJTM_mmaM3jQRBGMbHqA0-4aRgAIqvXpug2hvv4SzyE38OpJIY9d5fW2vdMirrPr3XZ8pn3YuPhaDOP6wXOAzUlS7l_Jhgdesf">
+</div>
+<span class="text-headline-md font-headline-md font-bold text-on-primary">IINICIA</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-x-space-lg gap-y-2">
+<a class="text-on-primary-container font-body-sm text-body-sm hover:text-on-primary transition-colors" href="#">Aviso de Privacidad</a>
+<a class="text-on-primary-container font-body-sm text-body-sm hover:text-on-primary transition-colors" href="#">Términos y Condiciones</a>
+<a class="text-on-primary-container font-body-sm text-body-sm hover:text-on-primary transition-colors" href="#">Reglamento Institucional</a>
+<a class="text-on-primary-container font-body-sm text-body-sm hover:text-on-primary transition-colors" href="#">Bolsa de Trabajo</a>
+<a class="text-on-primary-container font-body-sm text-body-sm hover:text-on-primary transition-colors" href="#">Soporte Técnico</a>
+<a class="text-tertiary-fixed-dim font-body-sm text-body-sm font-semibold hover:underline" href="#">Acreditaciones RVOE</a>
+</div>
+</div>
+<div class="text-center md:text-left text-on-primary-container font-body-sm text-body-sm leading-relaxed">
+<p class="">© 2024 Instituto de Innovación y Ciencias Aplicadas (IINICIA). Todos los derechos reservados. Institución con Reconocimiento de Validez Oficial de Estudios (RVOE).</p>
+</div>
+</div>
+</footer>
+</div>
+
+
+</body></html>

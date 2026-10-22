@@ -1,0 +1,973 @@
+<!DOCTYPE html><html class="h-full bg-background" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>IINICIA Campus Admin | Control de Acceso Centralizado (RBAC)</title>
+<!-- Material Symbols Google -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#263143",
+            "on-primary-container": "#7a93ca",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffba3b",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#f9f9ff",
+            "inverse-primary": "#aec6ff",
+            "on-secondary-container": "#003e80",
+            "on-secondary-fixed": "#001b3e",
+            "tertiary-fixed": "#ffdead",
+            "background": "#f9f9ff",
+            "on-primary-fixed-variant": "#2c4678",
+            "on-primary-fixed": "#001a42",
+            "on-error-container": "#93000a",
+            "primary": "#00163a",
+            "surface-container-highest": "#d8e3fb",
+            "surface-dim": "#cfdaf2",
+            "surface-container": "#e7eeff",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary-container": "#0b2a5b",
+            "on-surface-variant": "#44474f",
+            "tertiary-container": "#3d2800",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed": "#281900",
+            "primary-fixed-dim": "#aec6ff",
+            "error-container": "#ffdad6",
+            "outline": "#747780",
+            "on-error": "#ffffff",
+            "tertiary": "#231500",
+            "on-background": "#111c2d",
+            "on-tertiary-container": "#c48800",
+            "secondary-fixed-dim": "#aac7ff",
+            "surface-tint": "#455e91",
+            "inverse-on-surface": "#ecf1ff",
+            "on-secondary-fixed-variant": "#00458d",
+            "secondary-container": "#7aacff",
+            "surface-container-high": "#dee8ff",
+            "secondary": "#235eac",
+            "outline-variant": "#c4c6d0",
+            "error": "#ba1a1a",
+            "secondary-fixed": "#d6e3ff",
+            "surface-variant": "#d8e3fb",
+            "on-tertiary-fixed-variant": "#604100",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#d8e2ff",
+            "on-surface": "#111c2d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-mobile": "1rem",
+            "space-md": "1rem",
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-desktop": "3rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem",
+            "space-lg": "1.5rem",
+            "gutter-desktop": "2rem",
+            "space-sm": "0.5rem",
+            "margin-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "display": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c4c6d0;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #747780;
+    }
+  </style>
+</head>
+<body class="h-full flex overflow-hidden bg-background text-on-surface antialiased font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- ============================================================== -->
+<!-- 1. SIDEBAR (Hierarchical Drawer - 3 Grouped Sections)          -->
+<!-- ============================================================== -->
+<aside class="w-72 h-screen flex flex-col justify-between py-space-md px-space-sm border-r border-outline-variant bg-surface-container-low sticky top-0 z-50 overflow-y-auto custom-scroll transition-all duration-300" id="main-sidebar">
+<!-- Header with Institutional Emblem & Identity -->
+<div>
+<div class="px-space-md pt-space-xs pb-space-md flex items-center justify-between border-b border-outline-variant/60">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-primary-container p-1 shadow-sm flex items-center justify-center shrink-0"><img alt="Logo institucional IINICIA" class="w-full h-full object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ"></div>
+<div class="leading-tight">
+<div class="flex items-center gap-1.5">
+<span class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">IINICIA</span>
+<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary border border-outline-variant/40">v2.4</span>
+</div>
+<p class="text-[11px] font-body-sm text-on-surface-variant font-medium">Gestión Académica Central</p>
+</div>
+</div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" id="btn-toggle-sidebar" title="Colapsar panel">
+<span class="material-symbols-outlined text-[20px]">menu_open</span>
+</button>
+</div>
+<!-- Sello RVOE y Modo Operativo -->
+<div class="mx-space-sm mt-3 px-3 py-2 bg-surface-container-lowest border border-outline-variant/70 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-[11px] font-label-sm font-semibold tracking-wider text-primary">RVOE SEP FEDERAL</span>
+</div>
+<span class="text-[10px] font-mono text-on-surface-variant font-medium">AUT-2024-MX</span>
+</div>
+<!-- NAVEGACIÓN AGRUPADA EN 3 SECCIONES -->
+<nav class="mt-space-md space-y-space-md">
+<!-- SECCIÓN 1: ACADÉMICO -->
+<div>
+<div class="px-space-md mb-1 text-[11px] font-label-md uppercase tracking-wider text-outline font-bold">
+            Académico
+          </div>
+<ul class="space-y-0.5">
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center justify-between hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">school</span>
+<span class="text-body-sm font-medium">Programas</span>
+</span>
+<span class="text-[11px] px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant">14</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">date_range</span>
+<span class="text-body-sm font-medium">Cohortes y periodos</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center justify-between hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">person_search</span>
+<span class="text-body-sm font-medium">Aspirantes</span>
+</span>
+<span class="px-2 py-0.5 text-xs font-bold rounded-full bg-[#ffba3b]/20 text-[#8A5F00]">148</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+<span class="text-body-sm font-medium">Matrículas</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+<span class="text-body-sm font-medium">Estudiantes</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">cast_for_education</span>
+<span class="text-body-sm font-medium">Docentes</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- SECCIÓN 2: CONTENIDOS -->
+<div>
+<div class="px-space-md mb-1 text-[11px] font-label-md uppercase tracking-wider text-outline font-bold">
+            Contenidos
+          </div>
+<ul class="space-y-0.5">
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">web</span>
+<span class="text-body-sm font-medium">Páginas</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">newspaper</span>
+<span class="text-body-sm font-medium">Noticias</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+<span class="text-body-sm font-medium">Oferta académica</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+<span class="text-body-sm font-medium">Preguntas frecuentes</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- SECCIÓN 3: SISTEMA (ITEM ACTIVO EN USUARIOS Y ROLES CON ESTILO RBAC) -->
+<div>
+<div class="px-space-md mb-1 text-[11px] font-label-md uppercase tracking-wider text-outline font-bold">
+            Sistema
+          </div>
+<ul class="space-y-0.5">
+<li class="">
+<!-- style_active_navigation applied with high contrast indicator -->
+<a class="bg-surface-container-highest text-secondary font-semibold rounded-lg px-space-md py-space-sm flex items-center justify-between border-l-4 border-secondary shadow-sm" href="#">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">manage_accounts</span>
+<span class="text-body-sm font-semibold">Usuarios y roles</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-800">RBAC</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">integration_instructions</span>
+<span class="text-body-sm font-medium">Integraciones SEP/LMS</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">fact_check</span>
+<span class="text-body-sm font-medium">Auditoría</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-body-sm font-medium">Configuración</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+<!-- SIDEBAR FOOTER -->
+<div class="pt-space-md mt-space-md border-t border-outline-variant/60 space-y-3">
+<!-- Sync Status -->
+<div class="p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/50">
+<div class="flex items-center justify-between text-[11px] mb-1">
+<span class="text-on-surface-variant font-medium">Sincronización Nube</span>
+<span class="text-emerald-700 font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Operativo
+          </span>
+</div>
+<p class="text-[10px] text-outline truncate font-mono">LMS Moodle + SEP DGAIR: 100%</p>
+</div>
+<!-- Quick Help & Logout -->
+<div class="flex items-center gap-1">
+<a class="flex-1 text-center py-2 text-xs font-label-md font-semibold text-secondary bg-surface-container-high hover:bg-secondary hover:text-surface-lowest rounded-lg transition-colors" href="#">
+          Soporte Campus
+        </a>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/40 rounded-lg transition-colors" title="Cerrar sesión">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ============================================================== -->
+<!-- 2. MAIN CONTENT AREA (Header + Banner RBAC + Canvas)           -->
+<!-- ============================================================== -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TOP NAV BAR (Universal Header) -->
+<header class="w-full h-16 px-gutter flex items-center justify-between sticky top-0 bg-surface-container-lowest border-b border-outline-variant z-40 shadow-sm">
+<!-- Left: Global Search with shortcut -->
+<div class="flex items-center gap-4 w-full max-w-xl">
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full h-10 pl-10 pr-20 bg-surface-container-low border border-outline-variant text-body-sm text-on-surface placeholder:text-outline rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-body-sm" placeholder="Buscar programas, usuarios, matrículas, folios o folios SEP..." type="text">
+<div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+<kbd class="px-2 py-0.5 text-[11px] font-semibold text-outline bg-surface-container-lowest border border-outline-variant rounded shadow-xs">⌘K</kbd>
+</div>
+</div>
+</div>
+<!-- Right: Role Switcher, Quick Action, Notifications, Profile Card -->
+<div class="flex items-center gap-space-md">
+<!-- Primary Action CTA -->
+<button class="hidden lg:flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-xs font-label-md font-bold hover:bg-[#1E5AA8] transition-all shadow-sm active:scale-[0.99]">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="">+ Nueva Acción</span>
+</button>
+<!-- Role Badges & Switcher Pill -->
+<div class="hidden sm:flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-outline-variant/60">
+<span class="text-[11px] font-label-sm font-semibold px-2 text-outline">Rol:</span>
+<!-- Superadmin Active -->
+<button class="px-2.5 py-1 rounded text-xs font-bold bg-purple-600 text-white flex items-center gap-1 shadow-xs transition-transform active:scale-95" title="Rol actual con acceso pleno a base de datos y llaves de cifrado">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span class="">Superadmin</span>
+</button>
+<!-- Quick Role Switch Dropdown Trigger (Cambiar Rol) -->
+<div class="relative inline-block text-left" id="role-selector-container">
+<button class="p-1 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center text-xs font-medium" id="role-dropdown-btn">
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+</button>
+<!-- Floating Menu for Switching Roles (Simulated UI) -->
+<div class="hidden absolute right-0 mt-2 w-64 rounded-xl bg-surface-container-lowest border border-outline-variant shadow-xl z-50 p-2 space-y-1" id="role-dropdown-menu">
+<div class="px-3 py-1.5 text-[11px] font-label-sm text-outline uppercase font-bold tracking-wider">
+                Alternar Perfil RBAC
+              </div>
+<button class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-xs font-semibold bg-purple-50 text-purple-900 border border-purple-200">
+<span class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Superadministrador
+                </span>
+<span class="text-[10px] bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded">Activo</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-xs text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-cyan-600"></span> Admin Técnico
+                </span>
+<span class="text-[10px] text-outline">LMS / API</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-xs text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#0B2A5B]"></span> Admin Académico
+                </span>
+<span class="text-[10px] text-outline">Planes</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-xs text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Coordinador
+                </span>
+<span class="text-[10px] text-outline">Aspirantes</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-xs text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Soporte
+                </span>
+<span class="text-[10px] text-outline">Tickets</span>
+</button>
+</div>
+</div>
+</div>
+<div class="h-6 w-px bg-outline-variant"></div>
+<!-- Trailing Icon Actions -->
+<div class="flex items-center gap-1">
+<!-- Notification Bell with Badge -->
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-secondary transition-colors" title="Notificaciones institucionales">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span>
+</button>
+<!-- Help Icon -->
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-secondary transition-colors" title="Centro de Ayuda">
+<span class="material-symbols-outlined text-[22px]">help</span>
+</button>
+</div>
+<!-- Profile Card & Avatar -->
+<div class="flex items-center gap-3 pl-2 border-l border-outline-variant">
+<div class="relative">
+<img class="w-9 h-9 rounded-full object-cover border-2 border-purple-400 ring-1 ring-purple-200" data-alt="Retrato fotográfico institucional de alta calidad de un hombre profesionista mexicano de 42 años con traje sastre azul marino y camisa formal clara, sonriendo confiadamente frente a la biblioteca luminosa del campus universitario. Iluminación diurna balanceada y ambiente académico moderno." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiiOUutmE5jJqCWDIB8_v_3qLHzKwzjqF6ftyF8Q4CgMowkd-KsguaFk3JVLfZKw1fHXLhORmOUUXIMvVDJuQiU-4somB23svFID9LpEm0dCkL56TJE-Aaw6sk-pyKdzmleMmKbmZViALyleoONBp86Qx1eiygTSEqeimYj8oEMJw89qaYgpHNeb-FYA_1s8E6oS7Y2RyEZPlqolDW-QCQb17d1knU_FoxBJS_NTCtPDENciq0kQQvFg">
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-[7px] text-white">★</span>
+</div>
+<div class="hidden xl:block text-left leading-tight">
+<div class="text-xs font-headline-sm font-bold text-primary">Lic. Roberto Morales</div>
+<div class="text-[11px] font-body-sm text-outline truncate max-w-[130px]">r.morales@iincia.edu.mx</div>
+</div>
+</div>
+</div>
+</header>
+<!-- RBAC DISCREET BANNER -->
+<div class="w-full bg-[#F3E8FF] border-b border-purple-200 px-gutter py-2 flex items-center justify-between text-xs text-purple-950 font-body-sm">
+<div class="flex items-center gap-2.5">
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-purple-600"></span>
+</span>
+<span class="">
+<strong class="font-semibold text-purple-900">Viendo como Superadministrador</strong> • 
+          La navegación, opciones de edición y módulos visibles se adaptan automáticamente a los privilegios y permisos de tu rol asignado <span class="font-mono bg-purple-200/80 px-1 py-0.5 rounded text-[10px] text-purple-900 font-bold">RBAC Nivel 1 - Acceso Total</span>.
+        </span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 text-[11px] font-label-sm font-bold text-purple-800 hover:text-purple-950 hover:bg-purple-200/70 rounded transition-colors underline decoration-purple-400">
+          Gestionar Matriz de Permisos
+        </button>
+</div>
+</div>
+<!-- CANVAS BODY / MAIN DASHBOARD -->
+<main class="flex-1 overflow-y-auto px-margin-desktop py-space-lg custom-scroll space-y-space-lg">
+<!-- Executive Header -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2">
+<div>
+<div class="flex items-center gap-2.5 text-xs font-semibold text-secondary uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="">Centro de Control Administrativo</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-primary tracking-tight mt-1">
+            Panel Principal de Operaciones
+          </h1>
+<p class="text-body-sm text-on-surface-variant mt-0.5">
+            Lunes 23 de Febrero de 2026 • <span class="text-emerald-700 font-semibold inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Todos los sistemas LMS y validaciones SEP operando al 100%</span>
+</p>
+</div>
+<!-- Quick Top Filter & Export -->
+<div class="flex items-center gap-2 self-start md:self-auto">
+<button class="h-10 px-3.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-xs font-label-md font-semibold flex items-center gap-2 shadow-xs transition-colors">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="">Ciclo 2026-1 (Activo)</span>
+</button>
+<button class="h-10 px-4 rounded-lg bg-secondary text-white hover:bg-primary text-xs font-label-md font-semibold flex items-center gap-2 shadow-xs transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="">Exportar Informe</span>
+</button>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- 3. KPI METRIC TILES (Level 1 Elevation Bento Cards)            -->
+<!-- ============================================================== -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- KPI 1: Estudiantes Activos -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-[0_1px_3px_0_rgba(11,42,91,0.04),0_4px_6px_-1px_rgba(11,42,91,0.06)] hover:border-secondary/40 transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-xs font-label-sm font-semibold uppercase tracking-wider text-outline">Estudiantes</span>
+<span class="p-1.5 rounded-lg bg-surface-container text-secondary">
+<span class="material-symbols-outlined text-[18px]">school</span>
+</span>
+</div>
+<div class="text-2xl font-headline-lg font-bold text-primary mt-2">18,540</div>
+<div class="flex items-center gap-1.5 text-xs mt-2 text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class=""><strong>+12%</strong> vs ciclo anterior</span>
+</div>
+</div>
+<!-- KPI 2: Aspirantes en Proceso -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-[0_1px_3px_0_rgba(11,42,91,0.04),0_4px_6px_-1px_rgba(11,42,91,0.06)] hover:border-secondary/40 transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-xs font-label-sm font-semibold uppercase tracking-wider text-outline">Aspirantes</span>
+<span class="p-1.5 rounded-lg bg-[#F2A900]/20 text-[#8A5F00]">
+<span class="material-symbols-outlined text-[18px]">person_search</span>
+</span>
+</div>
+<div class="text-2xl font-headline-lg font-bold text-primary mt-2">1,284</div>
+<div class="text-xs mt-2 text-amber-800 font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+<span class=""><strong>148</strong> pendientes dictamen</span>
+</div>
+</div>
+<!-- KPI 3: Docentes y Catedráticos -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-[0_1px_3px_0_rgba(11,42,91,0.04),0_4px_6px_-1px_rgba(11,42,91,0.06)] hover:border-secondary/40 transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-xs font-label-sm font-semibold uppercase tracking-wider text-outline">Docentes</span>
+<span class="p-1.5 rounded-lg bg-surface-container text-secondary">
+<span class="material-symbols-outlined text-[18px]">cast_for_education</span>
+</span>
+</div>
+<div class="text-2xl font-headline-lg font-bold text-primary mt-2">342</div>
+<div class="text-xs mt-2 text-on-surface-variant font-medium">
+<span class="">En 48 cohortes activas</span>
+</div>
+</div>
+<!-- KPI 4: Tickets de Soporte -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-[0_1px_3px_0_rgba(11,42,91,0.04),0_4px_6px_-1px_rgba(11,42,91,0.06)] hover:border-secondary/40 transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-xs font-label-sm font-semibold uppercase tracking-wider text-outline">Soporte Campus</span>
+<span class="p-1.5 rounded-lg bg-emerald-50 text-emerald-700">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+</span>
+</div>
+<div class="text-2xl font-headline-lg font-bold text-primary mt-2">18 <span class="text-xs font-normal text-outline">abiertos</span></div>
+<div class="text-xs mt-2 text-emerald-700 font-medium">
+<span class="">Resp. prom. <strong>1.4 hrs</strong></span>
+</div>
+</div>
+<!-- KPI 5: Integraciones SEP & Moodle -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-[0_1px_3px_0_rgba(11,42,91,0.04),0_4px_6px_-1px_rgba(11,42,91,0.06)] hover:border-secondary/40 transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-xs font-label-sm font-semibold uppercase tracking-wider text-outline">SEP &amp; LMS</span>
+<span class="p-1.5 rounded-lg bg-emerald-100 text-emerald-800">
+<span class="material-symbols-outlined text-[18px]">cloud_done</span>
+</span>
+</div>
+<div class="text-lg font-headline-md font-bold text-emerald-700 mt-2 flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="">Sincronizado</span>
+</div>
+<div class="text-xs mt-2 text-outline font-medium">
+<span class="">Hace 4 minutos</span>
+</div>
+</div>
+</section>
+<!-- ============================================================== -->
+<!-- 4. QUICK ACTIONS GRID                                          -->
+<!-- ============================================================== -->
+<section>
+<div class="flex items-center justify-between mb-space-sm">
+<div>
+<h2 class="text-title font-headline-sm text-primary font-bold">Accesos Rápidos de Gestión</h2>
+<p class="text-xs text-on-surface-variant">Acciones prioritarias configuradas con tus permisos de Superadministrador</p>
+</div>
+<span class="text-xs font-semibold text-secondary hover:underline cursor-pointer">Personalizar atajos</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-space-sm">
+<!-- Quick Action 1 -->
+<a class="group p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-secondary hover:shadow-md transition-all flex flex-col justify-between" href="#">
+<div class="flex items-center justify-between mb-3">
+<span class="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">gavel</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Urgente</span>
+</div>
+<div>
+<h3 class="text-xs font-headline-sm font-bold text-primary group-hover:text-secondary">Dictaminar Aspirantes</h3>
+<p class="text-[11px] text-outline mt-0.5 leading-snug">Folios pendientes con documentación SEP completa</p>
+</div>
+<div class="mt-3 pt-2 border-t border-outline-variant/40 flex items-center text-[11px] font-semibold text-secondary gap-1">
+<span class="">Ir a admisiones</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<!-- Quick Action 2 -->
+<a class="group p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-secondary hover:shadow-md transition-all flex flex-col justify-between" href="#">
+<div class="flex items-center justify-between mb-3">
+<span class="w-10 h-10 rounded-lg bg-blue-50 text-secondary flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">event_repeat</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-secondary">Plan</span>
+</div>
+<div>
+<h3 class="text-xs font-headline-sm font-bold text-primary group-hover:text-secondary">Crear Nueva Cohorte</h3>
+<p class="text-[11px] text-outline mt-0.5 leading-snug">Programar ciclo escolar y fechas límite 2026-2</p>
+</div>
+<div class="mt-3 pt-2 border-t border-outline-variant/40 flex items-center text-[11px] font-semibold text-secondary gap-1">
+<span class="">Configurar periodo</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<!-- Quick Action 3 -->
+<a class="group p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-secondary hover:shadow-md transition-all flex flex-col justify-between" href="#">
+<div class="flex items-center justify-between mb-3">
+<span class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">assignment_ind</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800">Claustro</span>
+</div>
+<div>
+<h3 class="text-xs font-headline-sm font-bold text-primary group-hover:text-secondary">Asignar Docente</h3>
+<p class="text-[11px] text-outline mt-0.5 leading-snug">Distribuir cátedras para cuatrimestre en marcha</p>
+</div>
+<div class="mt-3 pt-2 border-t border-outline-variant/40 flex items-center text-[11px] font-semibold text-secondary gap-1">
+<span class="">Gestión claustro</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<!-- Quick Action 4 -->
+<a class="group p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-secondary hover:shadow-md transition-all flex flex-col justify-between" href="#">
+<div class="flex items-center justify-between mb-3">
+<span class="w-10 h-10 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">post_add</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-teal-100 text-teal-800">Portal</span>
+</div>
+<div>
+<h3 class="text-xs font-headline-sm font-bold text-primary group-hover:text-secondary">Publicar Noticia</h3>
+<p class="text-[11px] text-outline mt-0.5 leading-snug">Lanzar boletín o evento en sitio web institucional</p>
+</div>
+<div class="mt-3 pt-2 border-t border-outline-variant/40 flex items-center text-[11px] font-semibold text-secondary gap-1">
+<span class="">Redactar nota</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<!-- Quick Action 5 -->
+<a class="group p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-secondary hover:shadow-md transition-all flex flex-col justify-between" href="#">
+<div class="flex items-center justify-between mb-3">
+<span class="w-10 h-10 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">lock_person</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">RBAC</span>
+</div>
+<div>
+<h3 class="text-xs font-headline-sm font-bold text-primary group-hover:text-secondary">Permisos y Roles</h3>
+<p class="text-[11px] text-outline mt-0.5 leading-snug">Auditar accesos, contraseñas y 2FA del personal</p>
+</div>
+<div class="mt-3 pt-2 border-t border-outline-variant/40 flex items-center text-[11px] font-semibold text-purple-700 gap-1">
+<span class="">Matriz de roles</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<!-- Quick Action 6 -->
+<a class="group p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:border-secondary hover:shadow-md transition-all flex flex-col justify-between" href="#">
+<div class="flex items-center justify-between mb-3">
+<span class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">security</span>
+</span>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800">Seguridad</span>
+</div>
+<div>
+<h3 class="text-xs font-headline-sm font-bold text-primary group-hover:text-secondary">Logs de Auditoría</h3>
+<p class="text-[11px] text-outline mt-0.5 leading-snug">Eventos críticos de sistema, IP y cambios SEP</p>
+</div>
+<div class="mt-3 pt-2 border-t border-outline-variant/40 flex items-center text-[11px] font-semibold text-secondary gap-1">
+<span class="">Revisar trazas</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+</div>
+</section>
+<!-- ============================================================== -->
+<!-- 5. MAIN SPLIT SECTION: AUDIT LOGS + CAMPUS INFRASTRUCTURE     -->
+<!-- ============================================================== -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT (8 Columns): Recent Activity Logs by Role -->
+<section class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm border-b border-outline-variant/50 mb-space-md">
+<div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold">Actividad Reciente del Sistema por Rol</h3>
+<p class="text-xs text-on-surface-variant">Trazabilidad en tiempo real de operaciones administrativas y modificaciones</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-label-md text-outline">Filtrar por:</span>
+<select class="text-xs border border-outline-variant rounded-lg bg-surface-container-low px-2.5 py-1 text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option>Todos los roles</option>
+<option>Superadministrador</option>
+<option>Admin Académico</option>
+<option>Admin Técnico</option>
+<option>Coordinador</option>
+</select>
+</div>
+</div>
+<!-- Academic Table Pattern -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/70 text-[11px] font-label-md uppercase tracking-wider text-outline bg-surface-container-low">
+<th class="py-2.5 px-3">Usuario y Rol</th>
+<th class="py-2.5 px-3">Operación / Módulo</th>
+<th class="py-2.5 px-3">Detalle / Folio Afectado</th>
+<th class="py-2.5 px-3 text-right">Timestamp</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/40 text-xs">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 font-bold flex items-center justify-center text-[10px]">
+                        ES
+                      </div>
+<div>
+<div class="font-semibold text-primary">Mtra. Elena Salgado</div>
+<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-50 text-amber-800 border border-amber-200">Coordinador</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-medium text-primary">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span>
+                      Aprobación de Expediente
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-mono text-[11px]">
+                    ASP-2026-0842 (Maestría en Ciencia de Datos)
+                  </td>
+<td class="py-3 px-3 text-right text-outline whitespace-nowrap font-mono text-[11px]">
+                    Hace 12 mins
+                  </td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-cyan-100 text-cyan-800 font-bold flex items-center justify-center text-[10px]">
+                        CG
+                      </div>
+<div>
+<div class="font-semibold text-primary">Ing. Carlos Guzmán</div>
+<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-cyan-50 text-cyan-800 border border-cyan-200">Admin Técnico</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-medium text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary">sync</span>
+                      Sincronización Calificaciones
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-mono text-[11px]">
+                    Moodle Campus 2026-1 → SEP API (1,420 récords)
+                  </td>
+<td class="py-3 px-3 text-right text-outline whitespace-nowrap font-mono text-[11px]">
+                    Hace 28 mins
+                  </td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 font-bold flex items-center justify-center text-[10px]">
+                        DR
+                      </div>
+<div>
+<div class="font-semibold text-primary">Dr. Daniel Rodríguez</div>
+<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-50 text-blue-900 border border-blue-200">Admin Académico</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-medium text-primary">
+<span class="material-symbols-outlined text-[16px] text-amber-600">edit_note</span>
+                      Actualización de Temario
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-mono text-[11px]">
+                    PROG-LIC-DIR-04 (Diseño y Narrativa Transmedia)
+                  </td>
+<td class="py-3 px-3 text-right text-outline whitespace-nowrap font-mono text-[11px]">
+                    Hace 1 hora
+                  </td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-purple-100 text-purple-800 font-bold flex items-center justify-center text-[10px]">
+                        RM
+                      </div>
+<div>
+<div class="font-semibold text-primary">Lic. Roberto Morales</div>
+<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-50 text-purple-900 border border-purple-200">Superadmin</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-medium text-primary">
+<span class="material-symbols-outlined text-[16px] text-purple-600">vpn_key</span>
+                      Renovación Token SEP
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-mono text-[11px]">
+                    Certificados Digitales SSL DGAIR-2026-V4
+                  </td>
+<td class="py-3 px-3 text-right text-outline whitespace-nowrap font-mono text-[11px]">
+                    Hace 2 horas
+                  </td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-[10px]">
+                        MP
+                      </div>
+<div>
+<div class="font-semibold text-primary">Mariana Pineda</div>
+<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">Soporte</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-medium text-primary">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">lock_reset</span>
+                      Reinicio Credenciales 2FA
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-mono text-[11px]">
+                    USR-DOC-109 (Prof. Jesús Alarcón)
+                  </td>
+<td class="py-3 px-3 text-right text-outline whitespace-nowrap font-mono text-[11px]">
+                    Hace 3 horas
+                  </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pt-3 border-t border-outline-variant/60 flex items-center justify-between text-xs text-outline">
+<span class="">Mostrando últimas 5 de 1,280 transacciones registradas hoy</span>
+<a class="font-semibold text-secondary hover:underline flex items-center gap-1" href="#">
+<span class="">Ver bitácora de auditoría completa</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- RIGHT (4 Columns): Infrastructure Services & Campus Status -->
+<section class="lg:col-span-4 space-y-space-md">
+<!-- Infrastructure Health Widget -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/50 mb-3">
+<h3 class="text-xs font-headline-sm font-bold text-primary uppercase tracking-wider">
+                Infraestructura y Servicios
+              </h3>
+<span class="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-bold">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 99.98% SLA
+              </span>
+</div>
+<div class="space-y-3">
+<!-- Service 1: SEP API -->
+<div class="flex items-center justify-between text-xs p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary text-[20px]">account_balance</span>
+<div>
+<div class="font-semibold text-primary">WebService DGAIR (SEP)</div>
+<div class="text-[10px] text-outline">Validación de Matrículas</div>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">En línea</span>
+<div class="text-[10px] text-outline font-mono mt-0.5">38ms</div>
+</div>
+</div>
+<!-- Service 2: Moodle LMS Cluster -->
+<div class="flex items-center justify-between text-xs p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#F2A900] text-[20px]">school</span>
+<div>
+<div class="font-semibold text-primary">Campus Virtual Moodle 4.3</div>
+<div class="text-[10px] text-outline">4 Nodos Balanceados AWS</div>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Normal</span>
+<div class="text-[10px] text-outline font-mono mt-0.5">14% CPU</div>
+</div>
+</div>
+<!-- Service 3: Database PostgreSQL -->
+<div class="flex items-center justify-between text-xs p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-purple-700 text-[20px]">database</span>
+<div>
+<div class="font-semibold text-primary">Base de Datos Central RDS</div>
+<div class="text-[10px] text-outline">PostgreSQL Multi-AZ Cifrada</div>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Activa</span>
+<div class="text-[10px] text-outline font-mono mt-0.5">Replica Sync</div>
+</div>
+</div>
+<!-- Service 4: Stripe Payment Gateway -->
+<div class="flex items-center justify-between text-xs p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-indigo-700 text-[20px]">credit_card</span>
+<div>
+<div class="font-semibold text-primary">Pasarela Stripe &amp; Pagos SPEI</div>
+<div class="text-[10px] text-outline">Cobro de Inscripciones</div>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">100% OK</span>
+<div class="text-[10px] text-outline font-mono mt-0.5">Webhook Activo</div>
+</div>
+</div>
+</div>
+<div class="mt-3 pt-2 text-center">
+<button class="text-xs font-semibold text-secondary hover:text-primary transition-colors flex items-center justify-center gap-1 w-full py-1 rounded border border-secondary/20 hover:bg-secondary/5">
+<span class="material-symbols-outlined text-[16px]">terminal</span>
+<span class="">Consola Técnica de Diagnóstico</span>
+</button>
+</div>
+</div>
+<!-- Academic Calendar / Deadlines Reminder -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md shadow-sm">
+<div class="flex items-center gap-2 mb-2 text-primary font-bold text-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">event_upcoming</span>
+<span class="">Hitos del Calendario SEP</span>
+</div>
+<ul class="text-xs space-y-2">
+<li class="p-2 rounded bg-amber-50/70 border-l-2 border-[#F2A900]">
+<div class="font-semibold text-primary">Cierre de Actas de Examen Ordinario</div>
+<div class="text-[11px] text-on-surface-variant">Límite: 28 de Febrero, 23:59 hrs</div>
+</li>
+<li class="p-2 rounded bg-surface-container-low border-l-2 border-secondary">
+<div class="font-semibold text-primary">Dictamen de Becas Institucionales</div>
+<div class="text-[11px] text-on-surface-variant">Reunión de Comité: 03 de Marzo</div>
+</li>
+</ul>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Inline Script for Interactions (Sidebar Toggle, Role Dropdown, Keyboard Shortcut) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Role Switcher Toggle
+      const roleBtn = document.getElementById('role-dropdown-btn');
+      const roleMenu = document.getElementById('role-dropdown-menu');
+
+      if (roleBtn && roleMenu) {
+        roleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          roleMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!roleMenu.contains(e.target) && !roleBtn.contains(e.target)) {
+            roleMenu.classList.add('hidden');
+          }
+        });
+      }
+
+      // Sidebar Collapse / Expand Toggle
+      const toggleSidebarBtn = document.getElementById('btn-toggle-sidebar');
+      const sidebar = document.getElementById('main-sidebar');
+
+      if (toggleSidebarBtn && sidebar) {
+        toggleSidebarBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('w-72');
+          sidebar.classList.toggle('w-20');
+        });
+      }
+
+      // Global Shortcut ⌘K / Ctrl+K focus on search
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault();
+          const searchInput = document.querySelector('input[type="text"]');
+          if (searchInput) searchInput.focus();
+        }
+      });
+    });
+  </script>
+
+
+</body></html>

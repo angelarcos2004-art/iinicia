@@ -1,0 +1,843 @@
+<!DOCTYPE html><html class="h-full bg-background" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>IINICIA Campus Admin - Contenidos y Portal CMS</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#cfdaf2",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eeff",
+            "outline-variant": "#c4c6d0",
+            "on-surface": "#111c2d",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#c48800",
+            "on-background": "#111c2d",
+            "surface-container-lowest": "#ffffff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747780",
+            "secondary-fixed": "#d6e3ff",
+            "primary-fixed": "#d8e2ff",
+            "tertiary-fixed-dim": "#ffba3b",
+            "on-tertiary-fixed": "#281900",
+            "on-tertiary-fixed-variant": "#604100",
+            "tertiary-fixed": "#ffdead",
+            "on-secondary-container": "#003e80",
+            "surface": "#f9f9ff",
+            "on-primary-container": "#7a93ca",
+            "inverse-primary": "#aec6ff",
+            "on-secondary-fixed-variant": "#00458d",
+            "error": "#ba1a1a",
+            "tertiary-container": "#3d2800",
+            "primary-container": "#0b2a5b",
+            "background": "#f9f9ff",
+            "inverse-surface": "#263143",
+            "on-tertiary": "#ffffff",
+            "surface-variant": "#d8e3fb",
+            "tertiary": "#231500",
+            "surface-bright": "#f9f9ff",
+            "on-secondary-fixed": "#001b3e",
+            "primary-fixed-dim": "#aec6ff",
+            "surface-container-highest": "#d8e3fb",
+            "on-error-container": "#93000a",
+            "surface-container-high": "#dee8ff",
+            "on-primary-fixed": "#001a42",
+            "on-error": "#ffffff",
+            "secondary": "#235eac",
+            "on-primary-fixed-variant": "#2c4678",
+            "error-container": "#ffdad6",
+            "on-primary": "#ffffff",
+            "on-surface-variant": "#44474f",
+            "secondary-container": "#7aacff",
+            "primary": "#00163a",
+            "surface-tint": "#455e91",
+            "secondary-fixed-dim": "#aac7ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "margin-desktop": "3rem",
+            "gutter-mobile": "1rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1.25rem",
+            "space-md": "1rem",
+            "margin": "1.5rem",
+            "gutter-desktop": "2rem",
+            "space-xl": "2.5rem"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "title": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f0f3ff;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c4c6d0;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #747780;
+    }
+  </style>
+</head>
+<body class="h-full font-body-md text-on-surface bg-background flex flex-col antialiased">
+<!-- TOPNAVBAR (Shared Component Source of Truth) -->
+<header class="w-full h-16 px-gutter flex items-center justify-between sticky top-0 bg-surface-container-lowest dark:bg-primary-container z-40 border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-space-lg flex-1">
+<!-- Mobile menu trigger -->
+<button aria-label="Abrir menú" class="md:hidden text-on-surface-variant hover:text-primary p-space-xs">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Institutional Logo Anchor -->
+<div class="flex items-center gap-space-sm cursor-pointer select-none">
+<div class="h-9 flex items-center justify-center"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="Logotipo IINICIA" class="h-9 w-auto object-contain"></div>
+<div>
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary tracking-tight">IINICIA</span>
+<span class="hidden sm:inline-block ml-2 text-label-sm font-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-secondary border border-secondary/20">Campus Admin</span>
+</div>
+</div>
+<!-- Omnibox Search -->
+<div class="hidden md:flex items-center w-full max-w-md relative">
+<span class="material-symbols-outlined absolute left-3 text-outline text-lg">search</span>
+<input class="w-full h-10 pl-10 pr-12 bg-surface-container-low border border-outline-variant rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all" placeholder="Buscar páginas, noticias, recursos o comandos... (⌘K)" type="text">
+<kbd class="absolute right-3 bg-surface-container-highest text-on-surface-variant font-mono text-[10px] px-1.5 py-0.5 rounded border border-outline-variant">⌘K</kbd>
+</div>
+</div>
+<!-- Trailing Actions & Role Selector -->
+<div class="flex items-center gap-space-md">
+<!-- Active Role Badge / Switcher Button -->
+<div class="hidden lg:flex items-center bg-surface-container-low border border-outline-variant rounded-lg px-space-sm py-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+<div class="text-left mr-2">
+<p class="text-[10px] font-bold text-outline uppercase tracking-wider leading-none">Rol activo</p>
+<p class="text-label-sm font-label-sm text-primary leading-tight">Editor de Contenidos / Admin</p>
+</div>
+<button class="text-label-sm font-label-sm text-secondary hover:text-primary font-semibold px-2 py-1 rounded hover:bg-surface-container-high transition-colors">
+          Cambiar Rol
+        </button>
+</div>
+<!-- Quick Action "+ Nueva Publicación" -->
+<button class="flex items-center gap-1.5 bg-[#F2A900] text-primary-container font-label-lg font-bold px- space-md py-2 rounded-lg hover:brightness-95 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+<span class="hidden sm:inline">Nueva Publicación</span>
+</button>
+<!-- Trailing Icon Actions -->
+<div class="flex items-center gap-1 border-l border-outline-variant pl-space-md">
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Notificaciones">
+<span class="material-symbols-outlined text-xl">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Soporte y Documentación">
+<span class="material-symbols-outlined text-xl">help</span>
+</button>
+<!-- User Profile Avatar -->
+<div class="flex items-center gap-2 pl-2 cursor-pointer group">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-primary flex items-center justify-center font-bold text-label-md border border-outline-variant group-hover:ring-2 group-hover:ring-secondary/40 transition-all">
+<span class="material-symbols-outlined text-lg">account_circle</span>
+</div>
+<span class="hidden xl:inline text-label-md font-label-md text-on-surface font-medium">M. Sotomayor</span>
+</div>
+</div>
+</div>
+</header>
+<!-- APP WORKSPACE (SideNav + CMS Canvas) -->
+<div class="flex-1 flex overflow-hidden">
+<!-- SIDENAVBAR (Shared Component Source of Truth) -->
+<aside class="w-72 h-[calc(100vh-4rem)] flex flex-col justify-between py-space-md px-space-sm border-r border-outline-variant bg-surface-container-low sticky top-16 z-30 overflow-y-auto custom-scroll hidden md:flex shrink-0">
+<div class="space-y-4">
+<!-- Campus Unit Header -->
+<div class="px-space-sm pb-space-sm border-b border-outline-variant/60 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center p-1 shadow-sm overflow-hidden"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="Logotipo IINICIA" class="h-full w-full object-contain brightness-0 invert"></div>
+<div>
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary">IINICIA</h2>
+<p class="text-[11px] font-medium text-outline">Gestión Académica Central</p>
+</div>
+</div>
+<!-- Academic Management Category -->
+<div>
+<span class="text-[10px] font-bold text-outline uppercase tracking-wider px-space-sm block mb-1">Académico &amp; Control</span>
+<nav class="space-y-0.5">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">school</span>
+<span class="text-body-sm font-label-md">Programas</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">date_range</span>
+<span class="text-body-sm font-label-md">Cohortes y periodos</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">person_search</span>
+<span class="text-body-sm font-label-md">Aspirantes</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">how_to_reg</span>
+<span class="text-body-sm font-label-md">Matrículas</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">badge</span>
+<span class="text-body-sm font-label-md">Estudiantes</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">cast_for_education</span>
+<span class="text-body-sm font-label-md">Docentes</span>
+</a>
+</nav>
+</div>
+<!-- CMS / Portal Category (CURRENT ACTIVE CLUSTER) -->
+<div>
+<div class="flex items-center justify-between px-space-sm mb-1">
+<span class="text-[10px] font-bold text-secondary uppercase tracking-wider">Contenidos y Portal</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</div>
+<nav class="space-y-0.5">
+<!-- Active Sub-Item: Páginas -->
+<a class="bg-surface-container-highest text-secondary font-semibold rounded-lg px-space-md py-space-sm flex items-center justify-between shadow-xs" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-lg text-secondary">web</span>
+<span class="text-body-sm font-label-md">Páginas</span>
+</div>
+<span class="text-[11px] font-bold bg-white text-secondary px-1.5 py-0.5 rounded-full border border-secondary/20">14</span>
+</a>
+<!-- Active Cluster Item: Noticias -->
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center justify-between hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-lg">newspaper</span>
+<span class="text-body-sm font-label-md">Noticias</span>
+</div>
+<span class="text-[11px] text-outline bg-surface-container-high px-1.5 py-0.5 rounded-full">42</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">menu_book</span>
+<span class="text-body-sm font-label-md">Oferta académica</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">contact_support</span>
+<span class="text-body-sm font-label-md">Preguntas frecuentes</span>
+</a>
+</nav>
+</div>
+<!-- System & Setup -->
+<div>
+<span class="text-[10px] font-bold text-outline uppercase tracking-wider px-space-sm block mb-1">Sistema &amp; Seguridad</span>
+<nav class="space-y-0.5">
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">manage_accounts</span>
+<span class="text-body-sm font-label-md">Usuarios y roles</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">integration_instructions</span>
+<span class="text-body-sm font-label-md">Integraciones SEP/LMS</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">fact_check</span>
+<span class="text-body-sm font-label-md">Auditoría</span>
+</a>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+<span class="text-body-sm font-label-md">Configuración</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- SideNav Footer Actions -->
+<div class="pt-space-md border-t border-outline-variant space-y-2">
+<div class="bg-surface-container p-space-sm rounded-lg border border-outline-variant/80">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-secondary text-base">support_agent</span>
+<span class="text-label-sm font-label-sm text-primary font-bold">Soporte Campus</span>
+</div>
+<p class="text-[11px] text-outline leading-tight">Asistencia técnica 24/7 para coordinadores.</p>
+</div>
+<a class="text-on-surface-variant font-medium rounded-lg px-space-md py-space-sm flex items-center gap-space-sm hover:text-error hover:bg-error-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">logout</span>
+<span class="text-body-sm font-label-md">Cerrar sesión</span>
+</a>
+</div>
+</aside>
+<!-- MAIN CMS WORKSPACE -->
+<main class="flex-1 overflow-y-auto custom-scroll bg-background p- space-md lg:p-space-lg flex flex-col gap-space-lg">
+<!-- SUB-HEADER: CMS Section Navigation Tabs & Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md border-b border-outline-variant pb-space-md">
+<div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline mb-1">
+<span class="">Portal Institucional</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-secondary font-semibold">Gestión de Publicaciones</span>
+</div>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">Contenidos y Portal Web</h1>
+</div>
+<!-- Section Tabs (Páginas / Noticias / Biblioteca) -->
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl border border-outline-variant self-start md:self-auto">
+<button class="px-space-md py-1.5 rounded-lg text-label-md font-label-md font-bold bg-white text-secondary shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-base">web</span>
+<span class="">Páginas del Sitio</span>
+<span class="bg-surface-container-high text-secondary text-xs px-1.5 py-0.2 rounded-full">14</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-label-md font-label-md text-on-surface-variant hover:text-primary hover:bg-white/60 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-base">newspaper</span>
+<span class="">Noticias y Artículos</span>
+<span class="bg-surface-container-high text-outline text-xs px-1.5 py-0.2 rounded-full">42</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-label-md font-label-md text-on-surface-variant hover:text-primary hover:bg-white/60 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-base">photo_library</span>
+<span class="">Biblioteca de Medios</span>
+<span class="bg-surface-container-high text-outline text-xs px-1.5 py-0.2 rounded-full">128</span>
+</button>
+</div>
+</div>
+<!-- MAIN SECTION: VISUAL NO-CODE BLOCK EDITOR (Active Mode) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Editor Header Bar -->
+<div class="p-space-md bg-surface-container-low border-b border-outline-variant flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-secondary/10 rounded-lg text-secondary">
+<span class="material-symbols-outlined text-xl">auto_stories</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase tracking-wider font-bold text-secondary">Editor No-Code IINICIA</span>
+<span class="text-outline text-xs">•</span>
+<span class="flex items-center gap-1 text-[12px] text-outline">
+<span class="material-symbols-outlined text-xs text-emerald-600">check_circle</span>
+                  Guardado automático hace 2 min
+                </span>
+</div>
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary">Convocatoria Nuevo Ingreso 2026-B y Becas STEM</h2>
+</div>
+</div>
+<!-- Document Status Badge & Action Cluster -->
+<div class="flex items-center flex-wrap gap-space-sm">
+<!-- Viewport Switcher -->
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg p-0.5 text-on-surface-variant">
+<button class="px-2.5 py-1 text-label-sm font-label-sm font-semibold rounded bg-surface-container-high text-primary flex items-center gap-1" title="Vista Escritorio">
+<span class="material-symbols-outlined text-sm">desktop_windows</span>
+<span class="">Desktop</span>
+</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded hover:text-primary hover:bg-surface-container-low transition-colors flex items-center gap-1" title="Vista Móvil">
+<span class="material-symbols-outlined text-sm">smartphone</span>
+<span class="">Móvil</span>
+</button>
+</div>
+<!-- Workflow State Selector -->
+<div class="relative">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-label-sm font-label-sm font-bold bg-[#F2A900]/20 text-[#8A5F00] border border-[#F2A900]/40">
+<span class="w-2 h-2 rounded-full bg-[#F2A900]"></span>
+<span class="">Borrador en Revisión</span>
+<span class="material-symbols-outlined text-sm cursor-pointer">arrow_drop_down</span>
+</span>
+</div>
+<!-- Save Draft -->
+<button class="px-space-md py-2 border border-outline-variant rounded-lg text-label-md font-label-md text-primary font-semibold hover:bg-surface-container-low transition-colors">
+              Guardar Borrador
+            </button>
+<!-- Publish Changes CTA -->
+<button class="px-space-md py-2 bg-primary-container text-white rounded-lg text-label-md font-label-md font-bold hover:bg-secondary transition-all shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">rocket_launch</span>
+<span class="">Publicar Cambios</span>
+</button>
+</div>
+</div>
+<!-- Block Insertion Toolbar -->
+<div class="px-space-md py-2 bg-white border-b border-outline-variant flex items-center gap-2 overflow-x-auto custom-scroll">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider mr-2 shrink-0">Insertar Bloque:</span>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">title</span>
+<span class="">Título H1/H2</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">format_paragraph</span>
+<span class="">Párrafo</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">image</span>
+<span class="">Imagen Media</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">smart_button</span>
+<span class="">Botón CTA</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">grid_view</span>
+<span class="">Galería</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">format_quote</span>
+<span class="">Cita Destacada</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/80 hover:border-secondary hover:bg-surface-container-low text-body-sm text-on-surface font-medium shrink-0 transition-colors">
+<span class="material-symbols-outlined text-secondary text-base">quiz</span>
+<span class="">Acordeón FAQ</span>
+</button>
+</div>
+<!-- 2-COLUMN LAYOUT: CANVAS & SIDEBAR CONFIG -->
+<div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-outline-variant min-h-[620px]">
+<!-- CENTRAL EDITING CANVAS (Col 8) -->
+<div class="lg:col-span-8 p-space-md lg:p-space-lg bg-surface/50 overflow-y-auto space-y-space-md custom-scroll">
+<!-- Block 1: Main Hero / Post Title (Active Focus) -->
+<div class="group relative bg-white border-2 border-secondary rounded-xl p-space-md shadow-sm transition-all">
+<div class="absolute -top-3 left-4 bg-secondary text-white text-[11px] font-bold px-2 py-0.5 rounded flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-xs">drag_indicator</span>
+<span class="">Bloque 1: Hero &amp; Encabezado Principal</span>
+</div>
+<!-- Top Block Controls -->
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant/40 mb-3">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline font-medium">H1 Institucional</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded text-secondary font-mono">#hero-title</span>
+</div>
+<div class="flex items-center gap-1 text-outline">
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Subir"><span class="material-symbols-outlined text-sm">arrow_upward</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Bajar"><span class="material-symbols-outlined text-sm">arrow_downward</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Duplicar"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+<button class="p-1 hover:text-error hover:bg-error-container/30 rounded" title="Eliminar"><span class="material-symbols-outlined text-sm">delete</span></button>
+</div>
+</div>
+<input class="w-full text-headline-md font-headline-md font-bold text-primary border-0 focus:ring-0 p-0 placeholder:text-outline bg-transparent" placeholder="Escribe el título de la página..." type="text" value="Convocatoria Abierta: Nuevo Ingreso 2026-B y Programa Extraordinario de Becas STEM">
+<div class="mt-3 flex items-center gap-2">
+<span class="text-label-sm font-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded">Tag: Admisiones 2026</span>
+<span class="text-label-sm font-label-sm bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">Modalidad: Virtual &amp; Presencial</span>
+</div>
+</div>
+<!-- Block 2: Rich Text with Floating Format Bar -->
+<div class="group relative bg-white border border-outline-variant hover:border-secondary/60 rounded-xl p-space-md transition-all shadow-xs">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-outline-variant/30">
+<!-- Floating Format Simulation -->
+<div class="flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-lg border border-outline-variant/70 text-on-surface-variant">
+<button class="p-1 hover:bg-white rounded font-bold text-xs" title="Negrita"><b>B</b></button>
+<button class="p-1 hover:bg-white rounded italic text-xs" title="Cursiva"><i>I</i></button>
+<button class="p-1 hover:bg-white rounded underline text-xs" title="Subrayado"><u>U</u></button>
+<span class="text-outline-variant">|</span>
+<button class="p-1 hover:bg-white rounded text-xs flex items-center"><span class="material-symbols-outlined text-sm">link</span></button>
+<button class="p-1 hover:bg-white rounded text-xs flex items-center"><span class="material-symbols-outlined text-sm">format_list_bulleted</span></button>
+</div>
+<div class="flex items-center gap-1 text-outline opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1 hover:text-primary rounded"><span class="material-symbols-outlined text-sm">drag_handle</span></button>
+<button class="p-1 hover:text-primary rounded"><span class="material-symbols-outlined text-sm">delete</span></button>
+</div>
+</div>
+<p class="text-body-md font-body-md text-on-surface leading-relaxed">
+                El Instituto de Innovación y Ciencias Aplicadas (IINICIA) formaliza la apertura de su periodo de admisiones para las licenciaturas en Ingeniería de Software, Ciencia de Datos y Biotecnología Aplicada. A través de este programa, se otorgarán hasta un 70% de exención de colegiatura a aspirantes con excelencia académica y vocación de investigación científica.
+              </p>
+</div>
+<!-- Block 3: Institutional Banner Image with Media Library Picker -->
+<div class="group relative bg-white border border-outline-variant hover:border-secondary/60 rounded-xl p-space-md transition-all shadow-xs">
+<div class="flex items-center justify-between pb-2 mb-3 border-b border-outline-variant/40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-base">photo_library</span>
+<span class="text-label-sm font-label-sm font-bold text-primary">Bloque 3: Banner Institucional &amp; Media</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container text-secondary hover:bg-surface-container-high rounded border border-secondary/20 flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">sync</span>
+<span class="">Reemplazar desde Biblioteca</span>
+</button>
+</div>
+</div>
+<!-- Media Showcase Image -->
+<div class="relative rounded-lg overflow-hidden border border-outline-variant bg-surface-container-low max-h-72 flex items-center justify-center">
+<img alt="Banner de Convocatoria IINICIA 2026-B" class="w-full h-56 object-contain p-4 bg-white" src="https://lh3.googleusercontent.com/aida/AEtjO1UWW0Ram5pU-Q88cq1Cn9Hkj83kIW2YQmvczTpMCOOJinKfn4ANuAyZW6EEFoUot6eBmXwA5BUK9xGCIk0QkoBAPmTVYnw8sdPbvfh6DvWUr7vvBFypnfIkF0VNNwkBkdzyQrc9q59_S4hNuEXGFd5HyoaJTM_mmaM3jQRBGMbHqA0-4aRgAIqvXpug2hvv4SzyE38OpJIY9d5fW2vdMirrPr3XZ8pn3YuPhaDOP6wXOAzUlS7l_Jhgdesf">
+<div class="absolute bottom-2 left-2 bg-primary/80 backdrop-blur-md text-white px-2.5 py-1 rounded text-label-sm font-label-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs">verified</span>
+<span class="">Recurso Oficial Verificado: iinicia_emblema_vector_2026.png</span>
+</div>
+</div>
+<!-- Caption & Alt Text Inputs -->
+<div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-body-sm">
+<div>
+<label class="text-[11px] font-semibold text-outline uppercase block mb-1">Pie de foto visible</label>
+<input class="w-full text-body-sm h-8 px-2 border border-outline-variant rounded focus:border-secondary focus:ring-0" type="text" value="Emblema del Instituto de Innovación y Ciencias Aplicadas - Ciclo 2026-B">
+</div>
+<div>
+<label class="text-[11px] font-semibold text-outline uppercase block mb-1">Texto alternativo (Accesibilidad / SEO)</label>
+<input class="w-full text-body-sm h-8 px-2 border border-outline-variant rounded focus:border-secondary focus:ring-0" type="text" value="Logotipo oficial IINICIA en alta resolución para publicaciones académicas">
+</div>
+</div>
+</div>
+<!-- Block 4: Interactive CTA Button Block -->
+<div class="group relative bg-white border border-outline-variant hover:border-secondary/60 rounded-xl p-space-md transition-all shadow-xs">
+<div class="flex items-center justify-between pb-2 mb-3 border-b border-outline-variant/40">
+<span class="text-label-sm font-label-sm font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-base">smart_button</span>
+                  Bloque 4: Llamado a la Acción (CTA)
+                </span>
+<span class="text-xs text-outline">Enlace a formulario de prerregistro</span>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-lg border border-dashed border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div>
+<p class="text-label-lg font-label-lg text-primary font-bold">¿Listo para iniciar tu proceso?</p>
+<p class="text-body-sm font-body-sm text-outline">El examen de diagnóstico no tiene costo durante este periodo.</p>
+</div>
+<button class="bg-[#F2A900] text-primary-container font-label-lg font-bold px-space-lg py-3 rounded-lg shadow-sm hover:brightness-95 flex items-center gap-2">
+<span class="">Conoce los requisitos de admisión</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Block 5: Student Testimonials / Academic Grid -->
+<div class="group relative bg-white border border-outline-variant hover:border-secondary/60 rounded-xl p-space-md transition-all shadow-xs">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-outline-variant/40">
+<span class="text-label-sm font-label-sm font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-base">format_quote</span>
+                  Bloque 5: Cita de Investigador / Testimonio
+                </span>
+<span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Activo</span>
+</div>
+<blockquote class="italic text-body-md text-on-surface-variant border-l-4 border-secondary pl-4 py-1">
+                "La formación en IINICIA no se limita al aula virtual; desde el primer cuatrimestre integramos a los becarios a proyectos reales de cómputo cuántico e inteligencia biológica."
+              </blockquote>
+<p class="text-label-sm font-label-sm font-bold text-primary mt-2 pl-4">— Dr. Carlos Arriaga, Director de Posgrados e Investigación</p>
+</div>
+</div>
+<!-- RIGHT SIDEBAR: PUBLISHING CONFIG, METADATA & QUICK MEDIA (Col 4) -->
+<div class="lg:col-span-4 bg-white flex flex-col divide-y divide-outline-variant">
+<!-- Sidebar Navigation Tabs -->
+<div class="flex border-b border-outline-variant bg-surface-container-low">
+<button class="flex-1 py-3 text-label-sm font-label-sm font-bold text-secondary border-b-2 border-secondary bg-white text-center">
+                Ajustes
+              </button>
+<button class="flex-1 py-3 text-label-sm font-label-sm text-outline hover:text-primary text-center">
+                SEO &amp; Metadatos
+              </button>
+<button class="flex-1 py-3 text-label-sm font-label-sm text-outline hover:text-primary text-center">
+                Medios Rápidos
+              </button>
+</div>
+<!-- Tab 1 Body: Ajustes de Publicación -->
+<div class="p-space-md space-y-4 overflow-y-auto custom-scroll">
+<!-- Author Metadata Card -->
+<div>
+<label class="text-label-sm font-label-sm uppercase font-bold text-outline block mb-1">Autor Responsable</label>
+<div class="flex items-center gap-3 p-2 border border-outline-variant rounded-lg bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-sm">
+                    MS
+                  </div>
+<div>
+<p class="text-label-md font-label-md font-bold text-primary">Lic. Mariana Sotomayor</p>
+<p class="text-[11px] text-outline">Coordinación de Comunicación Institucional</p>
+</div>
+</div>
+</div>
+<!-- Publication Date and Visibility -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div>
+<label class="text-[11px] font-bold text-outline uppercase block mb-1">Fecha Programada</label>
+<input class="w-full text-body-sm h-10 border border-outline-variant rounded-lg px-2 focus:border-secondary focus:ring-0" type="date" value="2026-03-01">
+</div>
+<div>
+<label class="text-[11px] font-bold text-outline uppercase block mb-1">Hora (CST)</label>
+<input class="w-full text-body-sm h-10 border border-outline-variant rounded-lg px-2 focus:border-secondary focus:ring-0" type="time" value="09:00">
+</div>
+</div>
+<!-- Category & Taxonomies -->
+<div>
+<label class="text-[11px] font-bold text-outline uppercase block mb-1">Categoría del Portal</label>
+<select class="w-full h-10 border border-outline-variant rounded-lg text-body-sm px-3 focus:border-secondary focus:ring-0">
+<option selected="">Admisiones y Convocatorias</option>
+<option>Eventos y Congresos</option>
+<option>Comunicados Rectoría</option>
+<option>Gaceta Académica</option>
+</select>
+</div>
+<!-- Friendly Slug / URL -->
+<div>
+<label class="text-[11px] font-bold text-outline uppercase block mb-1">Slug / Enlace Permanente</label>
+<div class="flex items-center border border-outline-variant rounded-lg px-2 bg-surface-container-low focus-within:border-secondary">
+<span class="text-xs text-outline font-mono">/noticias/</span>
+<input class="w-full text-xs font-mono border-0 bg-transparent py-2 px-1 focus:ring-0 text-primary" type="text" value="convocatoria-2026-b-becas-stem">
+</div>
+<p class="text-[11px] text-outline mt-1">Generado automáticamente según el título.</p>
+</div>
+<!-- Featured Image Box -->
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="text-[11px] font-bold text-outline uppercase">Imagen Destacada (OpenGraph)</label>
+<button class="text-xs text-secondary font-semibold hover:underline">Cambiar</button>
+</div>
+<div class="border border-outline-variant rounded-lg p-2 bg-surface-container-low flex items-center gap-3">
+<div class="w-16 h-16 rounded bg-white border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Thumbnail" class="w-full h-full object-contain p-1" src="https://lh3.googleusercontent.com/aida/AEtjO1UWW0Ram5pU-Q88cq1Cn9Hkj83kIW2YQmvczTpMCOOJinKfn4ANuAyZW6EEFoUot6eBmXwA5BUK9xGCIk0QkoBAPmTVYnw8sdPbvfh6DvWUr7vvBFypnfIkF0VNNwkBkdzyQrc9q59_S4hNuEXGFd5HyoaJTM_mmaM3jQRBGMbHqA0-4aRgAIqvXpug2hvv4SzyE38OpJIY9d5fW2vdMirrPr3XZ8pn3YuPhaDOP6wXOAzUlS7l_Jhgdesf">
+</div>
+<div>
+<p class="text-label-sm font-label-sm font-bold text-primary truncate max-w-[180px]">emblema_iinicia_og.jpg</p>
+<p class="text-[11px] text-outline">1200 x 630 px • 142 KB</p>
+<span class="text-[10px] text-emerald-700 font-semibold bg-emerald-100 px-1.5 py-0.2 rounded">Optimizado</span>
+</div>
+</div>
+</div>
+<!-- SEO SERP PREVIEW BOX (Embedded Google Snippet) -->
+<div class="pt-2 border-t border-outline-variant">
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary">travel_explore</span>
+                    Previsualización en Google Search
+                  </span>
+<span class="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-mono">Score: 98/100</span>
+</div>
+<!-- Google Card Replica -->
+<div class="p-3 bg-white border border-outline-variant rounded-lg shadow-xs font-sans text-left space-y-1">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full bg-primary-container text-white flex items-center justify-center text-[8px] font-bold">I</div>
+<span class="text-xs text-[#202124] truncate">https://iinicia.edu.mx › noticias › convocatoria-2026-b</span>
+</div>
+<h4 class="text-sm text-[#1a0dab] font-medium hover:underline cursor-pointer leading-tight">
+                    Convocatoria Nuevo Ingreso 2026-B y Becas STEM | IINICIA
+                  </h4>
+<p class="text-xs text-[#4d5156] line-clamp-2 leading-relaxed">
+                    Apertura de admisiones en Ingeniería, Datos y Biotecnología. Obtén hasta 70% de beca con validez oficial ante la Secretaría de Educación Pública...
+                  </p>
+</div>
+<!-- SEO Character Counters -->
+<div class="mt-2 space-y-1.5">
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-outline">Título SEO</span>
+<span class="font-mono text-emerald-600 font-bold">56 / 60 caracteres</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[93%]"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] pt-1">
+<span class="text-outline">Meta Descripción</span>
+<span class="font-mono text-emerald-600 font-bold">145 / 160 caracteres</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[90%]"></div>
+</div>
+</div>
+<!-- Checkbox SEO -->
+<div class="mt-3 flex items-center gap-2">
+<input checked="" class="w-4 h-4 text-secondary rounded border-outline-variant focus:ring-secondary/30" id="index-toggle" type="checkbox">
+<label class="text-body-sm font-body-sm text-on-surface" for="index-toggle">Permitir indexación en motores de búsqueda (index, follow)</label>
+</div>
+</div>
+<!-- Quick Media Dropzone Tab Simulation -->
+<div class="pt-2 border-t border-outline-variant">
+<label class="text-[11px] font-bold text-outline uppercase block mb-1">Carga Rápida de Archivos</label>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-3 text-center bg-surface-container-low hover:border-secondary cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-secondary text-2xl">cloud_upload</span>
+<p class="text-label-sm font-label-sm font-bold text-primary mt-1">Arrastra imágenes aquí</p>
+<p class="text-[11px] text-outline">JPG, PNG, WebP o SVG (máx 5MB)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- RECENT PUBLICATIONS & CMS ENTRIES TABLE -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-md border-b border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-space-md bg-white">
+<div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary">Publicaciones Recientes y Entradas del Portal</h3>
+<p class="text-body-sm font-body-sm text-outline">Gestión del repositorio de páginas estáticas, boletines y notas de prensa.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 border border-outline-variant rounded-lg text-body-sm font-medium hover:bg-surface-container-low flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">filter_list</span>
+<span class="">Filtrar</span>
+</button>
+<button class="px-3 py-1.5 border border-outline-variant rounded-lg text-body-sm font-medium hover:bg-surface-container-low flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">file_download</span>
+<span class="">Exportar</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-[11px] font-bold text-outline uppercase tracking-wider">
+<th class="py-3 px-space-md">Título de la Publicación</th>
+<th class="py-3 px-space-md">Tipo</th>
+<th class="py-3 px-space-md">Autor / Editor</th>
+<th class="py-3 px-space-md">Última Modificación</th>
+<th class="py-3 px-space-md">Estado</th>
+<th class="py-3 px-space-md text-right">Lecturas</th>
+<th class="py-3 px-space-md text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant text-body-sm">
+<!-- Item 1: The Active One -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">edit_document</span>
+<div>
+<p class="font-bold text-primary hover:text-secondary cursor-pointer">Convocatoria Nuevo Ingreso 2026-B y Becas STEM</p>
+<span class="text-[11px] text-outline font-mono">/noticias/convocatoria-2026-b-becas-stem</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-100 text-blue-800">Noticia</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed text-primary font-bold text-[10px] flex items-center justify-center">MS</div>
+<span class="text-on-surface">M. Sotomayor</span>
+</div>
+</td>
+<td class="py-3 px-space-md text-outline">Hace 2 minutos</td>
+<td class="py-3 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#F2A900]/20 text-[#8A5F00]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F2A900]"></span>
+                    Borrador
+                  </span>
+</td>
+<td class="py-3 px-space-md text-right font-mono text-outline">—</td>
+<td class="py-3 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 text-outline">
+<button class="p-1 hover:text-secondary hover:bg-surface-container rounded" title="Editar Bloques"><span class="material-symbols-outlined text-base">edit</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Vista Previa"><span class="material-symbols-outlined text-base">visibility</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Más opciones"><span class="material-symbols-outlined text-base">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Item 2: Published Landing -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-lg">web</span>
+<div>
+<p class="font-bold text-primary hover:text-secondary cursor-pointer">Licenciatura en Inteligencia Artificial y Datos (Plan 2026)</p>
+<span class="text-[11px] text-outline font-mono">/programas/ingenieria-datos-ia</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="text-xs font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-800">Página</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary text-white font-bold text-[10px] flex items-center justify-center">CA</div>
+<span class="text-on-surface">Dr. C. Arriaga</span>
+</div>
+</td>
+<td class="py-3 px-space-md text-outline">24 Feb 2026</td>
+<td class="py-3 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Publicado
+                  </span>
+</td>
+<td class="py-3 px-space-md text-right font-mono text-on-surface font-semibold">4,812</td>
+<td class="py-3 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 text-outline">
+<button class="p-1 hover:text-secondary hover:bg-surface-container rounded" title="Editar"><span class="material-symbols-outlined text-base">edit</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Vista Previa"><span class="material-symbols-outlined text-base">visibility</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Más opciones"><span class="material-symbols-outlined text-base">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- Item 3: Institutional Notice -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-lg">newspaper</span>
+<div>
+<p class="font-bold text-primary hover:text-secondary cursor-pointer">Convenio Académico con Laboratorios de Cómputo Avanzado</p>
+<span class="text-[11px] text-outline font-mono">/noticias/convenio-computo-avanzado</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-100 text-blue-800">Noticia</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed text-primary font-bold text-[10px] flex items-center justify-center">MS</div>
+<span class="text-on-surface">M. Sotomayor</span>
+</div>
+</td>
+<td class="py-3 px-space-md text-outline">18 Feb 2026</td>
+<td class="py-3 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Publicado
+                  </span>
+</td>
+<td class="py-3 px-space-md text-right font-mono text-on-surface font-semibold">1,240</td>
+<td class="py-3 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 text-outline">
+<button class="p-1 hover:text-secondary hover:bg-surface-container rounded" title="Editar"><span class="material-symbols-outlined text-base">edit</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Vista Previa"><span class="material-symbols-outlined text-base">visibility</span></button>
+<button class="p-1 hover:text-primary hover:bg-surface-container rounded" title="Más opciones"><span class="material-symbols-outlined text-base">more_vert</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination Footer -->
+<div class="p-space-md bg-surface-container-low border-t border-outline-variant flex items-center justify-between text-body-sm">
+<p class="text-outline text-xs">Mostrando <span class="font-bold text-on-surface">3</span> de <span class="font-bold text-on-surface">56</span> publicaciones totales</p>
+<div class="flex items-center gap-1">
+<button class="px-2 py-1 border border-outline-variant rounded bg-white text-outline hover:text-primary text-xs font-medium">Anterior</button>
+<button class="px-2.5 py-1 rounded bg-secondary text-white text-xs font-bold">1</button>
+<button class="px-2.5 py-1 rounded hover:bg-white text-on-surface text-xs font-medium">2</button>
+<button class="px-2.5 py-1 rounded hover:bg-white text-on-surface text-xs font-medium">3</button>
+<span class="text-outline text-xs">...</span>
+<button class="px-2 py-1 border border-outline-variant rounded bg-white text-outline hover:text-primary text-xs font-medium">Siguiente</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+
+
+</body></html>

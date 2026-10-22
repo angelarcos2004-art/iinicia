@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Oferta Académica | IINICIA - Instituto de Innovación y Ciencias Aplicadas</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#004b6f",
+            "surface-variant": "#dae2fd",
+            "on-surface": "#131b2e",
+            "inverse-on-surface": "#eef0ff",
+            "on-error-container": "#93000a",
+            "text-secondary": "#475569",
+            "secondary-fixed-dim": "#9ccaff",
+            "primary-fixed-dim": "#8aceff",
+            "cyan-vibrant": "#009ee2",
+            "tertiary-fixed-dim": "#aac7fd",
+            "secondary": "#14629c",
+            "surface-container": "#f0f6fa",
+            "surface": "#faf8ff",
+            "on-tertiary-fixed": "#001b3d",
+            "surface-container-high": "#e2e7ff",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "success": "#16a34a",
+            "on-primary-container": "#00314a",
+            "surface-container-low": "#f2f3ff",
+            "primary": "#006492",
+            "on-background": "#131b2e",
+            "cyan-light": "#38bdf8",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#009ee2",
+            "on-error": "#ffffff",
+            "on-primary-fixed": "#001e2f",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#00497a",
+            "outline-variant": "#bec8d2",
+            "cyan-surface": "#e0f2fe",
+            "secondary-fixed": "#d0e4ff",
+            "on-secondary-fixed": "#001d35",
+            "outline": "#6e7881",
+            "surface-subtle": "#f8fafc",
+            "text-primary": "#0f172a",
+            "primary-fixed": "#c9e6ff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#d6e3ff",
+            "on-tertiary-container": "#082d5b",
+            "warning": "#d97706",
+            "on-secondary-container": "#004c7e",
+            "text-muted": "#64748b",
+            "secondary-container": "#80bdfe",
+            "blue-deep": "#005a94",
+            "border-subtle": "#e2e8f0",
+            "blue-institutional": "#002855",
+            "surface-tint": "#006492",
+            "surface-container-highest": "#dae2fd",
+            "error": "#dc2626",
+            "surface-dim": "#d2d9f4",
+            "tertiary": "#415f8f",
+            "background": "#faf8ff",
+            "on-tertiary-fixed-variant": "#284775",
+            "on-secondary": "#ffffff",
+            "surface-canvas": "#ffffff",
+            "on-surface-variant": "#3e4850",
+            "surface-bright": "#faf8ff",
+            "tertiary-container": "#7996c9",
+            "inverse-primary": "#8aceff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "margin-desktop": "3rem",
+            "gutter-mobile": "1rem",
+            "margin-mobile": "1.25rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "gutter-desktop": "2rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "display": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-subtle text-text-primary font-body-md text-body-md antialiased min-h-full flex flex-col selection:bg-cyan-surface selection:text-blue-institutional">
+<!-- ================= TOP APP BAR (Shared Component Anchor) ================= -->
+<header class="bg-surface-canvas/90 dark:bg-blue-institutional/90 backdrop-blur-md docked full-width top-0 sticky z-50 shadow-sm dark:shadow-md transition-all duration-200 ease-in-out">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand Logo Anchor -->
+<a class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-vibrant rounded-lg p-1" href="#">
+<div class="w-12 h-12 flex items-center justify-center p-1 bg-blue-institutional rounded-lg shadow-sm">
+<img alt="IINICIA Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title text-title font-extrabold text-blue-institutional dark:text-surface-canvas tracking-tight flex items-center gap-1">
+            IINICIA
+          </span>
+<span class="text-[0.625rem] tracking-wider uppercase font-semibold text-text-secondary">Ciencias Aplicadas</span>
+</div>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-7">
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Inicio</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Universidad</a>
+<!-- Active link: 'Oferta Académica' -->
+<a class="text-cyan-vibrant font-semibold border-b-2 border-cyan-vibrant pb-1 font-label-md text-label-md flex items-center gap-1" href="#">
+          Oferta Académica
+        </a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Admisiones</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Noticias</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Contacto</a>
+</nav>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-blue-deep font-semibold text-label-md rounded-lg hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_circle">account_circle</span>
+          Mi Campus
+        </a>
+<a class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-deep hover:bg-blue-institutional text-on-primary font-semibold text-label-md rounded-lg shadow-sm hover:shadow-md transition-all duration-200 active:scale-95" href="#">
+          Registrarme
+        </a>
+<!-- Mobile Menu Trigger -->
+<button aria-label="Abrir menú" class="md:hidden p-2 text-text-secondary hover:text-primary rounded-lg focus:outline-none">
+<span class="material-symbols-outlined text-2xl" data-icon="menu">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<!-- ================= HERO & SEARCH BANNER ================= -->
+<section class="relative bg-gradient-to-b from-blue-institutional via-[#04336c] to-blue-institutional text-on-primary overflow-hidden border-b border-border-subtle/10">
+<!-- Ambient light effect -->
+<div class="absolute -top-32 -left-20 w-96 h-96 bg-cyan-vibrant/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-20 w-96 h-96 bg-cyan-light/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 py-14 md:py-16 relative z-10">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-vibrant/15 border border-cyan-vibrant/30 text-cyan-light font-label-sm uppercase mb-4">
+<span class="material-symbols-outlined text-[16px]" data-icon="school">school</span>
+            Catálogo Académico Oficial 2026
+          </div>
+<h1 class="font-headline-lg text-headline-lg md:font-display md:text-display text-surface-canvas font-extrabold tracking-tight mb-4">
+            Impulsa tu carrera científica y tecnológica
+          </h1>
+<p class="font-body-lg text-body-lg text-surface-variant/90 max-w-2xl mb-8">
+            Programas de grado, posgrado y certificaciones de alta especialización avalados por SEP con enfoque en innovación aplicada y liderazgo digital.
+          </p>
+</div>
+<!-- Hero Search & Action Card -->
+<div class="bg-surface-canvas p-3 md:p-4 rounded-xl shadow-lg border border-border-subtle max-w-4xl text-text-primary">
+<div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+<!-- Realtime Search Input -->
+<div class="relative flex-grow flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline text-[22px]" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 h-12 bg-surface-subtle md:bg-transparent rounded-lg border border-border-subtle md:border-none focus:ring-2 focus:ring-cyan-vibrant font-body-md text-text-primary placeholder:text-outline text-sm md:text-base outline-none" placeholder="¿Qué te gustaría estudiar hoy? (ej. Inteligencia Artificial, Ciberseguridad...)" type="text"/>
+</div>
+<div class="hidden md:block w-px h-8 bg-border-subtle"></div>
+<!-- Fast Quick Select: Order -->
+<div class="flex items-center gap-2 min-w-[210px]">
+<span class="material-symbols-outlined text-outline text-[20px] ml-2" data-icon="swap_vert">swap_vert</span>
+<div class="flex-1">
+<label class="block text-[11px] font-semibold text-text-muted uppercase tracking-wider" for="order-select">Ordenar por</label>
+<select class="w-full bg-transparent font-label-md text-text-primary text-xs border-none p-0 focus:ring-0 cursor-pointer" id="order-select">
+<option selected="">Popularidad</option>
+<option>Próximo inicio</option>
+<option>Mayor duración</option>
+<option>Menor duración</option>
+</select>
+</div>
+</div>
+<!-- Submit CTA -->
+<button class="h-12 px-7 bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold font-label-lg text-label-lg rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow active:scale-95">
+<span>Buscar</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= CATALOG 2-COLUMN SECTION ================= -->
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 py-10 md:py-14">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- ================= SIDEBAR FILTERS ================= -->
+<aside class="lg:col-span-4 xl:col-span-3 bg-surface-canvas rounded-xl border border-border-subtle p-6 shadow-sm sticky top-28">
+<div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-deep text-[22px]" data-icon="tune">tune</span>
+<h2 class="font-title text-title text-blue-institutional font-bold">Filtros</h2>
+</div>
+<button class="text-cyan-vibrant hover:underline font-label-md text-label-md font-semibold transition-colors">
+              Limpiar filtros
+            </button>
+</div>
+<div class="divide-y divide-border-subtle space-y-6 pt-5">
+<!-- Filter Group: Tipo de Programa -->
+<div>
+<h3 class="font-label-lg text-label-lg text-blue-institutional font-bold mb-3 flex items-center justify-between">
+<span>Tipo de programa</span>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="expand_more">expand_more</span>
+</h3>
+<div class="space-y-2.5">
+<label class="flex items-center justify-between text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<div class="flex items-center gap-2.5">
+<input checked="" class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Licenciaturas</span>
+</div>
+<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-text-muted">6</span>
+</label>
+<label class="flex items-center justify-between text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<div class="flex items-center gap-2.5">
+<input checked="" class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Maestrías</span>
+</div>
+<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-text-muted">4</span>
+</label>
+<label class="flex items-center justify-between text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<div class="flex items-center gap-2.5">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Diplomados</span>
+</div>
+<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-text-muted">12</span>
+</label>
+<label class="flex items-center justify-between text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<div class="flex items-center gap-2.5">
+<input checked="" class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Certificaciones</span>
+</div>
+<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-text-muted">18</span>
+</label>
+<label class="flex items-center justify-between text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<div class="flex items-center gap-2.5">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Cursos especializados</span>
+</div>
+<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-text-muted">24</span>
+</label>
+</div>
+</div>
+<!-- Filter Group: Área de Conocimiento -->
+<div class="pt-5">
+<h3 class="font-label-lg text-label-lg text-blue-institutional font-bold mb-3 flex items-center justify-between">
+<span>Área de conocimiento</span>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="expand_more">expand_more</span>
+</h3>
+<div class="space-y-2.5">
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input checked="" class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Inteligencia Artificial</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input checked="" class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Ingeniería de Software</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Cloud &amp; DevOps</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Ciberseguridad</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Gestión de Negocios Tech</span>
+</label>
+</div>
+</div>
+<!-- Filter Group: Duración -->
+<div class="pt-5">
+<h3 class="font-label-lg text-label-lg text-blue-institutional font-bold mb-3 flex items-center justify-between">
+<span>Duración</span>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="expand_more">expand_more</span>
+</h3>
+<div class="space-y-2.5">
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" name="duration" type="radio"/>
+<span>Corta (&lt; 3 meses)</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" name="duration" type="radio"/>
+<span>Media (3-6 meses)</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input checked="" class="w-4 h-4 border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" name="duration" type="radio"/>
+<span>Carrera completa (3 años / 9 c.)</span>
+</label>
+</div>
+</div>
+<!-- Filter Group: Modalidad -->
+<div class="pt-5">
+<h3 class="font-label-lg text-label-lg text-blue-institutional font-bold mb-3 flex items-center justify-between">
+<span>Modalidad</span>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="expand_more">expand_more</span>
+</h3>
+<div class="space-y-2.5">
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input checked="" class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>100% En Línea síncrono</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>En Línea autogestivo</span>
+</label>
+<label class="flex items-center gap-2.5 text-body-sm text-text-primary cursor-pointer hover:text-blue-deep select-none">
+<input class="w-4 h-4 rounded border-border-subtle text-cyan-vibrant focus:ring-cyan-vibrant" type="checkbox"/>
+<span>Híbrido intensivo</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Advisor Help Mini Card -->
+<div class="mt-6 p-4 rounded-lg bg-surface-container border border-cyan-vibrant/20 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-blue-deep">
+<span class="material-symbols-outlined text-[20px]" data-icon="support_agent">support_agent</span>
+<span class="font-label-md text-label-md font-bold">¿Dudas con tu elección?</span>
+</div>
+<p class="text-xs text-text-secondary leading-relaxed">
+              Un asesor académico puede evaluar tu perfil y convalidar tus estudios previos.
+            </p>
+<a class="mt-1 text-xs text-blue-deep font-bold hover:text-cyan-vibrant inline-flex items-center gap-1" href="#asesoria">
+              Hablar con un orientador
+              <span class="material-symbols-outlined text-[16px]" data-icon="arrow_right_alt">arrow_right_alt</span>
+</a>
+</div>
+</aside>
+<!-- ================= MAIN CATALOG CONTENT ================= -->
+<div class="lg:col-span-8 xl:col-span-9 space-y-6">
+<!-- Results Header & Active Chips -->
+<div class="bg-surface-canvas p-4 md:p-5 rounded-xl border border-border-subtle shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<span class="font-title text-title text-blue-institutional font-bold block">
+                Mostrando 18 programas encontrados
+              </span>
+<span class="text-xs text-text-muted">Actualizado para el ciclo escolar 2026-B</span>
+</div>
+<!-- Active Tag Chips -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-cyan-surface text-blue-deep border border-cyan-vibrant/30">
+                Licenciaturas
+                <button aria-label="Remover filtro Licenciaturas" class="hover:text-error focus:outline-none">
+<span class="material-symbols-outlined text-[14px]" data-icon="close">close</span>
+</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-cyan-surface text-blue-deep border border-cyan-vibrant/30">
+                Inteligencia Artificial
+                <button aria-label="Remover filtro Inteligencia Artificial" class="hover:text-error focus:outline-none">
+<span class="material-symbols-outlined text-[14px]" data-icon="close">close</span>
+</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-cyan-surface text-blue-deep border border-cyan-vibrant/30">
+                100% En Línea
+                <button aria-label="Remover filtro En Línea" class="hover:text-error focus:outline-none">
+<span class="material-symbols-outlined text-[14px]" data-icon="close">close</span>
+</button>
+</span>
+</div>
+</div>
+<!-- Academic Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1: Licenciatura en Ingeniería de Software e IA -->
+<div class="group bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm hover:shadow-md hover:border-cyan-vibrant transition-all duration-200 flex flex-col justify-between">
+<div>
+<!-- Image Header with Badge -->
+<div class="relative h-48 w-full overflow-hidden bg-blue-institutional">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern high-tech software engineering university lab featuring clean glass partitions, glowing dual-monitor development workstations displaying neural network code and machine learning diagrams. The atmosphere is professional and brightly lit with high-key neutral laboratory lighting and crisp electric cyan highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEiGvtS2mLVRlKAQmPfDdeH6pJdpPIaOazZS2llx1oUQ4r1Qug-V7J1__m8E3PEw_zr5I1NT7kP9kzzfLbv2D6kj894kmo6JSAZbRFo0aI6rWaqvXSz-u3VJp_zfLBVChnwWxMHWOHZ_wlyDc4oiLxE-fU5dRCYUbRETDgrvC_KOjzi2iW13A-UISYbKZie2XgkdQ-bH28SSgDCOS1BlsSoMR5agKLs9JILaKXRHbrSCUKmEOThu-52A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-blue-institutional/80 via-transparent to-transparent"></div>
+<!-- Program Badge -->
+<div class="absolute top-3 left-3">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-surface-canvas text-blue-institutional shadow-sm border border-border-subtle">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="verified">verified</span>
+                      Licenciatura RVOE
+                    </span>
+</div>
+<!-- Faculty tag -->
+<div class="absolute bottom-3 left-3">
+<span class="text-xs font-semibold text-surface-canvas drop-shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-light" data-icon="code">code</span>
+                      Facultad de Computación Aplicada
+                    </span>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional font-bold group-hover:text-blue-deep transition-colors mb-2 leading-snug">
+                    Licenciatura en Ingeniería de Software e Inteligencia Artificial
+                  </h3>
+<p class="font-body-sm text-body-sm text-text-secondary line-clamp-2 mb-4">
+                    Forma competencias avanzadas en arquitecturas cloud nativas, desarrollo full stack, algoritmos generativos y modelado predictivo de datos.
+                  </p>
+<!-- Metadata Badges -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="schedule">schedule</span>
+                      9 cuatrimestres (3 años)
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="laptop_mac">laptop_mac</span>
+                      100% Virtual Síncrono
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-surface border border-cyan-vibrant/20 text-xs text-blue-deep font-semibold">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="event">event</span>
+                      Inicio: 18 de Mayo 2026
+                    </span>
+</div>
+<!-- Institutional Accreditation -->
+<div class="pt-3 border-t border-border-subtle/80 flex items-center justify-between text-xs text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-warning" data-icon="workspace_premium">workspace_premium</span>
+                      RVOE SEP Federal: <strong>2024-ACAD-091</strong>
+</span>
+</div>
+</div>
+</div>
+<!-- Card Actions -->
+<div class="px-6 pb-6 pt-2 grid grid-cols-2 gap-3">
+<a class="h-11 inline-flex items-center justify-center rounded-lg border border-blue-deep text-blue-deep font-semibold text-label-md hover:bg-surface-container transition-colors" href="#">
+                  Plan de estudios
+                </a>
+<a class="h-11 inline-flex items-center justify-center rounded-lg bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold text-label-md shadow-sm transition-all active:scale-95" href="#">
+                  Ver programa
+                </a>
+</div>
+</div>
+<!-- Card 2: Maestría en Data Science y Machine Learning -->
+<div class="group bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm hover:shadow-md hover:border-cyan-vibrant transition-all duration-200 flex flex-col justify-between">
+<div>
+<!-- Image Header with Badge -->
+<div class="relative h-48 w-full overflow-hidden bg-blue-institutional">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Futuristic data analysis room with expansive digital displays visualizing multidimensional neural networks, statistical heatmaps, and streaming big data. Warm ambient illumination mixed with cool technical blue and electric cyan tones highlights a collaborative applied science research atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUeANNHDF4O8PJJiKsyR75R-kUQNaj_esQeQFj9dTZc9WGpKAFq4uMB35EAaUxZ6vzSdTXKiwVJlFual6IkLhD-jwPO1bJF84T36dKDcNjYNHgCMupAjI9Yp8-ZpO-fHyaj_W69A8qn0VyZ91-zie7cId5urpk3c9PcLULxzJj5EY2HO9res73q5Ih47FvLSKWFRukUx-RZxXwz7gZX27IhUxb5SNwu8R_V4wR7q7fH-18nK2fBwpLDA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-blue-institutional/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-surface-canvas text-blue-institutional shadow-sm border border-border-subtle">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="school">school</span>
+                      Posgrado RVOE
+                    </span>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="text-xs font-semibold text-surface-canvas drop-shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-light" data-icon="database">database</span>
+                      Instituto de Inteligencia Analítica
+                    </span>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional font-bold group-hover:text-blue-deep transition-colors mb-2 leading-snug">
+                    Maestría en Data Science y Machine Learning
+                  </h3>
+<p class="font-body-sm text-body-sm text-text-secondary line-clamp-2 mb-4">
+                    Especialización directiva y técnica en inferencia estadística, deep learning aplicado, modelado de lenguaje a gran escala y gobierno de datos.
+                  </p>
+<!-- Metadata Badges -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="schedule">schedule</span>
+                      6 cuatrimestres (2 años)
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="cast_for_education">cast_for_education</span>
+                      100% En Línea Flexible
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-surface border border-cyan-vibrant/20 text-xs text-blue-deep font-semibold">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="event">event</span>
+                      Inicio: 01 de Junio 2026
+                    </span>
+</div>
+<!-- Institutional Accreditation -->
+<div class="pt-3 border-t border-border-subtle/80 flex items-center justify-between text-xs text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-warning" data-icon="workspace_premium">workspace_premium</span>
+                      RVOE SEP Federal: <strong>2024-POS-118</strong>
+</span>
+</div>
+</div>
+</div>
+<!-- Card Actions -->
+<div class="px-6 pb-6 pt-2 grid grid-cols-2 gap-3">
+<a class="h-11 inline-flex items-center justify-center rounded-lg border border-blue-deep text-blue-deep font-semibold text-label-md hover:bg-surface-container transition-colors" href="#">
+                  Plan de estudios
+                </a>
+<a class="h-11 inline-flex items-center justify-center rounded-lg bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold text-label-md shadow-sm transition-all active:scale-95" href="#">
+                  Ver programa
+                </a>
+</div>
+</div>
+<!-- Card 3: Diplomado en Cloud Architecture & Kubernetes -->
+<div class="group bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm hover:shadow-md hover:border-cyan-vibrant transition-all duration-200 flex flex-col justify-between">
+<div>
+<!-- Image Header with Badge -->
+<div class="relative h-48 w-full overflow-hidden bg-blue-institutional">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Server infrastructure and cloud operations center with glowing racks of servers illuminated in neon cyan and midnight blue. Engineers collaborate around a terminal interface showing cluster orchestration maps and microservice topologies." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXb4pRrbi1AQ4y2MdJcwG3MX_cpnoGcZIZWw-EBTedySFtHhmeY1WVceaqxDKt5ZQTUyPJC4iF4lp0WrwVdIwatd1R7gTo0pg54yk17R4cVgRNV-3ltco0LkM03E1VTaB1XAL23It8bNTDAPd44mR2KXUJGyM7VtQqEyGNV2u-T1-tesRwDiCrFBbOLMSkQg6YeJrJLFNCKOzHuHEN3kCxHn4klhBEzFTUKFNHGO6E1mgUsHqq7_qxiA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-blue-institutional/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-surface-canvas text-blue-institutional shadow-sm border border-border-subtle">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="military_tech">military_tech</span>
+                      Diplomado Ejecutivo
+                    </span>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="text-xs font-semibold text-surface-canvas drop-shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-light" data-icon="cloud">cloud</span>
+                      Centro de Infraestructura y DevOps
+                    </span>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional font-bold group-hover:text-blue-deep transition-colors mb-2 leading-snug">
+                    Diplomado en Cloud Architecture &amp; Kubernetes
+                  </h3>
+<p class="font-body-sm text-body-sm text-text-secondary line-clamp-2 mb-4">
+                    Domina el diseño de soluciones distribuidas en AWS, Azure y Google Cloud, administración avanzada de contenedores y pipelines CI/CD.
+                  </p>
+<!-- Metadata Badges -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="schedule">schedule</span>
+                      140 Horas lectivas (4 meses)
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="groups">groups</span>
+                      Híbrido intensivo / Online
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-surface border border-cyan-vibrant/20 text-xs text-blue-deep font-semibold">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="event">event</span>
+                      Inicio: 25 de Mayo 2026
+                    </span>
+</div>
+<!-- Institutional Accreditation -->
+<div class="pt-3 border-t border-border-subtle/80 flex items-center justify-between text-xs text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-success" data-icon="verified_user">verified_user</span>
+                      Validez Institucional con Insignia Digital
+                    </span>
+</div>
+</div>
+</div>
+<!-- Card Actions -->
+<div class="px-6 pb-6 pt-2 grid grid-cols-2 gap-3">
+<a class="h-11 inline-flex items-center justify-center rounded-lg border border-blue-deep text-blue-deep font-semibold text-label-md hover:bg-surface-container transition-colors" href="#">
+                  Plan de estudios
+                </a>
+<a class="h-11 inline-flex items-center justify-center rounded-lg bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold text-label-md shadow-sm transition-all active:scale-95" href="#">
+                  Ver programa
+                </a>
+</div>
+</div>
+<!-- Card 4: Certificación en Ciberseguridad Defensiva y SOC -->
+<div class="group bg-surface-canvas rounded-xl border border-border-subtle overflow-hidden shadow-sm hover:shadow-md hover:border-cyan-vibrant transition-all duration-200 flex flex-col justify-between">
+<div>
+<!-- Image Header with Badge -->
+<div class="relative h-48 w-full overflow-hidden bg-blue-institutional">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern Cybersecurity Operations Center (SOC) room with darkened ambiance, panoramic video walls visualizing real-time threat maps, cyber attack vectors, and incident response matrices. Sharp cyan and electric blue light glows on analyst workstations." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU6NsjAReUcefpKt-lDjFArXMdrE-bMh6hvH8BXRksu-a_nfZBnljKwHUhN1ZDjHCeuDYZrbrAEKbG_OD-QoOw36aQQdxwOjq9ZFCFxykGNElwbZT5xzuaueY2cOiTItVYeUiRXdQbPuyduY7Me11a5ruOBTk-vjul98FMZzxJxuY3OqR4OsFrQHJUJs8O5S_Gc7jnEnYpp3i_6ccbhPj7rXA8kSP2pKVDe_U4kKKYiqbphPuMJhK0OA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-blue-institutional/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-surface-canvas text-blue-institutional shadow-sm border border-border-subtle">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="shield">shield</span>
+                      Certificación Oficial
+                    </span>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="text-xs font-semibold text-surface-canvas drop-shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-cyan-light" data-icon="security">security</span>
+                      Laboratorio de Ciberdefensa
+                    </span>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-blue-institutional font-bold group-hover:text-blue-deep transition-colors mb-2 leading-snug">
+                    Certificación en Ciberseguridad Defensiva y SOC
+                  </h3>
+<p class="font-body-sm text-body-sm text-text-secondary line-clamp-2 mb-4">
+                    Entrenamiento táctico en respuesta a incidentes, análisis forense digital, monitoreo SIEM en vivo y fortificación de sistemas empresariales.
+                  </p>
+<!-- Metadata Badges -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="schedule">schedule</span>
+                      90 Horas de simulación
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-subtle border border-border-subtle text-xs text-text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="terminal">terminal</span>
+                      Laboratorio Virtual 24/7
+                    </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-surface border border-cyan-vibrant/20 text-xs text-blue-deep font-semibold">
+<span class="material-symbols-outlined text-[14px] text-cyan-vibrant" data-icon="event">event</span>
+                      Inicio: 10 de Mayo 2026
+                    </span>
+</div>
+<!-- Institutional Accreditation -->
+<div class="pt-3 border-t border-border-subtle/80 flex items-center justify-between text-xs text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-success" data-icon="verified_user">verified_user</span>
+                      Acreditación alineada con NIST y MITRE ATT&amp;CK
+                    </span>
+</div>
+</div>
+</div>
+<!-- Card Actions -->
+<div class="px-6 pb-6 pt-2 grid grid-cols-2 gap-3">
+<a class="h-11 inline-flex items-center justify-center rounded-lg border border-blue-deep text-blue-deep font-semibold text-label-md hover:bg-surface-container transition-colors" href="#">
+                  Plan de estudios
+                </a>
+<a class="h-11 inline-flex items-center justify-center rounded-lg bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold text-label-md shadow-sm transition-all active:scale-95" href="#">
+                  Ver programa
+                </a>
+</div>
+</div>
+</div>
+<!-- ================= PAGINATION ================= -->
+<div class="pt-6 pb-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border-subtle">
+<span class="text-sm text-text-muted">
+              Mostrando <strong class="text-text-primary">1 a 4</strong> de <strong class="text-text-primary">18</strong> programas
+            </span>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 rounded-lg border border-border-subtle flex items-center justify-center text-text-muted hover:bg-surface-canvas hover:text-blue-deep disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-cyan-vibrant text-blue-institutional font-bold text-sm shadow-sm">1</button>
+<button class="w-10 h-10 rounded-lg border border-border-subtle text-text-secondary hover:bg-surface-canvas font-semibold text-sm">2</button>
+<button class="w-10 h-10 rounded-lg border border-border-subtle text-text-secondary hover:bg-surface-canvas font-semibold text-sm">3</button>
+<button class="w-10 h-10 rounded-lg border border-border-subtle text-text-secondary hover:bg-surface-canvas font-semibold text-sm">4</button>
+<button class="w-10 h-10 rounded-lg border border-border-subtle flex items-center justify-center text-text-secondary hover:bg-surface-canvas hover:text-blue-deep">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= ADVISORY BANNER SECTION ================= -->
+<section class="bg-surface-canvas border-y border-border-subtle py-14" id="asesoria">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="bg-gradient-to-r from-blue-institutional via-blue-deep to-blue-institutional rounded-2xl p-8 md:p-12 text-on-primary shadow-md relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+<div class="max-w-2xl relative z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-vibrant/20 text-cyan-light text-xs font-semibold uppercase tracking-wider mb-3">
+<span class="material-symbols-outlined text-[16px]" data-icon="psychology">psychology</span>
+              Orientación Vocacional Sin Costo
+            </div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-surface-canvas mb-3">
+              ¿No estás seguro de qué camino tecnológico tomar?
+            </h2>
+<p class="text-surface-variant/90 text-body-md leading-relaxed">
+              Agenda una sesión virtual 1-a-1 de 20 minutos con nuestros directores de carrera. Revisaremos tu experiencia previa, tus objetivos profesionales y te recomendaremos el plan con mejor inserción laboral.
+            </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10">
+<button class="h-12 px-6 rounded-lg bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold font-label-lg text-label-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+              Agendar Asesoría Gratuita
+            </button>
+<button class="h-12 px-6 rounded-lg border border-surface-variant/40 hover:bg-surface-canvas/10 text-surface-canvas font-semibold font-label-lg text-label-lg transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span>
+              WhatsApp Admisiones
+            </button>
+</div>
+<!-- Decorative subtle ring -->
+<div class="absolute -right-16 -bottom-16 w-80 h-80 rounded-full border border-cyan-vibrant/20 pointer-events-none"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- ================= FOOTER (Shared Component Anchor) ================= -->
+<footer class="bg-blue-institutional dark:bg-inverse-surface border-t border-blue-deep/40 text-surface-canvas docked full-width bottom transition-all duration-200">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 py-12 md:py-16">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-blue-deep/40">
+<!-- Brand & Description Col -->
+<div class="md:col-span-2 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 flex items-center justify-center p-1 bg-surface-canvas/10 rounded-lg border border-cyan-vibrant/30">
+<img alt="IINICIA Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+</div>
+<div>
+<span class="font-title text-headline-sm font-bold text-surface-canvas tracking-tight">IINICIA</span>
+<p class="text-xs text-cyan-vibrant font-medium">Instituto de Innovación y Ciencias Aplicadas</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-surface-variant/80 max-w-md leading-relaxed">
+            Institución de educación superior y posgrados especializada en la formación de científicos de datos, ingenieros de software e innovadores tecnológicos de impacto global.
+          </p>
+<div class="flex items-center gap-3 pt-2 text-cyan-light">
+<span class="inline-flex items-center gap-1 text-xs text-surface-variant/90">
+<span class="material-symbols-outlined text-[16px] text-cyan-vibrant" data-icon="check_circle">check_circle</span>
+              Reconocimiento SEP RVOE Federal
+            </span>
+</div>
+</div>
+<!-- Academic Offer Links -->
+<div>
+<h4 class="font-title text-title text-cyan-vibrant dark:text-cyan-light font-semibold mb-4">Programas</h4>
+<ul class="space-y-2.5 font-label-sm text-label-sm">
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Ingeniería de Software &amp; IA</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Maestría en Data Science</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Ciberseguridad y Redes SOC</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Cloud Architecture &amp; DevOps</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Educación Continua &amp; Microgrados</a></li>
+</ul>
+</div>
+<!-- Contact & Legal Links -->
+<div>
+<h4 class="font-title text-title text-cyan-vibrant dark:text-cyan-light font-semibold mb-4">Institucional</h4>
+<ul class="space-y-2.5 font-label-sm text-label-sm">
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Aviso de Privacidad</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Términos y Condiciones</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Reglamento Institucional</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Validez SEP / RVOE</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Bolsa de Trabajo</a></li>
+<li><a class="text-surface-variant/80 hover:text-surface-canvas transition-colors" href="#">Portal de Transparencia</a></li>
+</ul>
+</div>
+</div>
+<!-- Footer Bottom Copyright Notice -->
+<div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="font-body-sm text-body-sm text-surface-variant/70 text-center md:text-left">
+          © 2025 IINICIA - Instituto de Innovación y Ciencias Aplicadas. Todos los derechos reservados. Planes con Reconocimiento de Validez Oficial de Estudios (RVOE SEP).
+        </p>
+<div class="flex items-center gap-4 text-surface-variant/70 text-xs">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+            Conexión Segura TLS 1.3
+          </span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

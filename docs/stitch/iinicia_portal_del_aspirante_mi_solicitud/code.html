@@ -1,0 +1,680 @@
+<!DOCTYPE html><html class="h-full bg-background" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mi Solicitud de Admisión | IINICIA Admisiones</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary-fixed": "#281900",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#003e80",
+            "on-tertiary-container": "#c48800",
+            "tertiary-container": "#3d2800",
+            "on-error": "#ffffff",
+            "on-surface": "#111c2d",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#7a93ca",
+            "tertiary-fixed-dim": "#ffba3b",
+            "surface-container-high": "#dee8ff",
+            "surface": "#f9f9ff",
+            "primary-container": "#0b2a5b",
+            "surface-container-highest": "#d8e3fb",
+            "background": "#f9f9ff",
+            "on-primary-fixed": "#001a42",
+            "surface-bright": "#f9f9ff",
+            "inverse-primary": "#aec6ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#ffdead",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#001b3e",
+            "inverse-on-surface": "#ecf1ff",
+            "primary": "#00163a",
+            "on-tertiary-fixed-variant": "#604100",
+            "primary-fixed": "#d8e2ff",
+            "error": "#ba1a1a",
+            "on-primary-fixed-variant": "#2c4678",
+            "surface-variant": "#d8e3fb",
+            "outline": "#747780",
+            "surface-tint": "#455e91",
+            "secondary-container": "#7aacff",
+            "on-background": "#111c2d",
+            "secondary": "#235eac",
+            "on-secondary-fixed-variant": "#00458d",
+            "on-surface-variant": "#44474f",
+            "surface-container-low": "#f0f3ff",
+            "outline-variant": "#c4c6d0",
+            "primary-fixed-dim": "#aec6ff",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#cfdaf2",
+            "inverse-surface": "#263143",
+            "tertiary": "#231500",
+            "secondary-fixed": "#d6e3ff",
+            "surface-container": "#e7eeff",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed-dim": "#aac7ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2.5rem",
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "gutter-desktop": "2rem",
+            "margin-mobile": "1.25rem",
+            "margin": "1.5rem",
+            "gutter": "1.5rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "label-lg": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .shadow-institution-level1 {
+      box-shadow: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+    }
+    .shadow-institution-level2 {
+      box-shadow: 0 4px 6px -2px rgba(11, 42, 91, 0.05), 0 10px 15px -3px rgba(11, 42, 91, 0.08);
+    }
+  </style>
+</head>
+<body class="h-full font-body-md text-on-surface antialiased bg-background flex flex-col">
+<!-- TOP APP BAR -->
+<header class="bg-surface-container-lowest border-b border-outline-variant shadow-sm sticky top-0 z-50">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand & Entity Name -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<img alt="Logotipo IINICIA Admisiones" class="h-9 w-9 object-contain rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ">
+<div class="flex flex-col">
+<span class="text-title font-title font-bold text-primary tracking-tight leading-none">IINICIA Admisiones</span>
+<span class="text-label-sm font-label-sm text-outline tracking-wider mt-0.5">PORTAL DEL ASPIRANTE</span>
+</div>
+</div>
+<!-- Navigation Cluster (Web Desktop) -->
+<nav class="hidden md:flex items-center gap-8 ml-6">
+<a aria-current="page" class="text-secondary border-b-2 border-secondary font-title text-label-md font-label-md py-4 transition-colors flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">assignment</span>
+<span class="">Mi solicitud</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface font-title text-label-md font-label-md py-4 transition-colors flex items-center gap-1.5 hover:text-secondary" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">school</span>
+<span class="">Oferta académica</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface font-title text-label-md font-label-md py-4 transition-colors flex items-center gap-1.5 hover:text-secondary" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">person</span>
+<span class="">Perfil</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface font-title text-label-md font-label-md py-4 transition-colors flex items-center gap-1.5 hover:text-secondary" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">help_center</span>
+<span class="">Ayuda</span>
+</a>
+</nav>
+</div>
+<!-- Trailing Action Group & User Status Header -->
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-2">
+<!-- Mesa de Admisiones Direct Button -->
+<button class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-secondary text-secondary hover:bg-surface-container-low text-label-md font-label-md transition duration-150 ease-in-out active:scale-95" type="button">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">support_agent</span>
+<span class="">Mesa de admisiones</span>
+</button>
+<!-- Soporte WhatsApp Action -->
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20 text-label-md font-label-md font-semibold transition duration-150" href="#">
+<span class="material-symbols-outlined text-[#128C7E]" style="font-size: 18px;">chat</span>
+<span class="">Soporte WhatsApp</span>
+</a>
+</div>
+<div class="h-6 w-px bg-outline-variant hidden sm:block"></div>
+<!-- Aspirante User Snapshot Badge -->
+<div class="flex items-center gap-3 pl-1">
+<div class="relative">
+<img alt="Fotografía de perfil del aspirante" class="h-9 w-9 rounded-full object-cover ring-2 ring-surface-container-high" data-alt="Close-up studio portrait of Mateo Morales, a prospective Latin American university student smiling confidently in a modern navy blue collared shirt with soft natural lighting, against a clean neutral architectural background reflecting academic prestige." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwohJBMFfasOodmpVXtOjcN4-5SLxawVH5dnRaLtsewiiyA7O7MrlS-nwEKpDGqbVobV-4SR0rJ-6IJZ1cMdYHaL9l0tAbpzRNE8JBmOQq-wPr6I_IwsFzHyHKT5KGJqWAQ6sIcizPgmmqlPCSNnsz8HKWTWyOZOuNN6b5gz0YRAKrfIcu9R-C1eRTjB3mA8p3xNCjbEEgWKL7GszwnjktL8HWQdk8TxIyAzP4I2kVyj9rRhHNTH44EQ">
+<span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-white"></span>
+</div>
+<div class="hidden xl:flex flex-col text-left">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-on-surface font-bold leading-tight">Mateo Morales Valenzuela</span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container text-primary font-medium border border-outline-variant/60">Aspirante - En Admisión</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant text-xs">Folio: <strong class="text-primary font-semibold">ADM-2026-0489</strong></span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+<!-- PAGE HERO & INSTITUTIONAL NOTICE -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-outline-variant/50">
+<div>
+<div class="flex items-center gap-2 text-label-md font-label-md text-secondary mb-1">
+<span class="material-symbols-outlined" style="font-size: 18px;">verified</span>
+<span class="">Proceso de Admisión Oficial • Licenciaturas e Ingenierías</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-primary tracking-tight">Mi Solicitud de Admisión</h1>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 mt-1.5 text-body-sm font-body-sm text-on-surface-variant">
+<span class="">Folio oficial de trámite: <strong class="text-primary font-semibold">ADM-2026-0489</strong></span>
+<span class="text-outline-variant">•</span>
+<span class="">Convocatoria Ciclo 2026-2 (Otoño)</span>
+<span class="text-outline-variant">•</span>
+<span class="inline-flex items-center gap-1 text-[#8A5F00] font-semibold bg-[#F2A900]/15 px-2 py-0.5 rounded-full text-xs">
+<span class="material-symbols-outlined text-[#8A5F00]" style="font-size: 14px;">pending</span>
+            En Dictamen Académico
+          </span>
+</div>
+</div>
+<!-- Quick Action Group / Print -->
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:text-primary text-label-md font-label-md transition shadow-sm" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">print</span>
+<span class="">Imprimir ficha</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-container text-white text-label-md font-label-md font-semibold hover:bg-secondary transition shadow-institution-level1" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">refresh</span>
+<span class="">Actualizar estado</span>
+</button>
+</div>
+</div>
+<!-- CALLOUT BANNER: Institutional Access Warning -->
+<div class="rounded-xl border border-secondary/30 bg-surface-container-low p-4 sm:p-5 flex items-start gap-4 shadow-institution-level1">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-size: 24px;">info</span>
+</div>
+<div class="flex-1">
+<h2 class="text-label-lg font-label-lg text-primary font-semibold">Aviso institucional sobre acceso al Campus Virtual</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+          Tu acceso a los cursos del campus virtual, materiales y credencial digital se habilitará una vez que seas formalmente admitido por la Dirección de Control Escolar.
+        </p>
+</div>
+<span class="hidden sm:inline-flex px-2.5 py-1 rounded text-label-sm font-label-sm uppercase bg-surface-container text-secondary font-bold">Informativo</span>
+</div>
+<!-- HORIZONTAL STEPPER / PROGRESS TRACKER -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-institution-level1">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">timeline</span>
+<span class="text-title font-title text-primary">Progreso de la Solicitud</span>
+</div>
+<span class="text-label-md font-label-md text-secondary font-bold bg-secondary-fixed/50 px-3 py-1 rounded-full">
+          Paso 4 de 5: En Comité
+        </span>
+</div>
+<!-- Stepper Line and Circles -->
+<div class="relative mt-2">
+<!-- Connecting Background Rail -->
+<div class="absolute top-5 left-8 right-8 h-1 bg-surface-container-high -z-0"></div>
+<!-- Progress Active Rail (up to step 4) -->
+<div class="absolute top-5 left-8 w-[72%] h-1 bg-secondary -z-0"></div>
+<div class="grid grid-cols-5 gap-2 relative z-10 text-center">
+<!-- Step 1: Cuenta creada (Completado) -->
+<div class="flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-label-md shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+</div>
+<span class="mt-2.5 text-label-md font-label-md text-primary font-bold">Cuenta creada</span>
+<span class="text-label-sm font-label-sm text-outline">18 Feb 2026</span>
+</div>
+<!-- Step 2: Perfil completo (Completado) -->
+<div class="flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-label-md shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+</div>
+<span class="mt-2.5 text-label-md font-label-md text-primary font-bold">Perfil completo</span>
+<span class="text-label-sm font-label-sm text-outline">20 Feb 2026</span>
+</div>
+<!-- Step 3: Documentos enviados (Completado) -->
+<div class="flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-label-md shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+</div>
+<span class="mt-2.5 text-label-md font-label-md text-primary font-bold">Documentos enviados</span>
+<span class="text-label-sm font-label-sm text-outline">22 Feb 2026</span>
+</div>
+<!-- Step 4: En revisión (ACTIVO) -->
+<div class="flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full bg-[#0B2A5B] text-[#F2A900] ring-4 ring-[#F2A900]/30 flex items-center justify-center font-bold text-label-md shadow-institution-level2 animate-pulse">
+<span class="material-symbols-outlined" style="font-size: 22px;">hourglass_top</span>
+</div>
+<div class="mt-2 flex flex-col items-center">
+<span class="text-label-md font-label-md text-primary font-bold">En revisión</span>
+<span class="mt-0.5 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[#F2A900]/20 text-[#8A5F00]">
+                En proceso por Comité de Admisiones
+              </span>
+</div>
+</div>
+<!-- Step 5: Admitido (Pendiente) -->
+<div class="flex flex-col items-center opacity-65 group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-outline-variant text-outline flex items-center justify-center font-bold text-label-md">
+<span class="material-symbols-outlined" style="font-size: 20px;">school</span>
+</div>
+<span class="mt-2.5 text-label-md font-label-md text-on-surface-variant font-medium">Admitido</span>
+<span class="text-label-sm font-label-sm text-outline">Resolución final</span>
+</div>
+</div>
+</div>
+<!-- Time estimate strip footer -->
+<div class="mt-6 pt-4 border-t border-outline-variant/50 flex flex-col sm:flex-row items-center justify-between text-body-sm font-body-sm text-on-surface-variant gap-2 bg-surface-container-low/50 px-4 py-2.5 rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">schedule</span>
+<span class=""><strong>Tiempo de dictamen estimado:</strong> 48 a 72 horas hábiles.</span>
+</div>
+<div class="flex items-center gap-1.5 text-primary font-medium">
+<span class="material-symbols-outlined text-amber-600" style="font-size: 18px;">event</span>
+<span class="">Fecha límite de resolución: <strong>28 de Febrero de 2026</strong></span>
+</div>
+</div>
+</div>
+<!-- BENTO GRID CONTENT SECTION (2 Columns: 2/3 and 1/3) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- LEFT / MAIN COLUMN (8 Columns) -->
+<div class="lg:col-span-8 space-y-6">
+<!-- CARD 1: Selected Academic Program -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-institution-level1 hover:border-secondary/40 transition duration-200">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full text-label-sm font-label-sm uppercase bg-[#0B2A5B]/10 text-primary font-bold tracking-wide">
+                Programa Seleccionado
+              </span>
+<span class="px-2.5 py-1 rounded-full text-label-sm font-label-sm uppercase bg-surface-container text-on-surface-variant font-medium">
+                RVOE SEP Federal No. 2024-ACAD-091
+              </span>
+</div>
+<span class="text-label-sm font-label-sm font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              Convocatoria Vigente
+            </span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">
+            Licenciatura en Ingeniería de Software e Inteligencia Artificial
+          </h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">
+            Formación universitaria orientada a arquitectura de software moderna, modelos generativos, algoritmos de aprendizaje automático y sistemas escalables en la nube.
+          </p>
+<!-- Key Metrics Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 py-4 px-4 bg-surface-container-low rounded-lg border border-outline-variant/40">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">laptop_mac</span>
+</div>
+<div>
+<span class="text-[11px] uppercase tracking-wider text-outline font-semibold block">Modalidad</span>
+<span class="text-label-md font-label-md text-primary font-bold">100% En Línea</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">pace</span>
+</div>
+<div>
+<span class="text-[11px] uppercase tracking-wider text-outline font-semibold block">Duración</span>
+<span class="text-label-md font-label-md text-primary font-bold">9 Cuatrimestres (3 años)</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">calendar_month</span>
+</div>
+<div>
+<span class="text-[11px] uppercase tracking-wider text-outline font-semibold block">Inicio de clases</span>
+<span class="text-label-md font-label-md text-primary font-bold">18 de Mayo de 2026</span>
+</div>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="flex items-center justify-between pt-2">
+<a class="inline-flex items-center gap-1.5 text-secondary hover:text-primary text-label-md font-label-md font-semibold transition" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">article</span>
+<span class="">Ver plan de estudios</span>
+</a>
+<div class="flex items-center gap-2">
+<span class="text-body-sm font-body-sm text-outline text-xs">Clave de carrera: <strong class="text-on-surface-variant font-mono">LIS-IA-26</strong></span>
+</div>
+</div>
+</div>
+<!-- CARD 2: Expediente Digital Interactivo -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-institution-level1">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-outline-variant/60">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-size: 22px;">folder_shared</span>
+<h3 class="text-title font-title text-primary font-bold">Expediente Digital del Aspirante</h3>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+                Carga de documentos oficiales con validez jurídica ante la Secretaría de Educación Pública.
+              </p>
+</div>
+<!-- Progress mini bar -->
+<div class="w-full sm:w-48 bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/50">
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-1.5">
+<span class="text-on-surface-variant font-bold">Documentos validados</span>
+<span class="text-primary font-bold">3 de 4 (75%)</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-2 rounded-full w-3/4"></div>
+</div>
+</div>
+</div>
+<!-- Documents List / Table Format -->
+<div class="mt-4 divide-y divide-outline-variant/40">
+<!-- Documento 1: Certificado -->
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-container-low/30 px-2 rounded-lg transition">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200">
+<span class="material-symbols-outlined" style="font-size: 22px;">verified_user</span>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-primary font-semibold">Certificado de Bachillerato / Preparatoria</h4>
+<div class="flex items-center gap-2 mt-0.5 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-xs">Archivo: Certificado_Morales_Mat.pdf (1.8 MB)</span>
+<span class="text-outline-variant">•</span>
+<span class="text-xs text-emerald-700 font-medium">Validado ante SEP</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:self-center self-end">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-label-sm font-label-sm font-bold bg-emerald-100/70 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-emerald-800" style="font-size: 16px;">check_circle</span>
+                  Aprobado ✓
+                </span>
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container-low transition" title="Ver documento" type="button">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+</div>
+</div>
+<!-- Documento 2: Acta de Nacimiento -->
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-container-low/30 px-2 rounded-lg transition">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200">
+<span class="material-symbols-outlined" style="font-size: 22px;">verified_user</span>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-primary font-semibold">Acta de Nacimiento actualizada</h4>
+<div class="flex items-center gap-2 mt-0.5 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-xs">Archivo: Acta_Nac_Certificada_2026.pdf (620 KB)</span>
+<span class="text-outline-variant">•</span>
+<span class="text-xs text-emerald-700 font-medium">Formato digital válido</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:self-center self-end">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-label-sm font-label-sm font-bold bg-emerald-100/70 text-emerald-800 border border-emerald-200">
+<span class="material-symbols-outlined text-emerald-800" style="font-size: 16px;">check_circle</span>
+                  Aprobado ✓
+                </span>
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container-low transition" title="Ver documento" type="button">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+</div>
+</div>
+<!-- Documento 3: INE / Pasaporte -->
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-container-low/30 px-2 rounded-lg transition">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200">
+<span class="material-symbols-outlined" style="font-size: 22px;">badge</span>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-primary font-semibold">Identificación Oficial (INE / Pasaporte)</h4>
+<div class="flex items-center gap-2 mt-0.5 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-xs">Archivo: INE_Anverso_Reverso.pdf (1.2 MB)</span>
+<span class="text-outline-variant">•</span>
+<span class="text-xs text-on-surface-variant">Recibido el 22 Feb 2026</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:self-center self-end">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-label-sm font-label-sm font-bold bg-amber-100/70 text-[#8A5F00] border border-amber-200">
+<span class="material-symbols-outlined text-[#8A5F00]" style="font-size: 16px;">hourglass_empty</span>
+                  En revisión ⏳
+                </span>
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container-low transition" title="Ver documento" type="button">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+</div>
+</div>
+<!-- Documento 4: Comprobante de Domicilio (ACCIÓN REQUERIDA) -->
+<div class="py-4 px-3 rounded-lg bg-red-50/50 border border-red-200 flex flex-col gap-3 my-1">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-lg bg-red-100 text-red-700 flex items-center justify-center shrink-0 border border-red-300">
+<span class="material-symbols-outlined" style="font-size: 22px;">warning</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="text-label-lg font-label-lg text-red-950 font-bold">Comprobante de Domicilio reciente</h4>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-label-sm font-label-sm font-bold bg-red-200 text-red-800">
+                        Acción requerida ⚠️
+                      </span>
+</div>
+<p class="text-body-sm font-body-sm text-red-900 mt-1">
+                      El documento presenta bordes cortados o baja resolución. Por favor vuelve a cargarlo con las cuatro esquinas visibles y vigencia menor a 3 meses (CFE, Agua o Telefonía fija).
+                    </p>
+</div>
+</div>
+<!-- Botón directo para subir nuevo archivo -->
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#0B2A5B] text-white hover:bg-secondary font-label-md text-label-md font-bold transition shadow-sm shrink-0 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[#F2A900]" style="font-size: 20px;">upload_file</span>
+<span class="">Subir nuevo archivo</span>
+</button>
+</div>
+</div>
+<!-- Documento Opcional: Carta de Motivos -->
+<div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-container-low/30 px-2 rounded-lg transition">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-lg bg-surface-container text-outline flex items-center justify-center shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined" style="font-size: 22px;">description</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="text-label-lg font-label-lg text-on-surface font-medium">Carta de motivos académicos</h4>
+<span class="text-label-sm font-label-sm text-outline">(Beca y Mérito)</span>
+</div>
+<p class="text-body-sm font-body-sm text-outline mt-0.5">
+                    Permite acceder a la evaluación para el Comité de Becas de Excelencia en Tecnología.
+                  </p>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:self-center self-end">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-label-sm font-label-sm font-medium bg-surface-container text-outline">
+                  Opcional / No subido
+                </span>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-secondary text-secondary hover:bg-surface-container-low font-label-md text-label-md font-semibold transition" type="button">
+<span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+<span class="">Subir</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom guidance note -->
+<div class="mt-4 pt-3 border-t border-outline-variant/40 flex items-center gap-2 text-xs text-outline">
+<span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+<span class="">Tus documentos son resguardados bajo la Ley Federal de Protección de Datos Personales en Posesión de Particulares.</span>
+</div>
+</div>
+</div>
+<!-- RIGHT / SIDEBAR COLUMN (4 Columns) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- CARD: Mensajes del Equipo de Admisiones -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-institution-level1">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant/60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">forum</span>
+<h3 class="text-title font-title text-primary font-bold">Mensajes de Admisiones</h3>
+</div>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+</div>
+<!-- Advisor Metadata Banner -->
+<div class="mt-3.5 flex items-center gap-3 p-3 rounded-lg bg-surface-container-low border border-outline-variant/50">
+<img alt="Foto de la Lic. Sofia Arismendi" class="h-10 w-10 rounded-full object-cover border border-white" data-alt="Professional corporate headshot of Sofia Arismendi, a Mexican university admissions officer with glasses and a warm reassuring smile, wearing formal dark blue attire in a contemporary higher education office setting with soft warm light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzh0D3owyr5R9W9OpeiNRrnt66RVUfeiOGMi1NngyqKnKVMuPbS2CmiNdvMy8dvid5WZP427lovKyoa9AvLITGiC_LmZYfVO0UjixZjNvNkRwvomhizR_IdzAXBA0Th6qkn0xt6lGS7qLLvMDNDKeKSVfKcUrD9I_xlyELn2DUCpUlUoTm-NkJ9uk7GTjPcJ5EckQs7w5DS7TeWkxFETNoDolg1b3ESm56lM-iiT4UZEs6EmesFqDFcQ">
+<div>
+<h4 class="text-label-md font-label-md text-primary font-bold">Lic. Sofia Arismendi</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Coordinación de Admisiones e Ingreso</p>
+</div>
+</div>
+<!-- Message Feed Bubble -->
+<div class="mt-3.5 space-y-3">
+<div class="p-3.5 rounded-lg bg-surface-container/60 border-l-4 border-amber-500 text-body-sm font-body-sm text-on-surface">
+<p class="leading-relaxed">
+                "Hola Mateo, hemos recibido tu expediente. Por favor actualiza tu comprobante de domicilio para concluir la validación de tu matrícula."
+              </p>
+<div class="flex items-center justify-between mt-2 pt-1 text-xs text-outline">
+<span class="font-medium text-amber-700">Comentario de validación</span>
+<span class="">Hace 3 horas</span>
+</div>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<div class="mt-4 space-y-2">
+<a class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#25D366] text-white font-label-md text-label-md font-bold hover:bg-[#128C7E] transition shadow-sm active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">chat</span>
+<span class="">Responder por WhatsApp Institucional</span>
+</a>
+<button class="w-full text-center py-2 text-label-sm font-label-sm text-secondary hover:text-primary font-semibold transition" type="button">
+              Escribir consulta en la plataforma
+            </button>
+</div>
+</div>
+<!-- CARD: Próximos Pasos tras Admisión -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-institution-level1">
+<div class="flex items-center gap-2 pb-3 border-b border-outline-variant/60">
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">next_plan</span>
+<h3 class="text-title font-title text-primary font-bold">Próximos Pasos tras Admisión</h3>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-2.5">
+            Una vez aprobado tu dictamen académico por la Comisión Escolar, estos serán tus siguientes trámites:
+          </p>
+<ol class="mt-4 space-y-3.5">
+<li class="flex items-start gap-3">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-surface-container-high text-primary font-bold text-xs shrink-0 mt-0.5">
+                1
+              </span>
+<div class="text-body-sm font-body-sm">
+<strong class="text-primary block font-semibold">Asignación de matrícula y credencial</strong>
+<span class="text-on-surface-variant text-xs">Creación de cuenta <span class="font-mono text-secondary">@alumnos.iinicia.edu.mx</span></span>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-surface-container-high text-primary font-bold text-xs shrink-0 mt-0.5">
+                2
+              </span>
+<div class="text-body-sm font-body-sm">
+<strong class="text-primary block font-semibold">Taller de inducción virtual</strong>
+<span class="text-on-surface-variant text-xs">Acceso guiado a la plataforma de aprendizaje Moodle 4.3</span>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-surface-container-high text-primary font-bold text-xs shrink-0 mt-0.5">
+                3
+              </span>
+<div class="text-body-sm font-body-sm">
+<strong class="text-primary block font-semibold">Inscripción y selección de horario</strong>
+<span class="text-on-surface-variant text-xs">Pago de inscripción cuatrimestral y registro de materias</span>
+</div>
+</li>
+</ol>
+</div>
+<!-- CARD: Mesa de Ayuda y Contacto -->
+<div class="bg-gradient-to-br from-primary-container to-[#001b3e] text-white rounded-xl p-5 shadow-institution-level2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#F2A900]" style="font-size: 22px;">headset_mic</span>
+<h3 class="text-title font-title text-white font-bold">Mesa de Ayuda a Aspirantes</h3>
+</div>
+<p class="text-body-sm font-body-sm text-surface-container-high/90 mt-2">
+            ¿Tienes dudas técnicas o de tu documentación oficial? Nuestro equipo de admisiones te orienta en tiempo real.
+          </p>
+<div class="mt-4 space-y-2.5 text-body-sm font-body-sm">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#F2A900]" style="font-size: 18px;">call</span>
+<span class="font-medium">+52 (55) 8432-9000 ext. 102</span>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#F2A900]" style="font-size: 18px;">mail</span>
+<a class="text-surface-container-high underline hover:text-white transition" href="mailto:admisiones@iinicia.edu.mx">admisiones@iinicia.edu.mx</a>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#F2A900]" style="font-size: 18px;">schedule</span>
+<span class="text-surface-container-high text-xs">Lunes a Viernes 8:00 a 20:00 hrs (CDMX)</span>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-white/15 flex items-center justify-between">
+<span class="text-xs text-surface-container-high">Folio: ADM-2026-0489</span>
+<span class="text-xs font-bold text-[#F2A900] bg-white/10 px-2 py-0.5 rounded">Prioridad Alta</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FOOTER -->
+<footer class="mt-12 bg-surface-container-lowest border-t border-outline-variant py-8">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-body-sm font-body-sm text-outline">
+<div class="flex items-center gap-3">
+<img alt="Logo IINICIA Institución" class="h-6 w-6 object-contain opacity-80" src="https://lh3.googleusercontent.com/aida/AEtjO1UWW0Ram5pU-Q88cq1Cn9Hkj83kIW2YQmvczTpMCOOJinKfn4ANuAyZW6EEFoUot6eBmXwA5BUK9xGCIk0QkoBAPmTVYnw8sdPbvfh6DvWUr7vvBFypnfIkF0VNNwkBkdzyQrc9q59_S4hNuEXGFd5HyoaJTM_mmaM3jQRBGMbHqA0-4aRgAIqvXpug2hvv4SzyE38OpJIY9d5fW2vdMirrPr3XZ8pn3YuPhaDOP6wXOAzUlS7l_Jhgdesf">
+<span class="">© 2026 IINICIA - Instituto de Innovación y Ciencias Aplicadas. Todos los derechos reservados.</span>
+</div>
+<div class="flex items-center gap-6 text-label-md font-label-md">
+<a class="hover:text-primary transition" href="#">Aviso de Privacidad</a>
+<a class="hover:text-primary transition" href="#">Reglamento General de Admisiones</a>
+<a class="hover:text-primary transition" href="#">Directorio Institucional</a>
+</div>
+</div>
+</footer>
+
+
+</body></html>

@@ -1,0 +1,839 @@
+<!DOCTYPE html><html class="h-full bg-surface" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mi IINICIA – Portal Docente</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#00458d",
+            "secondary": "#235eac",
+            "inverse-primary": "#aec6ff",
+            "on-primary-fixed": "#001a42",
+            "primary-container": "#0b2a5b",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed-variant": "#604100",
+            "surface-container-lowest": "#ffffff",
+            "surface": "#f9f9ff",
+            "on-surface": "#111c2d",
+            "outline-variant": "#c4c6d0",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "on-tertiary-container": "#c48800",
+            "primary-fixed": "#d8e2ff",
+            "surface-variant": "#d8e3fb",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#dee8ff",
+            "secondary-container": "#7aacff",
+            "outline": "#747780",
+            "primary-fixed-dim": "#aec6ff",
+            "surface-container-highest": "#d8e3fb",
+            "inverse-surface": "#263143",
+            "surface-container-low": "#f0f3ff",
+            "tertiary-container": "#3d2800",
+            "on-primary-container": "#7a93ca",
+            "secondary-fixed": "#d6e3ff",
+            "tertiary-fixed-dim": "#ffba3b",
+            "surface-container": "#e7eeff",
+            "surface-dim": "#cfdaf2",
+            "on-secondary-fixed": "#001b3e",
+            "on-secondary-container": "#003e80",
+            "on-error": "#ffffff",
+            "surface-bright": "#f9f9ff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#ffdead",
+            "inverse-on-surface": "#ecf1ff",
+            "on-tertiary-fixed": "#281900",
+            "tertiary": "#231500",
+            "on-secondary": "#ffffff",
+            "secondary-fixed-dim": "#aac7ff",
+            "primary": "#00163a",
+            "surface-tint": "#455e91",
+            "on-primary-fixed-variant": "#2c4678",
+            "background": "#f9f9ff",
+            "on-surface-variant": "#44474f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2.5rem",
+            "gutter-desktop": "2rem",
+            "margin": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter": "1.5rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem",
+            "gutter-mobile": "1rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "title": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .shadow-academic-sm {
+      box-shadow: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+    }
+    .shadow-academic-md {
+      box-shadow: 0 4px 6px -2px rgba(11, 42, 91, 0.05), 0 10px 15px -3px rgba(11, 42, 91, 0.08);
+    }
+    .shadow-academic-lg {
+      box-shadow: 0 10px 25px -5px rgba(11, 42, 91, 0.12), 0 20px 25px -5px rgba(11, 42, 91, 0.08);
+    }
+  </style>
+</head>
+<body class="h-full bg-surface text-on-surface flex overflow-hidden font-body-md text-body-md antialiased selection:bg-tertiary-fixed selection:text-primary">
+<!-- 1. BARRA LATERAL (SIDEBAR DOCENTE FIJA) -->
+<aside class="w-72 bg-primary-container flex flex-col justify-between shrink-0 select-none z-30 transition-all duration-300">
+<div class="flex flex-col h-full">
+<!-- Header del Sidebar con Brand Identity -->
+<div class="px-space-md py-space-lg flex flex-col gap-space-sm border-b border-on-primary-container/20">
+<div class="flex items-center gap-3"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="IINICIA Ciencias Aplicadas" class="h-10 w-auto object-contain brightness-0 invert"></div>
+<div class="flex items-center justify-between pt-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary text-surface-container-lowest font-label-sm text-label-sm tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim animate-pulse"></span>
+            PORTAL DOCENTE v2.4
+          </span>
+<span class="font-label-sm text-[10px] text-on-primary-container font-semibold">RVOE-SEP</span>
+</div>
+</div>
+<!-- Menú de Navegación Docente -->
+<nav class="flex-1 px-space-sm py-space-md space-y-1 overflow-y-auto">
+<!-- Inicio (Activo) -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg bg-secondary text-surface-container-lowest font-label-md text-label-md font-bold shadow-sm transition-all duration-200" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="">Inicio</span>
+</div>
+<span class="w-1.5 h-4 rounded-full bg-tertiary-fixed-dim"></span>
+</a>
+<!-- Mis Cursos -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-primary-fixed font-label-md text-label-md hover:bg-secondary/40 hover:text-surface-container-lowest transition-all duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="menu_book">menu_book</span>
+<span class="">Mis cursos</span>
+</div>
+<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-primary text-secondary-fixed">3</span>
+</a>
+<!-- Por Calificar -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-primary-fixed font-label-md text-label-md hover:bg-secondary/40 hover:text-surface-container-lowest transition-all duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="">Por calificar</span>
+</div>
+<span class="px-2 py-0.5 text-xs font-bold rounded-full bg-tertiary-fixed-dim text-primary">14</span>
+</a>
+<!-- Estudiantes -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-primary-fixed font-label-md text-label-md hover:bg-secondary/40 hover:text-surface-container-lowest transition-all duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="groups">groups</span>
+<span class="">Estudiantes</span>
+</div>
+<span class="text-xs text-on-primary-container">86</span>
+</a>
+<!-- Calendario -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-primary-fixed font-label-md text-label-md hover:bg-secondary/40 hover:text-surface-container-lowest transition-all duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+<span class="">Calendario</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+</a>
+<!-- Avisos -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-primary-fixed font-label-md text-label-md hover:bg-secondary/40 hover:text-surface-container-lowest transition-all duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="campaign">campaign</span>
+<span class="">Avisos</span>
+</div>
+<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-primary/70 text-on-primary-container">2</span>
+</a>
+<!-- Perfil -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-primary-fixed font-label-md text-label-md hover:bg-secondary/40 hover:text-surface-container-lowest transition-all duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+<span class="">Perfil y Firma</span>
+</div>
+</a>
+<div class="pt-4 border-t border-on-primary-container/20 mt-4">
+<span class="px-3.5 text-[11px] font-bold uppercase tracking-wider text-on-primary-container">Herramientas Docentes</span>
+<div class="mt-2 space-y-1">
+<a class="flex items-center gap-3 px-3.5 py-2 rounded-lg text-sm text-primary-fixed hover:bg-secondary/30 transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="fact_check">fact_check</span>
+<span class="">Captura de Kárdex</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2 rounded-lg text-sm text-primary-fixed hover:bg-secondary/30 transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="local_library">local_library</span>
+<span class="">Repositorio RVOE</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Ficha del Docente (Footer del Sidebar) -->
+<div class="p-space-md border-t border-on-primary-container/20 bg-primary/80">
+<div class="flex items-center gap-3">
+<img class="w-11 h-11 rounded-full object-cover ring-2 ring-tertiary-fixed-dim/70 shrink-0" data-alt="Professional academic headshot photograph of a distinguished Mexican university professor wearing formal spectacles and an elegant charcoal tailored suit with an authentic confident smile. The image is bathed in soft, warm studio rim lighting against a crisp scholarly navy background, communicating prestige, research rigor, and educational leadership." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBElEtCrI3A5EaI4Yk6IeF6ybj2n-djgmhCIsGpXPHb6uHp83y3l4VXf2WsWBqSMDZ6DaAtSid2mfac9yOONic6UP_EyxngXMkFloG4oQ21QPHPS0YxTSkOTSAUtZPjX_LgoKIK65PnV8dGbz1UCUacTVrDQioas7nf_gUNSRu876H9E_wjzKehkaCb5hv-5bHZoSyW1fXpyJdPkbFeyqHRXTsVnLkav8aYMUAZvc_tLN9wdwbT1E_cDw">
+<div class="min-w-0 flex-1">
+<h4 class="font-headline-sm text-sm font-bold text-surface-container-lowest truncate">Dr. Alejandro Mendoza R.</h4>
+<p class="font-body-sm text-[11px] text-primary-fixed-dim truncate">Catedrático Titular • IA</p>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-[10px] bg-secondary/80 text-surface-container-lowest px-1.5 py-0.2 rounded font-mono">DOC-2022-419</span>
+</div>
+</div>
+<button class="text-on-primary-container hover:text-surface-container-lowest transition-colors p-1.5 rounded-lg hover:bg-secondary/30" title="Ajustes de cuenta">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+<!-- CONTENEDOR CENTRAL: TOP BAR + CONTENIDO PRINCIPAL -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- 2. BARRA SUPERIOR (TOP BAR) -->
+<header class="h-16 bg-surface-container-lowest border-b border-outline-variant/30 px-space-lg flex items-center justify-between shrink-0 shadow-sm z-20">
+<!-- Lado Izquierdo: Breadcrumbs & Selector de Ciclo -->
+<div class="flex items-center gap-4"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-5DfoJQ9BrFApnnW4YP6ogjXDtAFtWBHwFmc3ORLQ50mCzYqrJVkKCfSU-HhJbq2yT8aRgnLgvqfVfzYOc-1G7exMspqpNLPs5WIW5IlOZ0e08XQH_2KoNJYhRTFdimXioqBNR5tUAxKP_3Pn4uIIH7pi-zET_9poSADMJmdEDvtsZggV5YXIIJCh8C1cvtLBQLRYdUxYkv3KKhTtXu9i1X07fibWIjiZpvjMJDoHNHT3VKBAyr_m36QSlpQVWKvIJRQ" alt="Logo IINICIA" class="h-9 w-auto object-contain pr-2 mr-1 hidden sm:block">
+<div class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<span class="text-secondary font-semibold">Mi IINICIA</span>
+<span class="material-symbols-outlined text-sm text-outline" data-icon="chevron_right">chevron_right</span>
+<span class="">Portal Docente</span>
+<span class="material-symbols-outlined text-sm text-outline" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface font-bold">Dashboard Principal</span>
+</div>
+<div class="h-4 w-px bg-outline-variant/50 hidden md:block"></div>
+<!-- Selector de Ciclo Activo -->
+<div class="hidden lg:flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/40">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="school">school</span>
+<select class="bg-transparent border-0 p-0 text-xs font-headline-sm font-semibold text-primary focus:ring-0 cursor-pointer">
+<option>Ciclo 2026-1 (Febrero - Mayo)</option>
+<option>Ciclo 2025-3 (Septiembre - Diciembre)</option>
+<option>Ciclo 2025-2 (Mayo - Agosto)</option>
+</select>
+</div>
+</div>
+<!-- Buscador Rápido -->
+<div class="flex-1 max-w-md mx-6 hidden xl:block">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]" data-icon="search">search</span>
+<input class="w-full bg-surface text-on-surface text-xs font-body-sm pl-9 pr-4 py-2 rounded-lg border border-outline-variant/40 focus:border-secondary focus:ring-2 focus:ring-secondary/20 placeholder:text-outline transition-all" placeholder="Buscar estudiante, entrega, actividad o tema..." type="text">
+<span class="absolute right-2.5 top-2 text-[10px] font-mono bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded border border-outline-variant/40">⌘K</span>
+</div>
+</div>
+<!-- Acciones de Cabecera y Status -->
+<div class="flex items-center gap-3">
+<!-- Botón de Acción Principal Ámbar -->
+<button class="flex items-center gap-2 bg-tertiary-fixed-dim hover:bg-tertiary-fixed text-primary px-3.5 py-2 rounded-lg font-label-md text-label-md font-bold shadow-sm transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="campaign">campaign</span>
+<span class="hidden sm:inline">+ Enviar aviso a grupo</span>
+</button>
+<div class="h-6 w-px bg-outline-variant/50 mx-1 hidden sm:block"></div>
+<!-- Botón Biblioteca Digital -->
+<button class="hidden sm:flex items-center gap-1.5 text-on-surface-variant hover:text-primary px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low transition-colors font-label-sm text-xs font-semibold" title="Biblioteca Digital Docente">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="menu_book">menu_book</span>
+<span class="">Biblioteca</span>
+</button>
+<!-- Notificaciones -->
+<div class="relative">
+<button class="p-2 text-on-surface-variant hover:text-primary rounded-lg hover:bg-surface-container-low transition-colors relative">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-tertiary-fixed-dim text-primary text-[10px] font-extrabold rounded-full flex items-center justify-center ring-2 ring-surface-container-lowest">5</span>
+</button>
+</div>
+<!-- Estado de Conexión Campus -->
+<div class="hidden 2xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant/40">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-medium">Campus CDMX: Conectado</span>
+</div>
+</div>
+</header>
+<!-- 3. ÁREA PRINCIPAL CON SCROLL INDEPENDIENTE -->
+<main class="flex-1 overflow-y-auto bg-surface p-space-lg space-y-space-lg">
+<!-- Saludo Personalizado y Encabezado de Sesión -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface-container-lowest p-space-lg rounded-xl border border-outline-variant/30 shadow-academic-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">¡Buenas tardes, Dr. Mendoza! 👋</h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+<span class="font-semibold text-on-surface">Lunes 23 de Febrero de 2026</span> • Semana 6 del Cuatrimestre. Tienes <span class="font-bold text-secondary">14 entregas pendientes</span> de revisión y <span class="font-bold text-primary">2 sesiones en vivo</span> programadas para esta semana.
+          </p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-secondary text-secondary hover:bg-surface-container-low font-label-md text-label-md font-semibold transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span class="">Descargar Reporte de Avance (PDF)</span>
+</button>
+</div>
+</div>
+<!-- Cuadrícula de 4 Métricas Clave (KPIs) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- KPI 1: Cursos Asignados -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-outline-variant/30 shadow-academic-sm flex flex-col justify-between hover:shadow-academic-md transition-shadow duration-200">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface-variant">Cursos Asignados</span>
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_stories">auto_stories</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl font-extrabold text-primary">3</span>
+<span class="text-xs font-semibold text-on-surface-variant">Materias activas</span>
+</div>
+<div class="mt-2 flex items-center justify-between text-xs pt-2 border-t border-outline-variant/20">
+<span class="text-on-surface-variant">Licenciatura y Maestría</span>
+<span class="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">100% EN LÍNEA</span>
+</div>
+</div>
+</div>
+<!-- KPI 2: Pendientes por Calificar -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-outline-variant/30 shadow-academic-sm flex flex-col justify-between hover:shadow-academic-md transition-shadow duration-200 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-tertiary-fixed-dim/10 rounded-bl-full pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface-variant">Por Calificar</span>
+<div class="w-9 h-9 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="rate_review">rate_review</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl font-extrabold text-primary">14</span>
+<span class="text-xs font-semibold text-on-surface-variant">entregas</span>
+</div>
+<div class="mt-2 flex items-center justify-between text-xs pt-2 border-t border-outline-variant/20">
+<span class="text-amber-800 font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                6 vencen en &lt;24 hrs
+              </span>
+<span class="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold uppercase">Prioridad</span>
+</div>
+</div>
+</div>
+<!-- KPI 3: Estudiantes Activos -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-outline-variant/30 shadow-academic-sm flex flex-col justify-between hover:shadow-academic-md transition-shadow duration-200">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface-variant">Estudiantes Activos</span>
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="people_alt">people_alt</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl font-extrabold text-primary">86</span>
+<span class="text-xs font-semibold text-on-surface-variant">matriculados</span>
+</div>
+<div class="mt-2 flex items-center justify-between text-xs pt-2 border-t border-outline-variant/20">
+<span class="text-on-surface-variant">En 3 cohortes</span>
+<span class="font-label-sm text-[10px] text-emerald-700 font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                +4 nuevos ingresos
+              </span>
+</div>
+</div>
+</div>
+<!-- KPI 4: Estudiantes en Riesgo -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-error/30 shadow-academic-sm flex flex-col justify-between hover:shadow-academic-md transition-shadow duration-200 bg-gradient-to-b from-error-container/20 to-transparent">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-error-container">Estudiantes en Riesgo</span>
+<div class="w-9 h-9 rounded-lg bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="warning">warning</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl font-extrabold text-error">5</span>
+<span class="text-xs font-semibold text-on-surface-variant">requieren apoyo</span>
+</div>
+<div class="mt-2 flex items-center justify-between text-xs pt-2 border-t border-error/20">
+<span class="text-on-error-container text-[11px]">&gt;7 días sin actividad</span>
+<button class="font-label-sm text-[10px] text-error hover:underline font-bold">Ver expediente &gt;</button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECCIÓN: MIS CURSOS ASIGNADOS (GRID ACADÉMICO) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary">Mis Cursos Asignados</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Aulas virtuales activas bajo tu titularidad docente en el Ciclo 2026-1</p>
+</div>
+<a class="font-label-md text-label-md font-semibold text-secondary hover:text-primary flex items-center gap-1 transition-colors" href="#">
+<span class="">Ver sílabos y planeaciones</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<!-- Curso 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/40 shadow-academic-sm hover:shadow-academic-md transition-all duration-200 flex flex-col justify-between overflow-hidden group">
+<div class="p-space-lg space-y-4">
+<!-- Header Curso -->
+<div class="flex items-start justify-between gap-2">
+<span class="font-label-sm text-[10px] tracking-wider uppercase font-bold px-2 py-0.5 rounded bg-primary-container text-surface-container-lowest">
+                  IA-301 • LICENCIATURA
+                </span>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-mono bg-surface-container px-2 py-0.5 rounded">
+                  SW-2026-A
+                </span>
+</div>
+<!-- Título Curso -->
+<div>
+<h3 class="font-headline-sm text-base font-bold text-primary group-hover:text-secondary transition-colors">
+                  Fundamentos de Inteligencia Artificial y Agentes Inteligentes
+                </h3>
+<p class="font-body-sm text-xs text-on-surface-variant mt-1">3er Cuatrimestre • 32 Alumnos inscritos</p>
+</div>
+<!-- Barra de Progreso Curricular -->
+<div class="space-y-1.5 pt-2">
+<div class="flex justify-between text-xs font-label-md">
+<span class="text-on-surface-variant font-medium">Avance temático RVOE</span>
+<span class="text-primary font-bold">68%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 68%"></div>
+</div>
+</div>
+<!-- Próxima Entrega Card Inset -->
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/30 text-xs space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-semibold">
+<span class="material-symbols-outlined text-amber-600 text-sm" data-icon="pending_actions">pending_actions</span>
+<span class="">Próxima entrega relevante:</span>
+</div>
+<p class="font-bold text-on-surface truncate">Proyecto Práctico 2: Redes Bayesianas</p>
+<p class="text-[11px] text-amber-800 font-medium">Cierre: Jueves 26 Feb, 23:59 hrs</p>
+</div>
+</div>
+<!-- Footer con Botones -->
+<div class="px-space-lg py-3 bg-surface border-t border-outline-variant/20 flex items-center justify-between gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-primary hover:bg-secondary text-surface-container-lowest font-label-md text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="cast_for_education">cast_for_education</span>
+<span class="">Entrar al Campus</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Calificaciones del grupo">
+<span class="material-symbols-outlined text-[18px]" data-icon="grading">grading</span>
+</button>
+</div>
+</div>
+<!-- Curso 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/40 shadow-academic-sm hover:shadow-academic-md transition-all duration-200 flex flex-col justify-between overflow-hidden group">
+<div class="p-space-lg space-y-4">
+<!-- Header Curso -->
+<div class="flex items-start justify-between gap-2">
+<span class="font-label-sm text-[10px] tracking-wider uppercase font-bold px-2 py-0.5 rounded bg-primary-container text-surface-container-lowest">
+                  CLD-302 • LICENCIATURA
+                </span>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-mono bg-surface-container px-2 py-0.5 rounded">
+                  SW-2026-B
+                </span>
+</div>
+<!-- Título Curso -->
+<div>
+<h3 class="font-headline-sm text-base font-bold text-primary group-hover:text-secondary transition-colors">
+                  Arquitectura Cloud y Microservicios
+                </h3>
+<p class="font-body-sm text-xs text-on-surface-variant mt-1">3er Cuatrimestre • 28 Alumnos inscritos</p>
+</div>
+<!-- Barra de Progreso Curricular -->
+<div class="space-y-1.5 pt-2">
+<div class="flex justify-between text-xs font-label-md">
+<span class="text-on-surface-variant font-medium">Avance temático RVOE</span>
+<span class="text-primary font-bold">72%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 72%"></div>
+</div>
+</div>
+<!-- Próxima Entrega Card Inset -->
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/30 text-xs space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-semibold">
+<span class="material-symbols-outlined text-amber-600 text-sm" data-icon="pending_actions">pending_actions</span>
+<span class="">Próxima entrega relevante:</span>
+</div>
+<p class="font-bold text-on-surface truncate">Laboratorio Docker &amp; Kubernetes</p>
+<p class="text-[11px] text-amber-800 font-medium">Cierre: Sábado 28 Feb, 23:59 hrs</p>
+</div>
+</div>
+<!-- Footer con Botones -->
+<div class="px-space-lg py-3 bg-surface border-t border-outline-variant/20 flex items-center justify-between gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-primary hover:bg-secondary text-surface-container-lowest font-label-md text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="cast_for_education">cast_for_education</span>
+<span class="">Entrar al Campus</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Calificaciones del grupo">
+<span class="material-symbols-outlined text-[18px]" data-icon="grading">grading</span>
+</button>
+</div>
+</div>
+<!-- Curso 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/40 shadow-academic-sm hover:shadow-academic-md transition-all duration-200 flex flex-col justify-between overflow-hidden group">
+<div class="p-space-lg space-y-4">
+<!-- Header Curso -->
+<div class="flex items-start justify-between gap-2">
+<span class="font-label-sm text-[10px] tracking-wider uppercase font-bold px-2 py-0.5 rounded bg-tertiary-fixed-dim text-primary">
+                  ETH-501 • MAESTRÍA IA
+                </span>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-mono bg-surface-container px-2 py-0.5 rounded">
+                  MS-IA-2025
+                </span>
+</div>
+<!-- Título Curso -->
+<div>
+<h3 class="font-headline-sm text-base font-bold text-primary group-hover:text-secondary transition-colors">
+                  Gobernanza y Ética en Algoritmos de IA
+                </h3>
+<p class="font-body-sm text-xs text-on-surface-variant mt-1">Semestre 2 • 26 Investigadores / Maestrantes</p>
+</div>
+<!-- Barra de Progreso Curricular -->
+<div class="space-y-1.5 pt-2">
+<div class="flex justify-between text-xs font-label-md">
+<span class="text-on-surface-variant font-medium">Avance temático RVOE</span>
+<span class="text-primary font-bold">55%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 55%"></div>
+</div>
+</div>
+<!-- Próxima Entrega Card Inset -->
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/30 text-xs space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-semibold">
+<span class="material-symbols-outlined text-amber-600 text-sm" data-icon="pending_actions">pending_actions</span>
+<span class="">Próxima entrega relevante:</span>
+</div>
+<p class="font-bold text-on-surface truncate">Ensayo: Sesgo algorítmico laboral</p>
+<p class="text-[11px] text-amber-800 font-medium">Cierre: Domingo 01 Mar, 18:00 hrs</p>
+</div>
+</div>
+<!-- Footer con Botones -->
+<div class="px-space-lg py-3 bg-surface border-t border-outline-variant/20 flex items-center justify-between gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-primary hover:bg-secondary text-surface-container-lowest font-label-md text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="cast_for_education">cast_for_education</span>
+<span class="">Entrar al Campus</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Calificaciones del grupo">
+<span class="material-symbols-outlined text-[18px]" data-icon="grading">grading</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. LAYOUT INFERIOR DIVIDIDO: 2/3 PENDIENTES & 1/3 AGENDA -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- COLUMNA IZQUIERDA (2/3): BANDEJA DE ENTREGAS POR CALIFICAR -->
+<section class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-space-lg shadow-academic-sm space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Bandeja de Calificación Rápida</h3>
+<span class="bg-tertiary-fixed-dim/30 text-tertiary text-xs font-extrabold px-2 py-0.5 rounded-full">14 pendientes</span>
+</div>
+<p class="font-body-sm text-xs text-on-surface-variant">Entregas de alumnos pendientes de retroalimentación y rúbrica</p>
+</div>
+<div class="flex items-center gap-2">
+<select class="bg-surface text-xs font-semibold text-on-surface-variant border border-outline-variant/40 rounded-lg py-1.5 px-3 focus:ring-secondary focus:border-secondary">
+<option>Todos los cursos</option>
+<option>SW-2026-A (Fundamentos IA)</option>
+<option>SW-2026-B (Arquitectura Cloud)</option>
+<option>MS-IA-2025 (Ética IA)</option>
+</select>
+<button class="px-3 py-1.5 bg-surface-container text-xs font-semibold text-secondary hover:bg-secondary hover:text-surface-container-lowest rounded-lg transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="rule">rule</span>
+<span class="">Rúbrica rápida</span>
+</button>
+</div>
+</div>
+<!-- Items de Entregas -->
+<div class="divide-y divide-outline-variant/20">
+<!-- Item 1 -->
+<div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface/50 rounded-lg px-2 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary font-bold flex items-center justify-center shrink-0 text-sm border border-outline-variant/30">
+                  VM
+                </div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Valeria Mendoza Sánchez</h4>
+<span class="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-red-100 text-red-800 font-bold uppercase tracking-wide">Prioridad Alta</span>
+</div>
+<p class="font-body-sm text-xs text-primary font-semibold mt-0.5">Proyecto Práctico: Microservicios Docker</p>
+<div class="flex items-center gap-3 text-[11px] text-on-surface-variant mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="folder_open">folder_open</span>
+                      Arquitectura Cloud (SW-2026-B)
+                    </span>
+<span class="">•</span>
+<span class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-xs text-outline" data-icon="schedule">schedule</span>
+                      Entregado hace 4 horas
+                    </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-tertiary-fixed-dim hover:bg-tertiary-fixed text-primary font-label-md text-xs font-bold transition-all shadow-sm">
+                  Calificar entrega
+                </button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface/50 rounded-lg px-2 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary font-bold flex items-center justify-center shrink-0 text-sm border border-outline-variant/30">
+                  RS
+                </div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Rodrigo Silva Montes</h4>
+<span class="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold uppercase tracking-wide">En tiempo</span>
+</div>
+<p class="font-body-sm text-xs text-primary font-semibold mt-0.5">Reporte de Clasificador con Algoritmo A*</p>
+<div class="flex items-center gap-3 text-[11px] text-on-surface-variant mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="folder_open">folder_open</span>
+                      Fundamentos de IA (SW-2026-A)
+                    </span>
+<span class="">•</span>
+<span class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-xs text-outline" data-icon="schedule">schedule</span>
+                      Ayer, 23:15 hrs
+                    </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-xs font-bold transition-all border border-outline-variant/30">
+                  Calificar entrega
+                </button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface/50 rounded-lg px-2 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary font-bold flex items-center justify-center shrink-0 text-sm border border-outline-variant/30">
+                  CP
+                </div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Carlos Eduardo Pineda Cruz</h4>
+<span class="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold uppercase tracking-wide">En tiempo</span>
+</div>
+<p class="font-body-sm text-xs text-primary font-semibold mt-0.5">Análisis Comparativo AWS vs GCP</p>
+<div class="flex items-center gap-3 text-[11px] text-on-surface-variant mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="folder_open">folder_open</span>
+                      Arquitectura Cloud (SW-2026-B)
+                    </span>
+<span class="">•</span>
+<span class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-xs text-outline" data-icon="schedule">schedule</span>
+                      Hace 1 día
+                    </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-xs font-bold transition-all border border-outline-variant/30">
+                  Calificar entrega
+                </button>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface/50 rounded-lg px-2 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary font-bold flex items-center justify-center shrink-0 text-sm border border-outline-variant/30">
+                  AM
+                </div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Andrea Morales Vega</h4>
+<span class="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold uppercase tracking-wide">Próximo a vencer plazo docente</span>
+</div>
+<p class="font-body-sm text-xs text-primary font-semibold mt-0.5">Implementación de Heurísticas en Python</p>
+<div class="flex items-center gap-3 text-[11px] text-on-surface-variant mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="folder_open">folder_open</span>
+                      Fundamentos de IA (SW-2026-A)
+                    </span>
+<span class="">•</span>
+<span class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-xs text-outline" data-icon="schedule">schedule</span>
+                      Hace 2 días
+                    </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-tertiary-fixed-dim hover:bg-tertiary-fixed text-primary font-label-md text-xs font-bold transition-all shadow-sm">
+                  Calificar entrega
+                </button>
+</div>
+</div>
+</div>
+<!-- Enlace de pie de bandeja -->
+<div class="pt-3 border-t border-outline-variant/20 text-center">
+<a class="inline-flex items-center gap-1.5 font-label-md text-xs font-bold text-secondary hover:text-primary transition-colors" href="#">
+<span class="">Ver las 14 entregas pendientes en Bandeja de Calificación</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- COLUMNA DERECHA (1/3): AGENDA DOCENTE & AVISO RÁPIDO -->
+<section class="lg:col-span-4 space-y-space-md">
+<!-- Tarjeta de Agenda y Próximas Fechas -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-space-md shadow-academic-sm space-y-4">
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="event_note">event_note</span>
+<h3 class="font-headline-sm text-sm font-bold text-primary">Próximas Sesiones y Cierres</h3>
+</div>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Semana 6</span>
+</div>
+<!-- Timeline de Eventos -->
+<div class="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/40">
+<!-- Evento 1: Masterclass Hoy -->
+<div class="relative pl-7 group">
+<div class="absolute left-1.5 top-1 w-3.5 h-3.5 rounded-full bg-secondary ring-4 ring-surface-container-lowest"></div>
+<div class="bg-surface p-2.5 rounded-lg border border-outline-variant/30 group-hover:border-secondary transition-colors">
+<div class="flex items-center justify-between text-xs font-bold">
+<span class="text-secondary font-mono">HOY • 18:30 hrs</span>
+<span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 text-[10px] rounded font-bold">En vivo</span>
+</div>
+<h4 class="text-xs font-bold text-primary mt-1">Masterclass Sincrónica: Agentes Autónomos con LangChain</h4>
+<p class="text-[11px] text-on-surface-variant">Grupo SW-2026-A</p>
+<button class="mt-2 w-full py-1 px-2 rounded bg-secondary hover:bg-primary text-surface-container-lowest text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-xs" data-icon="videocam">videocam</span>
+<span class="">Iniciar clase en Zoom/Meet</span>
+</button>
+</div>
+</div>
+<!-- Evento 2: Cierre de Entrega -->
+<div class="relative pl-7">
+<div class="absolute left-1.5 top-1 w-3.5 h-3.5 rounded-full bg-amber-500 ring-4 ring-surface-container-lowest"></div>
+<div class="bg-surface p-2.5 rounded-lg border border-outline-variant/30">
+<span class="text-[11px] font-mono font-bold text-amber-800">Miércoles 25 Feb • 23:59 hrs</span>
+<h4 class="text-xs font-bold text-primary mt-0.5">Cierre de Actividad 4: Pipeline CI/CD</h4>
+<p class="text-[11px] text-on-surface-variant">Grupo SW-2026-B</p>
+</div>
+</div>
+<!-- Evento 3: Asesoría Tutorial -->
+<div class="relative pl-7">
+<div class="absolute left-1.5 top-1 w-3.5 h-3.5 rounded-full bg-outline ring-4 ring-surface-container-lowest"></div>
+<div class="bg-surface p-2.5 rounded-lg border border-outline-variant/30">
+<span class="text-[11px] font-mono font-bold text-on-surface-variant">Jueves 26 Feb • 17:00 hrs</span>
+<h4 class="text-xs font-bold text-primary mt-0.5">Asesoría Tutorial 1 a 1 para alumnos en riesgo</h4>
+<p class="text-[11px] text-on-surface-variant">Sesión personalizada de acompañamiento</p>
+</div>
+</div>
+<!-- Evento 4: Hito Institucional -->
+<div class="relative pl-7">
+<div class="absolute left-1.5 top-1 w-3.5 h-3.5 rounded-full bg-primary-container ring-4 ring-surface-container-lowest"></div>
+<div class="bg-surface p-2.5 rounded-lg border border-outline-variant/30">
+<span class="text-[11px] font-mono font-bold text-primary">Viernes 27 Feb</span>
+<h4 class="text-xs font-bold text-primary mt-0.5">Límite institucional de captura de calificaciones parciales</h4>
+<p class="text-[11px] text-on-surface-variant">Ciclo 2026-1 (Kárdex oficial)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Widget de "Aviso Rápido a tus Grupos" -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-space-md shadow-academic-sm space-y-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="send">send</span>
+<h3 class="font-headline-sm text-sm font-bold text-primary">Aviso Rápido a tus Grupos</h3>
+</div>
+<form class="space-y-3" onsubmit="event.preventDefault();">
+<div>
+<label class="block text-[11px] font-semibold text-on-surface-variant mb-1">Destinatario:</label>
+<select class="w-full bg-surface text-xs font-medium text-on-surface border border-outline-variant/40 rounded-lg py-1.5 px-2.5 focus:ring-secondary focus:border-secondary">
+<option>SW-2026-A (Fundamentos de IA)</option>
+<option>SW-2026-B (Arquitectura Cloud)</option>
+<option>MS-IA-2025 (Gobernanza y Ética)</option>
+<option>Todos mis alumnos (86 matriculados)</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-semibold text-on-surface-variant mb-1">Mensaje directo al aula virtual:</label>
+<textarea class="w-full bg-surface text-xs text-on-surface border border-outline-variant/40 rounded-lg p-2.5 focus:ring-secondary focus:border-secondary placeholder:text-outline" placeholder="Escribe aquí un aviso urgente, enlace a sesión o recordatorio de rúbrica..." rows="3"></textarea>
+</div>
+<button class="w-full py-2 px-3 rounded-lg bg-tertiary-fixed-dim hover:bg-tertiary-fixed text-primary font-label-md text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm" type="submit">
+<span class="material-symbols-outlined text-[16px]" data-icon="campaign">campaign</span>
+<span class="">Publicar aviso en el aula</span>
+</button>
+</form>
+</div>
+</section>
+</div>
+</main>
+<!-- FOOTER INSTITUCIONAL ACREDITADO (SHARED COMPONENT) -->
+<footer class="bg-primary text-on-primary py-space-sm px-space-lg shrink-0 border-t border-outline-variant/20 z-10">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-xs font-body-sm">
+<div class="flex items-center gap-2">
+<span class="font-bold tracking-tight text-white">IINICIA</span>
+<span class="text-on-primary-container">•</span>
+<span class="text-on-primary-container text-[11px]">
+            © 2024 Instituto de Innovación y Ciencias Aplicadas (IINICIA). Todos los derechos reservados. Institución con Reconocimiento de Validez Oficial de Estudios (RVOE).
+          </span>
+</div>
+<div class="flex items-center gap-4 text-[11px] text-on-primary-container">
+<a class="hover:text-tertiary-fixed-dim transition-colors" href="#">Aviso de Privacidad</a>
+<a class="hover:text-tertiary-fixed-dim transition-colors" href="#">Reglamento Docente</a>
+<a class="hover:text-tertiary-fixed-dim transition-colors" href="#">Soporte Técnico Campus</a>
+</div>
+</div>
+</footer>
+</div>
+
+
+</body></html>

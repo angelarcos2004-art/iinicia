@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noticias y Actualidad Académica | IINICIA</title>
+<!-- Material Symbols Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Plus Jakarta Sans & Inter Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#263143",
+            "on-tertiary-container": "#c48800",
+            "error": "#ba1a1a",
+            "on-primary-fixed": "#001a42",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#dee8ff",
+            "on-primary-container": "#7a93ca",
+            "on-error": "#ffffff",
+            "primary-container": "#0b2a5b",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#d8e2ff",
+            "on-tertiary-fixed-variant": "#604100",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#281900",
+            "on-surface-variant": "#44474f",
+            "primary-fixed-dim": "#aec6ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#3d2800",
+            "outline": "#747780",
+            "secondary-fixed-dim": "#aac7ff",
+            "outline-variant": "#c4c6d0",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "primary": "#00163a",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffba3b",
+            "on-primary-fixed-variant": "#2c4678",
+            "on-secondary-fixed-variant": "#00458d",
+            "inverse-on-surface": "#ecf1ff",
+            "on-secondary-fixed": "#001b3e",
+            "tertiary": "#231500",
+            "secondary": "#235eac",
+            "secondary-container": "#7aacff",
+            "on-background": "#111c2d",
+            "background": "#f9f9ff",
+            "surface-tint": "#455e91",
+            "error-container": "#ffdad6",
+            "surface-container": "#e7eeff",
+            "surface-variant": "#d8e3fb",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "inverse-primary": "#aec6ff",
+            "tertiary-fixed": "#ffdead",
+            "on-secondary-container": "#003e80",
+            "surface-dim": "#cfdaf2",
+            "secondary-fixed": "#d6e3ff",
+            "surface-container-low": "#f0f3ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1.25rem",
+            "gutter-desktop": "2rem",
+            "gutter-mobile": "1rem",
+            "margin": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-desktop": "3rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "display": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .shadow-level-1 {
+      box-shadow: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+    }
+    .shadow-level-2 {
+      box-shadow: 0 4px 6px -2px rgba(11, 42, 91, 0.05), 0 10px 15px -3px rgba(11, 42, 91, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- 1. HEADER / TOPNAVBAR OFICIAL DE IINICIA -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface docked full-width top-0 sticky z-50 border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none">
+<div class="flex items-center justify-between px-space-md lg:px-margin-desktop py-space-md max-w-7xl mx-auto w-full">
+<!-- Logo Institucional -->
+<a class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-secondary rounded-lg p-1" href="#">
+<img alt="IINICIA Logo" class="h-10 w-10 object-contain rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcUt4uPTKQH9QcX2neud5jNZ0z7IzWJxzKXaR78kMqjyAZjnGTDzyd8eTShkR_FewU2j0xNCqfqEPOm3tFyL7c-2xFp0j2PHqEmgdcamqbGdnbB3k5Vma1KDqhBHvTaq7hvCpoklRI1SbFtuyQCi2ASMz-FyP9q5mxY1AytCBDqyStBKXkOOkWJ24Z4O5So38DGtrUzvlza1eKqCjywGtfHtDC0fD2U66vGIn1a2WU4qvyrOhVZ_5kim96vXnYa_AYrwM"/>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-extrabold tracking-tight text-primary dark:text-inverse-primary leading-none">IINICIA</span>
+<span class="text-[0.65rem] tracking-wider text-secondary font-headline-sm font-semibold uppercase mt-0.5">Instituto de Innovación y Ciencias Aplicadas</span>
+</div>
+</a>
+<!-- Navegación Desktop -->
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary font-label-lg text-label-lg font-medium transition-colors" href="#">Universidad</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary font-label-lg text-label-lg font-medium transition-colors" href="#">Oferta Académica</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary font-label-lg text-label-lg font-medium transition-colors" href="#">Admisiones</a>
+<!-- Active link: Noticias -->
+<a class="border-b-2 border-secondary dark:border-secondary-container text-secondary dark:text-secondary-container font-label-lg text-label-lg font-semibold pb-1" href="#">Noticias</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary font-label-lg text-label-lg font-medium transition-colors" href="#">Preguntas Frecuentes</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary font-label-lg text-label-lg font-medium transition-colors" href="#">Contacto</a>
+</nav>
+<!-- Botones de Acción -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-label-md font-label-md text-secondary border border-secondary/40 rounded-lg hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98]" href="#campus">
+          Mi Campus
+        </a>
+<a class="inline-flex items-center justify-center px-5 py-2.5 text-label-md font-label-md font-bold text-primary bg-[#F2A900] hover:bg-[#E5A000] rounded-lg shadow-sm hover:shadow transition-all duration-150 active:scale-[0.98]" href="#registro">
+          Registrarme
+        </a>
+</div>
+</div>
+</header>
+<!-- 2. ENCABEZADO DE SECCIÓN -->
+<section class="bg-surface-container-low border-b border-outline-variant/40 py-12 lg:py-16">
+<div class="max-w-7xl mx-auto px-space-md lg:px-margin-desktop">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm font-bold uppercase mb-3">
+<span class="material-symbols-outlined text-sm">newspaper</span>
+            Comunicación Institucional
+          </div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Noticias y Actualidad Académica</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-3 leading-relaxed">
+            Explora las últimas novedades de nuestra comunidad: investigación aplicada, acuerdos tecnológicos de vanguardia, eventos académicos, convocatorias de becas y logros de nuestros estudiantes y docentes.
+          </p>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Actualizado al 28 de Marzo, 2026</span>
+</div>
+</div>
+</div>
+</section>
+<main class="max-w-7xl mx-auto px-space-md lg:px-margin-desktop py-space-xl space-y-12">
+<!-- 3. NOTICIA DESTACADA GRANDE (Hero Featured News) -->
+<section>
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-shadow duration-300">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+<!-- Columna Imagen -->
+<div class="lg:col-span-7 relative min-h-[300px] lg:min-h-[440px] bg-surface-container overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="An expansive, cutting-edge artificial intelligence and robotics laboratory at an academic technology institution. Students and researchers in sharp professional attire collaborate around high-tech holographic displays, modular workstations, and robotic arms. The space is illuminated by bright, cool institutional blue daylight balanced with deep navy accents and soft ambient glow, capturing prestigious scientific innovation and high academic rigor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdZsYUp3FEuGmmdX2XvcdIoa-i7P5wNZtfBNj8b-GMnrDEo66UB7sjcm1pjbL2q0vEGEPHDeHNNhx3FoVNq1zhe8f_85xnr2ZrPR04vkp-F6610oiTETQqK1qY3-OTMS1QW-qzHPphbRdBtMWt0qsVvE49DXzJe0dUexIuB2_octYtKR8yTxS1y8hXYWiKedPSvFbLxolv6omZ9-mP-_iASDPoNV06S1H02T24c753NfD-l_sF4TtRig"/>
+<div class="absolute top-4 left-4 flex flex-wrap gap-2">
+<span class="bg-[#F2A900] text-primary font-label-sm text-label-sm font-extrabold uppercase px-3 py-1 rounded-full shadow-sm">
+                DESTACADA
+              </span>
+<span class="bg-primary/90 text-on-primary font-label-sm text-label-sm font-semibold uppercase px-3 py-1 rounded-full backdrop-blur-sm">
+                Innovación y Tecnología
+              </span>
+</div>
+</div>
+<!-- Columna Información -->
+<div class="lg:col-span-5 p-6 lg:p-10 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-md text-label-md mb-3">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary">calendar_today</span>
+                  28 de Marzo, 2026
+                </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary">schedule</span>
+                  5 min de lectura
+                </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary hover:text-secondary transition-colors cursor-pointer leading-snug">
+                IINICIA inaugura su Centro de Innovación en Inteligencia Artificial Aplicada y firma convenio con líderes tecnológicos
+              </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4 line-clamp-4 leading-relaxed">
+                Con una inversión estratégica en infraestructura computacional de alto rendimiento, el Instituto abre las puertas de su nuevo centro enfocado en Machine Learning, Visión Artificial y Procesamiento de Lenguaje Natural en beneficio de más de 4,000 estudiantes y posgraduados.
+              </p>
+</div>
+<div class="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold font-headline-sm text-sm">
+                  DR
+                </div>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-semibold">Dr. Roberto Valenzuela</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dir. de Investigación y Posgrado</p>
+</div>
+</div>
+<button class="inline-flex items-center gap-2 font-label-md text-label-md text-secondary font-bold hover:text-primary transition-colors group" onclick="scrollToDetail()">
+                Leer noticia completa
+                <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- 4. BARRA DE FILTROS POR CATEGORÍA Y BUSCADOR -->
+<section class="bg-surface-container-lowest p-4 lg:p-6 rounded-xl border border-outline-variant/60 shadow-level-1">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+<!-- Píldoras de Categoría -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none" id="categories-container">
+<button class="filter-pill whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md font-semibold transition-all duration-150 bg-primary text-on-primary shadow-sm" data-category="all">
+            Todas las noticias
+          </button>
+<button class="filter-pill whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all duration-150" data-category="campus">
+            Vida Universitaria
+          </button>
+<button class="filter-pill whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all duration-150" data-category="becas">
+            Convocatorias y Becas
+          </button>
+<button class="filter-pill whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all duration-150" data-category="ia">
+            Investigación &amp; IA
+          </button>
+<button class="filter-pill whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all duration-150" data-category="eventos">
+            Eventos y Webinars
+          </button>
+<button class="filter-pill whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all duration-150" data-category="alianzas">
+            Alianzas Estratégicas
+          </button>
+</div>
+<!-- Buscador Rápido -->
+<div class="relative min-w-[280px]">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl">search</span>
+</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-outline-variant/70 text-on-surface bg-surface font-body-sm text-body-sm focus:border-secondary focus:ring-2 focus:ring-secondary/20 focus:outline-none transition-all placeholder:text-outline" id="news-search" placeholder="Buscar por título o tema..." type="text"/>
+</div>
+</div>
+</section>
+<!-- 5. CUADRÍCULA DE NOTICIAS (Grid de 3 columnas) -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm text-primary">Artículos Recientes</h3>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Mostrando 6 publicaciones</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="news-grid">
+<!-- Tarjeta 1 -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex flex-col group">
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="A modern collaborative university auditorium where female engineering students engage actively with digital software models on laptop screens. The lighting is pristine, bright and high-key institutional daylight, highlighting shades of navy blue and warm amber accents. The scene conveys academic excellence, empowerment, and forward-looking higher education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn9moJHBC2h29DYx19oJPHudHR3LLKtghcflB000CBEpBgOflFM1xTqwapJEM7kGARtwtuxsDxAsOiVYBqRnUeV1_gp52IRE2Z-1nAbOStRgayKUwxR_b6bAfXsTQQWG4NtOBgAM8_Z3lPkdZDpktvvubLDEhw--1Ry-tt-Wt7v9GEM_PzzOu8YeSPPLsN6oGtCLpg_Bm33BTdQ3hii4SmFmzRcte9YniSrADTCAY7qZz9oRjtdcr9WQ"/>
+<span class="absolute top-3 left-3 bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+              Convocatorias y Becas
+            </span>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md mb-2">
+<span class="material-symbols-outlined text-sm text-secondary">event</span>
+                24 de Marzo, 2026
+              </span>
+<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                Convocatoria Abierta: Becas STEM Mujeres en Tecnología 2026
+              </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                IINICIA destina un fondo especial del 100% de cobertura de colegiatura para ingenieras y científicas de datos en formación continua.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed-dim text-on-secondary-fixed font-semibold text-xs flex items-center justify-center">
+                  MS
+                </div>
+<span class="font-label-md text-label-md text-on-surface-variant">Mariana Sotomayor</span>
+</div>
+<button class="text-secondary font-label-md text-label-md font-bold flex items-center gap-1 hover:underline" onclick="scrollToDetail()">
+                Leer más <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Tarjeta 2 -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex flex-col group">
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Institutional representatives in corporate suits and academic robes shaking hands inside a sleek, modern university boardroom. The glass wall looks out over a contemporary technology campus under bright morning sky. Professional photography style in navy blue tones with clear crisp ambient lighting celebrating an educational strategic alliance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCg7GQ2TZPqRYsChTrKw6EyIccARdDBImH4ux6w4BCtriECQDuHQywUL3w_4kz9UoHmse4n_cKp6bO28P9ZgUn5E0zePuZY4CoW_hwjsCpzIOgpOFHJVmgbd_OOLjpkOBNBPdqgS_yv6kQFyH9ZswcTC8UGqL_LCihxLi4B2tn-jSnke4IArRY6RAMIk2ptOuCDKNs7ZZHJ7xwXZEvJFPL5CgUsf8cUKsbDjDf672nKPfDgSUMqFY4K9g"/>
+<span class="absolute top-3 left-3 bg-secondary text-on-secondary font-label-sm text-label-sm font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+              Alianzas Estratégicas
+            </span>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md mb-2">
+<span class="material-symbols-outlined text-sm text-secondary">event</span>
+                21 de Marzo, 2026
+              </span>
+<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                Convenio con AWS y Microsoft para Certificaciones en la Nube
+              </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                Nuestros alumnos de programas virtuales e híbridos obtendrán acceso sin costo adicional a laboratorios oficiales y exámenes acreditados.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold text-xs flex items-center justify-center">
+                  AR
+                </div>
+<span class="font-label-md text-label-md text-on-surface-variant">Alejandro Ríos</span>
+</div>
+<a class="text-secondary font-label-md text-label-md font-bold flex items-center gap-1 hover:underline" href="#">
+                Leer más <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Tarjeta 3 -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex flex-col group">
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="A distinguished keynote speaker presenting complex deep learning graphs on a massive high-definition LED stage at an academic university summit. The audience consists of eager graduate students and university professors. Clean institutional composition with deep navy lighting, soft amber stage highlights, and professional academic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1yH7ri89MoU6lIe6OqWQ8YWZYqLDKcb2bvneN641SvAb9u30JciMIWN2XkLaaSiioGAx4L5keFWBGT80pgV59uSwB2D_nVEyokYmAQC8671qXFT05GzclGlde4vB7Fk1VOTu5bbR7Q3lX_rvNzb2XpMnAB2NBTuwzEgWRa3c8nYJjt2pq73smJRGtguOQzP1DXfTx6WTIoO4y6Z-6bBoFKX4JB3SocIFjJ6tWtkNKXGuDWCytsHWbnQ"/>
+<span class="absolute top-3 left-3 bg-surface-container-high text-primary font-label-sm text-label-sm font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+              Eventos y Webinars
+            </span>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md mb-2">
+<span class="material-symbols-outlined text-sm text-secondary">event</span>
+                18 de Marzo, 2026
+              </span>
+<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                Simposio Internacional de Ciberseguridad y Ética de Datos
+              </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                Expertos de 8 países analizarán los desafíos regulatorios de la IA generativa en América Latina. Inscripciones abiertas para la comunidad.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold text-xs flex items-center justify-center">
+                  PL
+                </div>
+<span class="font-label-md text-label-md text-on-surface-variant">Dra. Patricia Lara</span>
+</div>
+<a class="text-secondary font-label-md text-label-md font-bold flex items-center gap-1 hover:underline" href="#">
+                Leer más <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Tarjeta 4 -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex flex-col group">
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="A modern university library commons where postgraduate researchers study on wooden tables flanked by glass architecture and scientific books. Daylight washes through floor-to-ceiling windows illuminating a clean, scholarly environment styled in institutional blue and slate gray tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCVTyaR1RqPGrAk0fWPvB8-HXIKGaU_Sn1rhhAPtVOUY9Vu6YVHKO1TYYCyd_VNIz1Wrwj4crCxdSKKev583-pbHPY2agTnFTlgQoShScqO1tLplwVu2dR97cK26c9-507Us6_Iyxy3xGOQ0jt0TzGPGroiC6t63KdUDUji8xJyXS7T8pbgXvsVRJ5gRUBjGBEc0-H1sLrMwquc7OO2jWyAVVi0uzlTj95-ErkXyNo6fLpEI8yRB3Gbg"/>
+<span class="absolute top-3 left-3 bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+              Investigación &amp; IA
+            </span>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md mb-2">
+<span class="material-symbols-outlined text-sm text-secondary">event</span>
+                15 de Marzo, 2026
+              </span>
+<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                Publicación Indexada en Scopus: Diagnóstico Médico Asistido por Redes Neuronales
+              </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                Docentes investigadores del Departamento de Ciencias Computacionales publican avance crucial para detección temprana de patologías.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold text-xs flex items-center justify-center">
+                  EG
+                </div>
+<span class="font-label-md text-label-md text-on-surface-variant">Dr. Eduardo Garza</span>
+</div>
+<a class="text-secondary font-label-md text-label-md font-bold flex items-center gap-1 hover:underline" href="#">
+                Leer más <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Tarjeta 5 -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex flex-col group">
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="An energetic university hackathon venue filled with diverse groups of passionate young engineers working on software and electronics prototypes late into the evening. Ambient LED blue and cyan lighting with comfortable ergonomic beanbags and dual-monitor computer desks, showcasing collegiate teamwork." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC0LXVBvZWjBTEy31U1aleiOb147pGFKwj95Hr57EsPAQwEmNFJF9uNup0JCFLB89baiImRzV4-uO28rnNZpeiJ2WMokeoqfxpbAANnETRH8ORQsRBU-faKImfg3oxkd1XUD9B9Ahw6B_jXgEgbyzhqD7y1IQGwoIjO7vy068C-7EVcowIc17gW5YBDgXmLG3NOJkvrnAMXxWCGJXQuNrZs8sGs1Q5ou3WdvK17DtaQm4u2pAzj4cnXw"/>
+<span class="absolute top-3 left-3 bg-surface-variant text-primary font-label-sm text-label-sm font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+              Vida Universitaria
+            </span>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md mb-2">
+<span class="material-symbols-outlined text-sm text-secondary">event</span>
+                11 de Marzo, 2026
+              </span>
+<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                Hackathon IINICIA 2026: 48 horas de Soluciones para Ciudades Inteligentes
+              </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                Más de 60 equipos multidisciplinarios compitieron por capital semilla para incubar startups tecnológicas en el ecosistema universitario.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold text-xs flex items-center justify-center">
+                  CC
+                </div>
+<span class="font-label-md text-label-md text-on-surface-variant">Comité Estudiantil</span>
+</div>
+<a class="text-secondary font-label-md text-label-md font-bold flex items-center gap-1 hover:underline" href="#">
+                Leer más <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Tarjeta 6 -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-level-1 hover:shadow-level-2 transition-all duration-200 flex flex-col group">
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="An official graduation ceremony hall inside a prestigious higher education academy, showing university authorities on stage handing academic diplomas with gold stamps. Dignified institutional lighting in navy and warm gold tones, representing high-standard Mexican academic accreditation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy3rOHB9JycnNufOj8a5huwERYHsBgu29WhBLcK3HOLPn02e3BMcvRjNw4YFMVrMRecBHpx1FLngHUXiMRy2iRxazAOFAdNw9aCvs7eFL-JcudHuwIrpw-jJJaq_-yOdv9E7Apz7_yJiMiJ4KAV6Kd0elEBpIhJfCdYPd7Eaj6QBfjGpvwppy_miyLff9dXVKLnFcsEDOpib8p0wNSbO1VPTCFWkCqh1qBAA93ZGEEIcUwnbyZUAhB5w"/>
+<span class="absolute top-3 left-3 bg-[#F2A900]/20 text-[#8A5F00] font-label-sm text-label-sm font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+              Institucional RVOE
+            </span>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<span class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md mb-2">
+<span class="material-symbols-outlined text-sm text-secondary">event</span>
+                05 de Marzo, 2026
+              </span>
+<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                SEP actualiza y renueva los RVOE de las Maestrías en Ciencia de Datos
+              </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                El reconocimiento de validez oficial refrenda el estándar de excelencia curricular y pertinencia laboral de nuestros posgrados tecnológicos.
+              </p>
+</div>
+<div class="pt-4 mt-4 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold text-xs flex items-center justify-center">
+                  SA
+                </div>
+<span class="font-label-md text-label-md text-on-surface-variant">Secretaría Académica</span>
+</div>
+<a class="text-secondary font-label-md text-label-md font-bold flex items-center gap-1 hover:underline" href="#">
+                Leer más <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- 6. SECCIÓN INTERACTIVA INTEGRADA: VISTA DE DETALLE EDITORIAL COMPLETA -->
+<section class="pt-6" id="detalle-noticia">
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded-2xl p-6 lg:p-12 shadow-level-2">
+<!-- Badge y Back Action -->
+<div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-outline-variant/30">
+<div class="flex items-center gap-3">
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase px-3 py-1 rounded-full">
+              Convocatorias y Becas
+            </span>
+<span class="text-on-surface-variant font-label-md text-label-md">Publicado en portal oficial</span>
+</div>
+<button class="inline-flex items-center gap-1.5 text-secondary hover:text-primary font-label-md text-label-md font-semibold transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+<span class="material-symbols-outlined text-lg">arrow_upward</span>
+            Volver al listado
+          </button>
+</div>
+<!-- Encabezado Editorial -->
+<div class="py-8 max-w-4xl">
+<h1 class="font-headline-lg text-headline-lg lg:text-3xl font-extrabold text-primary tracking-tight leading-tight">
+            Convocatoria Abierta: Becas STEM Mujeres en Tecnología 2026
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-4 leading-relaxed">
+            El Instituto de Innovación y Ciencias Aplicadas lanza su programa insignia para reducir la brecha de género en la industria del software, inteligencia artificial y computación cuántica.
+          </p>
+<!-- Metadata Autor & Fecha -->
+<div class="flex flex-wrap items-center gap-6 mt-6 pt-6 border-t border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold font-headline-sm flex items-center justify-center">
+                MS
+              </div>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-bold">Mariana Sotomayor</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Coordinadora Institucional de Inclusión y Talento</p>
+</div>
+</div>
+<div class="flex items-center gap-6 text-on-surface-variant font-label-md text-label-md ml-auto">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-secondary">calendar_today</span>
+                24 de Marzo, 2026
+              </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-secondary">timer</span>
+                4 min de lectura
+              </span>
+</div>
+</div>
+</div>
+<!-- Imagen Editorial Destacada -->
+<div class="relative rounded-xl overflow-hidden bg-surface-container max-h-[500px] mb-10 shadow-level-1">
+<img class="w-full h-full object-cover" data-alt="A bright, high-resolution editorial photograph of a female computational engineer presenting an innovative machine learning architecture inside a state-of-the-art university auditorium. The environment features refined navy blue and light azure corporate university styling, ambient glass textures, and focused collegiate collaboration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB74fXZSuS_Kq61gxA2so_KQZVmr_E6sWHdGgk3kr9uxRKi6MuYhe44zJvTBi3EBGosctWNkTzvHlfoqgafEFn0qVsbNdduRP-s1MTHpsCAySK0qduqBtEDSndoIbZYkP30-BOFx9-bmTLjEZC_QhYkDjNWV6CtCb0Nu0wWvoGb3bQdZpDcjhfPeIvF3ZK6E6SzFAoBcpi4Vyb8uE0sh7uw2FguqtHgEpepP7jzuGYekz3wXkqcjsBRYQ"/>
+<div class="p-3 bg-surface-container-low/90 text-on-surface-variant font-body-sm text-xs border-t border-outline-variant/30 text-center">
+            Foto: Laboratorio Central de Ciencia de Datos IINICIA - Campus Virtual y Metropolitano.
+          </div>
+</div>
+<!-- Contenido Formateado Editorial -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<div class="lg:col-span-8 space-y-6 text-on-surface font-body-md text-body-md leading-relaxed">
+<p>
+              En el marco de su compromiso inquebrantable con el desarrollo del talento científico en México y Latinoamérica, el <strong>Instituto de Innovación y Ciencias Aplicadas (IINICIA)</strong> anuncia la apertura formal de la convocatoria para el <em>Programa de Becas STEM Mujeres en Tecnología 2026</em>.
+            </p>
+<h2 class="font-headline-md text-headline-md text-primary mt-8 mb-4">
+              Impulso directo al liderazgo femenino en ciencias duras
+            </h2>
+<p>
+              El programa contempla la adjudicación de 150 becas completas (100% de exención en cuotas de inscripción y colegiaturas mensuales) para programas de pregrado en Ingeniería de Software e Inteligencia Artificial, así como para Maestrías en Ciberseguridad y Arquitectura de Datos.
+            </p>
+<!-- Cita destacada (Blockquote) -->
+<blockquote class="my-8 p-6 bg-surface-container-low border-l-4 border-secondary rounded-r-xl italic font-headline-sm text-headline-sm text-primary leading-relaxed shadow-sm">
+              “La innovación tecnológica auténtica solo es posible cuando todas las mentes brillantes tienen el espacio y los recursos para liderar. Este fondo no es asistencialismo; es una inversión estratégica en el futuro del país.”
+              <span class="block not-italic text-label-md font-label-md text-secondary mt-3">— Dra. Valentina Morales, Vicerrectora Académica</span>
+</blockquote>
+<h2 class="font-headline-md text-headline-md text-primary mt-8 mb-4">
+              Requisitos y cronograma de postulación
+            </h2>
+<p>
+              Podrán postularse candidatas de nacionalidad mexicana o residentes en países de habla hispana que demuestren vocación sobresaliente en matemáticas, programación o ciencias afines. Todas las postulaciones se evaluarán mediante una prueba de habilidades analíticas y un ensayo de impacto social.
+            </p>
+<ul class="list-disc pl-6 space-y-2 text-on-surface-variant font-body-md">
+<li><strong>Cierre de recepción de solicitudes:</strong> 30 de Mayo, 2026.</li>
+<li><strong>Publicación de resultados preliminares:</strong> 15 de Junio, 2026.</li>
+<li><strong>Inicio de semestre académico:</strong> Septiembre, 2026.</li>
+</ul>
+<div class="p-6 bg-surface-container-high rounded-xl border border-secondary/20 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary font-bold">¿Deseas postularte a la convocatoria?</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Descarga las bases completas y la guía de registro oficial.</p>
+</div>
+<a class="whitespace-nowrap px-6 py-3 bg-[#F2A900] text-primary font-label-md font-bold rounded-lg shadow-sm hover:shadow transition-all" href="#registro">
+                Postularme en Línea
+              </a>
+</div>
+</div>
+<!-- Barra Lateral: Compartir y Datos Clave -->
+<aside class="lg:col-span-4 space-y-8">
+<!-- Barra de compartir -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/60">
+<h4 class="font-label-lg text-label-lg font-bold text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">share</span>
+                Compartir esta noticia
+              </h4>
+<div class="flex flex-col gap-2.5">
+<a class="flex items-center justify-between px-4 py-2.5 bg-surface-container-lowest rounded-lg border border-outline-variant/50 hover:border-secondary hover:text-secondary transition-all font-label-md text-label-md text-on-surface" href="https://linkedin.com" rel="noopener noreferrer" target="_blank">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-blue-600">business_center</span>
+                    LinkedIn
+                  </span>
+<span class="material-symbols-outlined text-sm text-outline">open_in_new</span>
+</a>
+<a class="flex items-center justify-between px-4 py-2.5 bg-surface-container-lowest rounded-lg border border-outline-variant/50 hover:border-secondary hover:text-secondary transition-all font-label-md text-label-md text-on-surface" href="https://api.whatsapp.com" rel="noopener noreferrer" target="_blank">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-emerald-600">chat</span>
+                    WhatsApp
+                  </span>
+<span class="material-symbols-outlined text-sm text-outline">open_in_new</span>
+</a>
+<a class="flex items-center justify-between px-4 py-2.5 bg-surface-container-lowest rounded-lg border border-outline-variant/50 hover:border-secondary hover:text-secondary transition-all font-label-md text-label-md text-on-surface" href="https://twitter.com" rel="noopener noreferrer" target="_blank">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-slate-800">public</span>
+                    X / Twitter
+                  </span>
+<span class="material-symbols-outlined text-sm text-outline">open_in_new</span>
+</a>
+<a class="flex items-center justify-between px-4 py-2.5 bg-surface-container-lowest rounded-lg border border-outline-variant/50 hover:border-secondary hover:text-secondary transition-all font-label-md text-label-md text-on-surface" href="https://facebook.com" rel="noopener noreferrer" target="_blank">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-blue-700">groups</span>
+                    Facebook
+                  </span>
+<span class="material-symbols-outlined text-sm text-outline">open_in_new</span>
+</a>
+<!-- Copiar enlace con feedback visual -->
+<button class="flex items-center justify-between px-4 py-2.5 bg-secondary-fixed text-on-secondary-fixed rounded-lg font-label-md text-label-md font-bold hover:bg-secondary-fixed-dim transition-all" id="copy-btn" onclick="copyArticleLink()">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined" id="copy-icon">content_copy</span>
+<span id="copy-text">Copiar enlace</span>
+</span>
+<span class="material-symbols-outlined text-sm" id="copy-status">link</span>
+</button>
+</div>
+</div>
+<!-- Ficha de Información de la Beca -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/60 space-y-4">
+<h4 class="font-label-lg text-label-lg font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">verified</span>
+                Ficha Técnica
+              </h4>
+<div class="space-y-3 font-body-sm text-body-sm">
+<div>
+<span class="text-on-surface-variant block text-xs">Modalidad:</span>
+<span class="font-semibold text-primary">En Línea / Híbrida</span>
+</div>
+<div>
+<span class="text-on-surface-variant block text-xs">Reconocimiento Oficial:</span>
+<span class="font-semibold text-primary">RVOE SEP Federal Vigente</span>
+</div>
+<div>
+<span class="text-on-surface-variant block text-xs">Cupo:</span>
+<span class="font-semibold text-primary">150 lugares con beca 100%</span>
+</div>
+<div>
+<span class="text-on-surface-variant block text-xs">Correo de dudas:</span>
+<span class="font-semibold text-secondary">becas.stem@iinicia.edu.mx</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- NOTICIAS RELACIONADAS (3 tarjetas compactas) -->
+<div class="mt-14 pt-10 border-t border-outline-variant/50">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">auto_stories</span>
+            Noticias Relacionadas
+          </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<a class="group p-4 rounded-xl border border-outline-variant/60 bg-surface-container-low hover:bg-surface-container transition-all flex flex-col justify-between" href="#">
+<div>
+<span class="text-secondary font-label-sm text-label-sm font-bold uppercase block mb-1">Admisiones 2026</span>
+<h5 class="font-title text-title text-primary group-hover:text-secondary transition-colors line-clamp-2">
+                  Calendario de Exámenes de Ingreso para el Ciclo de Otoño
+                </h5>
+<p class="text-on-surface-variant text-body-sm mt-2 line-clamp-2">
+                  Conoce las fechas límite de entrega de documentación física y digital para aspirantes.
+                </p>
+</div>
+<span class="text-on-surface-variant text-xs mt-4 block">12 de Marzo, 2026</span>
+</a>
+<a class="group p-4 rounded-xl border border-outline-variant/60 bg-surface-container-low hover:bg-surface-container transition-all flex flex-col justify-between" href="#">
+<div>
+<span class="text-secondary font-label-sm text-label-sm font-bold uppercase block mb-1">Vida Universitaria</span>
+<h5 class="font-title text-title text-primary group-hover:text-secondary transition-colors line-clamp-2">
+                  Mentorías con Exalumnas Líderes en Silicon Valley y Europa
+                </h5>
+<p class="text-on-surface-variant text-body-sm mt-2 line-clamp-2">
+                  Sesiones 1 a 1 de orientación técnica y proyección de carrera internacional.
+                </p>
+</div>
+<span class="text-on-surface-variant text-xs mt-4 block">08 de Marzo, 2026</span>
+</a>
+<a class="group p-4 rounded-xl border border-outline-variant/60 bg-surface-container-low hover:bg-surface-container transition-all flex flex-col justify-between" href="#">
+<div>
+<span class="text-secondary font-label-sm text-label-sm font-bold uppercase block mb-1">Investigación</span>
+<h5 class="font-title text-title text-primary group-hover:text-secondary transition-colors line-clamp-2">
+                  Laboratorio de Neurocomputación recibe financiamiento internacional
+                </h5>
+<p class="text-on-surface-variant text-body-sm mt-2 line-clamp-2">
+                  Fondos canalizados al desarrollo de interfaces cerebro-computadora aplicadas.
+                </p>
+</div>
+<span class="text-on-surface-variant text-xs mt-4 block">02 de Marzo, 2026</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- 7. FOOTER INSTITUCIONAL OFICIAL DE IINICIA -->
+<footer class="bg-primary dark:bg-inverse-surface text-on-primary dark:text-inverse-on-surface w-full border-t border-primary-container dark:border-outline">
+<div class="w-full py-space-xl px-space-md lg:px-margin-desktop max-w-7xl mx-auto flex flex-col gap-space-lg">
+<!-- Top Grid Footer -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 border-b border-primary-container">
+<!-- Marca y Logo -->
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<img alt="IINICIA Logo Blanco" class="h-10 w-10 object-contain rounded-md bg-white/10 p-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcUt4uPTKQH9QcX2neud5jNZ0z7IzWJxzKXaR78kMqjyAZjnGTDzyd8eTShkR_FewU2j0xNCqfqEPOm3tFyL7c-2xFp0j2PHqEmgdcamqbGdnbB3k5Vma1KDqhBHvTaq7hvCpoklRI1SbFtuyQCi2ASMz-FyP9q5mxY1AytCBDqyStBKXkOOkWJ24Z4O5So38DGtrUzvlza1eKqCjywGtfHtDC0fD2U66vGIn1a2WU4qvyrOhVZ_5kim96vXnYa_AYrwM"/>
+<span class="text-headline-sm font-headline-sm font-extrabold text-on-primary dark:text-inverse-primary">IINICIA</span>
+</div>
+<p class="text-on-primary-container dark:text-outline-variant text-body-sm leading-relaxed">
+            Instituto de Innovación y Ciencias Aplicadas. Formación científica y digital de vanguardia, orientada al desarrollo productivo y la ética tecnológica.
+          </p>
+</div>
+<!-- Enlaces Rápidos 1 -->
+<div>
+<h5 class="text-label-lg font-label-lg font-bold text-on-primary mb-3">Oferta Educativa</h5>
+<ul class="space-y-2 text-body-sm text-on-primary-container">
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Licenciaturas en Tecnología</a></li>
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Maestrías e Investigación</a></li>
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Diplomados Especializados</a></li>
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Certificaciones en la Nube</a></li>
+</ul>
+</div>
+<!-- Enlaces Rápidos 2 -->
+<div>
+<h5 class="text-label-lg font-label-lg font-bold text-on-primary mb-3">Comunidad y Servicios</h5>
+<ul class="space-y-2 text-body-sm text-on-primary-container">
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Campus Virtual LMS</a></li>
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Biblioteca Digital y Scopus</a></li>
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Bolsa de Trabajo Institucional</a></li>
+<li><a class="hover:text-tertiary-fixed transition-colors" href="#">Atención y Soporte Técnico</a></li>
+</ul>
+</div>
+<!-- Información de Validez Oficial -->
+<div class="bg-primary-container/40 p-4 rounded-xl border border-primary-container">
+<div class="flex items-center gap-2 text-tertiary-fixed font-label-md font-bold mb-2">
+<span class="material-symbols-outlined text-base">verified</span>
+            Validez Oficial SEP
+          </div>
+<p class="text-xs text-on-primary-container leading-relaxed">
+            Institución incorporada al Sistema Educativo Nacional. Planes de estudio con Reconocimiento de Validez Oficial de Estudios (RVOE) emitido por la SEP.
+          </p>
+</div>
+</div>
+<!-- Links del Shared Components JSON -->
+<div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+<nav class="flex flex-wrap gap-x-6 gap-y-2 text-label-sm font-label-sm">
+<a class="text-on-primary-container dark:text-outline-variant hover:text-on-primary dark:hover:text-inverse-on-surface transition-colors" href="#">Acreditaciones SEP RVOE</a>
+<a class="text-on-primary-container dark:text-outline-variant hover:text-on-primary dark:hover:text-inverse-on-surface transition-colors" href="#">Aviso de Privacidad</a>
+<a class="text-on-primary-container dark:text-outline-variant hover:text-on-primary dark:hover:text-inverse-on-surface transition-colors" href="#">Términos y Condiciones</a>
+<a class="text-on-primary-container dark:text-outline-variant hover:text-on-primary dark:hover:text-inverse-on-surface transition-colors" href="#">Soporte Técnico</a>
+<a class="text-on-primary-container dark:text-outline-variant hover:text-on-primary dark:hover:text-inverse-on-surface transition-colors" href="#">Bolsa de Trabajo</a>
+<a class="text-on-primary-container dark:text-outline-variant hover:text-on-primary dark:hover:text-inverse-on-surface transition-colors" href="#">Portal de Transparencia</a>
+</nav>
+</div>
+<!-- Texto Legal y Copyright Mandatorio -->
+<div class="pt-4 border-t border-primary-container/60">
+<p class="text-label-sm font-label-sm text-on-primary-container leading-relaxed">
+          © 2025 Instituto de Innovación y Ciencias Aplicadas (IINICIA). Todos los derechos reservados. Planes de estudio con Reconocimiento de Validez Oficial de Estudios (RVOE) otorgado por la Secretaría de Educación Pública (SEP).
+        </p>
+</div>
+</div>
+</footer>
+<!-- Script interactivo de filtrado, búsqueda y micro-interacciones -->
+<script>
+    // Scroll fluido al detalle de noticia
+    function scrollToDetail() {
+      const el = document.getElementById('detalle-noticia');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Copiar enlace con feedback visual
+    function copyArticleLink() {
+      const btn = document.getElementById('copy-btn');
+      const text = document.getElementById('copy-text');
+      const icon = document.getElementById('copy-icon');
+      
+      navigator.clipboard.writeText(window.location.href);
+
+      text.innerText = "¡Enlace copiado!";
+      icon.innerText = "check";
+      btn.classList.add('bg-emerald-600', 'text-white');
+
+      setTimeout(() => {
+        text.innerText = "Copiar enlace";
+        icon.innerText = "content_copy";
+        btn.classList.remove('bg-emerald-600', 'text-white');
+      }, 2500);
+    }
+
+    // Filtros de categoría interactivos
+    const filterButtons = document.querySelectorAll('.filter-pill');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          b.classList.add('text-on-surface-variant');
+        });
+        btn.classList.remove('text-on-surface-variant');
+        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      });
+    });
+
+    // Búsqueda en vivo (filtra tarjetas de noticias)
+    const searchInput = document.getElementById('news-search');
+    const newsGrid = document.getElementById('news-grid');
+    if (searchInput && newsGrid) {
+      const cards = newsGrid.querySelectorAll('article');
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        cards.forEach(card => {
+          const title = card.querySelector('h4') ? card.querySelector('h4').innerText.toLowerCase() : '';
+          const body = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : '';
+          if (title.includes(query) || body.includes(query)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</body></html>

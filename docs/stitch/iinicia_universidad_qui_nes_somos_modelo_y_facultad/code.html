@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IINICIA - Instituto de Innovación y Ciencias Aplicadas | Universidad</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#004b6f",
+            "surface-variant": "#dae2fd",
+            "on-surface": "#131b2e",
+            "inverse-on-surface": "#eef0ff",
+            "on-error-container": "#93000a",
+            "text-secondary": "#475569",
+            "secondary-fixed-dim": "#9ccaff",
+            "primary-fixed-dim": "#8aceff",
+            "cyan-vibrant": "#009ee2",
+            "tertiary-fixed-dim": "#aac7fd",
+            "secondary": "#14629c",
+            "surface-container": "#f0f6fa",
+            "surface": "#faf8ff",
+            "on-tertiary-fixed": "#001b3d",
+            "surface-container-high": "#e2e7ff",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "success": "#16a34a",
+            "on-primary-container": "#00314a",
+            "surface-container-low": "#f2f3ff",
+            "primary": "#006492",
+            "on-background": "#131b2e",
+            "cyan-light": "#38bdf8",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#009ee2",
+            "on-error": "#ffffff",
+            "on-primary-fixed": "#001e2f",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#00497a",
+            "outline-variant": "#bec8d2",
+            "cyan-surface": "#e0f2fe",
+            "secondary-fixed": "#d0e4ff",
+            "on-secondary-fixed": "#001d35",
+            "outline": "#6e7881",
+            "surface-subtle": "#f8fafc",
+            "text-primary": "#0f172a",
+            "primary-fixed": "#c9e6ff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#d6e3ff",
+            "on-tertiary-container": "#082d5b",
+            "warning": "#d97706",
+            "on-secondary-container": "#004c7e",
+            "text-muted": "#64748b",
+            "secondary-container": "#80bdfe",
+            "blue-deep": "#005a94",
+            "border-subtle": "#e2e8f0",
+            "blue-institutional": "#002855",
+            "surface-tint": "#006492",
+            "surface-container-highest": "#dae2fd",
+            "error": "#dc2626",
+            "surface-dim": "#d2d9f4",
+            "tertiary": "#415f8f",
+            "background": "#faf8ff",
+            "on-tertiary-fixed-variant": "#284775",
+            "on-secondary": "#ffffff",
+            "surface-canvas": "#ffffff",
+            "on-surface-variant": "#3e4850",
+            "surface-bright": "#faf8ff",
+            "tertiary-container": "#7996c9",
+            "inverse-primary": "#8aceff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "margin-desktop": "3rem",
+            "gutter-mobile": "1rem",
+            "margin-mobile": "1.25rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "gutter-desktop": "2rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "display": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-text-primary antialiased font-body-md text-body-md selection:bg-cyan-vibrant selection:text-white">
+<!-- TopNavBar (Shared Component Anchor) -->
+<header class="bg-surface-canvas/90 dark:bg-blue-institutional/90 backdrop-blur-md docked full-width top-0 sticky z-50 shadow-sm dark:shadow-md">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand Logo Container -->
+<a class="flex items-center gap-3 group transition-all duration-200 ease-in-out active:scale-95" href="#">
+<div class="w-10 h-10 rounded-lg bg-blue-institutional flex items-center justify-center p-1.5 shadow-sm">
+<img alt="Logo IINICIA" class="w-full h-full object-contain filter drop-shadow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title text-title font-extrabold text-blue-institutional dark:text-surface-canvas tracking-tight leading-tight">IINICIA</span>
+<span class="text-[0.625rem] text-text-muted tracking-wider uppercase font-semibold leading-none">Ciencias Aplicadas</span>
+</div>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center space-x-8">
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Inicio</a>
+<a class="text-cyan-vibrant font-semibold border-b-2 border-cyan-vibrant pb-1 font-label-md text-label-md" href="#">Universidad</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Oferta Académica</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Admisiones</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Noticias</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-cyan-light transition-colors font-label-md text-label-md" href="#">Contacto</a>
+</nav>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center space-x-4">
+<a class="hidden sm:inline-flex items-center text-blue-deep font-semibold text-body-sm hover:text-cyan-vibrant transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] mr-1.5">school</span>
+          Mi Campus
+        </a>
+<a class="bg-blue-deep hover:bg-blue-institutional text-white font-semibold font-label-md text-label-md px-5 py-2.5 rounded-lg shadow-sm hover:shadow transition-all duration-200 ease-in-out active:scale-95 flex items-center gap-1.5" href="#">
+<span>Registrarme</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<main>
+<!-- 1. Hero Institucional -->
+<section class="relative bg-gradient-to-b from-surface-container-low via-surface to-surface-canvas overflow-hidden pt-12 pb-20 md:py-24">
+<div class="absolute inset-0 bg-[radial-gradient(#009ee2_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none"></div>
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 relative z-10">
+<div class="max-w-4xl mx-auto text-center space-y-6">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-surface border border-cyan-light/40 text-blue-deep">
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wide">Excelencia y Vanguardia Educativa</span>
+</div>
+<h1 class="font-display text-display-mobile md:font-display md:text-display text-blue-institutional tracking-tight">
+            Formando líderes en tecnología y <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-deep via-cyan-vibrant to-cyan-light">ciencias aplicadas</span>
+</h1>
+<p class="font-body-lg text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
+            IINICIA nace para transformar la educación superior en América Latina mediante investigación rigurosa, pedagogía inmersiva y un ecosistema de innovación conectado en tiempo real con la industria digital global.
+          </p>
+<div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+<a class="bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold px-7 py-3.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2" href="#quienes-somos">
+<span>Conoce nuestra historia</span>
+<span class="material-symbols-outlined text-[20px]">explore</span>
+</a>
+<a class="border-2 border-blue-deep text-blue-deep hover:bg-surface-container font-semibold px-6 py-3 rounded-lg transition-all duration-200 flex items-center gap-2" href="#modelo-educativo">
+<span>Modelo de aprendizaje</span>
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+</a>
+</div>
+</div>
+<!-- Metric Grid / Badges -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-16 pt-8 border-t border-border-subtle">
+<div class="bg-surface-canvas p-6 rounded-xl border border-border-subtle shadow-sm hover:border-cyan-vibrant transition-all">
+<div class="flex items-center justify-between mb-2">
+<span class="font-display text-3xl font-extrabold text-blue-institutional">100%</span>
+<span class="p-2 rounded-lg bg-cyan-surface text-cyan-vibrant material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">policy</span>
+</div>
+<p class="font-label-lg text-label-lg text-blue-deep font-semibold">Programas RVOE</p>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Validez oficial absoluta SEP en licenciaturas y maestrías.</p>
+</div>
+<div class="bg-surface-canvas p-6 rounded-xl border border-border-subtle shadow-sm hover:border-cyan-vibrant transition-all">
+<div class="flex items-center justify-between mb-2">
+<span class="font-display text-3xl font-extrabold text-blue-institutional">+5,000</span>
+<span class="p-2 rounded-lg bg-surface-container text-blue-deep material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<p class="font-label-lg text-label-lg text-blue-deep font-semibold">Egresados de Impacto</p>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Liderando equipos técnicos en más de 18 países.</p>
+</div>
+<div class="bg-surface-canvas p-6 rounded-xl border border-border-subtle shadow-sm hover:border-cyan-vibrant transition-all">
+<div class="flex items-center justify-between mb-2">
+<span class="font-display text-3xl font-extrabold text-blue-institutional">+95%</span>
+<span class="p-2 rounded-lg bg-cyan-surface text-cyan-vibrant material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">work_history</span>
+</div>
+<p class="font-label-lg text-label-lg text-blue-deep font-semibold">Tasa de Empleabilidad</p>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Inserción laboral calificada antes de los 6 meses de egreso.</p>
+</div>
+<div class="bg-surface-canvas p-6 rounded-xl border border-border-subtle shadow-sm hover:border-cyan-vibrant transition-all">
+<div class="flex items-center justify-between mb-2">
+<span class="font-display text-3xl font-extrabold text-blue-institutional">100%</span>
+<span class="p-2 rounded-lg bg-surface-container text-blue-deep material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">devices</span>
+</div>
+<p class="font-label-lg text-label-lg text-blue-deep font-semibold">Campus Digital</p>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Infraestructura interactiva de alta disponibilidad 24/7.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Sección Quiénes Somos -->
+<section class="py-20 bg-surface-canvas border-t border-border-subtle" id="quienes-somos">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-6 space-y-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container border border-border-subtle text-blue-deep font-label-sm text-label-sm tracking-wide">
+<span class="w-2 h-2 rounded-full bg-cyan-vibrant animate-pulse"></span>
+              NUESTRA INSTITUCIÓN
+            </div>
+<h2 class="font-headline-lg text-headline-lg md:font-headline-lg md:text-headline-lg text-blue-institutional leading-tight">
+              Una universidad diseñada para resolver las demandas de la <span class="text-blue-deep">era digital</span>
+</h2>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+              El <strong>Instituto de Innovación y Ciencias Aplicadas (IINICIA)</strong> fue fundado con la convicción de que la brecha tecnológica y la educación universitaria no podían continuar en vías paralelas. Integramos métodos científicos de investigación con la agilidad metodológica de las mayores tecnológicas globales.
+            </p>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+              Nuestra filosofía concibe el aprendizaje no como la memorización pasiva de conceptos, sino como un laboratorio vivo donde el estudiante desarrolla soluciones aplicadas de ingeniería de software, arquitectura de datos y ciberseguridad con pertinencia económica y social.
+            </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+<div class="flex items-start gap-3 p-4 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl mt-0.5">terminal</span>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-semibold">Vanguardia Técnica</h4>
+<p class="font-body-sm text-body-sm text-text-muted">Currículas actualizadas anualmente junto al sector productivo.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-4 rounded-lg bg-surface-subtle border border-border-subtle">
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl mt-0.5">public</span>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-semibold">Alcance Global</h4>
+<p class="font-body-sm text-body-sm text-text-muted">Metodologías internacionales con reconocimiento oficial formal.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6">
+<div class="relative">
+<div class="absolute -inset-2 bg-gradient-to-r from-blue-deep to-cyan-vibrant rounded-2xl blur-lg opacity-20"></div>
+<div class="relative bg-surface-subtle rounded-2xl overflow-hidden border border-border-subtle shadow-md">
+<img class="w-full h-80 md:h-[460px] object-cover" data-alt="Modern collaborative university research and innovation laboratory at IINICIA with high-tech displays showing complex data analytics, software code, and robotics. Students and professors collaborate around clean white surfaces in a professional institutional setting illuminated with soft blue and natural sunlight. High-key modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8gPIvteTu-YkQ2-lqYcZpJVax76TpWg78Nxqh9B8mcjbmoyw2KKjiXZqDbnvPHV6zJAmaeYFTP6WrAVSdj9uClzXbJ69rgqq2Fj__9AIsN9RpcoU13ZEdZZvnPld8X1AjTeNMgEyXkat6stRHDc1B5kwwzTBafPRgjFko8m6WyMxJyZEGeQZi6aBCkTIMtMmbexWFwZik5J3FIM0NqWZodX9qFvC-BZWnC7U9muHTjPe5_5p1VruSdA"/>
+<div class="p-6 bg-surface-canvas/95 backdrop-blur-sm border-t border-border-subtle">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-blue-institutional flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">biotech</span>
+</div>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">Investigación + Desarrollo Aplicado</h4>
+<p class="font-body-sm text-body-sm text-text-muted">Laboratorios virtuales y clústeres de cómputo abiertos a todos los estudiantes matriculados.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Misión y Visión -->
+<section class="py-20 bg-surface">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="text-center max-w-2xl mx-auto mb-14 space-y-3">
+<span class="font-label-sm text-label-sm text-blue-deep uppercase tracking-widest font-bold">Brújula Institucional</span>
+<h2 class="font-headline-lg text-headline-lg text-blue-institutional">Nuestra Misión y Visión de Futuro</h2>
+<p class="font-body-md text-body-md text-text-secondary">Los principios rectores que orientan cada decisión pedagógica, tecnológica y de vinculación en IINICIA.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Tarjeta Misión -->
+<div class="group bg-surface-canvas rounded-2xl p-8 md:p-10 border border-border-subtle hover:border-cyan-vibrant transition-all duration-300 shadow-sm hover:shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="absolute top-0 right-0 w-32 h-32 bg-cyan-surface/50 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110"></div>
+<div>
+<div class="w-14 h-14 rounded-xl bg-blue-institutional text-white flex items-center justify-center mb-6 shadow-sm group-hover:bg-cyan-vibrant group-hover:text-blue-institutional transition-colors">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div class="inline-block px-3 py-1 rounded bg-blue-institutional/5 text-blue-deep font-label-sm text-label-sm font-bold uppercase mb-4">
+                Propósito Fundamental
+              </div>
+<h3 class="font-headline-md text-headline-md text-blue-institutional font-bold mb-4">Misión</h3>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed mb-6">
+                Democratizar el acceso a una educación superior de clase mundial en ingeniería, ciencias de datos y tecnologías disruptivas. Formamos profesionales éticos, críticos y altamente competentes, capaces de resolver problemas complejos, liderar la transformación digital y generar valor económico y social con rigor científico e innovación aplicada.
+              </p>
+</div>
+<div class="pt-6 border-t border-border-subtle flex items-center justify-between text-blue-deep font-semibold text-body-sm">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-cyan-vibrant text-[20px]">check_circle</span>
+                Formación Continua y Pertinente
+              </span>
+<span class="material-symbols-outlined text-outline-variant">north_east</span>
+</div>
+</div>
+<!-- Tarjeta Visión -->
+<div class="group bg-surface-canvas rounded-2xl p-8 md:p-10 border border-border-subtle hover:border-cyan-vibrant transition-all duration-300 shadow-sm hover:shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="absolute top-0 right-0 w-32 h-32 bg-blue-institutional/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110"></div>
+<div>
+<div class="w-14 h-14 rounded-xl bg-cyan-vibrant text-blue-institutional flex items-center justify-center mb-6 shadow-sm group-hover:bg-blue-institutional group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<div class="inline-block px-3 py-1 rounded bg-cyan-surface text-blue-deep font-label-sm text-label-sm font-bold uppercase mb-4">
+                Proyección 2030
+              </div>
+<h3 class="font-headline-md text-headline-md text-blue-institutional font-bold mb-4">Visión</h3>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed mb-6">
+                Consolidarnos como el referente universitario más innovador de Iberoamérica en ciencias aplicadas y computación. Ser reconocidos internacionalmente por la excelencia de nuestros egresados, la transferencia tecnológica hacia los sectores productivos y un modelo educativo adaptativo potenciado por inteligencia artificial que evoluciona al ritmo de la ciencia global.
+              </p>
+</div>
+<div class="pt-6 border-t border-border-subtle flex items-center justify-between text-blue-deep font-semibold text-body-sm">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-cyan-vibrant text-[20px]">auto_awesome</span>
+                Liderazgo Tecnológico Regional
+              </span>
+<span class="material-symbols-outlined text-outline-variant">north_east</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Modelo Educativo (4 Pilares) -->
+<section class="py-20 bg-surface-canvas border-y border-border-subtle" id="modelo-educativo">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="max-w-3xl mx-auto text-center mb-16 space-y-3">
+<div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-surface text-blue-deep font-label-sm text-label-sm font-bold uppercase">
+            Metodología Propia
+          </div>
+<h2 class="font-headline-lg text-headline-lg text-blue-institutional">Modelo Educativo IINICIA-Tech™</h2>
+<p class="font-body-md text-body-md text-text-secondary">Diseñado bajo los estándares pedagógicos de las universidades tecnológicas más avanzadas del mundo, combinando teoría rigurosa con práctica intensiva.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Pilar 1 -->
+<div class="bg-surface-subtle p-7 rounded-2xl border border-border-subtle hover:border-cyan-vibrant hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-xl bg-blue-deep text-white flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl">hardware</span>
+</div>
+<span class="text-xs font-bold text-cyan-vibrant tracking-wider uppercase">Pilar 01</span>
+<h3 class="font-title text-title text-blue-institutional font-bold mt-1 mb-3">Aprendizaje en Retos Reales</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Sin exámenes de memoria tradicionales. Evaluamos mediante proyectos funcionales, resolución de problemas de ingeniería y desarrollo de software escalable.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-blue-deep text-xs font-semibold">
+<span class="material-symbols-outlined text-base">domain_verification</span>
+              Casos reales de empresas
+            </div>
+</div>
+<!-- Pilar 2 -->
+<div class="bg-surface-subtle p-7 rounded-2xl border border-border-subtle hover:border-cyan-vibrant hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-xl bg-cyan-vibrant text-blue-institutional flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl">supervisor_account</span>
+</div>
+<span class="text-xs font-bold text-cyan-vibrant tracking-wider uppercase">Pilar 02</span>
+<h3 class="font-title text-title text-blue-institutional font-bold mt-1 mb-3">Mentoría Activa de la Industria</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Nuestros catedráticos no son teóricos aislados: son líderes técnicos, investigadores y directores de tecnología activos en corporaciones e institutos científicos.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-blue-deep text-xs font-semibold">
+<span class="material-symbols-outlined text-base">co_present</span>
+              Acompañamiento 1-a-1
+            </div>
+</div>
+<!-- Pilar 3 -->
+<div class="bg-surface-subtle p-7 rounded-2xl border border-border-subtle hover:border-cyan-vibrant hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-xl bg-blue-institutional text-white flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl">memory</span>
+</div>
+<span class="text-xs font-bold text-cyan-vibrant tracking-wider uppercase">Pilar 03</span>
+<h3 class="font-title text-title text-blue-institutional font-bold mt-1 mb-3">Plataforma Adaptativa con IA</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Entornos virtuales que personalizan las rutas de aprendizaje analizando fortalezas y áreas de mejora con analítica de datos en tiempo real.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-blue-deep text-xs font-semibold">
+<span class="material-symbols-outlined text-base">smart_toy</span>
+              Tutor inteligente 24/7
+            </div>
+</div>
+<!-- Pilar 4 -->
+<div class="bg-surface-subtle p-7 rounded-2xl border border-border-subtle hover:border-cyan-vibrant hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-xl bg-cyan-surface text-blue-deep flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl">workspace_premium</span>
+</div>
+<span class="text-xs font-bold text-cyan-vibrant tracking-wider uppercase">Pilar 04</span>
+<h3 class="font-title text-title text-blue-institutional font-bold mt-1 mb-3">Certificación Continua</h3>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                Obtén credenciales y micro-certificaciones profesionales con reconocimiento de la industria (AWS, Google Cloud, Cisco) a lo largo de tu carrera.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-blue-deep text-xs font-semibold">
+<span class="material-symbols-outlined text-base">badge</span>
+              Badges verificables en blockchain
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Autoridades Institucionales -->
+<section class="py-20 bg-surface">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="max-w-2xl mx-auto text-center mb-16 space-y-3">
+<span class="font-label-sm text-label-sm text-blue-deep uppercase tracking-widest font-bold">Gobernanza Universitaria</span>
+<h2 class="font-headline-lg text-headline-lg text-blue-institutional">Autoridades Institucionales</h2>
+<p class="font-body-md text-body-md text-text-secondary">Líderes académicos y científicos comprometidos con la excelencia y la integridad del instituto.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Autoridad 1: Rector -->
+<div class="bg-surface-canvas rounded-2xl p-6 border border-border-subtle shadow-sm hover:shadow-lg transition-all duration-200 group text-center">
+<div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-cyan-vibrant p-1 mb-5">
+<img class="w-full h-full object-cover rounded-full" data-alt="Distinguished Hispanic male university rector in his early 50s wearing formal navy suit, glasses, and a confident academic expression. Professional studio portrait with neutral soft gradient background, laboratory clean lighting, and balanced contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChEfRltZq5gNW-CYl_cO-_U1AIWuONaN6BzNDX1ttfFjKgfvivBt1KO9-y10IU1H--e8KSfkDDEuIYBxKmLtvq4PeIxdDldFDZ8NF98C4_S7_scdNRb-4w3F_XSCFeDbRQB_iZvZ4N3VyEU3Fj3rg2oh1yV2YC6DfZg-DhPr5NCrsyJIVF10RiNAvwdT2rVmeTav_xCHTZ6ZoF069DHmifuPsQQVtst-OsV65F27snIvhiaNQrF2_zVQ"/>
+</div>
+<span class="inline-block px-3 py-1 bg-cyan-surface text-blue-deep text-[11px] font-bold rounded-full uppercase tracking-wider mb-2">Rector</span>
+<h3 class="font-title text-title text-blue-institutional font-bold">Dr. Alejandro Morales V.</h3>
+<p class="text-xs text-cyan-vibrant font-semibold mb-3">PhD en Computación Cuántica, MIT</p>
+<p class="font-body-sm text-body-sm text-text-muted leading-relaxed">
+              Ex-investigador en laboratorios internacionales con más de 20 años en transformación de la educación superior en ciencias aplicadas.
+            </p>
+</div>
+<!-- Autoridad 2: Vicerrector Académico -->
+<div class="bg-surface-canvas rounded-2xl p-6 border border-border-subtle shadow-sm hover:shadow-lg transition-all duration-200 group text-center">
+<div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-cyan-vibrant p-1 mb-5">
+<img class="w-full h-full object-cover rounded-full" data-alt="Distinguished Hispanic female university vice rector in her late 40s with sharp professional demeanor, wearing an elegant dark blazer, friendly smile, and minimalist styling. Institutional photography studio setting with soft cyan ambient rim light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMn5WV8fAtXhA7HpDZ37xiq35OxIwddt8z8prNIHPj3KVmNzi495MQ8jPVS9LoYCixgmu6_NRp65BrzC7G6prcUYB0msJASp59139G9rHiamE6Iv8Nnc625fC5WriA9PI1exkw6S7s4hfaRyFzcunHq6uZijFuG4-lc6Lj27eyK8XSUtv5xU2bEN0tBnXX9KE0wuC3HyvEafSZjBNNAodwW6fxsZI4iEPcjwkyb6r5l04pyDkPe1o4tA"/>
+</div>
+<span class="inline-block px-3 py-1 bg-surface-container text-blue-deep text-[11px] font-bold rounded-full uppercase tracking-wider mb-2">Vicerrector Académico</span>
+<h3 class="font-title text-title text-blue-institutional font-bold">Dra. Beatriz Sandoval R.</h3>
+<p class="text-xs text-cyan-vibrant font-semibold mb-3">PhD en Ciencias de la Educación, Stanford</p>
+<p class="font-body-sm text-body-sm text-text-muted leading-relaxed">
+              Especialista en diseño curricular por competencias, acreditaciones internacionales RVOE y modelos de acreditación universitaria.
+            </p>
+</div>
+<!-- Autoridad 3: Dir. Innovación y Posgrados -->
+<div class="bg-surface-canvas rounded-2xl p-6 border border-border-subtle shadow-sm hover:shadow-lg transition-all duration-200 group text-center">
+<div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-cyan-vibrant p-1 mb-5">
+<img class="w-full h-full object-cover rounded-full" data-alt="Professional technology executive and academic director in his 40s with a modern tech-forward appearance, wearing a tailored navy jacket over crisp shirt. Clean scientific office background with subtle blue institutional illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATDRkoYTj7kl3KktGOtNcizCYKwVAy5HCPVhIvtnJOWoHCSVVsLUcoatOpZC9tcd7YPey2B-QgH_mAonbVATSDa2NjonISOEIgq9zAI0rsBjBn9mbR2P1EkxUrqBXze0feBTN1JoY9yO57Xq4bSQGwPbpcyIIVLiyOJ1PeyqyIWd-aYRqIrODMYxBt7iAX_ak69Ted_Gy-4Oxu-2IfYy2t-37gKi3cpBC2aK49ARtNA187jQ3hTEvs4g"/>
+</div>
+<span class="inline-block px-3 py-1 bg-cyan-surface text-blue-deep text-[11px] font-bold rounded-full uppercase tracking-wider mb-2">Dir. Innovación y Posgrados</span>
+<h3 class="font-title text-title text-blue-institutional font-bold">Mtro. Carlos Estrada L.</h3>
+<p class="text-xs text-cyan-vibrant font-semibold mb-3">M.Sc. en Inteligencia Artificial, Oxford</p>
+<p class="font-body-sm text-body-sm text-text-muted leading-relaxed">
+              Pionero en vinculación entre hubs tecnológicos y programas de posgrado avanzados en analítica predictiva y cloud native.
+            </p>
+</div>
+<!-- Autoridad 4: Secretario General -->
+<div class="bg-surface-canvas rounded-2xl p-6 border border-border-subtle shadow-sm hover:shadow-lg transition-all duration-200 group text-center">
+<div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-cyan-vibrant p-1 mb-5">
+<img class="w-full h-full object-cover rounded-full" data-alt="Experienced university legal and institutional general secretary in his 50s, wearing classic formal dark business attire, professional corporate headshot, poised and trustworthy atmosphere with clean neutral lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALVayG1LTlP1-8GlUQChCT3ioQy4GhQvo7XK1jxidttBuyH-Gk1aYDg5JudssOWQwVpKB9Cs8IshrXZowNmPEFPunk-KGfaNHPorW10afSNv8JuIvXNFPDmw1m8bsfOb79pyeopUMO_B7PohVSqSpPraa73M__mnjHnUShxeZpWD5bX6SdDL5N743TsQZx_PoIr5GEftUnTA28czZ1dy4KFejyQcUiNU6qcdIvhEG1yL5NRYJADsAIgw"/>
+</div>
+<span class="inline-block px-3 py-1 bg-surface-container text-blue-deep text-[11px] font-bold rounded-full uppercase tracking-wider mb-2">Secretario General</span>
+<h3 class="font-title text-title text-blue-institutional font-bold">Lic. Javier Ramos Mendoza</h3>
+<p class="text-xs text-cyan-vibrant font-semibold mb-3">M. en Derecho Corporativo y TIC, UNAM</p>
+<p class="font-body-sm text-body-sm text-text-muted leading-relaxed">
+              Garante de la normatividad académica, validez institucional y cumplimiento estricto de las directivas educativas nacionales.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Cuerpo Docente -->
+<section class="py-20 bg-surface-canvas border-t border-border-subtle">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div class="max-w-xl space-y-2">
+<span class="font-label-sm text-label-sm text-blue-deep uppercase tracking-widest font-bold">Facultad de Élite</span>
+<h2 class="font-headline-lg text-headline-lg text-blue-institutional">Cuerpo Docente e Investigadores</h2>
+<p class="font-body-md text-body-md text-text-secondary">Aprende de científicos, ingenieros senior y líderes de industria con trayectoria demostrada en el mercado global.</p>
+</div>
+<!-- Search / Filter Area -->
+<div class="w-full md:w-auto">
+<div class="relative">
+<input class="w-full md:w-80 h-11 pl-10 pr-4 rounded-lg bg-surface border border-border-subtle focus:border-cyan-vibrant focus:ring-2 focus:ring-cyan-vibrant/20 text-body-sm placeholder:text-text-muted transition-all outline-none" placeholder="Buscar por docente o especialidad..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-text-muted text-[20px]">search</span>
+</div>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex items-center gap-2 overflow-x-auto pb-4 mb-10 no-scrollbar">
+<button class="px-4 py-2 rounded-full text-xs font-semibold bg-blue-institutional text-white whitespace-nowrap shadow-sm">Todos los Departamentos</button>
+<button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-subtle text-text-secondary hover:text-blue-deep border border-border-subtle whitespace-nowrap transition-colors">Inteligencia Artificial y Software</button>
+<button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-subtle text-text-secondary hover:text-blue-deep border border-border-subtle whitespace-nowrap transition-colors">Ciencia de Datos y Cloud</button>
+<button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-subtle text-text-secondary hover:text-blue-deep border border-border-subtle whitespace-nowrap transition-colors">Ciberseguridad y Redes</button>
+<button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-subtle text-text-secondary hover:text-blue-deep border border-border-subtle whitespace-nowrap transition-colors">Innovación y Gestión Tecnológica</button>
+</div>
+<!-- Teacher Cards Deck -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Docente 1 -->
+<div class="bg-surface rounded-xl p-6 border border-border-subtle hover:border-cyan-vibrant transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-4">
+<img class="w-16 h-16 rounded-xl object-cover border border-border-subtle shrink-0" data-alt="Professional female computer science professor in her late 30s with welcoming posture and smart casual attire, studio portrait with clean soft daylight and bright white background. Contemporary university academic headshot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-UhPkjnzk0gnRTbp5cdqcXKLJq8ARLFdjAGs7tpCJQ8-jY3qDQTRFBQ0RSzxjCtv74lyFIdWK8j_JcYw6VzCsfmJdxPMCWQL1Vh47ZsUg2SaXkUQ6N-LKshdVcq5rzjRVfKa_rrZF4PD2rHY8oPQcgvJBkM3fsMfXWGxQXeHHhxf9Np6ekotFyCReg1WTa2WisqiScWZVM3tMhyEYdm6U3v2DqmRV2m8nm4VAq_xc3lJ3nMwqXBgv5w"/>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">Dra. Claudia Domínguez</h4>
+<p class="text-xs text-blue-deep font-semibold">PhD en Computer Science, Carnegie Mellon</p>
+<span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-cyan-surface text-blue-deep">IA &amp; Redes Neuronales</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                Investigadora principal en arquitecturas Transformer y visión artificial. 12 patentes registradas y colaboraciones directas con consorcios de telecomunicaciones.
+              </p>
+</div>
+<div class="pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+<span>Experiencia: <strong class="text-blue-institutional font-semibold">Google Research • MIT Media Lab</strong></span>
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">verified</span>
+</div>
+</div>
+<!-- Docente 2 -->
+<div class="bg-surface rounded-xl p-6 border border-border-subtle hover:border-cyan-vibrant transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-4">
+<img class="w-16 h-16 rounded-xl object-cover border border-border-subtle shrink-0" data-alt="Male data science professor in his 40s wearing modern glasses and clean button-up shirt in an engineering research environment. Natural crisp illumination, tech laboratory ambiance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEubXxAdpp-WZ2312OZB5l1I36FHPVPlYuYfI89RUpFypet1CD3hXX3bc3dGAW8hfxCfxQA4EqvIwXyvCHwkPgEs7ySL0NwHSpdqicIWyUp22qumfHtdVkpLg-tKIYynNVxo3ySz98I15KqrzbLAy5ASfDDimUlHPHm_rdQBJ-u7v5Sx8zzThVpAXw4Prlw2KCdVKMszRESPCvo6Qgwa7IIsRU7zVAuS-VWvZe7KvYPJb7eH3LFs14DQ"/>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">M.Sc. Fernando Arreola</h4>
+<p class="text-xs text-blue-deep font-semibold">M.Sc. Data Engineering, TU Munich</p>
+<span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-surface-container text-blue-deep">Big Data &amp; Cloud</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                Arquitecto de soluciones distribuidas y pipelines de streaming de datos masivos. Catedrático con certificación AWS Principal Solution Architect.
+              </p>
+</div>
+<div class="pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+<span>Experiencia: <strong class="text-blue-institutional font-semibold">Amazon Web Services • Oracle</strong></span>
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">verified</span>
+</div>
+</div>
+<!-- Docente 3 -->
+<div class="bg-surface rounded-xl p-6 border border-border-subtle hover:border-cyan-vibrant transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-4">
+<img class="w-16 h-16 rounded-xl object-cover border border-border-subtle shrink-0" data-alt="Female cybersecurity researcher and professor in her early 40s, sharp professional posture with a minimalist dark top, clear intelligent expression, illuminated with subtle cyan rim light in an institutional setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLSqGC89QVZiP0vj2s6i9u4GybGCYitWuCYIyb8FUH7Bfuyk3VlTQm92d3B0arcwx4wvWpRI4tYbg6eKka-BUERz7RyQ0U29Jxx3FXRfsJ54o4vV1rY2aLRY_gZLfMQwZc4hN6J7yq6zERShCsNyBy_k7h5U0Tn05OcadhAZwecQRCtIlp-t5otPpewVMqIbADaaevDvDZPgTjoSdUjh9XQxz0A6i0HWPSEsHK-MmJMpcrGxIQYKxq6w"/>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">Dra. Mariana Zaldívar</h4>
+<p class="text-xs text-blue-deep font-semibold">PhD en Seguridad de la Información, Politécnico de Madrid</p>
+<span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-cyan-surface text-blue-deep">Ciberseguridad Ofensiva</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                Consultora de seguridad defensiva y auditoría criptográfica para entidades financieras. Líder del Centro de Respuesta a Incidentes (CERT) de IINICIA.
+              </p>
+</div>
+<div class="pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+<span>Experiencia: <strong class="text-blue-institutional font-semibold">Kaspersky Labs • Banco Interamericano</strong></span>
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">verified</span>
+</div>
+</div>
+<!-- Docente 4 -->
+<div class="bg-surface rounded-xl p-6 border border-border-subtle hover:border-cyan-vibrant transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-4">
+<img class="w-16 h-16 rounded-xl object-cover border border-border-subtle shrink-0" data-alt="Hispanic male software engineering professor in his mid-30s with approachable demeanor, clean dark polo shirt, modern academic studio portrait with high clarity and soft white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkJi97fh6Sz9SAmHsRKkefnRSghcwJalzdrbA8TBeRQAbJ49wKEomxwAv3Bu2YfUsI7XDGyJ6z8ebBuNv0l58UxCSOjjya792JzBdWmHtidtcjDkcqaoigeDw1ZrAUJ2XVz3A3GNhnrF78r_wGYG0QoAnDXlJpIPI6jJKF7vWPvONG43nF-4OtkygPbLxqLORUPtRpmIHzojyS3pUV-wL1wiq9GJ-oF0rmvHc4Rot8NwcqcXRf7Kyr2g"/>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">Mtro. Rodrigo Salgado</h4>
+<p class="text-xs text-blue-deep font-semibold">M.Sc. Software Systems, ETH Zurich</p>
+<span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-surface-container text-blue-deep">Arquitectura de Software</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                Especialista en desarrollo frontend avanzado, microservicios y sistemas tolerantes a fallos. Evaluador técnico de startups para fondos de capital de riesgo.
+              </p>
+</div>
+<div class="pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+<span>Experiencia: <strong class="text-blue-institutional font-semibold">Spotify • Mercado Libre</strong></span>
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">verified</span>
+</div>
+</div>
+<!-- Docente 5 -->
+<div class="bg-surface rounded-xl p-6 border border-border-subtle hover:border-cyan-vibrant transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-4">
+<img class="w-16 h-16 rounded-xl object-cover border border-border-subtle shrink-0" data-alt="Female tech product management and innovation professor in her late 30s with energetic confident smile, wearing a contemporary blazer, professional portrait in a modern design laboratory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBujDiaP1MftmGCaQOw6nKXGVbmnzcmOL5TFcNDDWvGonTQPXy8N5mTeq3FvRruvypTpORTCxEeJ4IGqDnGqA-nzXXS-sOEBZQbiupuWaPP9oElwe4qGgxgBIx3YCHYFnpSUTyuHpA7a5fW9eDVyb1qCEY8fR30ivaWrJ8bHimc9p9vja0lh9r9E0KVSAjV3ANAn_rf4kCPwD4ormnw6eWZ_ya9pkPK4wHKr8o0uz69344kVX_KcVwGlw"/>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">Dra. Gabriela Ortiz P.</h4>
+<p class="text-xs text-blue-deep font-semibold">PhD en Innovación Tecnológica, Berkeley</p>
+<span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-cyan-surface text-blue-deep">Gestión de Producto Digital</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                Dirige el laboratorio de incubación y transferencia tecnológica. Autora de artículos sobre metodologías ágiles aplicadas a hardware y biotecnología.
+              </p>
+</div>
+<div class="pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+<span>Experiencia: <strong class="text-blue-institutional font-semibold">Meta • Y Combinator Alumni</strong></span>
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">verified</span>
+</div>
+</div>
+<!-- Docente 6 -->
+<div class="bg-surface rounded-xl p-6 border border-border-subtle hover:border-cyan-vibrant transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-4">
+<img class="w-16 h-16 rounded-xl object-cover border border-border-subtle shrink-0" data-alt="Distinguished senior male artificial intelligence researcher in his 50s, wearing classic glasses, warm scholarly smile, studio lighting with clean academic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGR7Dhgeao4HCohdQevzq87xEzVjy3HAy4v8bDpN8C6eBwww0EfkXOX3BRibUPt2OJ59KxEKNOyVUaVcIbY2RCfNTdhKOlskAlpFVzZPi79v0z--K2pcfrVGuVV8hPd3N590RiAdYwSvm9MCj8KnRwB_V_sfNTQJB-0gfys_VAlnfpxXMJbuayYjrbiM_TuyYR0og99IKLrklCieQ7BNTF7Rrb2hKk87aFbKhRgeCDKOWeH4kwyiY-dw"/>
+<div>
+<h4 class="font-title text-title text-blue-institutional font-bold">Dr. Emilio Cárdenas</h4>
+<p class="text-xs text-blue-deep font-semibold">PhD en Robótica y Automatización, Tokyo Tech</p>
+<span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-surface-container text-blue-deep">Robótica &amp; Sistemas Embebidos</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                Líder en diseño de sistemas ciberfísicos, sensórica IoT y algoritmos de control de navegación autónoma para la industria 4.0.
+              </p>
+</div>
+<div class="pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+<span>Experiencia: <strong class="text-blue-institutional font-semibold">Sony Robotics • Siemens R&amp;D</strong></span>
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">verified</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. Banner Llamado a la Acción Institucional -->
+<section class="py-16 md:py-20 bg-gradient-to-r from-blue-institutional via-[#00396b] to-blue-institutional text-white relative overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,158,226,0.25),transparent_60%)] pointer-events-none"></div>
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-8 space-y-4">
+<span class="inline-block px-3 py-1 bg-cyan-vibrant/20 border border-cyan-light/30 text-cyan-light rounded-full font-label-sm text-label-sm uppercase tracking-wide">
+              Convocatoria de Admisiones Abierta
+            </span>
+<h2 class="font-headline-lg text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold tracking-tight text-surface-canvas">
+              Forma parte de la nueva generación de científicos y tecnólogos
+            </h2>
+<p class="font-body-md text-body-md text-surface-variant max-w-2xl leading-relaxed">
+              Inicia tu proceso de admisión con asesoría personalizada, convalidación de estudios y opciones de financiamiento institucional diseñadas para tu potencial.
+            </p>
+</div>
+<div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3.5">
+<a class="bg-cyan-vibrant hover:bg-[#008bc7] text-blue-institutional font-bold px-6 py-4 rounded-lg text-center transition-all shadow-lg hover:shadow-cyan-vibrant/20 flex items-center justify-center gap-2" href="#">
+<span>Iniciar Solicitud de Admisión</span>
+<span class="material-symbols-outlined text-[20px]">send</span>
+</a>
+<a class="border border-surface-variant/40 hover:bg-white/10 text-white font-semibold px-6 py-3.5 rounded-lg text-center transition-all flex items-center justify-center gap-2" href="#">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Descargar Folleto Institucional</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component Anchor) -->
+<footer class="bg-blue-institutional dark:bg-inverse-surface border-t border-blue-deep/40 docked full-width bottom">
+<div class="w-full max-w-[1360px] mx-auto px-6 md:px-12 py-12 md:py-16">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+<!-- Logo & Institutional Identity Column -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-canvas flex items-center justify-center p-1.5 shadow-sm">
+<img alt="Logo IINICIA" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCS0x1laCI_ZFd7Seo_Ah5P5TDbcZnya5plwXm4jvYuInJsoF97k3x8XIlRj7XWBGqt5_7ognSOtF-PH5pdZe2p4H3kD6TaXDzyVS4oacVa7nizJotpS9Mnqgw8EK8q6x_-bmjn_kSzjj-Z7kxxyI-BIS9GtyQKtHU6diENSopeV-KsKgOCLixBvAs2Bg2VuXAQn4253zZdhaz8poZsiTy2GyKd81MLnEgUX0ltOnWCgyfzHy6jQZjivVnWoFxNhr06c"/>
+</div>
+<div>
+<span class="font-title text-headline-sm font-bold text-surface-canvas tracking-tight">IINICIA</span>
+<p class="text-[0.6875rem] text-cyan-light uppercase tracking-wider font-semibold">Instituto de Innovación y Ciencias Aplicadas</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-surface-variant/80 max-w-sm leading-relaxed">
+            Institución de educación superior con reconocimiento oficial dedicada a la formación de líderes en computación, inteligencia artificial e ingeniería de vanguardia.
+          </p>
+<div class="flex items-center space-x-3 text-surface-variant">
+<a class="w-9 h-9 rounded-lg bg-white/5 hover:bg-cyan-vibrant hover:text-blue-institutional flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</a>
+<a class="w-9 h-9 rounded-lg bg-white/5 hover:bg-cyan-vibrant hover:text-blue-institutional flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</a>
+<a class="w-9 h-9 rounded-lg bg-white/5 hover:bg-cyan-vibrant hover:text-blue-institutional flex items-center justify-center transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</a>
+</div>
+</div>
+<!-- Academic Links -->
+<div class="space-y-3">
+<h4 class="font-title text-title text-surface-canvas font-semibold">Oferta Académica</h4>
+<ul class="space-y-2 text-body-sm text-surface-variant/80">
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Ingeniería de Software</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Ciencia de Datos e IA</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Ciberseguridad Aplicada</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Maestrías y Posgrados</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Certificaciones Tech</a></li>
+</ul>
+</div>
+<!-- Institutional Links -->
+<div class="space-y-3">
+<h4 class="font-title text-title text-surface-canvas font-semibold">Universidad</h4>
+<ul class="space-y-2 text-body-sm text-surface-variant/80">
+<li><a class="text-cyan-vibrant dark:text-cyan-light font-semibold" href="#">Nosotros</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Modelo Educativo</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Cuerpo Académico</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Bolsa de Trabajo</a></li>
+<li><a class="hover:text-cyan-vibrant dark:hover:text-cyan-light transition-colors duration-200" href="#">Portal de Transparencia</a></li>
+</ul>
+</div>
+<!-- Contact & Location -->
+<div class="space-y-3">
+<h4 class="font-title text-title text-surface-canvas font-semibold">Sede y Contacto</h4>
+<ul class="space-y-2.5 text-body-sm text-surface-variant/80">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant mt-0.5">location_on</span>
+<span>Av. Insurgentes Sur 1450, Ciudad de México, México</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">call</span>
+<span>+52 (55) 8000-4464</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-cyan-vibrant">mail</span>
+<span>admisiones@iinicia.edu.mx</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Footer Bottom Legal Links & Copyright -->
+<div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="font-body-sm text-body-sm text-surface-variant/70 text-center md:text-left">
+          © 2025 IINICIA - Instituto de Innovación y Ciencias Aplicadas. Todos los derechos reservados. Planes con Reconocimiento de Validez Oficial de Estudios (RVOE SEP).
+        </p>
+<!-- Links verbatim from JSON -->
+<div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-surface-variant/80 dark:text-outline-variant font-label-sm text-label-sm">
+<a class="hover:text-surface-canvas transition-colors" href="#">Aviso de Privacidad</a>
+<a class="hover:text-surface-canvas transition-colors" href="#">Términos y Condiciones</a>
+<a class="hover:text-surface-canvas transition-colors" href="#">Reglamento Institucional</a>
+<a class="hover:text-surface-canvas transition-colors" href="#">Validez SEP / RVOE</a>
+<a class="hover:text-surface-canvas transition-colors" href="#">Bolsa de Trabajo</a>
+<a class="hover:text-surface-canvas transition-colors" href="#">Portal de Transparencia</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

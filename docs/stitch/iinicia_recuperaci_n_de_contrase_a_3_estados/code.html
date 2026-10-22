@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recuperación de Contraseña | IINICIA - Instituto de Innovación y Ciencias Aplicadas</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface": "#131b2e",
+            "outline-variant": "#bec8d2",
+            "on-primary-container": "#00314a",
+            "on-tertiary-container": "#082d5b",
+            "tertiary-fixed-dim": "#aac7fd",
+            "on-tertiary": "#ffffff",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "surface-container": "#eaedff",
+            "blue-institutional": "#002855",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#00497a",
+            "secondary-fixed": "#d0e4ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#faf8ff",
+            "on-secondary-fixed": "#001d35",
+            "secondary-fixed-dim": "#9ccaff",
+            "text-muted": "#64748b",
+            "surface-tint": "#006492",
+            "inverse-primary": "#8aceff",
+            "blue-deep": "#005a94",
+            "tertiary-container": "#7996c9",
+            "secondary-container": "#80bdfe",
+            "on-tertiary-fixed-variant": "#284775",
+            "on-primary-fixed-variant": "#004b6f",
+            "success": "#16a34a",
+            "primary-fixed-dim": "#8aceff",
+            "secondary": "#14629c",
+            "surface-canvas": "#ffffff",
+            "surface-subtle": "#f8fafc",
+            "on-secondary-container": "#004c7e",
+            "on-error-container": "#93000a",
+            "on-background": "#131b2e",
+            "on-error": "#ffffff",
+            "cyan-vibrant": "#009ee2",
+            "primary": "#006492",
+            "on-tertiary-fixed": "#001b3d",
+            "outline": "#6e7881",
+            "surface-variant": "#dae2fd",
+            "text-secondary": "#475569",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#c9e6ff",
+            "border-subtle": "#e2e8f0",
+            "surface": "#faf8ff",
+            "inverse-on-surface": "#eef0ff",
+            "surface-container-low": "#f2f3ff",
+            "surface-container-highest": "#dae2fd",
+            "warning": "#d97706",
+            "cyan-surface": "#e0f2fe",
+            "primary-container": "#009ee2",
+            "surface-container-high": "#e2e7ff",
+            "on-primary-fixed": "#001e2f",
+            "tertiary": "#415f8f",
+            "cyan-light": "#38bdf8",
+            "background": "#faf8ff",
+            "tertiary-fixed": "#d6e3ff",
+            "surface-dim": "#d2d9f4",
+            "on-surface-variant": "#3e4850",
+            "text-primary": "#0f172a",
+            "error": "#dc2626"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "margin-mobile": "1.25rem",
+            "space-md": "1rem",
+            "gutter-mobile": "1rem",
+            "gutter": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "gutter-desktop": "2rem",
+            "space-lg": "1.5rem",
+            "margin-desktop": "3rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "display-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "title": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "display": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "display-mobile": ["2.5rem", { "lineHeight": "3rem", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }],
+            "title": ["1.125rem", { "lineHeight": "1.625rem", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.625rem", "fontWeight": "400" }],
+            "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .elevation-level-1 {
+      box-shadow: 0 1px 3px 0 rgba(0, 90, 148, 0.04), 0 4px 12px -2px rgba(0, 158, 226, 0.06);
+    }
+    .elevation-level-2 {
+      box-shadow: 0 4px 8px -2px rgba(0, 90, 148, 0.06), 0 12px 24px -4px rgba(0, 158, 226, 0.12);
+    }
+    .elevation-level-3 {
+      box-shadow: 0 12px 32px -6px rgba(0, 40, 85, 0.16), 0 24px 48px -8px rgba(0, 158, 226, 0.10);
+    }
+    .grid-pattern {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 90, 148, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 90, 148, 0.04) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-text-primary min-h-full flex flex-col justify-between selection:bg-cyan-surface selection:text-blue-institutional antialiased">
+<!-- ================= TOP APP BAR / BRAND HEADER ================= -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-space-lg md:px-margin-desktop h-16 bg-surface-container-lowest shadow-sm">
+<div class="flex items-center gap-space-md">
+<a class="flex items-center gap-space-sm group focus:outline-none focus:ring-2 focus:ring-cyan-vibrant rounded-lg py-1 px-1" href="#">
+<img alt="Logotipo oficial IINICIA Instituto de Innovación y Ciencias Aplicadas" class="h-10 w-10 object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApjhbM7XqDwKD6SYfUUyr2SNkjUymKCy1UmHJCMIuUBIB74HuSqwU4bbjuTNzTDutw70ZWBzlAZdtdvVipFF_ZOAuO4wAOmn6vhnx5wbVJn1k9ez9W38ndjOS-qKHOtiqWXy0hgDb7eReosz9gvrPeIscXW3AyJkPVY8iLZdNWhACIYilh1Zv6MoOiPyqbPVddju0xt9Yb8fXz3uX8k3eghWMWHiZEx-ItQfCeYUBgfRBfoE7iXlLmlu3UvUqfX9QU9ek"/>
+<div class="flex flex-col">
+<span class="font-title text-title tracking-tight text-blue-institutional leading-none font-bold">IINICIA</span>
+<span class="font-label-sm text-[0.65rem] tracking-wider uppercase text-blue-deep font-semibold">Instituto de Innovación</span>
+</div>
+</a>
+<div class="hidden sm:block h-6 w-[1px] bg-border-subtle mx-2"></div>
+<span class="hidden sm:inline-flex items-center gap-1 font-label-md text-label-md text-text-secondary">
+<span class="material-symbols-outlined text-[16px] text-cyan-vibrant" data-icon="lock_reset">lock_reset</span>
+        Gestión de Seguridad &amp; Identidad
+      </span>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-space-md">
+<a class="flex items-center gap-space-xs font-label-md text-label-md text-blue-deep hover:text-cyan-vibrant transition-colors duration-150 py-1.5 px-3 rounded-lg hover:bg-cyan-surface" href="#soporte">
+<span class="material-symbols-outlined text-base" data-icon="contact_support">contact_support</span>
+<span class="hidden md:inline">Ayuda Académica &amp; Soporte Técnico</span>
+<span class="md:hidden">Soporte</span>
+</a>
+<a class="flex items-center gap-space-xs font-label-md text-label-md text-text-secondary hover:text-blue-institutional transition-colors duration-150 py-1.5 px-2" href="#login">
+<span class="material-symbols-outlined text-base" data-icon="login">login</span>
+<span class="hidden sm:inline">Iniciar Sesión</span>
+</a>
+</div>
+</header>
+<!-- ================= MAIN CONTENT WRAPPER ================= -->
+<main class="flex-grow flex items-center justify-center p-space-md md:p-space-xl grid-pattern relative overflow-hidden">
+<!-- Atmospheric background glow circles -->
+<div class="absolute -top-32 -left-32 w-96 h-96 bg-cyan-surface/50 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-32 -right-32 w-96 h-96 bg-primary-fixed/40 rounded-full blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-2xl mx-auto flex flex-col gap-space-lg relative z-10">
+<!-- CRUCIAL BANNER: MANDATORY INVIOLABLE NOTICE -->
+<section class="bg-cyan-surface/80 backdrop-blur-sm border border-cyan-light rounded-xl p-space-md md:p-space-lg shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-cyan-vibrant/15 flex items-center justify-center text-blue-institutional shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-2xl text-blue-deep" data-icon="sync_saved_locally">sync_saved_locally</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-label-sm uppercase bg-blue-institutional text-white font-bold">
+                Aviso Institucional Unificado
+              </span>
+<span class="font-label-md text-label-md text-blue-institutional font-bold">Credencial Única IINICIA</span>
+</div>
+<p class="font-body-sm text-body-sm text-blue-institutional leading-relaxed font-medium">
+              Tu nueva contraseña aplicará de inmediato para todos los servicios institucionales: Portal Web IINICIA, Campus Virtual Moodle y la App Móvil Oficial (Android / iOS).
+            </p>
+</div>
+</div>
+</section>
+<!-- ================= CARD PRINCIPAL ASISTENTE MULTI-ESTADO ================= -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded-xl elevation-level-2 overflow-hidden transition-all duration-300">
+<!-- STEPPER / INDICADOR DE ESTADOS -->
+<nav aria-label="Progreso de recuperación" class="bg-surface-subtle border-b border-border-subtle px-space-md py- space-sm md:px-space-lg">
+<div class="flex items-center justify-between">
+<!-- Tab 1 -->
+<button class="flex-1 flex items-center justify-center gap-2 py-3 px-2 border-b-2 border-cyan-vibrant text-blue-institutional transition-all duration-200" id="step-tab-1" onclick="switchState(1)">
+<span class="w-6 h-6 rounded-full bg-cyan-vibrant text-white font-label-sm text-xs flex items-center justify-center font-bold" id="step-badge-1">1</span>
+<div class="text-left hidden sm:block">
+<p class="font-label-md text-label-md font-bold leading-tight">Ingresar correo</p>
+<p class="font-label-sm text-[11px] text-text-muted leading-none">Verificación</p>
+</div>
+</button>
+<!-- Divider -->
+<div class="w-8 h-[1px] bg-border-subtle hidden sm:block"></div>
+<!-- Tab 2 -->
+<button class="flex-1 flex items-center justify-center gap-2 py-3 px-2 border-b-2 border-transparent text-text-secondary hover:text-blue-institutional transition-all duration-200" id="step-tab-2" onclick="switchState(2)">
+<span class="w-6 h-6 rounded-full bg-border-subtle text-text-secondary font-label-sm text-xs flex items-center justify-center font-bold" id="step-badge-2">2</span>
+<div class="text-left hidden sm:block">
+<p class="font-label-md text-label-md font-bold leading-tight">Confirmación</p>
+<p class="font-label-sm text-[11px] text-text-muted leading-none">Enlace seguro</p>
+</div>
+</button>
+<!-- Divider -->
+<div class="w-8 h-[1px] bg-border-subtle hidden sm:block"></div>
+<!-- Tab 3 -->
+<button class="flex-1 flex items-center justify-center gap-2 py-3 px-2 border-b-2 border-transparent text-text-secondary hover:text-blue-institutional transition-all duration-200" id="step-tab-3" onclick="switchState(3)">
+<span class="w-6 h-6 rounded-full bg-border-subtle text-text-secondary font-label-sm text-xs flex items-center justify-center font-bold" id="step-badge-3">3</span>
+<div class="text-left hidden sm:block">
+<p class="font-label-md text-label-md font-bold leading-tight">Nueva contraseña</p>
+<p class="font-label-sm text-[11px] text-text-muted leading-none">Reestablecimiento</p>
+</div>
+</button>
+</div>
+</nav>
+<!-- CARD BODY / VIEWSTATES CONTAINER -->
+<div class="p-space-lg md:p-space-xl">
+<!-- ================= ESTADO 1: INGRESAR CORREO ================= -->
+<div class="transition-opacity duration-300" id="state-1">
+<div class="mb-space-lg text-center md:text-left">
+<div class="inline-flex p-3 rounded-xl bg-cyan-surface text-blue-deep mb-3">
+<span class="material-symbols-outlined text-3xl text-blue-deep" data-icon="mail_lock">mail_lock</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-blue-institutional font-bold tracking-tight">Recupera tu acceso institucional</h1>
+<p class="font-body-md text-body-md text-text-secondary mt-1">
+                Ingresa tu correo institucional asignado (<span class="font-semibold text-blue-deep">@iinicia.edu.mx</span>) o la cuenta personal que tienes registrada ante Servicios Escolares.
+              </p>
+</div>
+<form class="space-y-space-lg" onsubmit="event.preventDefault(); goToState2();">
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold" for="recovery-email">
+                  Correo electrónico institucional o personal
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-text-muted">
+<span class="material-symbols-outlined text-xl" data-icon="alternate_email">alternate_email</span>
+</div>
+<input class="block w-full h-12 pl-11 pr-4 bg-white border border-outline-variant rounded-lg font-body-md text-text-primary placeholder:text-text-muted focus:border-cyan-vibrant focus:ring-4 focus:ring-cyan-vibrant/20 transition-all duration-150 outline-none" id="recovery-email" placeholder="ejemplo: a.martinez@iinicia.edu.mx" required="" type="email" value="alejandro.vargas@iinicia.edu.mx"/>
+</div>
+<div class="flex items-center gap-1.5 mt-2 text-text-muted font-body-sm text-xs">
+<span class="material-symbols-outlined text-sm text-cyan-vibrant" data-icon="info">info</span>
+<span>Si no recuerdas tu identificador de matrícula, contacta a la mesa de ayuda.</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-2">
+<button class="w-full h-12 bg-blue-deep hover:bg-blue-institutional text-white font-label-lg text-label-lg font-bold rounded-lg transition-all duration-200 elevation-level-1 hover:elevation-level-2 flex items-center justify-center gap-2" type="submit">
+<span>Enviar enlace de recuperación</span>
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="text-center pt-2">
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-blue-deep hover:text-cyan-vibrant font-semibold transition-colors duration-150" href="#login">
+<span class="material-symbols-outlined text-lg" data-icon="arrow_back">arrow_back</span>
+                    Regresar al Login
+                  </a>
+</div>
+</div>
+</form>
+</div>
+<!-- ================= ESTADO 2: CONFIRMACIÓN DE ENVÍO ================= -->
+<div class="hidden transition-opacity duration-300" id="state-2">
+<div class="text-center max-w-lg mx-auto py-2">
+<!-- Icono Buzón / Check en azul cian -->
+<div class="relative inline-flex items-center justify-center mb- space-lg">
+<div class="w-20 h-20 rounded-full bg-cyan-surface border-2 border-cyan-light flex items-center justify-center text-blue-deep shadow-sm">
+<span class="material-symbols-outlined text-4xl text-cyan-vibrant" data-icon="mark_email_read">mark_email_read</span>
+</div>
+<div class="absolute -bottom-1 -right-1 w-7 h-7 bg-success text-white rounded-full flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-blue-institutional font-bold tracking-tight">Te enviamos un enlace a tu correo</h2>
+<!-- Correo enmascarado con chip de seguridad -->
+<div class="my-4 inline-flex items-center gap-2 px-4 py-2 bg-surface-subtle border border-border-subtle rounded-full text-blue-institutional font-semibold font-body-md">
+<span class="material-symbols-outlined text-cyan-vibrant text-lg" data-icon="mail">mail</span>
+<span id="masked-display-email">al***@iinicia.edu.mx</span>
+</div>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed mb-6">
+                Hemos generado un token temporal criptográficamente seguro. Haz clic en el enlace adjunto en el mensaje para continuar con el restablecimiento de tu contraseña institucional.
+              </p>
+<!-- Alerta informativa Spam -->
+<div class="bg-surface-subtle border border-border-subtle rounded-lg p-3.5 mb-6 text-left flex items-start gap-3">
+<span class="material-symbols-outlined text-warning text-xl shrink-0 mt-0.5" data-icon="schedule">schedule</span>
+<div class="font-body-sm text-xs text-text-secondary">
+<p class="font-semibold text-text-primary mb-0.5">¿No visualizas el mensaje en tu bandeja principal?</p>
+<p>Revisa tu carpeta de correo no deseado o spam. El enlace tiene una vigencia máxima de <strong class="text-text-primary">30 minutos</strong> por seguridad académica.</p>
+</div>
+</div>
+<!-- Acciones de Estado 2 -->
+<div class="space-y-3">
+<a class="w-full h-12 bg-cyan-vibrant hover:bg-blue-deep text-white font-label-lg text-label-lg font-bold rounded-lg transition-all duration-200 elevation-level-1 flex items-center justify-center gap-2" href="https://outlook.office.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-xl" data-icon="open_in_new">open_in_new</span>
+<span>Abrir mi cliente de correo</span>
+</a>
+<!-- Contador dinámico de reenvío -->
+<div class="py-2 flex items-center justify-center">
+<button class="font-label-md text-label-md text-text-muted cursor-not-allowed flex items-center gap-1.5 transition-colors duration-150" disabled="" id="resend-btn" onclick="triggerResend()">
+<span class="material-symbols-outlined text-base" data-icon="timer">timer</span>
+<span>Reenviar correo en <span class="font-bold text-blue-deep" id="countdown-seconds">48s</span></span>
+</button>
+</div>
+<!-- Botón de avance rápido para demostración -->
+<div class="pt-2 border-t border-border-subtle flex items-center justify-between">
+<button class="font-label-sm text-label-sm text-text-secondary hover:text-blue-deep flex items-center gap-1" onclick="switchState(1)">
+<span class="material-symbols-outlined text-base" data-icon="chevron_left">chevron_left</span>
+                    Modificar correo
+                  </button>
+<button class="font-label-sm text-label-sm text-blue-deep hover:text-cyan-vibrant font-bold flex items-center gap-1" onclick="switchState(3)">
+                    Simular clic en enlace recibido
+                    <span class="material-symbols-outlined text-base" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= ESTADO 3: CREAR NUEVA CONTRASEÑA ================= -->
+<div class="hidden transition-opacity duration-300" id="state-3">
+<div class="mb-space-lg">
+<div class="inline-flex p-3 rounded-xl bg-cyan-surface text-blue-deep mb-3">
+<span class="material-symbols-outlined text-3xl text-blue-deep" data-icon="password">password</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-blue-institutional font-bold tracking-tight">Crea tu nueva contraseña</h2>
+<p class="font-body-md text-body-md text-text-secondary mt-1">
+                Asegura tu cuenta de estudiante o docente con un nivel de cifrado alto conforme a los estándares de identidad IINICIA.
+              </p>
+</div>
+<form class="space-y-space-md" onsubmit="handleFinalSubmit(event)">
+<!-- Campo: Nueva contraseña -->
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold" for="new-password">
+                  Nueva contraseña
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-text-muted">
+<span class="material-symbols-outlined text-xl" data-icon="key">key</span>
+</div>
+<input class="block w-full h-12 pl-11 pr-12 bg-white border border-outline-variant rounded-lg font-body-md text-text-primary placeholder:text-text-muted focus:border-cyan-vibrant focus:ring-4 focus:ring-cyan-vibrant/20 transition-all duration-150 outline-none" id="new-password" oninput="evaluatePasswordStrength(this.value)" placeholder="Ingresa una clave segura" required="" type="password"/>
+<button aria-label="Mostrar u ocultar contraseña" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-text-secondary hover:text-blue-institutional focus:outline-none" onclick="toggleVisibility('new-password', 'toggle-icon-1')" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="visibility" id="toggle-icon-1">visibility</span>
+</button>
+</div>
+</div>
+<!-- Medidor dinámico de fortaleza -->
+<div class="bg-surface-subtle p-3.5 rounded-lg border border-border-subtle space-y-2.5">
+<div class="flex justify-between items-center font-label-sm text-xs">
+<span class="text-text-secondary font-medium">Nivel de seguridad de la clave:</span>
+<span class="font-bold text-text-muted" id="strength-label">Esperando datos...</span>
+</div>
+<!-- Barra de progreso segmentada -->
+<div class="w-full h-2 bg-border-subtle rounded-full overflow-hidden flex gap-1">
+<div class="h-full w-1/3 bg-transparent rounded-full transition-all duration-300" id="bar-seg-1"></div>
+<div class="h-full w-1/3 bg-transparent rounded-full transition-all duration-300" id="bar-seg-2"></div>
+<div class="h-full w-1/3 bg-transparent rounded-full transition-all duration-300" id="bar-seg-3"></div>
+</div>
+<!-- Checklist interactivo de requisitos -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-xs font-body-sm">
+<div class="flex items-center gap-1.5 text-text-muted transition-colors duration-200" id="req-length">
+<span class="material-symbols-outlined text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span>Mínimo 8 caracteres</span>
+</div>
+<div class="flex items-center gap-1.5 text-text-muted transition-colors duration-200" id="req-upper">
+<span class="material-symbols-outlined text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span>Al menos 1 mayúscula</span>
+</div>
+<div class="flex items-center gap-1.5 text-text-muted transition-colors duration-200" id="req-lower">
+<span class="material-symbols-outlined text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span>Al menos 1 minúscula</span>
+</div>
+<div class="flex items-center gap-1.5 text-text-muted transition-colors duration-200" id="req-special">
+<span class="material-symbols-outlined text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span>1 número o símbolo especial</span>
+</div>
+</div>
+</div>
+<!-- Campo: Confirmar nueva contraseña -->
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-1.5 font-semibold" for="confirm-password">
+                  Confirmar nueva contraseña
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-text-muted">
+<span class="material-symbols-outlined text-xl" data-icon="lock_reset">lock_reset</span>
+</div>
+<input class="block w-full h-12 pl-11 pr-12 bg-white border border-outline-variant rounded-lg font-body-md text-text-primary placeholder:text-text-muted focus:border-cyan-vibrant focus:ring-4 focus:ring-cyan-vibrant/20 transition-all duration-150 outline-none" id="confirm-password" oninput="checkPasswordMatch()" placeholder="Repite tu nueva contraseña" required="" type="password"/>
+<button aria-label="Mostrar u ocultar confirmación de contraseña" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-text-secondary hover:text-blue-institutional focus:outline-none" onclick="toggleVisibility('confirm-password', 'toggle-icon-2')" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="visibility" id="toggle-icon-2">visibility</span>
+</button>
+</div>
+<p class="text-error font-body-sm text-xs mt-1.5 hidden flex items-center gap-1" id="match-error">
+<span class="material-symbols-outlined text-sm" data-icon="cancel">cancel</span>
+                  Las contraseñas ingresadas no coinciden.
+                </p>
+</div>
+<!-- Botón principal de acción -->
+<div class="pt-3">
+<button class="w-full h-12 bg-blue-deep hover:bg-blue-institutional text-white font-label-lg text-label-lg font-bold rounded-lg transition-all duration-200 elevation-level-1 hover:elevation-level-2 flex items-center justify-center gap-2" id="reset-submit-btn" type="submit">
+<span class="material-symbols-outlined text-xl" data-icon="check_circle">check_circle</span>
+<span>Restablecer contraseña</span>
+</button>
+</div>
+</form>
+</div>
+<!-- ================= ESTADO 4: FINALIZACIÓN EXITOSA ================= -->
+<div class="hidden text-center py-6" id="state-success">
+<div class="w-20 h-20 bg-success/10 border-2 border-success/30 rounded-full mx-auto flex items-center justify-center text-success mb-4">
+<span class="material-symbols-outlined text-5xl" data-icon="task_alt">task_alt</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-blue-institutional font-bold">¡Contraseña actualizada con éxito!</h3>
+<p class="font-body-md text-body-md text-text-secondary mt-2 max-w-md mx-auto">
+              Tu nueva clave de acceso ya está sincronizada y habilitada de forma inmediata para el Portal IINICIA, Campus Virtual Moodle y aplicaciones oficiales.
+            </p>
+<div class="mt-6">
+<a class="inline-flex items-center justify-center px-8 h-12 bg-blue-institutional hover:bg-blue-deep text-white font-label-lg text-label-lg font-bold rounded-lg transition-all duration-200 elevation-level-1" href="#login">
+                Acceder a mi Portal
+              </a>
+</div>
+</div>
+</div>
+</div>
+<!-- ASISTENCIA / CARDS DE SOPORTE ACADÉMICO -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md text-text-secondary">
+<div class="bg-surface-container-lowest/80 backdrop-blur-sm border border-border-subtle rounded-xl p-4 flex items-start gap-3">
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="headset_mic">headset_mic</span>
+<div>
+<h4 class="font-label-md text-label-md text-blue-institutional font-bold">Mesa de Ayuda de TI</h4>
+<p class="font-body-sm text-xs text-text-muted mt-0.5">Lunes a Viernes 08:00 a 20:00 hrs. Extensión académica 104 o correo soporteti@iinicia.edu.mx</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest/80 backdrop-blur-sm border border-border-subtle rounded-xl p-4 flex items-start gap-3">
+<span class="material-symbols-outlined text-cyan-vibrant text-2xl" data-icon="shield_person">shield_person</span>
+<div>
+<h4 class="font-label-md text-label-md text-blue-institutional font-bold">Seguridad de la Cuenta</h4>
+<p class="font-body-sm text-xs text-text-muted mt-0.5">El personal institucional de IINICIA nunca te solicitará tu contraseña por teléfono ni por correo.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- ================= INSTITUTIONAL FOOTER ================= -->
+<footer class="w-full py-space-xl px-space-lg md:px-margin-desktop bg-blue-institutional text-surface-container-lowest flex flex-col items-center justify-center text-center gap-space-md border-t border-blue-deep">
+<!-- Logo & Title Footer -->
+<div class="flex items-center gap-2">
+<img alt="Logotipo IINICIA" class="h-8 w-8 object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApjhbM7XqDwKD6SYfUUyr2SNkjUymKCy1UmHJCMIuUBIB74HuSqwU4bbjuTNzTDutw70ZWBzlAZdtdvVipFF_ZOAuO4wAOmn6vhnx5wbVJn1k9ez9W38ndjOS-qKHOtiqWXy0hgDb7eReosz9gvrPeIscXW3AyJkPVY8iLZdNWhACIYilh1Zv6MoOiPyqbPVddju0xt9Yb8fXz3uX8k3eghWMWHiZEx-ItQfCeYUBgfRBfoE7iXlLmlu3UvUqfX9QU9ek"/>
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest tracking-normal font-bold">IINICIA</span>
+</div>
+<!-- Navigation links from Shared Components -->
+<div class="flex flex-wrap justify-center gap-y-2 gap-x-6">
+<a class="font-label-sm text-label-sm text-outline-variant hover:text-surface-container-lowest transition-colors duration-150" href="#aviso">Aviso de Privacidad Institucional</a>
+<span class="text-blue-deep">•</span>
+<a class="font-label-sm text-label-sm text-outline-variant hover:text-surface-container-lowest transition-colors duration-150" href="#estatuto">Estatuto General</a>
+<span class="text-blue-deep">•</span>
+<a class="font-label-sm text-label-sm text-outline-variant hover:text-surface-container-lowest transition-colors duration-150" href="#reglamento">Reglamento Académico</a>
+<span class="text-blue-deep">•</span>
+<a class="font-label-sm text-label-sm text-outline-variant hover:text-surface-container-lowest transition-colors duration-150" href="#validacion">Validación de Documentos Oficiales</a>
+<span class="text-blue-deep">•</span>
+<a class="font-label-sm text-label-sm text-outline-variant hover:text-surface-container-lowest transition-colors duration-150" href="#transparencia">Transparencia y RVOE SEP</a>
+</div>
+<!-- Official SEP RVOE & Copyright Notice -->
+<p class="font-body-sm text-body-sm text-outline-variant max-w-4xl text-xs leading-relaxed">
+      © 2025 Instituto de Innovación y Ciencias Aplicadas (IINICIA). Institución de Educación Superior con Reconocimiento de Validez Oficial de Estudios (RVOE) de la Secretaría de Educación Pública. Todos los derechos reservados.
+    </p>
+</footer>
+<!-- ================= INLINE LOGIC & MICRO-INTERACTIONS ================= -->
+<script>
+    // State machine controller
+    let currentState = 1;
+    let countdownInterval;
+    let remainingSeconds = 48;
+
+    function switchState(stateNumber) {
+      currentState = stateNumber;
+      
+      // Elements
+      const s1 = document.getElementById('state-1');
+      const s2 = document.getElementById('state-2');
+      const s3 = document.getElementById('state-3');
+      const sSuccess = document.getElementById('state-success');
+
+      s1.classList.add('hidden');
+      s2.classList.add('hidden');
+      s3.classList.add('hidden');
+      sSuccess.classList.add('hidden');
+
+      if (stateNumber === 1) s1.classList.remove('hidden');
+      if (stateNumber === 2) {
+        s2.classList.remove('hidden');
+        startCountdown();
+      }
+      if (stateNumber === 3) s3.classList.remove('hidden');
+      if (stateNumber === 4) sSuccess.classList.remove('hidden');
+
+      // Update stepper indicators
+      for (let i = 1; i <= 3; i++) {
+        const tab = document.getElementById(`step-tab-${i}`);
+        const badge = document.getElementById(`step-badge-${i}`);
+        
+        if (i === stateNumber) {
+          tab.classList.remove('border-transparent', 'text-text-secondary');
+          tab.classList.add('border-cyan-vibrant', 'text-blue-institutional');
+          badge.classList.remove('bg-border-subtle', 'text-text-secondary', 'bg-success');
+          badge.classList.add('bg-cyan-vibrant', 'text-white');
+        } else if (i < stateNumber) {
+          tab.classList.remove('border-cyan-vibrant');
+          tab.classList.add('border-transparent', 'text-blue-deep');
+          badge.classList.remove('bg-border-subtle', 'bg-cyan-vibrant');
+          badge.classList.add('bg-blue-institutional', 'text-white');
+        } else {
+          tab.classList.remove('border-cyan-vibrant', 'text-blue-institutional');
+          tab.classList.add('border-transparent', 'text-text-secondary');
+          badge.classList.remove('bg-cyan-vibrant', 'bg-blue-institutional', 'text-white');
+          badge.classList.add('bg-border-subtle', 'text-text-secondary');
+        }
+      }
+    }
+
+    // Go from State 1 to State 2 with masked email
+    function goToState2() {
+      const emailVal = document.getElementById('recovery-email').value;
+      if (emailVal) {
+        const parts = emailVal.split('@');
+        let masked = parts[0];
+        if (masked.length > 2) {
+          masked = masked.substring(0, 2) + '***';
+        } else {
+          masked = masked + '***';
+        }
+        document.getElementById('masked-display-email').textContent = `${masked}@${parts[1] || 'iinicia.edu.mx'}`;
+      }
+      switchState(2);
+    }
+
+    // Timer countdown for resending email in State 2
+    function startCountdown() {
+      clearInterval(countdownInterval);
+      remainingSeconds = 48;
+      const resendBtn = document.getElementById('resend-btn');
+      const counterSpan = document.getElementById('countdown-seconds');
+      
+      resendBtn.disabled = true;
+      resendBtn.classList.add('cursor-not-allowed', 'text-text-muted');
+      resendBtn.classList.remove('text-blue-deep', 'hover:text-cyan-vibrant');
+
+      countdownInterval = setInterval(() => {
+        remainingSeconds--;
+        if (counterSpan) counterSpan.textContent = `${remainingSeconds}s`;
+
+        if (remainingSeconds <= 0) {
+          clearInterval(countdownInterval);
+          resendBtn.disabled = false;
+          resendBtn.classList.remove('cursor-not-allowed', 'text-text-muted');
+          resendBtn.classList.add('text-blue-deep', 'hover:text-cyan-vibrant', 'font-bold');
+          resendBtn.innerHTML = `
+            <span class="material-symbols-outlined text-base" data-icon="replay">replay</span>
+            <span>Reenviar correo ahora</span>
+          `;
+        }
+      }, 1000);
+    }
+
+    function triggerResend() {
+      alert("Enlace reenviado satisfactoriamente a tu buzón institucional.");
+      startCountdown();
+    }
+
+    // Password visibility toggle
+    function toggleVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // Password strength & requirements evaluation
+    function evaluatePasswordStrength(val) {
+      const hasLength = val.length >= 8;
+      const hasUpper = /[A-Z]/.test(val);
+      const hasLower = /[a-z]/.test(val);
+      const hasSpecialOrNum = /[0-9!@#$%^&*(),.?":{}|<>]/.test(val);
+
+      // Update checklist requirements UI
+      updateReq('req-length', hasLength);
+      updateReq('req-upper', hasUpper);
+      updateReq('req-lower', hasLower);
+      updateReq('req-special', hasSpecialOrNum);
+
+      let score = 0;
+      if (hasLength) score++;
+      if (hasUpper) score++;
+      if (hasLower) score++;
+      if (hasSpecialOrNum) score++;
+
+      const bar1 = document.getElementById('bar-seg-1');
+      const bar2 = document.getElementById('bar-seg-2');
+      const bar3 = document.getElementById('bar-seg-3');
+      const label = document.getElementById('strength-label');
+
+      // Reset
+      bar1.className = 'h-full w-1/3 rounded-full transition-all duration-300';
+      bar2.className = 'h-full w-1/3 rounded-full transition-all duration-300';
+      bar3.className = 'h-full w-1/3 rounded-full transition-all duration-300';
+
+      if (val.length === 0) {
+        label.textContent = "Esperando datos...";
+        label.className = "font-bold text-text-muted";
+        bar1.classList.add('bg-border-subtle');
+        bar2.classList.add('bg-border-subtle');
+        bar3.classList.add('bg-border-subtle');
+        return;
+      }
+
+      if (score <= 2) {
+        // Débil
+        label.textContent = "Débil";
+        label.className = "font-bold text-error";
+        bar1.classList.add('bg-error');
+        bar2.classList.add('bg-border-subtle');
+        bar3.classList.add('bg-border-subtle');
+      } else if (score === 3) {
+        // Media
+        label.textContent = "Media";
+        label.className = "font-bold text-warning";
+        bar1.classList.add('bg-warning');
+        bar2.classList.add('bg-warning');
+        bar3.classList.add('bg-border-subtle');
+      } else if (score >= 4) {
+        // Fuerte
+        label.textContent = "Fuerte";
+        label.className = "font-bold text-success";
+        bar1.classList.add('bg-success');
+        bar2.classList.add('bg-success');
+        bar3.classList.add('bg-success');
+      }
+
+      checkPasswordMatch();
+    }
+
+    function updateReq(id, valid) {
+      const el = document.getElementById(id);
+      const icon = el.querySelector('.material-symbols-outlined');
+      if (valid) {
+        el.className = 'flex items-center gap-1.5 text-success transition-colors duration-200 font-semibold';
+        icon.textContent = 'check_circle';
+      } else {
+        el.className = 'flex items-center gap-1.5 text-text-muted transition-colors duration-200';
+        icon.textContent = 'radio_button_unchecked';
+      }
+    }
+
+    function checkPasswordMatch() {
+      const p1 = document.getElementById('new-password').value;
+      const p2 = document.getElementById('confirm-password').value;
+      const err = document.getElementById('match-error');
+
+      if (p2.length > 0 && p1 !== p2) {
+        err.classList.remove('hidden');
+        return false;
+      } else {
+        err.classList.add('hidden');
+        return true;
+      }
+    }
+
+    function handleFinalSubmit(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('new-password').value;
+      const p2 = document.getElementById('confirm-password').value;
+
+      if (p1.length < 8) {
+        alert("La contraseña debe tener un mínimo de 8 caracteres.");
+        return;
+      }
+      if (p1 !== p2) {
+        alert("Las contraseñas no coinciden. Por favor verifica.");
+        return;
+      }
+
+      // Show success view
+      switchState(4);
+    }
+  </script>
+</body></html>
