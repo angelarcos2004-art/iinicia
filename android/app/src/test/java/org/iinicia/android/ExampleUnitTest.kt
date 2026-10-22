@@ -26,24 +26,33 @@ class ExampleUnitTest {
 
     @Test
     fun apiConfig_normalizesBaseUrlCorrectly() {
-        assertEquals("http://localhost:3000/api/", ApiConfig.normalizeBaseUrl("http://localhost:3000/api"))
-        assertEquals("http://localhost:3000/api/", ApiConfig.normalizeBaseUrl("http://localhost:3000/api/"))
+        assertEquals("http://localhost:3001/", ApiConfig.DEFAULT_BASE_URL)
+        assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001"))
+        assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001/"))
     }
 
     @Test
     fun retrofitClient_createsApiServiceWithPlaceholderUrl() {
-        val service = RetrofitClient.createApiService(baseUrl = "http://localhost:3000/api")
+        val service = RetrofitClient.createApiService(baseUrl = "http://localhost:3001/")
         assertNotNull(service)
     }
 
     @Test
-    fun loginFormValidation_validatesEmailAndPasswordFormat() {
+    fun loginFormValidation_validatesEmailAndMin8CharPassword() {
         val viewModel = MainViewModel()
 
         val emptyValidation = viewModel.validarFormularioLogin("", "")
         assertFalse(emptyValidation.isValid)
         assertNotNull(emptyValidation.correoError)
         assertNotNull(emptyValidation.passwordError)
+
+        val shortPasswordValidation = viewModel.validarFormularioLogin(
+            "rodrigo.hernandez@iinicia.edu.mx",
+            "1234567" // 7 caracteres (< 8)
+        )
+        assertFalse(shortPasswordValidation.isValid)
+        assertNull(shortPasswordValidation.correoError)
+        assertNotNull(shortPasswordValidation.passwordError)
 
         val invalidEmailValidation = viewModel.validarFormularioLogin("correo-invalido", "Secreto123")
         assertFalse(invalidEmailValidation.isValid)
@@ -60,7 +69,7 @@ class ExampleUnitTest {
     fun repository_loginAndDashboardPlaceholder_storesOnlyJwtAndEmptyCoursesList() = runTest {
         val tokenStorage = InMemorySessionTokenStorage()
         val repository = IiniciaRepositoryImpl(
-            baseUrl = "http://localhost:3000/api/",
+            baseUrl = "http://localhost:3001/",
             tokenStorage = tokenStorage,
             isConnectToRemoteEnabled = false
         )

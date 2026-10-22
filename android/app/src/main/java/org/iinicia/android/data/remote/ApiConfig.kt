@@ -8,8 +8,8 @@ import org.iinicia.android.BuildConfig
  */
 object ApiConfig {
     /**
-     * URL base configurable (por defecto `http://localhost:3000/api/` desde BuildConfig).
-     * En emulador Android se puede cambiar a `http://10.0.2.2:3000/api/` cuando el backend esté activo.
+     * URL base configurable (por defecto `http://localhost:3001/` desde BuildConfig).
+     * En emulador Android se puede apuntar a `http://10.0.2.2:3001/` cuando el backend esté activo.
      */
     const val DEFAULT_BASE_URL: String = BuildConfig.API_BASE_URL
 

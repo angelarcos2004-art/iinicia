@@ -69,7 +69,7 @@ class MainViewModel(
 
         val passwordError = when {
             password.isEmpty() -> "Ingresa tu contraseña."
-            password.length < 6 -> "La contraseña debe tener al menos 6 caracteres."
+            password.length < 8 -> "La contraseña debe tener al menos 8 caracteres."
             else -> null
         }
 
