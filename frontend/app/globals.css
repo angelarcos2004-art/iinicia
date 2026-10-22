@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/*
+ * Tokens del design system IINICIA.
+ * Fuente: docs/stitch/iinicia_academic_system/DESIGN.md (secciones Colors,
+ * Typography, Layout & Spacing, Elevation, Shapes). Se usan los valores de
+ * la seccion de prosa (coherentes con el logo institucional), no el bloque
+ * YAML de tokens Material3 que Stitch repite sin variar en cada mockup.
+ */
+@theme {
+  /* Colores de marca */
+  --color-primary: #0b2a5b;
+  --color-primary-hover: #1e5aa8;
+  --color-secondary: #1e5aa8;
+  --color-secondary-hover: #164785;
+  --color-accent: #f2a900;
+  --color-accent-ink: #0b2a5b;
+
+  /* Texto y superficies neutras */
+  --color-ink: #1e293b;
+  --color-ink-muted: #475569;
+  --color-border-subtle: #e2e8f0;
+  --color-surface-canvas: #ffffff;
+  --color-surface-subtle: #f5f7fa;
+  --color-surface-neutral: #edf2f7;
+
+  /* Estado */
+  --color-error: #dc2626;
+  --color-success-bg: #dcfce7;
+  --color-success-ink: #166534;
+  --color-admission-bg: #faf0d9;
+  --color-admission-ink: #8a5f00;
+  --color-academic-bg: #e6eaf1;
+  --color-academic-ink: #0b2a5b;
+
+  /* Tipografia: familias (las variables --font-plus-jakarta-sans y
+     --font-inter las inyecta next/font en app/layout.tsx) */
+  --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Tipografia: escala (tamano + interlineado) */
+  --text-display: 3.5rem;
+  --text-display--line-height: 4.25rem;
+  --text-display-mobile: 2.5rem;
+  --text-display-mobile--line-height: 3rem;
+  --text-headline-lg: 2.25rem;
+  --text-headline-lg--line-height: 2.75rem;
+  --text-headline-lg-mobile: 1.75rem;
+  --text-headline-lg-mobile--line-height: 2.25rem;
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 2rem;
+  --text-headline-sm: 1.25rem;
+  --text-headline-sm--line-height: 1.75rem;
+  --text-title: 1.125rem;
+  --text-title--line-height: 1.625rem;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.75rem;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.625rem;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.375rem;
+  --text-label-lg: 0.9375rem;
+  --text-label-lg--line-height: 1.375rem;
+  --text-label-md: 0.8125rem;
+  --text-label-md--line-height: 1.125rem;
+  --text-label-sm: 0.6875rem;
+  --text-label-sm--line-height: 1rem;
+
+  /* Radios (seccion Shapes de DESIGN.md) */
+  --radius-md: 0.5rem; /* 8px: inputs, chips, botones de tabla */
+  --radius-lg: 0.75rem; /* 12px: cards, modales */
+  --radius-xl: 1rem; /* 16px: heros, modulos grandes */
+
+  /* Espaciado nombrado (seccion Layout & Spacing) */
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 1rem;
+  --spacing-gutter-desktop: 2rem;
+  --spacing-margin: 1.5rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-margin-desktop: 3rem;
+
+  /* Sombras (seccion Elevation & Depth) */
+  --shadow-level-1: 0 1px 3px 0 rgba(11, 42, 91, 0.04), 0 4px 6px -1px rgba(11, 42, 91, 0.06);
+  --shadow-level-2: 0 4px 6px -2px rgba(11, 42, 91, 0.05), 0 10px 15px -3px rgba(11, 42, 91, 0.08);
+  --shadow-level-3: 0 10px 25px -5px rgba(11, 42, 91, 0.12), 0 20px 25px -5px rgba(11, 42, 91, 0.08);
+}
+
+body {
+  background-color: var(--color-surface-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
