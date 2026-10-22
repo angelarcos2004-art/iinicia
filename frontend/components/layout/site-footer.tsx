@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
 
 const SITEMAP_LINKS = [
   { href: "/", label: "Inicio" },
@@ -16,7 +16,13 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
         <div className="grid grid-cols-1 gap-10 border-b border-white/15 pb-10 md:grid-cols-3">
           <div className="flex flex-col gap-3">
-            <Logo variant="dark" className="h-10 w-auto" />
+            <Image
+              src="/logo-inicia.png"
+              alt="IINICIA, Instituto de Innovación y Ciencias Aplicadas"
+              width={1563}
+              height={1563}
+              className="h-24 w-24"
+            />
             <p className="max-w-sm text-body-sm text-white/80">
               Institución de educación superior en línea comprometida con la
               excelencia académica y la accesibilidad tecnológica.
