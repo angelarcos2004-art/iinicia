@@ -1,8 +1,15 @@
 package org.iinicia.android
 
 import kotlinx.coroutines.test.runTest
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.iinicia.android.data.local.InMemorySessionTokenStorage
+import org.iinicia.android.data.model.AuthResponse
+import org.iinicia.android.data.model.LoginRequest
+import org.iinicia.android.data.model.RegistroRequest
+import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
+import org.iinicia.android.data.remote.IiniciaApiService
 import org.iinicia.android.data.remote.RetrofitClient
 import org.iinicia.android.data.repository.IiniciaRepositoryImpl
 import org.iinicia.android.ui.theme.IiniciaAccent
@@ -15,6 +22,8 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import retrofit2.HttpException
+import retrofit2.Response
 
 class ExampleUnitTest {
     @Test
@@ -26,15 +35,18 @@ class ExampleUnitTest {
 
     @Test
     fun apiConfig_normalizesBaseUrlCorrectly() {
-        assertEquals("http://localhost:3001/", ApiConfig.DEFAULT_BASE_URL)
-        assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001"))
-        assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001/"))
+        assertEquals("http://10.0.2.2:3001/", ApiConfig.DEFAULT_BASE_URL)
+        assertEquals("http://10.0.2.2:3001/", ApiConfig.normalizeBaseUrl("http://10.0.2.2:3001"))
+        assertEquals("http://10.0.2.2:3001/", ApiConfig.normalizeBaseUrl("http://10.0.2.2:3001/"))
     }
 
     @Test
     fun retrofitClient_createsApiServiceWithPlaceholderUrl() {
-        val service = RetrofitClient.createApiService(baseUrl = "http://localhost:3001/")
+        val service = RetrofitClient.createApiService(baseUrl = "http://10.0.2.2:3001/")
         assertNotNull(service)
+        val defaultRepository = IiniciaRepositoryImpl()
+        assertTrue(defaultRepository.isConnectToRemoteEnabled)
+        assertEquals("http://10.0.2.2:3001/", defaultRepository.baseUrl)
     }
 
     @Test
@@ -69,7 +81,7 @@ class ExampleUnitTest {
     fun repository_loginAndDashboardPlaceholder_storesOnlyJwtAndEmptyCoursesList() = runTest {
         val tokenStorage = InMemorySessionTokenStorage()
         val repository = IiniciaRepositoryImpl(
-            baseUrl = "http://localhost:3001/",
+            baseUrl = "http://10.0.2.2:3001/",
             tokenStorage = tokenStorage,
             isConnectToRemoteEnabled = false
         )
@@ -87,5 +99,39 @@ class ExampleUnitTest {
 
         repository.logout()
         assertNull(tokenStorage.getToken())
+    }
+
+    @Test
+    fun repository_loginHttpException_parsesBackendJsonMessageInSpanish() = runTest {
+        val fakeApi = object : IiniciaApiService {
+            override suspend fun login(request: LoginRequest): AuthResponse {
+                val errorJson = """{"message":"Correo o contraseña incorrectos"}"""
+                val errorBody = errorJson.toResponseBody("application/json".toMediaType())
+                throw HttpException(Response.error<AuthResponse>(401, errorBody))
+            }
+
+            override suspend fun registro(request: RegistroRequest): AuthResponse {
+                throw UnsupportedOperationException()
+            }
+
+            override suspend fun getPerfilActual(): Usuario {
+                throw UnsupportedOperationException()
+            }
+        }
+
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            tokenStorage = InMemorySessionTokenStorage(),
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val result = repository.login("rodrigo.hernandez@iinicia.edu.mx", "Incorrecta123")
+        assertTrue(result.isFailure)
+        assertEquals("Correo o contraseña incorrectos", result.exceptionOrNull()?.message)
+
+        // Verifica también el respaldo cuando el cuerpo no es JSON válido
+        val fallback = IiniciaRepositoryImpl.parseErrorMessage("no-es-json", "Error genérico de respaldo")
+        assertEquals("Error genérico de respaldo", fallback)
     }
 }

@@ -5,9 +5,9 @@ Aplicación nativa Android desarrollada con **Kotlin + Jetpack Compose** para el
 ## Arquitectura y Reglas de Seguridad
 
 - **Capas:** `UI (Jetpack Compose)` → `ViewModel (StateFlow)` → `Repository` → `Cliente HTTP (Retrofit 2 + OkHttp)`.
-- **BFF (Backend for Frontend):** La aplicación apunta al backend NestJS de IINICIA (`BuildConfig.API_BASE_URL`, por defecto `http://localhost:3001/`).
+- **BFF (Backend for Frontend):** La aplicación apunta al backend NestJS de IINICIA (`BuildConfig.API_BASE_URL`, por defecto `http://10.0.2.2:3001/` para conexión desde el emulador Android).
 - **Cero tokens de Moodle en Android:** Ningún token administrativo o de servicio web de Moodle existe ni se procesa en la app móvil.
-- **Seguridad de credenciales:** Prohibido almacenar contraseñas en texto plano. Se incluye el contrato `SessionTokenStorage` con los marcadores `TODO(Seguridad - Login Real)` para conectar `EncryptedSharedPreferences` / `DataStore` cifrado con Android Keystore cuando el login real del backend esté disponible.
+- **Seguridad de credenciales y sesión:** Prohibido almacenar contraseñas en texto plano o cifradas. La sesión se persiste mediante `EncryptedSessionTokenStorage` (`androidx.security:security-crypto` / `EncryptedSharedPreferences` con Android Keystore `AES256_SIV` y `AES256_GCM`), guardando únicamente el JWT de sesión y los datos públicos de `Usuario`.
 
 ## Identidad Visual Institucional
 
@@ -16,10 +16,10 @@ Configurada en `ui/theme/Color.kt` y `ui/theme/Theme.kt`:
 - **Secundario (Azul):** `#1E5AA8`
 - **Acento (Ámbar):** `#F2A900`
 
-## Navegación y Pantallas (Fase 4)
+## Navegación y Pantallas
 
-- **`LoginScreen` (`login`):** Campos de correo institucional y contraseña con validación de formato en el cliente y simulación de inicio de sesión exitoso hacia el `MainViewModel`.
-- **`DashboardScreen` (`dashboard`):** Pantalla placeholder del estudiante con encabezado `"Bienvenido"`, lista vacía de cursos (`emptyList()`) y cierre de sesión.
+- **`LoginScreen` (`login`):** Campos de correo institucional y contraseña con validación de formato en el cliente (mínimo 8 caracteres), conexión real a `POST /auth/login` y parseo nativo de mensajes de error JSON (`{ "message": "..." }`) del backend.
+- **`DashboardScreen` (`dashboard`):** Pantalla placeholder del estudiante con encabezado `"Bienvenido"`, lista vacía de cursos (`emptyList()`) y cierre de sesión que limpia `EncryptedSharedPreferences`.
 
 ## Ejecución y Pruebas
 
