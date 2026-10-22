@@ -1,4 +1,5 @@
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import type { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 import { AuthService } from './auth.service.js';
@@ -7,7 +8,11 @@ import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
 import type { UsersService } from '../users/users.service.js';
 
-function makeService(existing: User | null, moodleUserId = 99) {
+function makeService(
+  existing: User | null,
+  moodleUserId = 99,
+  env: Record<string, string> = {},
+) {
   const users = {
     findByCorreo: vi.fn().mockResolvedValue(existing),
     create: vi.fn(async (d: Record<string, unknown>) => ({ id: 'uuid-1', moodleUserId: null, ...d }) as unknown as User),
@@ -16,9 +21,13 @@ function makeService(existing: User | null, moodleUserId = 99) {
   const jwt = { signAsync: vi.fn().mockResolvedValue('tok') } as unknown as JwtService;
   const moodle = {
     buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(moodleUserId),
+    matricularEnCurso: vi.fn().mockResolvedValue(undefined),
   } as unknown as MoodleService;
+  const config = {
+    get: (key: string, def?: string) => env[key] ?? def,
+  } as unknown as ConfigService;
   return {
-    service: new AuthService(users as unknown as UsersService, jwt, moodle),
+    service: new AuthService(users as unknown as UsersService, jwt, moodle, config),
     users,
     jwt,
     moodle,
@@ -114,5 +123,57 @@ describe('AuthService', () => {
     );
     await service.login({ correo: 'a@b.com', password: 'buena' });
     expect(moodle.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+  });
+
+  describe('matrícula en el curso de prueba', () => {
+    const dto = {
+      nombreCompleto: 'Ana',
+      correo: 'a@b.com',
+      password: 'secreto123',
+      programaInteresId: 'p1',
+      aceptaAvisoPrivacidad: true,
+      deseaInformacionBecas: false,
+    };
+
+    it('registro exitoso matricula al usuario Moodle en IINICIA101 (default)', async () => {
+      const { service, moodle } = makeService(null, 42);
+      await service.registro(dto);
+      expect(moodle.matricularEnCurso).toHaveBeenCalledWith(42, 'IINICIA101');
+    });
+
+    it('usa MOODLE_TEST_COURSE si está definida', async () => {
+      const { service, moodle } = makeService(null, 42, { MOODLE_TEST_COURSE: 'OTRO101' });
+      await service.registro(dto);
+      expect(moodle.matricularEnCurso).toHaveBeenCalledWith(42, 'OTRO101');
+    });
+
+    it('si matricularEnCurso falla, el registro igual se completa y el id Moodle se conserva', async () => {
+      const { service, users, moodle } = makeService(null, 42);
+      (moodle.matricularEnCurso as ReturnType<typeof vi.fn>).mockRejectedValue(
+        new Error('curso inexistente'),
+      );
+      const res = await service.registro(dto);
+      expect(res.token).toBe('tok');
+      expect(users.actualizarMoodleUserId).toHaveBeenCalledWith('uuid-1', 42);
+    });
+
+    it('si no se pudo vincular al usuario, no intenta matricular', async () => {
+      const { service, moodle } = makeService(null);
+      (moodle.buscarOCrearUsuarioMoodle as ReturnType<typeof vi.fn>).mockRejectedValue(
+        new Error('Moodle caído'),
+      );
+      await service.registro(dto);
+      expect(moodle.matricularEnCurso).not.toHaveBeenCalled();
+    });
+
+    it('login que reintenta la vinculación también matricula', async () => {
+      const hash = await bcrypt.hash('buena', 4);
+      const { service, moodle } = makeService(
+        { id: 'u', correo: 'a@b.com', nombre: 'Ana', passwordHash: hash, moodleUserId: null } as User,
+        55,
+      );
+      await service.login({ correo: 'a@b.com', password: 'buena' });
+      expect(moodle.matricularEnCurso).toHaveBeenCalledWith(55, 'IINICIA101');
+    });
   });
 });

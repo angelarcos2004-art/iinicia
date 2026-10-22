@@ -39,7 +39,10 @@ class InMemoryUsers {
 }
 
 /** MoodleService falso: estas pruebas no deben depender de un Moodle real. */
-const moodleFake = { buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(555) };
+const moodleFake = {
+  buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(555),
+  matricularEnCurso: vi.fn().mockResolvedValue(undefined),
+};
 
 const registroValido = {
   nombreCompleto: 'Ana Pérez',
@@ -56,6 +59,7 @@ describe('Auth (e2e)', () => {
 
   beforeEach(async () => {
     moodleFake.buscarOCrearUsuarioMoodle.mockClear();
+    moodleFake.matricularEnCurso.mockClear();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [AuthController],
@@ -64,7 +68,13 @@ describe('Auth (e2e)', () => {
         JwtStrategy,
         { provide: UsersService, useClass: InMemoryUsers },
         { provide: MoodleService, useValue: moodleFake },
-        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret' } },
+        {
+          provide: ConfigService,
+          useValue: {
+            getOrThrow: () => 'test-secret',
+            get: (_key: string, def?: string) => def,
+          },
+        },
       ],
     }).compile();
     app = moduleRef.createNestApplication();
