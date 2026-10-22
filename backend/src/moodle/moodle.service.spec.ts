@@ -5,13 +5,14 @@ import { MoodleService } from './moodle.service.js';
 const MOODLE_URL = 'http://moodle.test:8080/';
 const TOKEN = 'token-de-prueba-no-real';
 
-function makeService() {
+function makeService(env: Record<string, string> = {}) {
   const config = {
     getOrThrow: (key: string) => {
       if (key === 'MOODLE_URL') return MOODLE_URL;
       if (key === 'MOODLE_TOKEN') return TOKEN;
       throw new Error(`falta ${key}`);
     },
+    get: (key: string, def?: string) => env[key] ?? def,
   } as unknown as ConfigService;
   return new MoodleService(config);
 }
@@ -148,5 +149,73 @@ describe('MoodleService.buscarOCrearUsuarioMoodle', () => {
       BadRequestException,
     );
     expect(fetchFn).not.toHaveBeenCalled();
+  });
+});
+
+describe('MoodleService.matricularEnCurso', () => {
+  const cursoEncontrado = { courses: [{ id: 2, shortname: 'IINICIA101' }], warnings: [] };
+
+  it('busca el curso por shortname y matricula con roleid 5 por defecto', async () => {
+    const fetchFn = mockFetch(cursoEncontrado, null);
+
+    await expect(makeService().matricularEnCurso(42, 'IINICIA101')).resolves.toBeUndefined();
+
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+    const busqueda = paramsDeLlamada(fetchFn, 0);
+    expect(busqueda.get('wsfunction')).toBe('core_course_get_courses_by_field');
+    expect(busqueda.get('field')).toBe('shortname');
+    expect(busqueda.get('value')).toBe('IINICIA101');
+    const matricula = paramsDeLlamada(fetchFn, 1);
+    expect(matricula.get('wsfunction')).toBe('enrol_manual_enrol_users');
+    expect(matricula.get('enrolments[0][roleid]')).toBe('5');
+    expect(matricula.get('enrolments[0][userid]')).toBe('42');
+    expect(matricula.get('enrolments[0][courseid]')).toBe('2');
+    expect(matricula.get('wstoken')).toBe(TOKEN);
+    expect(matricula.get('moodlewsrestformat')).toBe('json');
+  });
+
+  it('usa MOODLE_ROLEID_STUDENT si está definida', async () => {
+    const fetchFn = mockFetch(cursoEncontrado, null);
+    await makeService({ MOODLE_ROLEID_STUDENT: '7' }).matricularEnCurso(42, 'IINICIA101');
+    expect(paramsDeLlamada(fetchFn, 1).get('enrolments[0][roleid]')).toBe('7');
+  });
+
+  it('usa el id del primer curso si Moodle devuelve varios', async () => {
+    const fetchFn = mockFetch({ courses: [{ id: 9 }, { id: 3 }] }, null);
+    await makeService().matricularEnCurso(1, 'X');
+    expect(paramsDeLlamada(fetchFn, 1).get('enrolments[0][courseid]')).toBe('9');
+  });
+
+  it('si el curso no existe lanza 502 y NO intenta matricular', async () => {
+    const fetchFn = mockFetch({ courses: [], warnings: [] });
+    await expect(makeService().matricularEnCurso(42, 'NOEXISTE')).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+  });
+
+  it('si Moodle rechaza la matrícula (HTTP 200 + exception) lanza 502 sin filtrar el token', async () => {
+    mockFetch(cursoEncontrado, {
+      exception: 'moodle_exception',
+      errorcode: 'wsusercannotassign',
+      message: 'No puede asignar ese rol',
+    });
+    const promesa = makeService().matricularEnCurso(42, 'IINICIA101');
+    await expect(promesa).rejects.toBeInstanceOf(BadGatewayException);
+    await expect(promesa).rejects.toSatisfy((e: Error) => !e.message.includes(TOKEN));
+  });
+
+  it('si falla la búsqueda del curso por error de Moodle lanza 502', async () => {
+    mockFetch({ exception: 'moodle_exception', errorcode: 'accessexception', message: 'denegado' });
+    await expect(makeService().matricularEnCurso(42, 'IINICIA101')).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+  });
+
+  it('lanza 502 si falla la conexión de red', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('fetch failed')));
+    await expect(makeService().matricularEnCurso(42, 'IINICIA101')).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
   });
 });
