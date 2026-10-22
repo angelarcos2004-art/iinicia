@@ -1,0 +1,57 @@
+name: iinicia
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: iinicia-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-iinicia}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-iinicia_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-iinicia_backend}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-iinicia}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Imagen oficial de Moodle HQ (solo runtime PHP+Apache; el codigo fuente
+  # de Moodle se monta desde ./moodle-src, ver infrastructure/README.md
+  # para como obtenerlo e instalarlo). bitnami/moodle ya no esta disponible
+  # gratis en Docker Hub, por eso no se uso.
+  moodle:
+    image: moodlehq/moodle-php-apache:8.3
+    container_name: iinicia-moodle
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./moodle-src:/var/www/html
+      - moodledata_data:/var/www/moodledata
+
+  # El backend NestJS lo agrega el compañero a cargo de backend/ cuando
+  # tenga su Dockerfile. Mientras tanto corre localmente con
+  # DATABASE_URL apuntando a postgres://iinicia:<password>@localhost:5432/iinicia_backend
+  # backend:
+  #   build: ../backend
+  #   container_name: iinicia-backend
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   env_file:
+  #     - ../backend/.env
+  #   ports:
+  #     - "3001:3001"
+
+volumes:
+  postgres_data:
+  moodledata_data:

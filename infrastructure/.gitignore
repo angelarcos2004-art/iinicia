@@ -1,0 +1,4 @@
+# Codigo fuente de Moodle: se clona con el comando en README.md, no se
+# versiona aqui (cientos de MB). moodle-custom/ (temas y plugins propios)
+# si se versiona normalmente, en la raiz del repo.
+moodle-src/
