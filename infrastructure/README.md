@@ -25,10 +25,18 @@ abajo desde el paso 1.
   - `tool_generator_000001` — otro estudiante, generado automáticamente
     por `tool_generator` (nombre aleatorio, ignóralo salvo que necesites
     más volumen de datos de prueba).
-- `enablewebservices=1` y `webserviceprotocols=rest` ya están activos.
-  Falta el único paso manual que no tiene CLI oficial: crear el servicio
-  externo y el token (sección "Habilitar Web Services" más abajo, paso 2
-  en adelante).
+- Web Services REST ya habilitados y probados por HTTP de verdad
+  (`core_webservice_get_site_info` y `core_user_get_users_by_field`
+  contra el servicio real, no solo revisando la base de datos):
+  - Servicio: `IINICIA Backend` (shortname `iinicia_backend`), con las
+    9 funciones que el backend va a necesitar (ver script en "Habilitar
+    Web Services" abajo).
+  - Token del usuario `admin` para ese servicio:
+    `ddde4b467e7b7d79ac7696b36d23b26e` — úsalo tal cual en
+    `backend/.env` (`MOODLE_URL=http://localhost:8080`,
+    `MOODLE_TOKEN=ddde4b467e7b7d79ac7696b36d23b26e`) si trabajas en esta
+    misma máquina. En una instalación nueva, el script de la sección
+    "Habilitar Web Services" genera uno distinto.
 
 ## Por qué esta estructura
 
@@ -186,26 +194,84 @@ idempotente (ver CLAUDE.md y docs/requerimientos.md sección 13). Pasos:
    docker compose exec -T moodle php admin/cli/cfg.php --name=webserviceprotocols --set=rest
    ```
 
-2. **Crear/activar un servicio web externo** con las funciones que el
-   backend va a necesitar (crear usuarios, consultar usuarios, crear
-   cursos, matricular). Esto, a diferencia del paso 1, no tiene CLI
-   oficial — se hace una vez desde la interfaz de administrador:
-   - Entra a `http://localhost:8080` con el usuario `admin`.
-   - *Site administration > Server > Web services > External services*
-     → **Add** un servicio nuevo (ej. "IINICIA Backend"), marca
-     "Enabled", y agrégale al menos estas funciones:
-     - `core_user_get_users` / `core_user_get_users_by_field`
-     - `core_user_create_users`
-     - `core_user_update_users`
-     - `core_course_get_courses`
-     - `enrol_manual_enrol_users`
-   - *Site administration > Server > Web services > Manage tokens* →
-     **Create token**: usuario `admin` (o uno dedicado de servicio),
-     servicio el que acabas de crear. Copia el token generado.
+2. **Crear el servicio web externo + token.** La interfaz de admin
+   (*Site administration > Server > Web services*) hace exactamente
+   esto — aquí lo hacemos por script para que sea repetible y no
+   dependa de clicks. Usa las mismas funciones internas que usa esa UI
+   (`webservice::add_external_service()`,
+   `add_external_function_to_service()`, `external_generate_token()`):
+
+   ```bash
+   cat > seed-webservice-token.php << 'EOF'
+   <?php
+   define('CLI_SCRIPT', true);
+   require('/var/www/html/config.php');
+   require_once($CFG->dirroot . '/webservice/lib.php');
+   require_once($CFG->libdir . '/externallib.php');
+
+   $shortname = 'iinicia_backend';
+   $functions = [
+       'core_user_get_users',
+       'core_user_get_users_by_field',
+       'core_user_create_users',
+       'core_user_update_users',
+       'core_course_get_courses',
+       'core_course_create_courses',
+       'enrol_manual_enrol_users',
+       'core_enrol_get_users_courses',
+       'core_webservice_get_site_info',
+   ];
+
+   $wsmanager = new webservice();
+   $service = $wsmanager->get_external_service_by_shortname($shortname);
+   if (!$service) {
+       $data = new stdClass();
+       $data->name = 'IINICIA Backend';
+       $data->shortname = $shortname;
+       $data->enabled = 1;
+       $data->restrictedusers = 0;
+       $data->downloadfiles = 0;
+       $data->uploadfiles = 0;
+       $wsmanager->add_external_service($data);
+       $service = $wsmanager->get_external_service_by_shortname($shortname);
+   }
+   $existing = array_column(
+       $DB->get_records('external_services_functions', ['externalserviceid' => $service->id]),
+       'functionname',
+   );
+   foreach ($functions as $fn) {
+       if (!in_array($fn, $existing, true)) {
+           $wsmanager->add_external_function_to_service($fn, $service->id);
+       }
+   }
+
+   $admin = $DB->get_record('user', ['username' => 'admin', 'deleted' => 0], '*', MUST_EXIST);
+   $existingtoken = $DB->get_record('external_tokens', [
+       'tokentype' => EXTERNAL_TOKEN_PERMANENT,
+       'userid' => $admin->id,
+       'externalserviceid' => $service->id,
+   ]);
+   $token = $existingtoken ? $existingtoken->token : external_generate_token(
+       EXTERNAL_TOKEN_PERMANENT, $service->id, $admin->id, context_system::instance(),
+   );
+   echo "MOODLE_TOKEN=$token\n";
+   EOF
+   MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < seed-webservice-token.php
+   rm seed-webservice-token.php
+   ```
+
+   Verifica que el token sirve de verdad (debe devolver JSON con el
+   nombre del sitio, no un error):
+
+   ```bash
+   curl -s "http://localhost:8080/webservice/rest/server.php?wstoken=<EL_TOKEN>&wsfunction=core_webservice_get_site_info&moodlewsrestformat=json"
+   ```
 
 3. Ese token va en `backend/.env` como `MOODLE_TOKEN` (y la URL base
    como `MOODLE_URL=http://localhost:8080`) — **nunca** en
    `frontend/.env*` ni en el código de Android, por regla de CLAUDE.md.
+   El token ya generado en esta máquina está en la sección "Estado
+   actual" arriba.
 
 ## Comandos útiles
 
