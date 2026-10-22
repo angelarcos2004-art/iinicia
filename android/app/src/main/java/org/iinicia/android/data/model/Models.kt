@@ -1,0 +1,113 @@
+package org.iinicia.android.data.model
+
+import com.google.gson.annotations.SerializedName
+
+/**
+ * Roles definidos en CLAUDE.md y validados por el backend (BFF).
+ */
+enum class Rol(val valor: String, val etiqueta: String) {
+    @SerializedName("superadmin")
+    SUPERADMIN("superadmin", "Superadministrador"),
+
+    @SerializedName("admin_academico")
+    ADMIN_ACADEMICO("admin_academico", "Administrador académico"),
+
+    @SerializedName("coordinador")
+    COORDINADOR("coordinador", "Coordinador"),
+
+    @SerializedName("profesor")
+    PROFESOR("profesor", "Profesor"),
+
+    @SerializedName("estudiante")
+    ESTUDIANTE("estudiante", "Estudiante"),
+
+    @SerializedName("aspirante")
+    ASPIRANTE("aspirante", "Aspirante");
+
+    companion object {
+        fun fromString(raw: String?): Rol {
+            return entries.firstOrNull { it.valor.equals(raw, ignoreCase = true) } ?: ESTUDIANTE
+        }
+    }
+}
+
+data class Usuario(
+    val id: String,
+    val nombre: String,
+    val correo: String,
+    val rol: Rol = Rol.ESTUDIANTE
+)
+
+/**
+ * DTO de inicio de sesión enviado únicamente por HTTPS/HTTP al BFF.
+ * La contraseña jamás se persiste en almacenamiento local.
+ */
+data class LoginRequest(
+    val correo: String,
+    val password: String
+)
+
+data class RegistroRequest(
+    val nombreCompleto: String,
+    val correo: String,
+    val password: String,
+    val programaInteresId: String,
+    val aceptaAvisoPrivacidad: Boolean,
+    val deseaInformacionBecas: Boolean
+)
+
+/**
+ * Respuesta del BFF de IINICIA (/auth/login y /auth/registro).
+ * El token corresponde exclusivamente al JWT de sesión de IINICIA (nunca un token de Moodle).
+ */
+data class AuthResponse(
+    val token: String,
+    val usuario: Usuario
+)
+
+enum class EstadoCurso(val valor: String, val etiqueta: String) {
+    @SerializedName("en_curso")
+    EN_CURSO("en_curso", "En curso"),
+
+    @SerializedName("por_iniciar")
+    POR_INICIAR("por_iniciar", "Por iniciar"),
+
+    @SerializedName("finalizado")
+    FINALIZADO("finalizado", "Finalizado")
+}
+
+data class ActividadCurso(
+    val id: String,
+    val titulo: String,
+    val tipo: String,
+    val fechaEntrega: String,
+    val completada: Boolean = false
+)
+
+data class CursoEstudiante(
+    val id: String,
+    val nombre: String,
+    val periodo: String,
+    val progreso: Int,
+    val estado: EstadoCurso,
+    val docente: String = "Docente IINICIA",
+    val descripcion: String = "",
+    val actividades: List<ActividadCurso> = emptyList()
+)
+
+data class AvisoInstitucional(
+    val id: String,
+    val titulo: String,
+    val fecha: String,
+    val resumen: String
+)
+
+data class DashboardEstudiante(
+    val usuario: Usuario,
+    val cuatrimestre: String,
+    val creditosObtenidos: Int,
+    val creditosTotales: Int,
+    val progresoCurricular: Int,
+    val cursos: List<CursoEstudiante>,
+    val avisos: List<AvisoInstitucional>
+)

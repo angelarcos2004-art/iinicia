@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="iinicia_primary">#FF0B2A5B</color>
+    <color name="iinicia_secondary">#FF1E5AA8</color>
+    <color name="iinicia_accent">#FFF2A900</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
