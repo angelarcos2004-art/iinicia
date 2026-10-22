@@ -16,8 +16,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // URL base configurable del BFF IINICIA (NestJS)
-        buildConfigField("String", "API_BASE_URL", "\"http://localhost:3001/\"")
+        // URL base configurable del BFF IINICIA (NestJS) desde el emulador Android
+        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:3001/\"")
     }
 
     buildTypes {
@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.security.crypto)
 
     // Red (Cliente HTTP hacia el BFF de IINICIA)
     implementation(libs.retrofit.core)
