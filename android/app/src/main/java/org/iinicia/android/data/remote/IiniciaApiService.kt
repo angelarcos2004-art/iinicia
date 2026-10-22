@@ -1,18 +1,20 @@
 package org.iinicia.android.data.remote
 
 import org.iinicia.android.data.model.AuthResponse
-import org.iinicia.android.data.model.CursoEstudiante
-import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.RegistroRequest
 import org.iinicia.android.data.model.Usuario
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 /**
  * Contrato HTTP hacia el backend BFF de IINICIA (NestJS).
+ *
+ * Endpoints soportados actualmente por el backend:
+ * - POST /auth/login
+ * - POST /auth/registro
+ * - GET /auth/me
  *
  * Regla de arquitectura:
  * - Android se comunica únicamente con el BFF de IINICIA.
@@ -28,13 +30,4 @@ interface IiniciaApiService {
 
     @GET("auth/me")
     suspend fun getPerfilActual(): Usuario
-
-    @GET("estudiante/dashboard")
-    suspend fun getDashboardEstudiante(): DashboardEstudiante
-
-    @GET("estudiante/cursos")
-    suspend fun getCursosAutorizados(): List<CursoEstudiante>
-
-    @GET("estudiante/cursos/{cursoId}")
-    suspend fun getDetalleCurso(@Path("cursoId") cursoId: String): CursoEstudiante
 }

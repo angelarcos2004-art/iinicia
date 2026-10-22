@@ -5,7 +5,7 @@ Aplicación nativa Android desarrollada con **Kotlin + Jetpack Compose** para el
 ## Arquitectura y Reglas de Seguridad
 
 - **Capas:** `UI (Jetpack Compose)` → `ViewModel (StateFlow)` → `Repository` → `Cliente HTTP (Retrofit 2 + OkHttp)`.
-- **BFF (Backend for Frontend):** La aplicación apunta al backend NestJS de IINICIA (`BuildConfig.API_BASE_URL`, por defecto `http://localhost:3000/api/`).
+- **BFF (Backend for Frontend):** La aplicación apunta al backend NestJS de IINICIA (`BuildConfig.API_BASE_URL`, por defecto `http://localhost:3001/`).
 - **Cero tokens de Moodle en Android:** Ningún token administrativo o de servicio web de Moodle existe ni se procesa en la app móvil.
 - **Seguridad de credenciales:** Prohibido almacenar contraseñas en texto plano. Se incluye el contrato `SessionTokenStorage` con los marcadores `TODO(Seguridad - Login Real)` para conectar `EncryptedSharedPreferences` / `DataStore` cifrado con Android Keystore cuando el login real del backend esté disponible.
 

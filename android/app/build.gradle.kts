@@ -17,7 +17,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // URL base configurable del BFF IINICIA (NestJS)
-        buildConfigField("String", "API_BASE_URL", "\"http://localhost:3000/api/\"")
+        buildConfigField("String", "API_BASE_URL", "\"http://localhost:3001/\"")
     }
 
     buildTypes {
