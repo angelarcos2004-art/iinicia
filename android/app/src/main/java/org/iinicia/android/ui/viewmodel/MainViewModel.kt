@@ -1,5 +1,6 @@
 package org.iinicia.android.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.iinicia.android.data.local.EncryptedSessionTokenStorage
 import org.iinicia.android.data.model.CursoEstudiante
 import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.Usuario
@@ -80,8 +82,13 @@ class MainViewModel(
     }
 
     /**
-     * Valida los campos en el cliente, simula el envío al repositorio y un inicio de sesión exitoso
-     * sin llamada real al backend.
+     * Valida los campos en el cliente y ejecuta el inicio de sesión contra el repositorio
+     * (conectado al backend BFF real en `http://10.0.2.2:3001/`).
+     *
+     * Confirmación de seguridad:
+     * La contraseña solo viaja en la petición de autenticación hacia el BFF y jamás se persiste
+     * en almacenamiento local; `EncryptedSessionTokenStorage` guarda únicamente el JWT y los
+     * datos públicos de `Usuario`.
      */
     fun iniciarSesion(
         correo: String,
@@ -112,10 +119,6 @@ class MainViewModel(
 
             repository.login(correo.trim(), password)
                 .onSuccess { authResponse ->
-                    // TODO(Seguridad - Login Real): Al integrar el login real contra el BFF NestJS,
-                    //  almacenar únicamente `authResponse.token` (JWT) en EncryptedSharedPreferences
-                    //  o en Jetpack DataStore cifrado con Android Keystore.
-                    //  Nunca almacenar `password` en texto plano ni procesar tokens de Moodle en Android.
                     val dashboardResult = repository.getDashboardEstudiante().getOrNull()
                     _uiState.update {
                         it.copy(
@@ -153,8 +156,29 @@ class MainViewModel(
     }
 
     companion object {
+        /**
+         * Factory de producción que inyecta [EncryptedSessionTokenStorage] (`EncryptedSharedPreferences`)
+         * en [IiniciaRepositoryImpl] para persistir de forma segura el token JWT y datos del usuario.
+         */
         fun provideFactory(
-            repository: IiniciaRepository = IiniciaRepositoryImpl()
+            context: Context
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                val secureTokenStorage = EncryptedSessionTokenStorage(context.applicationContext)
+                val repository = IiniciaRepositoryImpl(
+                    tokenStorage = secureTokenStorage,
+                    isConnectToRemoteEnabled = true
+                )
+                return MainViewModel(repository) as T
+            }
+        }
+
+        /**
+         * Sobrecarga para inyectar un repositorio específico en pruebas unitarias.
+         */
+        fun provideFactory(
+            repository: IiniciaRepository
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

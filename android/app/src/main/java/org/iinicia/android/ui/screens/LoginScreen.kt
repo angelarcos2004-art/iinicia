@@ -50,12 +50,10 @@ import org.iinicia.android.ui.viewmodel.MainUiState
 
 /**
  * Pantalla 1 - Login:
- * - Campos de correo electrónico y contraseña con validación de formato en el cliente.
- * - Simula el envío de credenciales al ViewModel y el inicio de sesión exitoso sin llamar al backend real.
- *
- * TODO(Seguridad - Login Real): Cuando se habilite la autenticación real contra el BFF NestJS,
- *  el JWT recibido se guardará usando EncryptedSharedPreferences o DataStore cifrado
- *  (ver `SessionTokenStorage.kt` y `MainViewModel.kt`). Jamás guardar la contraseña en texto plano.
+ * - Campos de correo electrónico y contraseña con validación de formato en el cliente (mínimo 8 caracteres).
+ * - Envía las credenciales al ViewModel para autenticar contra el BFF NestJS (`POST /auth/login`).
+ * - Persiste únicamente el JWT y los datos públicos del usuario en `EncryptedSharedPreferences`
+ *   ([org.iinicia.android.data.local.EncryptedSessionTokenStorage]), sin guardar jamás la contraseña.
  */
 @Composable
 fun LoginScreen(
