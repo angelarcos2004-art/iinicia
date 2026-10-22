@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,7 @@ const INITIAL_STATE: FormState = {
 };
 
 export default function RegistroPage() {
+  const router = useRouter();
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -97,7 +99,7 @@ export default function RegistroPage() {
             Hemos registrado tu solicitud como aspirante. Inicia sesión para
             dar seguimiento a tu proceso de admisión.
           </p>
-          <Button variant="primary" onClick={() => (window.location.href = "/login")}>
+          <Button variant="primary" onClick={() => router.push("/login")}>
             Ir a iniciar sesión
           </Button>
         </Card>
