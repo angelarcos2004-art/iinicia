@@ -56,6 +56,18 @@ export interface CursoEstudiante {
   estado: EstadoCurso;
 }
 
+/**
+ * Curso real de Moodle (GET /estudiante/cursos), tal como lo devuelve el
+ * backend. `progreso` es null cuando el curso no tiene seguimiento de
+ * finalización activado en Moodle: no se inventa un valor.
+ */
+export interface CursoInscrito {
+  id: number;
+  nombre: string;
+  shortname: string;
+  progreso: number | null;
+}
+
 export interface AvisoInstitucional {
   id: string;
   titulo: string;

@@ -1,18 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { ApiError, obtenerMisCursos } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
-import type { EstadoCurso, Rol } from "@/lib/types";
-
-const ESTADO_BADGE: Record<EstadoCurso, { label: string; variant: "active" | "neutral" | "academic" }> = {
-  en_curso: { label: "En curso", variant: "active" },
-  por_iniciar: { label: "Por iniciar", variant: "neutral" },
-  finalizado: { label: "Finalizado", variant: "academic" },
-};
+import type { CursoInscrito, Rol } from "@/lib/types";
 
 const ROL_LABEL: Record<Rol, string> = {
   superadmin: "Superadministrador",
@@ -31,15 +26,52 @@ function formatFecha(fechaIso: string) {
   });
 }
 
+/** Deriva una etiqueta a partir del progreso real; nunca inventa un estado. */
+function estadoCurso(progreso: number | null): { label: string; variant: "active" | "neutral" | "academic" } {
+  if (progreso === null) return { label: "Inscrito", variant: "neutral" };
+  if (progreso >= 100) return { label: "Finalizado", variant: "academic" };
+  if (progreso <= 0) return { label: "Por iniciar", variant: "neutral" };
+  return { label: "En curso", variant: "active" };
+}
+
 export default function MiIiniciaPage() {
   const { sesion, cargando } = useAuth();
   const router = useRouter();
+
+  const [cursos, setCursos] = useState<CursoInscrito[] | null>(null);
+  const [cargandoCursos, setCargandoCursos] = useState(true);
+  const [errorCursos, setErrorCursos] = useState<string | null>(null);
 
   useEffect(() => {
     if (!cargando && !sesion) {
       router.replace("/login");
     }
   }, [cargando, sesion, router]);
+
+  useEffect(() => {
+    if (!sesion) return;
+    let cancelado = false;
+
+    obtenerMisCursos(sesion.token)
+      .then((data) => {
+        if (!cancelado) setCursos(data);
+      })
+      .catch((error) => {
+        if (cancelado) return;
+        setErrorCursos(
+          error instanceof ApiError
+            ? error.message
+            : "No se pudieron cargar tus cursos. Intenta más tarde.",
+        );
+      })
+      .finally(() => {
+        if (!cancelado) setCargandoCursos(false);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [sesion]);
 
   if (cargando || !sesion) {
     return (
@@ -49,10 +81,10 @@ export default function MiIiniciaPage() {
     );
   }
 
-  // El resto del dashboard (créditos, cursos, avisos) es informacion
-  // academica de ejemplo mientras no exista el backend/Moodle; el nombre
-  // y el rol sí vienen de la sesión real.
-  const { cuatrimestre, creditosObtenidos, creditosTotales, progresoCurricular, cursos, avisos } =
+  // Creditos, cuatrimestre y avisos son informacion academica de ejemplo:
+  // el backend todavia no expone un endpoint para ellos. Los cursos de
+  // abajo SI son reales, consultados a Moodle para este usuario.
+  const { cuatrimestre, creditosObtenidos, creditosTotales, progresoCurricular, avisos } =
     MOCK_DASHBOARD_ESTUDIANTE;
   const { usuario } = sesion;
 
@@ -97,31 +129,51 @@ export default function MiIiniciaPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <h2 className="text-headline-sm font-display font-bold text-primary">Mis cursos</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {cursos.map((curso) => {
-              const estado = ESTADO_BADGE[curso.estado];
-              return (
-                <Card key={curso.id} hoverable className="flex flex-col gap-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-title font-display font-bold text-primary">
-                      {curso.nombre}
-                    </h3>
-                    <Badge variant={estado.variant}>{estado.label}</Badge>
-                  </div>
-                  <p className="text-body-sm text-ink-muted">{curso.periodo}</p>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-surface-neutral">
-                    <div
-                      className="h-full rounded-full bg-secondary"
-                      style={{ width: `${curso.progreso}%` }}
-                    />
-                  </div>
-                  <span className="text-label-sm font-display font-semibold text-ink-muted">
-                    {curso.progreso}% completado
-                  </span>
-                </Card>
-              );
-            })}
-          </div>
+
+          {cargandoCursos ? (
+            <p className="text-body-sm text-ink-muted">Consultando tus cursos en Moodle…</p>
+          ) : errorCursos ? (
+            <Card className="text-body-sm text-error">{errorCursos}</Card>
+          ) : !cursos || cursos.length === 0 ? (
+            <Card className="text-body-sm text-ink-muted">
+              Aún no tienes cursos asignados. Cuando tu programa sea
+              autorizado, aparecerán aquí automáticamente.
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {cursos.map((curso) => {
+                const estado = estadoCurso(curso.progreso);
+                return (
+                  <Card key={curso.id} hoverable className="flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-title font-display font-bold text-primary">
+                        {curso.nombre}
+                      </h3>
+                      <Badge variant={estado.variant}>{estado.label}</Badge>
+                    </div>
+                    <p className="text-body-sm text-ink-muted">{curso.shortname}</p>
+                    {curso.progreso === null ? (
+                      <span className="text-label-sm font-display font-semibold text-ink-muted">
+                        Sin seguimiento de progreso en este curso
+                      </span>
+                    ) : (
+                      <>
+                        <div className="h-2 w-full overflow-hidden rounded-full bg-surface-neutral">
+                          <div
+                            className="h-full rounded-full bg-secondary"
+                            style={{ width: `${curso.progreso}%` }}
+                          />
+                        </div>
+                        <span className="text-label-sm font-display font-semibold text-ink-muted">
+                          {curso.progreso}% completado
+                        </span>
+                      </>
+                    )}
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4">

@@ -1,5 +1,5 @@
 import { buildMockAuthResponse } from "./mock-data";
-import type { AuthResponse, LoginInput, RegistroAspiranteInput } from "./types";
+import type { AuthResponse, CursoInscrito, LoginInput, RegistroAspiranteInput } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,6 +27,33 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
+    });
+  } catch (networkError) {
+    throw new BackendUnavailableError(
+      `No se pudo conectar con el backend (${String(networkError)})`,
+    );
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new ApiError(
+      data?.message ?? `El backend respondió con error ${response.status}`,
+      response.status,
+    );
+  }
+
+  return response.json() as Promise<T>;
+}
+
+async function getJSON<T>(path: string, token: string): Promise<T> {
+  if (!API_URL) {
+    throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
   } catch (networkError) {
     throw new BackendUnavailableError(
@@ -86,4 +113,14 @@ export async function registrarAspirante(
     }
     throw error;
   }
+}
+
+/**
+ * Cursos reales en los que el usuario autenticado está inscrito en
+ * Moodle. A diferencia de login/registro, no cae a datos simulados si el
+ * backend no responde: es información personal real, no tiene sentido
+ * inventarla. El llamador decide cómo mostrar el error.
+ */
+export async function obtenerMisCursos(token: string): Promise<CursoInscrito[]> {
+  return getJSON<CursoInscrito[]>("/estudiante/cursos", token);
 }
