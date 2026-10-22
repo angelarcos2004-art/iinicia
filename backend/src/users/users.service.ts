@@ -28,6 +28,10 @@ export class UsersService {
     return this.repo.findOne({ where: { id } });
   }
 
+  async actualizarMoodleUserId(id: string, moodleUserId: number): Promise<void> {
+    await this.repo.update(id, { moodleUserId });
+  }
+
   create(data: CrearUsuarioData): Promise<User> {
     const user = this.repo.create({
       nombre: data.nombre.trim(),

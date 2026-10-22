@@ -7,6 +7,7 @@ import { setupApp } from '../src/app.setup.js';
 import { AuthController } from '../src/auth/auth.controller.js';
 import { AuthService } from '../src/auth/auth.service.js';
 import { JwtStrategy } from '../src/auth/jwt.strategy.js';
+import { MoodleService } from '../src/moodle/moodle.service.js';
 import { Rol } from '../src/users/rol.enum.js';
 import type { User } from '../src/users/user.entity.js';
 import { UsersService } from '../src/users/users.service.js';
@@ -31,7 +32,14 @@ class InMemoryUsers {
     this.items.push(user);
     return user;
   }
+  async actualizarMoodleUserId(id: string, moodleUserId: number) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) user.moodleUserId = moodleUserId;
+  }
 }
+
+/** MoodleService falso: estas pruebas no deben depender de un Moodle real. */
+const moodleFake = { buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(555) };
 
 const registroValido = {
   nombreCompleto: 'Ana Pérez',
@@ -47,6 +55,7 @@ describe('Auth (e2e)', () => {
   let jwt: JwtService;
 
   beforeEach(async () => {
+    moodleFake.buscarOCrearUsuarioMoodle.mockClear();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [AuthController],
@@ -54,6 +63,7 @@ describe('Auth (e2e)', () => {
         AuthService,
         JwtStrategy,
         { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret' } },
       ],
     }).compile();
@@ -77,6 +87,18 @@ describe('Auth (e2e)', () => {
     expect(res.body.usuario.passwordHash).toBeUndefined();
     const payload = await jwt.verifyAsync(res.body.token);
     expect(payload.sub).toBe(res.body.usuario.id);
+  });
+
+  it('POST /auth/registro vincula al usuario con Moodle (idempotente)', async () => {
+    await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+    expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith('ana@correo.com', 'Ana Pérez');
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ correo: 'ana@correo.com', password: 'secreto123' });
+    expect(res.status).toBe(200);
+    // Ya tenia moodleUserId desde el registro: el login no vuelve a llamar a Moodle.
+    expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledTimes(1);
   });
 
   it('POST /auth/registro con correo duplicado -> 400 { message }', async () => {
