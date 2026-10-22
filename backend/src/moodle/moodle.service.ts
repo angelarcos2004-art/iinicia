@@ -11,6 +11,14 @@ interface MoodleUsuario {
   id: number;
 }
 
+interface MoodleCursoInscrito {
+  id: number;
+  shortname: string;
+  fullname: string;
+  /** null si el curso no tiene seguimiento de finalización activado en Moodle. */
+  progress: number | null;
+}
+
 interface MoodleErrorBody {
   exception?: string;
   errorcode?: string;
@@ -76,6 +84,25 @@ export class MoodleService {
       'enrolments[0][userid]': String(moodleUserId),
       'enrolments[0][courseid]': String(courseId),
     });
+  }
+
+  /**
+   * Cursos en los que el usuario está inscrito en Moodle, tal como los
+   * reporta core_enrol_get_users_courses (sin inventar progreso: si el
+   * curso no tiene seguimiento de finalización activado, Moodle devuelve
+   * `progress: null` y así se propaga).
+   */
+  async obtenerCursosDeUsuario(moodleUserId: number): Promise<MoodleCursoInscrito[]> {
+    const cursos = await this.llamar<MoodleCursoInscrito[]>('core_enrol_get_users_courses', {
+      userid: String(moodleUserId),
+    });
+    if (!Array.isArray(cursos)) return [];
+    return cursos.map((c) => ({
+      id: c.id,
+      shortname: c.shortname,
+      fullname: c.fullname,
+      progress: typeof c.progress === 'number' ? c.progress : null,
+    }));
   }
 
   private async buscarCursoPorShortname(shortname: string): Promise<number | null> {
