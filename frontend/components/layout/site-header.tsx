@@ -9,7 +9,11 @@ import { useAuth } from "@/lib/auth-context";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
+  { href: "/universidad", label: "Universidad" },
   { href: "/oferta-academica", label: "Oferta académica" },
+  { href: "/admisiones", label: "Admisiones" },
+  { href: "/noticias", label: "Noticias" },
+  { href: "/contacto", label: "Contacto" },
 ];
 
 export function SiteHeader() {
@@ -39,7 +43,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegación principal">
+        <nav className="hidden items-center gap-5 xl:flex" aria-label="Navegación principal">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -51,7 +55,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           {sesion ? (
             <>
               <Link
@@ -78,7 +82,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border-subtle text-primary lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border-subtle text-primary xl:hidden"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
@@ -102,7 +106,7 @@ export function SiteHeader() {
         <nav
           id="mobile-menu"
           aria-label="Navegación móvil"
-          className="flex flex-col gap-1 border-t border-border-subtle bg-surface-canvas px-margin-mobile py-space-md lg:hidden"
+          className="flex flex-col gap-1 border-t border-border-subtle bg-surface-canvas px-margin-mobile py-space-md xl:hidden"
         >
           {NAV_LINKS.map((link) => (
             <Link

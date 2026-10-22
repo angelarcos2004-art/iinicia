@@ -1,11 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const SITEMAP_LINKS = [
+const INSTITUCIONAL_LINKS = [
   { href: "/", label: "Inicio" },
+  { href: "/universidad", label: "Universidad" },
   { href: "/oferta-academica", label: "Oferta académica" },
+  { href: "/admisiones", label: "Admisiones" },
+  { href: "/noticias", label: "Noticias" },
+];
+
+const CUENTA_LINKS = [
   { href: "/registro", label: "Registrarme" },
   { href: "/login", label: "Mi Campus" },
+  { href: "/contacto", label: "Contacto" },
 ];
 
 const CURRENT_YEAR = 2026;
@@ -14,8 +21,8 @@ export function SiteFooter() {
   return (
     <footer className="bg-primary text-white">
       <div className="mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
-        <div className="grid grid-cols-1 gap-10 border-b border-white/15 pb-10 md:grid-cols-3">
-          <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 gap-10 border-b border-white/15 pb-10 sm:grid-cols-2 md:grid-cols-4">
+          <div className="flex flex-col gap-3 sm:col-span-2 md:col-span-1">
             <Image
               src="/logo-inicia.png"
               alt="IINICIA, Instituto de Innovación y Ciencias Aplicadas"
@@ -30,9 +37,9 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-headline-sm font-display font-bold">Mapa del sitio</h3>
+            <h3 className="mb-4 text-headline-sm font-display font-bold">Institucional</h3>
             <ul className="space-y-2.5 text-body-sm">
-              {SITEMAP_LINKS.map((link) => (
+              {INSTITUCIONAL_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-white/80 transition-colors hover:text-white">
                     {link.label}
@@ -43,7 +50,20 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-headline-sm font-display font-bold">Contacto</h3>
+            <h3 className="mb-4 text-headline-sm font-display font-bold">Mi cuenta</h3>
+            <ul className="space-y-2.5 text-body-sm">
+              {CUENTA_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-white/80 transition-colors hover:text-white">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-headline-sm font-display font-bold">Contacto directo</h3>
             <ul className="space-y-2.5 text-body-sm text-white/80">
               <li>
                 <a className="hover:text-white" href="tel:+525589427000">
