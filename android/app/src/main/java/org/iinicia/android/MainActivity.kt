@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             IiniciaTheme {
                 val mainViewModel: MainViewModel = viewModel(
-                    factory = MainViewModel.provideFactory()
+                    factory = MainViewModel.provideFactory(applicationContext)
                 )
                 IiniciaNavGraph(
                     viewModel = mainViewModel,

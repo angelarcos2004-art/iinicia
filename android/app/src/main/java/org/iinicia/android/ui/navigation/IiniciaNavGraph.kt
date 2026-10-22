@@ -2,6 +2,7 @@ package org.iinicia.android.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -25,9 +26,18 @@ fun IiniciaNavGraph(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    // Si existe una sesión persistida en EncryptedSharedPreferences, inicia directamente en Dashboard
+    val initialDestination = remember {
+        if (uiState.usuarioAutenticado != null) {
+            Screen.Dashboard.route
+        } else {
+            Screen.Login.route
+        }
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route,
+        startDestination = initialDestination,
         modifier = modifier
     ) {
         composable(route = Screen.Login.route) {
