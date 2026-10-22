@@ -1,10 +1,12 @@
 import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { setupApp } from '../src/app.setup.js';
 import { AuthController } from '../src/auth/auth.controller.js';
 import { AuthService } from '../src/auth/auth.service.js';
+import { JwtStrategy } from '../src/auth/jwt.strategy.js';
 import { Rol } from '../src/users/rol.enum.js';
 import type { User } from '../src/users/user.entity.js';
 import { UsersService } from '../src/users/users.service.js';
@@ -48,7 +50,12 @@ describe('Auth (e2e)', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [AuthController],
-      providers: [AuthService, { provide: UsersService, useClass: InMemoryUsers }],
+      providers: [
+        AuthService,
+        JwtStrategy,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret' } },
+      ],
     }).compile();
     app = moduleRef.createNestApplication();
     setupApp(app, 'http://localhost:3000');
@@ -113,6 +120,83 @@ describe('Auth (e2e)', () => {
       .send({ correo: 'nadie@correo.com', password: 'x' });
     expect(res.status).toBe(401);
     expect(typeof res.body.message).toBe('string');
+  });
+
+  describe('GET /auth/me', () => {
+    it('con token válido devuelve { id, nombre, correo, rol } del usuario', async () => {
+      const reg = await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+
+      const res = await request(app.getHttpServer())
+        .get('/auth/me')
+        .set('Authorization', `Bearer ${reg.body.token}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({
+        id: reg.body.usuario.id,
+        nombre: 'Ana Pérez',
+        correo: 'ana@correo.com',
+        rol: 'aspirante',
+      });
+      expect(res.body.passwordHash).toBeUndefined();
+    });
+
+    it('sin header Authorization -> 401 { message }', async () => {
+      const res = await request(app.getHttpServer()).get('/auth/me');
+      expect(res.status).toBe(401);
+      expect(Object.keys(res.body)).toEqual(['message']);
+      expect(typeof res.body.message).toBe('string');
+    });
+
+    it('con token basura -> 401 { message }', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/auth/me')
+        .set('Authorization', 'Bearer esto.no.es-un-jwt');
+      expect(res.status).toBe(401);
+      expect(typeof res.body.message).toBe('string');
+    });
+
+    it('con esquema distinto a Bearer -> 401', async () => {
+      const reg = await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      const res = await request(app.getHttpServer())
+        .get('/auth/me')
+        .set('Authorization', `Basic ${reg.body.token}`);
+      expect(res.status).toBe(401);
+    });
+
+    it('con token firmado con otro secreto -> 401', async () => {
+      const reg = await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      const falso = await new JwtService({ secret: 'otro-secreto' }).signAsync({
+        sub: reg.body.usuario.id,
+        rol: 'superadmin',
+      });
+      const res = await request(app.getHttpServer())
+        .get('/auth/me')
+        .set('Authorization', `Bearer ${falso}`);
+      expect(res.status).toBe(401);
+      expect(typeof res.body.message).toBe('string');
+    });
+
+    it('con token expirado -> 401 { message }', async () => {
+      const reg = await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      const expirado = await jwt.signAsync(
+        { sub: reg.body.usuario.id, rol: 'aspirante' },
+        { expiresIn: -10 },
+      );
+      const res = await request(app.getHttpServer())
+        .get('/auth/me')
+        .set('Authorization', `Bearer ${expirado}`);
+      expect(res.status).toBe(401);
+      expect(typeof res.body.message).toBe('string');
+    });
+
+    it('con token válido de un usuario que ya no existe -> 401', async () => {
+      const huerfano = await jwt.signAsync({ sub: crypto.randomUUID(), rol: 'aspirante' });
+      const res = await request(app.getHttpServer())
+        .get('/auth/me')
+        .set('Authorization', `Bearer ${huerfano}`);
+      expect(res.status).toBe(401);
+      expect(typeof res.body.message).toBe('string');
+    });
   });
 
   it('ruta inexistente -> { message }', async () => {
