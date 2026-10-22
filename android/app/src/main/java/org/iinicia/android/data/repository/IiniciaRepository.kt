@@ -15,8 +15,8 @@ import org.iinicia.android.data.remote.RetrofitClient
 
 /**
  * Contrato de la capa de repositorio de IINICIA.
- * Abstrae el origen de datos (cliente HTTP Retrofit hacia el BFF NestJS o simulación local
- * mientras el backend está en construcción).
+ * Abstrae el origen de datos (cliente HTTP Retrofit hacia el BFF NestJS para endpoints de auth
+ * y datos mock locales para el dashboard).
  */
 interface IiniciaRepository {
     val baseUrl: String
@@ -60,44 +60,36 @@ class IiniciaRepositoryImpl(
         }
     }
 
+    /**
+     * El backend actual solo expone `/auth/login`, `/auth/registro` y `/auth/me`.
+     * El dashboard consume datos locales directamente sin pasar por Retrofit.
+     */
     override suspend fun getDashboardEstudiante(): Result<DashboardEstudiante> {
         return runCatching {
-            if (isConnectToRemoteEnabled) {
-                apiService.getDashboardEstudiante()
-            } else {
-                val usuario = tokenStorage.getUsuario() ?: MockDataSource.mockUsuarioEstudiante
-                // Para el primer avance (Fase 4), el Dashboard inicia con una lista vacía de cursos
-                DashboardEstudiante(
-                    usuario = usuario,
-                    cuatrimestre = "1er cuatrimestre",
-                    creditosObtenidos = 0,
-                    creditosTotales = 300,
-                    progresoCurricular = 0,
-                    cursos = emptyList(),
-                    avisos = emptyList()
-                )
-            }
+            val usuario = tokenStorage.getUsuario() ?: MockDataSource.mockUsuarioEstudiante
+            // Para el primer avance (Fase 4), el Dashboard inicia con una lista vacía de cursos
+            DashboardEstudiante(
+                usuario = usuario,
+                cuatrimestre = "1er cuatrimestre",
+                creditosObtenidos = 0,
+                creditosTotales = 300,
+                progresoCurricular = 0,
+                cursos = emptyList(),
+                avisos = emptyList()
+            )
         }
     }
 
     override suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>> {
         return runCatching {
-            if (isConnectToRemoteEnabled) {
-                apiService.getCursosAutorizados()
-            } else {
-                emptyList()
-            }
+            emptyList()
         }
     }
 
     override suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante> {
         return runCatching {
-            if (isConnectToRemoteEnabled) {
-                apiService.getDetalleCurso(cursoId)
-            } else {
-                MockDataSource.mockCursos.firstOrNull { it.id == cursoId }
-                    ?: throw IllegalArgumentException("Curso no encontrado: $cursoId")
-            }
+            MockDataSource.mockCursos.firstOrNull { it.id == cursoId }
+                ?: throw IllegalArgumentException("Curso no encontrado: $cursoId")
         }
     }
 

@@ -252,7 +252,7 @@ fun LoginScreen(
 fun LoginScreenPreview() {
     IiniciaTheme {
         LoginScreen(
-            uiState = MainUiState(baseUrl = "http://localhost:3000/api/"),
+            uiState = MainUiState(baseUrl = "http://localhost:3001/"),
             onFieldEdited = {},
             onSubmitLogin = { _, _ -> }
         )
