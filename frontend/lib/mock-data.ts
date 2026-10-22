@@ -1,0 +1,138 @@
+import type {
+  AuthResponse,
+  AvisoInstitucional,
+  CursoEstudiante,
+  DashboardEstudiante,
+  Programa,
+} from "./types";
+
+/**
+ * Catálogo de oferta académica de ejemplo. Mientras el backend (CLAUDE.md:
+ * backend/) no expone un endpoint de programas, la página de oferta
+ * académica consume estos datos directamente.
+ */
+export const MOCK_PROGRAMAS: Programa[] = [
+  {
+    id: "lic-software-ia",
+    tipo: "licenciatura",
+    nombre: "Ingeniería de Software e Inteligencia Artificial",
+    descripcion:
+      "Forma parte de la próxima generación de ingenieros especializados en IA aplicada.",
+    duracion: "12 cuatrimestres",
+    modalidad: "en_linea",
+  },
+  {
+    id: "lic-admon-negocios",
+    tipo: "licenciatura",
+    nombre: "Administración de Negocios Digitales",
+    descripcion:
+      "Desarrolla modelos de negocio y estrategias digitales para empresas en crecimiento.",
+    duracion: "12 cuatrimestres",
+    modalidad: "en_linea",
+  },
+  {
+    id: "dip-cloud-kubernetes",
+    tipo: "diplomado",
+    nombre: "Cloud Architecture & Kubernetes",
+    descripcion:
+      "Diseña e implementa arquitecturas en la nube listas para producción.",
+    duracion: "4 meses",
+    modalidad: "en_linea",
+  },
+  {
+    id: "dip-gestion-proyectos",
+    tipo: "diplomado",
+    nombre: "Gestión de Proyectos Digitales",
+    descripcion:
+      "Planifica y da seguimiento a proyectos tecnológicos con metodologías ágiles.",
+    duracion: "3 meses",
+    modalidad: "hibrida",
+  },
+  {
+    id: "cert-ciberseguridad-soc",
+    tipo: "certificacion",
+    nombre: "Ciberseguridad Defensiva y SOC",
+    descripcion:
+      "Capacítate en detección y respuesta a incidentes de seguridad informática.",
+    duracion: "6 semanas",
+    modalidad: "en_linea",
+  },
+];
+
+const MOCK_CURSOS: CursoEstudiante[] = [
+  {
+    id: "curso-estructuras-datos",
+    nombre: "Estructuras de Datos Avanzadas",
+    periodo: "3er cuatrimestre",
+    progreso: 72,
+    estado: "en_curso",
+  },
+  {
+    id: "curso-ia-aplicada",
+    nombre: "Inteligencia Artificial Aplicada",
+    periodo: "3er cuatrimestre",
+    progreso: 45,
+    estado: "en_curso",
+  },
+  {
+    id: "curso-bases-datos",
+    nombre: "Bases de Datos Relacionales",
+    periodo: "3er cuatrimestre",
+    progreso: 100,
+    estado: "finalizado",
+  },
+  {
+    id: "curso-ingles-tecnico-4",
+    nombre: "Inglés Técnico IV",
+    periodo: "3er cuatrimestre",
+    progreso: 0,
+    estado: "por_iniciar",
+  },
+];
+
+const MOCK_AVISOS: AvisoInstitucional[] = [
+  {
+    id: "aviso-conferencia-ia",
+    titulo: "Conferencia magistral: el impacto de la IA en la educación superior",
+    fecha: "2026-10-15",
+    resumen:
+      "Especialistas debatieron sobre el futuro del aprendizaje adaptativo y la ética en la formación profesional.",
+  },
+  {
+    id: "aviso-periodo-examenes",
+    titulo: "Periodo de exámenes del 3er cuatrimestre",
+    fecha: "2026-11-10",
+    resumen: "Consulta las fechas y modalidades de evaluación en Mi IINICIA.",
+  },
+];
+
+/** Respuesta simulada de autenticación mientras no existe backend real. */
+export const MOCK_DASHBOARD_ESTUDIANTE: DashboardEstudiante = {
+  usuario: {
+    id: "mock-estudiante-001",
+    nombre: "Rodrigo Hernández",
+    correo: "rodrigo.hernandez@iinicia.edu.mx",
+    rol: "estudiante",
+  },
+  cuatrimestre: "3er cuatrimestre",
+  creditosObtenidos: 148,
+  creditosTotales: 300,
+  progresoCurricular: 49,
+  cursos: MOCK_CURSOS,
+  avisos: MOCK_AVISOS,
+};
+
+export function buildMockAuthResponse(
+  correo: string,
+  nombre: string,
+): AuthResponse {
+  return {
+    token: "mock-token-sin-backend",
+    usuario: {
+      id: "mock-usuario-001",
+      nombre,
+      correo,
+      rol: "aspirante",
+    },
+  };
+}
