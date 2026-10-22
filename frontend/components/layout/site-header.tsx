@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ButtonLink } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
@@ -12,6 +14,14 @@ const NAV_LINKS = [
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { sesion, logout } = useAuth();
+  const router = useRouter();
+
+  function handleLogout() {
+    logout();
+    setMenuOpen(false);
+    router.push("/");
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-surface-canvas/95 backdrop-blur-sm">
@@ -42,12 +52,28 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <ButtonLink href="/login" variant="outline" className="h-11 px-5">
-            Mi Campus
-          </ButtonLink>
-          <ButtonLink href="/registro" variant="primary" className="h-11 px-5">
-            Registrarme
-          </ButtonLink>
+          {sesion ? (
+            <>
+              <Link
+                href="/mi-iinicia"
+                className="text-label-md font-display font-semibold text-ink hover:text-secondary"
+              >
+                Hola, {sesion.usuario.nombre.split(" ")[0]}
+              </Link>
+              <Button variant="outline" className="h-11 px-5" onClick={handleLogout}>
+                Cerrar sesión
+              </Button>
+            </>
+          ) : (
+            <>
+              <ButtonLink href="/login" variant="outline" className="h-11 px-5">
+                Mi Campus
+              </ButtonLink>
+              <ButtonLink href="/registro" variant="primary" className="h-11 px-5">
+                Registrarme
+              </ButtonLink>
+            </>
+          )}
         </div>
 
         <button
@@ -89,12 +115,29 @@ export function SiteHeader() {
             </Link>
           ))}
           <div className="mt-2 flex flex-col gap-2">
-            <ButtonLink href="/login" variant="outline" onClick={() => setMenuOpen(false)}>
-              Mi Campus
-            </ButtonLink>
-            <ButtonLink href="/registro" variant="primary" onClick={() => setMenuOpen(false)}>
-              Registrarme
-            </ButtonLink>
+            {sesion ? (
+              <>
+                <Link
+                  href="/mi-iinicia"
+                  className="rounded-md px-3 py-2.5 text-label-lg font-display font-semibold text-ink hover:bg-surface-subtle"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Hola, {sesion.usuario.nombre.split(" ")[0]}
+                </Link>
+                <Button variant="outline" onClick={handleLogout}>
+                  Cerrar sesión
+                </Button>
+              </>
+            ) : (
+              <>
+                <ButtonLink href="/login" variant="outline" onClick={() => setMenuOpen(false)}>
+                  Mi Campus
+                </ButtonLink>
+                <ButtonLink href="/registro" variant="primary" onClick={() => setMenuOpen(false)}>
+                  Registrarme
+                </ButtonLink>
+              </>
+            )}
           </div>
         </nav>
       )}

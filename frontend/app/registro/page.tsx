@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ApiError, registrarAspirante } from "@/lib/api";
+import { ApiError } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { MOCK_PROGRAMAS } from "@/lib/mock-data";
 
 type FormState = {
@@ -32,6 +33,7 @@ const INITIAL_STATE: FormState = {
 
 export default function RegistroPage() {
   const router = useRouter();
+  const { registrarAspirante } = useAuth();
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -96,11 +98,11 @@ export default function RegistroPage() {
             ¡Cuenta creada con éxito!
           </h1>
           <p className="text-body-md text-ink-muted">
-            Hemos registrado tu solicitud como aspirante. Inicia sesión para
-            dar seguimiento a tu proceso de admisión.
+            Hemos registrado tu solicitud como aspirante y ya iniciaste
+            sesión. Da seguimiento a tu proceso de admisión desde Mi IINICIA.
           </p>
-          <Button variant="primary" onClick={() => router.push("/login")}>
-            Ir a iniciar sesión
+          <Button variant="primary" onClick={() => router.push("/mi-iinicia")}>
+            Ir a Mi IINICIA
           </Button>
         </Card>
       </section>

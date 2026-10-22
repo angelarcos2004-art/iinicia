@@ -1,12 +1,26 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { useAuth } from "@/lib/auth-context";
 import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
-import type { EstadoCurso } from "@/lib/types";
+import type { EstadoCurso, Rol } from "@/lib/types";
 
 const ESTADO_BADGE: Record<EstadoCurso, { label: string; variant: "active" | "neutral" | "academic" }> = {
   en_curso: { label: "En curso", variant: "active" },
   por_iniciar: { label: "Por iniciar", variant: "neutral" },
   finalizado: { label: "Finalizado", variant: "academic" },
+};
+
+const ROL_LABEL: Record<Rol, string> = {
+  superadmin: "Superadministrador",
+  admin_academico: "Administrador académico",
+  coordinador: "Coordinador",
+  profesor: "Profesor",
+  estudiante: "Estudiante",
+  aspirante: "Aspirante",
 };
 
 function formatFecha(fechaIso: string) {
@@ -18,15 +32,39 @@ function formatFecha(fechaIso: string) {
 }
 
 export default function MiIiniciaPage() {
-  const { usuario, cuatrimestre, creditosObtenidos, creditosTotales, progresoCurricular, cursos, avisos } =
+  const { sesion, cargando } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!cargando && !sesion) {
+      router.replace("/login");
+    }
+  }, [cargando, sesion, router]);
+
+  if (cargando || !sesion) {
+    return (
+      <section className="mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
+        <p className="text-body-md text-ink-muted">Cargando tu sesión…</p>
+      </section>
+    );
+  }
+
+  // El resto del dashboard (créditos, cursos, avisos) es informacion
+  // academica de ejemplo mientras no exista el backend/Moodle; el nombre
+  // y el rol sí vienen de la sesión real.
+  const { cuatrimestre, creditosObtenidos, creditosTotales, progresoCurricular, cursos, avisos } =
     MOCK_DASHBOARD_ESTUDIANTE;
+  const { usuario } = sesion;
 
   return (
     <section className="mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
-      <div className="mb-8 flex flex-col gap-1">
-        <h1 className="text-headline-lg font-display font-bold text-primary">
-          ¡Bienvenido de vuelta, {usuario.nombre.split(" ")[0]}! 👋
-        </h1>
+      <div className="mb-8 flex flex-col gap-2">
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-headline-lg font-display font-bold text-primary">
+            ¡Bienvenido de vuelta, {usuario.nombre.split(" ")[0]}! 👋
+          </h1>
+          <Badge variant="academic">{ROL_LABEL[usuario.rol]}</Badge>
+        </div>
         <p className="text-body-md text-ink-muted">{cuatrimestre} · Mi IINICIA</p>
       </div>
 
