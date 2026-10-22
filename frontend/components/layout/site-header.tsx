@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Logo } from "@/components/logo";
 import { ButtonLink } from "@/components/ui/button";
 
 const NAV_LINKS = [
@@ -17,7 +17,16 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-surface-canvas/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-margin-mobile py-3 md:px-margin-desktop">
         <Link href="/" className="flex items-center" aria-label="IINICIA, ir al inicio">
-          <Logo className="h-10 w-auto" />
+          <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-lg border border-border-subtle bg-white p-1 shadow-level-1">
+            <Image
+              src="/logo-iinicia-oscuro-letras.jpg"
+              alt="IINICIA, Instituto de Innovación y Ciencias Aplicadas"
+              width={1024}
+              height={1024}
+              className="h-full w-full rounded object-cover"
+              priority
+            />
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegación principal">
