@@ -219,3 +219,38 @@ describe('MoodleService.matricularEnCurso', () => {
     );
   });
 });
+
+describe('MoodleService.obtenerCursosDeUsuario', () => {
+  it('mapea los cursos y pasa userid correctamente', async () => {
+    const fetchFn = mockFetch([
+      { id: 2, shortname: 'IINICIA101', fullname: 'Test course: XS', progress: null },
+    ]);
+
+    const cursos = await makeService().obtenerCursosDeUsuario(17);
+
+    expect(cursos).toEqual([
+      { id: 2, shortname: 'IINICIA101', fullname: 'Test course: XS', progress: null },
+    ]);
+    const p = paramsDeLlamada(fetchFn, 0);
+    expect(p.get('wsfunction')).toBe('core_enrol_get_users_courses');
+    expect(p.get('userid')).toBe('17');
+  });
+
+  it('conserva el progreso cuando Moodle sí lo reporta (curso con seguimiento activado)', async () => {
+    mockFetch([{ id: 2, shortname: 'IINICIA101', fullname: 'Curso', progress: 42.5 }]);
+    const cursos = await makeService().obtenerCursosDeUsuario(17);
+    expect(cursos[0].progress).toBe(42.5);
+  });
+
+  it('devuelve lista vacía si el usuario no está inscrito en ningún curso', async () => {
+    mockFetch([]);
+    await expect(makeService().obtenerCursosDeUsuario(17)).resolves.toEqual([]);
+  });
+
+  it('lanza 502 si Moodle falla', async () => {
+    mockFetch(new Response('boom', { status: 500 }));
+    await expect(makeService().obtenerCursosDeUsuario(17)).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+  });
+});
