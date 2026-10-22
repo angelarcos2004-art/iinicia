@@ -4,6 +4,7 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 import { MoodleService } from '../moodle/moodle.service.js';
@@ -37,6 +38,7 @@ export class AuthService {
     private readonly users: UsersService,
     private readonly jwt: JwtService,
     private readonly moodle: MoodleService,
+    private readonly config: ConfigService,
   ) {}
 
   async login(dto: LoginDto): Promise<AuthResponse> {
@@ -95,12 +97,29 @@ export class AuthService {
       const moodleUserId = await this.moodle.buscarOCrearUsuarioMoodle(user.correo, user.nombre);
       await this.users.actualizarMoodleUserId(user.id, moodleUserId);
       user.moodleUserId = moodleUserId;
+      await this.matricularEnCursoDePrueba(user, moodleUserId);
       return user;
     } catch (error) {
       this.logger.warn(
         `No se pudo vincular a Moodle el usuario ${user.id}: ${String(error)}`,
       );
       return user;
+    }
+  }
+
+  /**
+   * Matricula al usuario en el curso de prueba (MOODLE_TEST_COURSE, default
+   * IINICIA101). Igual que la vinculación, un fallo aquí solo se registra:
+   * nunca bloquea login/registro.
+   */
+  private async matricularEnCursoDePrueba(user: User, moodleUserId: number): Promise<void> {
+    const curso = this.config.get<string>('MOODLE_TEST_COURSE', 'IINICIA101');
+    try {
+      await this.moodle.matricularEnCurso(moodleUserId, curso);
+    } catch (error) {
+      this.logger.warn(
+        `No se pudo matricular al usuario ${user.id} en el curso ${curso}: ${String(error)}`,
+      );
     }
   }
 
