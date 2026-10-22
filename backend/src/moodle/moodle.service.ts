@@ -60,6 +60,33 @@ export class MoodleService {
     return Array.isArray(usuarios) && usuarios.length > 0 ? usuarios[0].id : null;
   }
 
+  /**
+   * Matricula al usuario en el curso (por shortname) con el rol de estudiante
+   * (MOODLE_ROLEID_STUDENT, default 5). Moodle no duplica ni falla si ya
+   * estaba matriculado, así que es seguro repetirlo.
+   */
+  async matricularEnCurso(moodleUserId: number, courseShortname: string): Promise<void> {
+    const courseId = await this.buscarCursoPorShortname(courseShortname);
+    if (courseId === null) {
+      throw new BadGatewayException(`No existe el curso "${courseShortname}" en Moodle`);
+    }
+    const roleId = this.config.get<string>('MOODLE_ROLEID_STUDENT', '5');
+    await this.llamar<null>('enrol_manual_enrol_users', {
+      'enrolments[0][roleid]': String(roleId),
+      'enrolments[0][userid]': String(moodleUserId),
+      'enrolments[0][courseid]': String(courseId),
+    });
+  }
+
+  private async buscarCursoPorShortname(shortname: string): Promise<number | null> {
+    const respuesta = await this.llamar<{ courses?: MoodleUsuario[] }>(
+      'core_course_get_courses_by_field',
+      { field: 'shortname', value: shortname },
+    );
+    const cursos = respuesta?.courses;
+    return Array.isArray(cursos) && cursos.length > 0 ? cursos[0].id : null;
+  }
+
   private async crearUsuario(email: string, nombreCompleto: string): Promise<number> {
     const { firstname, lastname } = this.separarNombre(nombreCompleto);
     const creados = await this.llamar<MoodleUsuario[]>('core_user_create_users', {
