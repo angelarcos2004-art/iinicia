@@ -1,11 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 import { ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 
@@ -53,69 +54,90 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="mx-auto max-w-md px-margin-mobile py-space-xl md:px-margin-desktop">
-      <div className="mb-8 flex flex-col gap-2 text-center">
-        <h1 className="text-headline-lg font-display font-bold text-primary">
-          Mi Campus
-        </h1>
-        <p className="text-body-md text-ink-muted">
-          Inicia sesión con tu identidad IINICIA.
-        </p>
-      </div>
-
-      <Card>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
-          <Input
-            id="correo"
-            type="email"
-            label="Correo institucional o de aspirante"
-            placeholder="ejemplo@iinicia.edu.mx"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-            error={errors.correo}
-            autoComplete="email"
+    <section className="mx-auto max-w-5xl px-margin-mobile py-space-xl md:px-margin-desktop">
+      <Reveal variant="zoom" className="grid grid-cols-1 overflow-hidden rounded-xl border border-border-subtle shadow-level-2 lg:grid-cols-2">
+        <div className="relative hidden lg:block">
+          <Image
+            src="/images/hero-campus.jpg"
+            alt="Estudiantes en el campus de IINICIA"
+            fill
+            className="object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/80 to-primary/40" />
+          <div className="relative z-10 flex h-full flex-col justify-end gap-3 p-space-xl text-white">
+            <span className="w-fit rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-label-sm font-display font-bold uppercase tracking-wide">
+              Mi Campus
+            </span>
+            <h2 className="text-headline-md font-display font-bold">Continúa tu formación</h2>
+            <p className="text-body-sm text-white/85">
+              Accede a tus cursos, avisos y avance curricular en un solo lugar.
+            </p>
+          </div>
+        </div>
 
-          <Input
-            id="password"
-            type="password"
-            label="Contraseña"
-            placeholder="Ingresa tu contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={errors.password}
-            autoComplete="current-password"
-          />
-
-          <div className="flex items-center justify-between text-body-sm">
-            <label className="flex items-center gap-2 text-ink-muted">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-border-subtle text-secondary"
-                checked={recordarme}
-                onChange={(e) => setRecordarme(e.target.checked)}
-              />
-              Recordarme
-            </label>
-            <Link href="#" className="font-semibold text-secondary hover:underline">
-              ¿Olvidaste tu contraseña?
-            </Link>
+        <div className="flex flex-col justify-center gap-6 bg-surface-canvas p-space-xl">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-headline-lg font-display font-bold text-primary">
+              Mi Campus
+            </h1>
+            <p className="text-body-md text-ink-muted">
+              Inicia sesión con tu identidad IINICIA.
+            </p>
           </div>
 
-          {submitError && <p className="text-body-sm text-error">{submitError}</p>}
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
+            <Input
+              id="correo"
+              type="email"
+              label="Correo institucional o de aspirante"
+              placeholder="ejemplo@iinicia.edu.mx"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              error={errors.correo}
+              autoComplete="email"
+            />
 
-          <Button type="submit" variant="primary" disabled={submitting} className="mt-2">
-            {submitting ? "Iniciando sesión…" : "Iniciar sesión"}
-          </Button>
-        </form>
-      </Card>
+            <Input
+              id="password"
+              type="password"
+              label="Contraseña"
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+              autoComplete="current-password"
+            />
 
-      <p className="mt-6 text-center text-body-sm text-ink-muted">
-        ¿Aún no tienes cuenta?{" "}
-        <Link href="/registro" className="font-semibold text-secondary hover:underline">
-          Regístrate
-        </Link>
-      </p>
+            <div className="flex items-center justify-between text-body-sm">
+              <label className="flex items-center gap-2 text-ink-muted">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-border-subtle text-secondary"
+                  checked={recordarme}
+                  onChange={(e) => setRecordarme(e.target.checked)}
+                />
+                Recordarme
+              </label>
+              <Link href="#" className="font-semibold text-secondary hover:underline">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+
+            {submitError && <p className="text-body-sm text-error">{submitError}</p>}
+
+            <Button type="submit" variant="primary" disabled={submitting} className="mt-2">
+              {submitting ? "Iniciando sesión…" : "Iniciar sesión"}
+            </Button>
+          </form>
+
+          <p className="text-center text-body-sm text-ink-muted">
+            ¿Aún no tienes cuenta?{" "}
+            <Link href="/registro" className="font-semibold text-secondary hover:underline">
+              Regístrate
+            </Link>
+          </p>
+        </div>
+      </Reveal>
     </section>
   );
 }

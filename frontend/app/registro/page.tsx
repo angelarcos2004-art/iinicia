@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
@@ -7,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 import { ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_PROGRAMAS } from "@/lib/mock-data";
@@ -90,38 +92,60 @@ export default function RegistroPage() {
   if (success) {
     return (
       <section className="mx-auto max-w-xl px-margin-mobile py-space-xl md:px-margin-desktop">
-        <Card className="flex flex-col items-center gap-4 text-center">
-          <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-success-bg text-success-ink text-2xl font-bold">
-            ✓
-          </span>
-          <h1 className="text-headline-md font-display font-bold text-primary">
-            ¡Cuenta creada con éxito!
-          </h1>
-          <p className="text-body-md text-ink-muted">
-            Hemos registrado tu solicitud como aspirante y ya iniciaste
-            sesión. Da seguimiento a tu proceso de admisión desde Mi IINICIA.
-          </p>
-          <Button variant="primary" onClick={() => router.push("/mi-iinicia")}>
-            Ir a Mi IINICIA
-          </Button>
-        </Card>
+        <Reveal variant="zoom">
+          <Card className="flex flex-col items-center gap-4 text-center">
+            <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-success-bg text-success-ink text-2xl font-bold">
+              ✓
+            </span>
+            <h1 className="text-headline-md font-display font-bold text-primary">
+              ¡Cuenta creada con éxito!
+            </h1>
+            <p className="text-body-md text-ink-muted">
+              Hemos registrado tu solicitud como aspirante y ya iniciaste
+              sesión. Da seguimiento a tu proceso de admisión desde Mi IINICIA.
+            </p>
+            <Button variant="primary" onClick={() => router.push("/mi-iinicia")}>
+              Ir a Mi IINICIA
+            </Button>
+          </Card>
+        </Reveal>
       </section>
     );
   }
 
   return (
-    <section className="mx-auto max-w-xl px-margin-mobile py-space-xl md:px-margin-desktop">
-      <div className="mb-8 flex flex-col gap-2 text-center">
-        <h1 className="text-headline-lg font-display font-bold text-primary">
-          Crear cuenta de aspirante
-        </h1>
-        <p className="text-body-md text-ink-muted">
-          Completa tus datos para iniciar tu proceso de admisión en IINICIA.
-        </p>
-      </div>
+    <section className="mx-auto max-w-5xl px-margin-mobile py-space-xl md:px-margin-desktop">
+      <Reveal variant="zoom" className="grid grid-cols-1 overflow-hidden rounded-xl border border-border-subtle shadow-level-2 lg:grid-cols-2">
+        <div className="relative hidden lg:block">
+          <Image
+            src="/images/vida-estudiantil.jpg"
+            alt="Estudiantes de IINICIA en el campus"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/80 to-primary/40" />
+          <div className="relative z-10 flex h-full flex-col justify-end gap-3 p-space-xl text-white">
+            <span className="w-fit rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-label-sm font-display font-bold uppercase tracking-wide">
+              Convocatoria 2026 abierta
+            </span>
+            <h2 className="text-headline-md font-display font-bold">Da el primer paso</h2>
+            <p className="text-body-sm text-white/85">
+              Crea tu cuenta de aspirante y recibe el dictamen de tu comité en 48 a 72 horas.
+            </p>
+          </div>
+        </div>
 
-      <Card>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <div className="flex flex-col justify-center gap-6 bg-surface-canvas p-space-xl">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-headline-lg font-display font-bold text-primary">
+              Crear cuenta de aspirante
+            </h1>
+            <p className="text-body-md text-ink-muted">
+              Completa tus datos para iniciar tu proceso de admisión en IINICIA.
+            </p>
+          </div>
+
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <Input
             id="nombreCompleto"
             label="Nombre completo del aspirante"
@@ -219,15 +243,16 @@ export default function RegistroPage() {
           <Button type="submit" variant="accent" disabled={submitting} className="mt-2">
             {submitting ? "Creando cuenta…" : "Crear mi cuenta"}
           </Button>
-        </form>
-      </Card>
+          </form>
 
-      <p className="mt-6 text-center text-body-sm text-ink-muted">
-        ¿Ya tienes cuenta?{" "}
-        <Link href="/login" className="font-semibold text-secondary hover:underline">
-          Inicia sesión
-        </Link>
-      </p>
+          <p className="text-center text-body-sm text-ink-muted">
+            ¿Ya tienes cuenta?{" "}
+            <Link href="/login" className="font-semibold text-secondary hover:underline">
+              Inicia sesión
+            </Link>
+          </p>
+        </div>
+      </Reveal>
     </section>
   );
 }
