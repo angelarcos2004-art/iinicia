@@ -95,3 +95,106 @@ body {
   color: var(--color-ink);
   font-family: var(--font-body);
 }
+
+/* Navegacion de un solo scroll: el header fijo no debe tapar el inicio de
+   cada seccion ancla al llegar desde el menu. */
+html {
+  scroll-behavior: smooth;
+}
+
+[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* Unico momento orquestado de entrada del hero (ver app/page.tsx). */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Luces difusas flotantes para secciones con fondo oscuro (hero, testimonios). */
+@keyframes float-blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -40px) scale(1.1);
+  }
+}
+
+.animate-float-blob {
+  animation: float-blob 11s ease-in-out infinite;
+}
+
+.animate-float-blob-slow {
+  animation: float-blob 15s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+/* Carrusel continuo de testimonios: la pista se duplica y recorre -50% para
+   dar un loop perfecto; se pausa al pasar el mouse. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-rise-in,
+  .reveal,
+  .animate-float-blob,
+  .animate-float-blob-slow,
+  .animate-marquee {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .btn-accent-shine::before {
+    transition: none !important;
+    display: none !important;
+  }
+
+  .progress-fill {
+    width: var(--pb-target) !important;
+    transition: none !important;
+  }
+}
+
+/* Material Symbols Outlined (fuente cargada vía <link> en app/layout.tsx).
+   Reglas recomendadas por Google para que el ligature-font renderice bien. */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}

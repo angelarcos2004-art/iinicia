@@ -2,17 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 const INSTITUCIONAL_LINKS = [
-  { href: "/", label: "Inicio" },
-  { href: "/universidad", label: "Universidad" },
-  { href: "/oferta-academica", label: "Oferta académica" },
-  { href: "/admisiones", label: "Admisiones" },
-  { href: "/noticias", label: "Noticias" },
+  { href: "/#inicio", label: "Inicio" },
+  { href: "/#universidad", label: "Universidad" },
+  { href: "/#oferta-academica", label: "Oferta académica" },
+  { href: "/#admisiones", label: "Admisiones" },
+  { href: "/#noticias", label: "Noticias" },
 ];
 
 const CUENTA_LINKS = [
   { href: "/registro", label: "Registrarme" },
   { href: "/login", label: "Mi Campus" },
-  { href: "/contacto", label: "Contacto" },
+  { href: "/#contacto", label: "Contacto" },
 ];
 
 const CURRENT_YEAR = 2026;

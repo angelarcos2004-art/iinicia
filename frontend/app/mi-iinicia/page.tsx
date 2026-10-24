@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ApiError, obtenerMisCursos } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
@@ -17,6 +18,8 @@ const ROL_LABEL: Record<Rol, string> = {
   estudiante: "Estudiante",
   aspirante: "Aspirante",
 };
+
+const MOODLE_URL = process.env.NEXT_PUBLIC_MOODLE_URL;
 
 function formatFecha(fechaIso: string) {
   return new Date(fechaIso).toLocaleDateString("es-MX", {
@@ -168,6 +171,17 @@ export default function MiIiniciaPage() {
                           {curso.progreso}% completado
                         </span>
                       </>
+                    )}
+                    {MOODLE_URL && (
+                      <ButtonLink
+                        href={`${MOODLE_URL}/course/view.php?id=${curso.id}`}
+                        variant="outline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 h-10 w-fit px-4 text-label-sm"
+                      >
+                        Ingresar al curso
+                      </ButtonLink>
                     )}
                   </Card>
                 );
