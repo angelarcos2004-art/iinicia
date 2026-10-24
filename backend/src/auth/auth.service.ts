@@ -7,6 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
+import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleService } from '../moodle/moodle.service.js';
 import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
@@ -82,45 +83,19 @@ export class AuthService {
   }
 
   /**
-   * Vincula (o crea, de forma idempotente) la cuenta Moodle del usuario.
-   * Nota: docs/requerimientos.md describe esto ocurriendo cuando un
-   * aspirante es *admitido* por un administrador academico, no en el
-   * autorregistro. Para esta fase (sin flujo de admision todavia) se
-   * dispara aqui mismo, como demostracion funcional de la integracion.
-   *
-   * Nunca bloquea login/registro: si Moodle no responde, el usuario sigue
-   * teniendo su cuenta IINICIA y queda con moodleUserId en null para
-   * reintentarse en un login posterior.
+   * Vincula (o crea, de forma idempotente) la cuenta Moodle del usuario y lo
+   * matricula en el curso de prueba. Nota: docs/requerimientos.md describe
+   * esto ocurriendo cuando un aspirante es *admitido* por un administrador
+   * academico (ver UsuariosController.actualizarRol), no en el
+   * autorregistro. Para esta fase se dispara aqui tambien, como
+   * demostracion funcional de la integracion. Nunca bloquea login/registro:
+   * ver vincularYMatricularMoodle.
    */
-  private async vincularMoodle(user: User): Promise<User> {
-    try {
-      const moodleUserId = await this.moodle.buscarOCrearUsuarioMoodle(user.correo, user.nombre);
-      await this.users.actualizarMoodleUserId(user.id, moodleUserId);
-      user.moodleUserId = moodleUserId;
-      await this.matricularEnCursoDePrueba(user, moodleUserId);
-      return user;
-    } catch (error) {
-      this.logger.warn(
-        `No se pudo vincular a Moodle el usuario ${user.id}: ${String(error)}`,
-      );
-      return user;
-    }
-  }
-
-  /**
-   * Matricula al usuario en el curso de prueba (MOODLE_TEST_COURSE, default
-   * IINICIA101). Igual que la vinculación, un fallo aquí solo se registra:
-   * nunca bloquea login/registro.
-   */
-  private async matricularEnCursoDePrueba(user: User, moodleUserId: number): Promise<void> {
-    const curso = this.config.get<string>('MOODLE_TEST_COURSE', 'IINICIA101');
-    try {
-      await this.moodle.matricularEnCurso(moodleUserId, curso);
-    } catch (error) {
-      this.logger.warn(
-        `No se pudo matricular al usuario ${user.id} en el curso ${curso}: ${String(error)}`,
-      );
-    }
+  private vincularMoodle(user: User): Promise<User> {
+    return vincularYMatricularMoodle(
+      { users: this.users, moodle: this.moodle, config: this.config, logger: this.logger },
+      user,
+    );
   }
 
   private async buildResponse(user: User): Promise<AuthResponse> {

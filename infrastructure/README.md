@@ -25,6 +25,35 @@ abajo desde el paso 1.
   - `tool_generator_000001` — otro estudiante, generado automáticamente
     por `tool_generator` (nombre aleatorio, ignóralo salvo que necesites
     más volumen de datos de prueba).
+
+  **Importante**: las cuentas de arriba (`profesor.prueba`/`estudiante.prueba`
+  sin dominio, contraseñas `...#2026`) son usuarios de **Moodle**, en una
+  base de datos separada de la del portal — no sirven para iniciar sesión en
+  `http://localhost:3000`. Para el portal (backend + Postgres `iinicia_backend`)
+  usa las cuentas de la sección siguiente.
+
+### Cuentas de prueba del portal IINICIA (una por rol)
+
+Se crean/actualizan con `npm run seed` en `backend/` (requiere Postgres y
+Moodle arriba, y `backend/.env` configurado). Es idempotente: se puede
+correr otra vez cuando se quiera, siempre deja estas credenciales conocidas
+aunque la cuenta ya existiera con otra contraseña (p. ej. si alguien se
+autorregistró antes con ese mismo correo como aspirante).
+
+| Correo | Contraseña | Rol |
+| --- | --- | --- |
+| `superadmin.prueba@iinicia.test` | `Superadmin#2026` | superadmin |
+| `admin.prueba@iinicia.test` | `AdminAcademico#2026` | admin_academico |
+| `coordinador.prueba@iinicia.test` | `Coordinador#2026` | coordinador |
+| `profesor.prueba@iinicia.test` | `Profesor#2026` | profesor |
+| `estudiante.prueba@iinicia.test` | `Estudiante#2026` | estudiante (vinculado y matriculado en `IINICIA101`) |
+
+El rol `aspirante` se obtiene registrándose normalmente desde
+`http://localhost:3000/registro`. Un `superadmin`/`admin_academico` puede
+promover a cualquier usuario (incluido un aspirante autorregistrado) a otro
+rol con `PATCH /usuarios/:id/rol` (body `{ "rol": "estudiante" }`); si se
+promueve a `estudiante` y el usuario no tenía cuenta Moodle, el backend la
+crea/vincula y lo matricula en el curso de prueba automáticamente.
 - Web Services REST ya habilitados y probados por HTTP de verdad
   (`core_webservice_get_site_info` y `core_user_get_users_by_field`
   contra el servicio real, no solo revisando la base de datos):
