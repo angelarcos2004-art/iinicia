@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { AuthService, type AuthResponse } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegistroDto } from './dto/registro.dto.js';
@@ -18,6 +19,8 @@ import { UsuarioActual } from './usuario-actual.decorator.js';
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
+  /** Límite estricto: evita fuerza bruta de contraseñas (docs/requerimientos.md Sec. 16). */
+  @Throttle({ default: { ttl: 60_000, limit: 5 } })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: LoginDto): Promise<AuthResponse> {
@@ -25,6 +28,7 @@ export class AuthController {
   }
 
   /** El contrato del portal espera 200 OK (no 201) en el registro. */
+  @Throttle({ default: { ttl: 60_000, limit: 5 } })
   @Post('registro')
   @HttpCode(HttpStatus.OK)
   registro(@Body() dto: RegistroDto): Promise<AuthResponse> {

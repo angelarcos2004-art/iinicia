@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module.js';
 import { EstudianteModule } from './estudiante/estudiante.module.js';
@@ -11,6 +13,10 @@ import { UsuariosModule } from './usuarios/usuarios.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    // Límite global de peticiones por IP (ver docs/requerimientos.md Sec. 16,
+    // "rate limiting"). Rutas sensibles como /auth/login usan un límite más
+    // estricto con @Throttle (ver AuthController).
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -27,5 +33,6 @@ import { UsuariosModule } from './usuarios/usuarios.module.js';
     EstudianteModule,
     UsuariosModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}
