@@ -80,8 +80,8 @@ class MainViewModel(
     }
 
     /**
-     * Valida los campos en el cliente, simula el envío al repositorio y un inicio de sesión exitoso
-     * sin llamada real al backend.
+     * Valida los campos en el cliente y envía el login al repositorio (BFF real por defecto,
+     * ver `IiniciaRepositoryImpl.isConnectToRemoteEnabled`).
      */
     fun iniciarSesion(
         correo: String,
@@ -112,10 +112,6 @@ class MainViewModel(
 
             repository.login(correo.trim(), password)
                 .onSuccess { authResponse ->
-                    // TODO(Seguridad - Login Real): Al integrar el login real contra el BFF NestJS,
-                    //  almacenar únicamente `authResponse.token` (JWT) en EncryptedSharedPreferences
-                    //  o en Jetpack DataStore cifrado con Android Keystore.
-                    //  Nunca almacenar `password` en texto plano ni procesar tokens de Moodle en Android.
                     val dashboardResult = repository.getDashboardEstudiante().getOrNull()
                     _uiState.update {
                         it.copy(

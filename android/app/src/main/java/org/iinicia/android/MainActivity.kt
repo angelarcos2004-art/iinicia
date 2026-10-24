@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.iinicia.android.data.local.EncryptedSessionTokenStorage
+import org.iinicia.android.data.repository.IiniciaRepositoryImpl
 import org.iinicia.android.ui.navigation.IiniciaNavGraph
 import org.iinicia.android.ui.theme.IiniciaTheme
 import org.iinicia.android.ui.viewmodel.MainViewModel
@@ -18,7 +20,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             IiniciaTheme {
                 val mainViewModel: MainViewModel = viewModel(
-                    factory = MainViewModel.provideFactory()
+                    factory = MainViewModel.provideFactory(
+                        repository = IiniciaRepositoryImpl(
+                            tokenStorage = EncryptedSessionTokenStorage(applicationContext)
+                        )
+                    )
                 )
                 IiniciaNavGraph(
                     viewModel = mainViewModel,

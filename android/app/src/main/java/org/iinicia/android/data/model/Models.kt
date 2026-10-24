@@ -73,7 +73,22 @@ enum class EstadoCurso(val valor: String, val etiqueta: String) {
     POR_INICIAR("por_iniciar", "Por iniciar"),
 
     @SerializedName("finalizado")
-    FINALIZADO("finalizado", "Finalizado")
+    FINALIZADO("finalizado", "Finalizado"),
+
+    /** Moodle no reporta progreso para este curso (p. ej. sin finalización configurada). */
+    @SerializedName("sin_seguimiento")
+    SIN_SEGUIMIENTO("sin_seguimiento", "Inscrito");
+
+    companion object {
+        /** Misma regla que `estadoCurso()` en frontend/app/mi-iinicia/page.tsx, para mantener
+         * la misma lectura del progreso en portal web y app Android. */
+        fun desdeProgreso(progreso: Int?): EstadoCurso = when {
+            progreso == null -> SIN_SEGUIMIENTO
+            progreso >= 100 -> FINALIZADO
+            progreso <= 0 -> POR_INICIAR
+            else -> EN_CURSO
+        }
+    }
 }
 
 data class ActividadCurso(
@@ -88,11 +103,23 @@ data class CursoEstudiante(
     val id: String,
     val nombre: String,
     val periodo: String,
-    val progreso: Int,
+    /** Null cuando Moodle no reporta porcentaje de avance para este curso. */
+    val progreso: Int?,
     val estado: EstadoCurso,
     val docente: String = "Docente IINICIA",
     val descripcion: String = "",
     val actividades: List<ActividadCurso> = emptyList()
+)
+
+/**
+ * Forma cruda que devuelve el backend en `GET /estudiante/cursos`
+ * (ver `backend/src/estudiante/estudiante.controller.ts`, interfaz `CursoInscrito`).
+ */
+data class CursoInscritoDto(
+    val id: Int,
+    val nombre: String,
+    val shortname: String,
+    val progreso: Int?
 )
 
 data class AvisoInstitucional(
