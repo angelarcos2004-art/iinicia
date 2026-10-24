@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { CountUp } from "@/components/ui/count-up";
+import { ProgressBar } from "@/components/ui/progress-bar";
+import { Reveal } from "@/components/ui/reveal";
+import { SectionBg } from "@/components/ui/section-bg";
 import { ApiError, obtenerMisCursos } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
@@ -92,8 +96,10 @@ export default function MiIiniciaPage() {
   const { usuario } = sesion;
 
   return (
-    <section className="mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
-      <div className="mb-8 flex flex-col gap-2">
+    <section className="relative overflow-hidden">
+      <SectionBg image="/images/bg-abstract-1.png" opacity={0.06} />
+      <div className="relative mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
+      <Reveal className="mb-8 flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-headline-lg font-display font-bold text-primary">
             ¡Bienvenido de vuelta, {usuario.nombre.split(" ")[0]}! 👋
@@ -101,33 +107,30 @@ export default function MiIiniciaPage() {
           <Badge variant="academic">{ROL_LABEL[usuario.rol]}</Badge>
         </div>
         <p className="text-body-md text-ink-muted">{cuatrimestre} · Mi IINICIA</p>
-      </div>
+      </Reveal>
 
-      <Card className="mb-8 flex flex-col gap-4">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <span className="text-headline-md font-display font-bold text-primary">
-            {creditosObtenidos}
-            <span className="text-label-sm font-display font-semibold text-ink-muted">
-              {" "}
-              / {creditosTotales} créditos
+      <Reveal>
+        <Card className="mb-8 flex flex-col gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <span className="text-headline-md font-display font-bold text-primary">
+              <CountUp value={`${creditosObtenidos}`} />
+              <span className="text-label-sm font-display font-semibold text-ink-muted">
+                {" "}
+                / {creditosTotales} créditos
+              </span>
             </span>
-          </span>
-          <span className="text-label-md font-display font-semibold text-secondary">
-            {progresoCurricular}% del plan de estudios
-          </span>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <span className="text-body-sm font-semibold text-ink-muted">
-            Progreso curricular total
-          </span>
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface-neutral">
-            <div
-              className="h-full rounded-full bg-secondary"
-              style={{ width: `${progresoCurricular}%` }}
-            />
+            <span className="text-label-md font-display font-semibold text-secondary">
+              <CountUp value={`${progresoCurricular}%`} /> del plan de estudios
+            </span>
           </div>
-        </div>
-      </Card>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-body-sm font-semibold text-ink-muted">
+              Progreso curricular total
+            </span>
+            <ProgressBar value={progresoCurricular} className="h-2.5" />
+          </div>
+        </Card>
+      </Reveal>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
@@ -144,46 +147,43 @@ export default function MiIiniciaPage() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {cursos.map((curso) => {
+              {cursos.map((curso, i) => {
                 const estado = estadoCurso(curso.progreso);
                 return (
-                  <Card key={curso.id} hoverable className="flex flex-col gap-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-title font-display font-bold text-primary">
-                        {curso.nombre}
-                      </h3>
-                      <Badge variant={estado.variant}>{estado.label}</Badge>
-                    </div>
-                    <p className="text-body-sm text-ink-muted">{curso.shortname}</p>
-                    {curso.progreso === null ? (
-                      <span className="text-label-sm font-display font-semibold text-ink-muted">
-                        Sin seguimiento de progreso en este curso
-                      </span>
-                    ) : (
-                      <>
-                        <div className="h-2 w-full overflow-hidden rounded-full bg-surface-neutral">
-                          <div
-                            className="h-full rounded-full bg-secondary"
-                            style={{ width: `${curso.progreso}%` }}
-                          />
-                        </div>
+                  <Reveal key={curso.id} delay={i * 90}>
+                    <Card hoverable className="flex h-full flex-col gap-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-title font-display font-bold text-primary">
+                          {curso.nombre}
+                        </h3>
+                        <Badge variant={estado.variant}>{estado.label}</Badge>
+                      </div>
+                      <p className="text-body-sm text-ink-muted">{curso.shortname}</p>
+                      {curso.progreso === null ? (
                         <span className="text-label-sm font-display font-semibold text-ink-muted">
-                          {curso.progreso}% completado
+                          Sin seguimiento de progreso en este curso
                         </span>
-                      </>
-                    )}
-                    {MOODLE_URL && (
-                      <ButtonLink
-                        href={`${MOODLE_URL}/course/view.php?id=${curso.id}`}
-                        variant="outline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-1 h-10 w-fit px-4 text-label-sm"
-                      >
-                        Ingresar al curso
-                      </ButtonLink>
-                    )}
-                  </Card>
+                      ) : (
+                        <>
+                          <ProgressBar value={curso.progreso} />
+                          <span className="text-label-sm font-display font-semibold text-ink-muted">
+                            <CountUp value={`${curso.progreso}%`} /> completado
+                          </span>
+                        </>
+                      )}
+                      {MOODLE_URL && (
+                        <ButtonLink
+                          href={`${MOODLE_URL}/course/view.php?id=${curso.id}`}
+                          variant="outline"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-1 h-10 w-fit px-4 text-label-sm"
+                        >
+                          Ingresar al curso
+                        </ButtonLink>
+                      )}
+                    </Card>
+                  </Reveal>
                 );
               })}
             </div>
@@ -195,19 +195,22 @@ export default function MiIiniciaPage() {
             Avisos institucionales
           </h2>
           <div className="flex flex-col gap-4">
-            {avisos.map((aviso) => (
-              <Card key={aviso.id}>
-                <time className="mb-1 block text-label-sm font-display font-semibold text-ink-muted">
-                  {formatFecha(aviso.fecha)}
-                </time>
-                <h3 className="mb-1 text-body-lg font-display font-bold text-primary">
-                  {aviso.titulo}
-                </h3>
-                <p className="text-body-sm text-ink-muted">{aviso.resumen}</p>
-              </Card>
+            {avisos.map((aviso, i) => (
+              <Reveal key={aviso.id} delay={i * 90}>
+                <Card>
+                  <time className="mb-1 block text-label-sm font-display font-semibold text-ink-muted">
+                    {formatFecha(aviso.fecha)}
+                  </time>
+                  <h3 className="mb-1 text-body-lg font-display font-bold text-primary">
+                    {aviso.titulo}
+                  </h3>
+                  <p className="text-body-sm text-ink-muted">{aviso.resumen}</p>
+                </Card>
+              </Reveal>
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
