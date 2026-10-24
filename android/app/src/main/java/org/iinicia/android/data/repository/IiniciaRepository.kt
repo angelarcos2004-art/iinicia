@@ -6,7 +6,9 @@ import org.iinicia.android.data.local.MockDataSource
 import org.iinicia.android.data.local.SessionTokenStorage
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoEstudiante
+import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.DashboardEstudiante
+import org.iinicia.android.data.model.EstadoCurso
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
@@ -30,10 +32,23 @@ interface IiniciaRepository {
     fun logout()
 }
 
+/** Convierte el curso crudo del backend (`CursoInscritoDto`, directo de Moodle) al modelo de
+ * dominio de la UI. No inventa `periodo`/`docente`/`descripcion`: Moodle no los expone en este
+ * endpoint, así que quedan vacíos en vez de simular un dato que no es real. */
+private fun CursoInscritoDto.aCursoEstudiante(): CursoEstudiante = CursoEstudiante(
+    id = id.toString(),
+    nombre = nombre,
+    periodo = shortname,
+    progreso = progreso,
+    estado = EstadoCurso.desdeProgreso(progreso),
+    docente = "",
+    descripcion = "",
+)
+
 class IiniciaRepositoryImpl(
     override val baseUrl: String = ApiConfig.DEFAULT_BASE_URL,
     private val tokenStorage: SessionTokenStorage = InMemorySessionTokenStorage(),
-    override val isConnectToRemoteEnabled: Boolean = false,
+    override val isConnectToRemoteEnabled: Boolean = true,
     private val apiService: IiniciaApiService = RetrofitClient.createApiService(
         baseUrl = baseUrl,
         tokenProvider = { tokenStorage.getToken() }
@@ -51,30 +66,35 @@ class IiniciaRepositoryImpl(
                 delay(300)
                 MockDataSource.buildMockAuthResponse(correo = correo.trim())
             }
-            // TODO(Seguridad - Login Real): Cuando exista conexión real al backend (BFF),
-            //  persistir `response.token` (JWT de IINICIA) usando EncryptedSharedPreferences
-            //  o Jetpack DataStore cifrado con Android Keystore.
-            //  PROHIBIDO almacenar `password` en texto plano o guardar tokens de Moodle.
+            // `tokenStorage` persiste esto en EncryptedSharedPreferences (ver
+            // EncryptedSessionTokenStorage, usada por defecto desde MainActivity).
+            // PROHIBIDO almacenar `password` en texto plano o guardar tokens de Moodle.
             tokenStorage.saveSession(response.token, response.usuario)
             response
         }
     }
 
     /**
-     * El backend actual solo expone `/auth/login`, `/auth/registro` y `/auth/me`.
-     * El dashboard consume datos locales directamente sin pasar por Retrofit.
+     * El backend todavía no expone créditos ni cuatrimestre (son datos académicos que
+     * dependen de un modelo curricular aún no implementado), así que quedan en 0/placeholder
+     * en vez de simular un avance que no es real. Los cursos sí son reales: vienen de
+     * `GET /estudiante/cursos`, que el backend sincroniza directo con Moodle.
      */
     override suspend fun getDashboardEstudiante(): Result<DashboardEstudiante> {
         return runCatching {
             val usuario = tokenStorage.getUsuario() ?: MockDataSource.mockUsuarioEstudiante
-            // Para el primer avance (Fase 4), el Dashboard inicia con una lista vacía de cursos
+            val cursos = if (isConnectToRemoteEnabled) {
+                apiService.getCursos().map { it.aCursoEstudiante() }
+            } else {
+                emptyList()
+            }
             DashboardEstudiante(
                 usuario = usuario,
                 cuatrimestre = "1er cuatrimestre",
                 creditosObtenidos = 0,
                 creditosTotales = 300,
                 progresoCurricular = 0,
-                cursos = emptyList(),
+                cursos = cursos,
                 avisos = emptyList()
             )
         }
@@ -82,14 +102,25 @@ class IiniciaRepositoryImpl(
 
     override suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>> {
         return runCatching {
-            emptyList()
+            if (isConnectToRemoteEnabled) {
+                apiService.getCursos().map { it.aCursoEstudiante() }
+            } else {
+                emptyList()
+            }
         }
     }
 
     override suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante> {
         return runCatching {
-            MockDataSource.mockCursos.firstOrNull { it.id == cursoId }
-                ?: throw IllegalArgumentException("Curso no encontrado: $cursoId")
+            if (isConnectToRemoteEnabled) {
+                apiService.getCursos()
+                    .map { it.aCursoEstudiante() }
+                    .firstOrNull { it.id == cursoId }
+                    ?: throw IllegalArgumentException("Curso no encontrado: $cursoId")
+            } else {
+                MockDataSource.mockCursos.firstOrNull { it.id == cursoId }
+                    ?: throw IllegalArgumentException("Curso no encontrado: $cursoId")
+            }
         }
     }
 

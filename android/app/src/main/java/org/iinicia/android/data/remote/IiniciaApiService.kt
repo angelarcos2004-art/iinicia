@@ -1,6 +1,7 @@
 package org.iinicia.android.data.remote
 
 import org.iinicia.android.data.model.AuthResponse
+import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.RegistroRequest
 import org.iinicia.android.data.model.Usuario
@@ -15,6 +16,7 @@ import retrofit2.http.POST
  * - POST /auth/login
  * - POST /auth/registro
  * - GET /auth/me
+ * - GET /estudiante/cursos
  *
  * Regla de arquitectura:
  * - Android se comunica únicamente con el BFF de IINICIA.
@@ -30,4 +32,8 @@ interface IiniciaApiService {
 
     @GET("auth/me")
     suspend fun getPerfilActual(): Usuario
+
+    /** Cursos reales del estudiante autenticado, sincronizados por el backend desde Moodle. */
+    @GET("estudiante/cursos")
+    suspend fun getCursos(): List<CursoInscritoDto>
 }

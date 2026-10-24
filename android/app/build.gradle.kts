@@ -16,8 +16,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // URL base configurable del BFF IINICIA (NestJS)
-        buildConfigField("String", "API_BASE_URL", "\"http://localhost:3001/\"")
+        // URL base configurable del BFF IINICIA (NestJS). 10.0.2.2 es como el emulador
+        // de Android ve "localhost" de la máquina anfitriona (donde corre el backend).
+        // En un dispositivo físico, cambiar a la IP de red de la máquina con el backend.
+        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:3001/\"")
     }
 
     buildTypes {
@@ -61,6 +63,9 @@ dependencies {
     implementation(libs.okhttp.core)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.coroutines.android)
+
+    // Almacenamiento cifrado del token de sesión (Requerimiento 9.3: nunca contraseñas en texto plano)
+    implementation(libs.androidx.security.crypto)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

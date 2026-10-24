@@ -2,7 +2,14 @@ package org.iinicia.android
 
 import kotlinx.coroutines.test.runTest
 import org.iinicia.android.data.local.InMemorySessionTokenStorage
+import org.iinicia.android.data.model.AuthResponse
+import org.iinicia.android.data.model.CursoInscritoDto
+import org.iinicia.android.data.model.EstadoCurso
+import org.iinicia.android.data.model.LoginRequest
+import org.iinicia.android.data.model.RegistroRequest
+import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
+import org.iinicia.android.data.remote.IiniciaApiService
 import org.iinicia.android.data.remote.RetrofitClient
 import org.iinicia.android.data.repository.IiniciaRepositoryImpl
 import org.iinicia.android.ui.theme.IiniciaAccent
@@ -16,6 +23,14 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+/** Implementación falsa de [IiniciaApiService] para pruebas sin red real. */
+private class FakeApiService(private val cursos: List<CursoInscritoDto>) : IiniciaApiService {
+    override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
+    override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
+    override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
+    override suspend fun getCursos(): List<CursoInscritoDto> = cursos
+}
+
 class ExampleUnitTest {
     @Test
     fun institutionalColors_areCorrect() {
@@ -26,7 +41,7 @@ class ExampleUnitTest {
 
     @Test
     fun apiConfig_normalizesBaseUrlCorrectly() {
-        assertEquals("http://localhost:3001/", ApiConfig.DEFAULT_BASE_URL)
+        assertEquals("http://10.0.2.2:3001/", ApiConfig.DEFAULT_BASE_URL)
         assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001"))
         assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001/"))
     }
@@ -87,5 +102,35 @@ class ExampleUnitTest {
 
         repository.logout()
         assertNull(tokenStorage.getToken())
+    }
+
+    @Test
+    fun estadoCurso_seDeriveDelProgreso() {
+        assertEquals(EstadoCurso.SIN_SEGUIMIENTO, EstadoCurso.desdeProgreso(null))
+        assertEquals(EstadoCurso.POR_INICIAR, EstadoCurso.desdeProgreso(0))
+        assertEquals(EstadoCurso.EN_CURSO, EstadoCurso.desdeProgreso(50))
+        assertEquals(EstadoCurso.FINALIZADO, EstadoCurso.desdeProgreso(100))
+    }
+
+    @Test
+    fun repository_getCursosAutorizados_mapeaCursosRealesDelBackend() = runTest {
+        val fakeApi = FakeApiService(
+            cursos = listOf(
+                CursoInscritoDto(id = 2, nombre = "Test course: XS", shortname = "IINICIA101", progreso = null)
+            )
+        )
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://localhost:3001/",
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val result = repository.getCursosAutorizados()
+        assertTrue(result.isSuccess)
+        val curso = result.getOrThrow().single()
+        assertEquals("2", curso.id)
+        assertEquals("IINICIA101", curso.periodo)
+        assertEquals(EstadoCurso.SIN_SEGUIMIENTO, curso.estado)
+        assertNull(curso.progreso)
     }
 }
