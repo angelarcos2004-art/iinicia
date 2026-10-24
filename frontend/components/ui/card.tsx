@@ -19,7 +19,7 @@ export function Card({
       className={[
         "rounded-xl border border-border-subtle bg-surface-canvas p-space-lg shadow-level-1",
         hoverable &&
-          "transition-all duration-200 hover:shadow-level-2 hover:border-secondary/40",
+          "transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1 hover:shadow-level-2 hover:border-secondary/40",
         className,
       ]
         .filter(Boolean)
