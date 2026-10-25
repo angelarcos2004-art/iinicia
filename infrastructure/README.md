@@ -1,9 +1,8 @@
 # Infraestructura IINICIA (desarrollo local)
 
-Levanta PostgreSQL + Moodle en Docker para desarrollo local. El backend
-(NestJS) lo corre por separado el equipo de `backend/` hasta que tenga su
-propio `Dockerfile` (hay un servicio comentado en `docker-compose.yml`
-listo para cuando lo agreguen).
+Levanta PostgreSQL + Moodle + backend (NestJS) en Docker para desarrollo
+local. El backend necesita `backend/.env` ya configurado (copia
+`backend/.env.example`) antes de `docker compose up`.
 
 ## Estado actual (ya configurado en este equipo)
 
@@ -302,6 +301,34 @@ idempotente (ver CLAUDE.md y docs/requerimientos.md sección 13). Pasos:
    El token ya generado en esta máquina está en la sección "Estado
    actual" arriba.
 
+## Por qué el backend en Docker necesita MOODLE_HOST_HEADER
+
+El servicio `backend` del `docker-compose.yml` llama a Moodle por el
+nombre interno de la red de Docker (`http://moodle`), no por
+`http://localhost:8080` (eso solo funciona desde tu máquina, no entre
+contenedores). Pero Moodle tiene configurado `$CFG->wwwroot =
+http://localhost:8080`, y redirige (303) cualquier petición que llegue
+con un `Host` distinto al de su `wwwroot` — incluida
+`webservice/rest/server.php`. El backend seguía esa redirección hacia
+`http://localhost:8080` **desde dentro de su propio contenedor**, donde
+no hay nada escuchando en ese puerto, y fallaba con
+`TypeError: fetch failed` / "No se pudo conectar con Moodle".
+
+(Probamos primero `$CFG->reverseproxy`, que parecía la opción obvia para
+"mismatch de host" — pero Moodle usa ese flag para un escenario distinto:
+asume que SOLO se accede a través de un proxy real y rechaza con error 500
+cualquier request cuyo Host coincida exactamente con el wwwroot, lo cual
+rompía el acceso normal desde el navegador a `localhost:8080`. Se revirtió.)
+
+La solución real: `MOODLE_HOST_HEADER=localhost:8080` en el `environment:`
+del servicio `backend` (`docker-compose.yml`). `MoodleService` (ver
+`backend/src/moodle/moodle.service.ts`) usa esa variable para forzar el
+header `Host` correcto mientras conecta físicamente a `moodle` — con
+`node:http` directamente, porque `fetch()` no puede sobreescribir `Host`
+(la spec Fetch lo prohíbe). Sin Docker (backend corriendo local con
+`npm run start:dev`), no se define esta variable y todo sigue igual que
+antes (vía `fetch`, sin cambios).
+
 ## Comandos útiles
 
 ```bash
@@ -313,8 +340,6 @@ docker compose down -v            # apagar y BORRAR los datos (reinstala desde c
 
 ## Siguiente fase (no es parte de esta entrega)
 
-- Dockerfile para `backend/` y descomentar el servicio `backend` en
-  `docker-compose.yml`.
 - Tema/plugins propios en `moodle-custom/` (nunca modificar
   `moodle-src/` directamente — eso es el core de Moodle).
 - Dominios reales (`aula.iinicia.org`, `api.iinicia.org`) y HTTPS, solo
