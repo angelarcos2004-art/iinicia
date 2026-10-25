@@ -1,5 +1,7 @@
 package org.iinicia.android.data.repository
 
+import com.google.gson.JsonParser
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.iinicia.android.data.local.InMemorySessionTokenStorage
 import org.iinicia.android.data.local.MockDataSource
@@ -14,6 +16,7 @@ import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
 import org.iinicia.android.data.remote.IiniciaApiService
 import org.iinicia.android.data.remote.RetrofitClient
+import retrofit2.HttpException
 
 /**
  * Contrato de la capa de repositorio de IINICIA.
@@ -58,11 +61,11 @@ class IiniciaRepositoryImpl(
     override fun getCurrentSessionUser(): Usuario? = tokenStorage.getUsuario()
 
     override suspend fun login(correo: String, password: String): Result<AuthResponse> {
-        return runCatching {
+        return try {
             val response = if (isConnectToRemoteEnabled) {
                 apiService.login(LoginRequest(correo = correo.trim(), password = password))
             } else {
-                // Simulación de inicio de sesión exitoso sin llamada real al backend
+                // Respaldo simulado para pruebas unitarias locales
                 delay(300)
                 MockDataSource.buildMockAuthResponse(correo = correo.trim())
             }
@@ -70,7 +73,21 @@ class IiniciaRepositoryImpl(
             // EncryptedSessionTokenStorage, usada por defecto desde MainActivity).
             // PROHIBIDO almacenar `password` en texto plano o guardar tokens de Moodle.
             tokenStorage.saveSession(response.token, response.usuario)
-            response
+            Result.success(response)
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (httpException: HttpException) {
+            val rawErrorBody = runCatching {
+                httpException.response()?.errorBody()?.string()
+            }.getOrNull()
+            val fallbackMessage = httpException.message().takeIf { it.isNotBlank() }
+                ?: "El servidor respondió con un error (${httpException.code()})."
+            val parsedMessage = parseErrorMessage(rawErrorBody, fallbackMessage)
+            Result.failure(Exception(parsedMessage, httpException))
+        } catch (e: Exception) {
+            val fallback = e.message?.takeIf { it.isNotBlank() }
+                ?: "No se pudo conectar con el servidor. Verifica tu conexión."
+            Result.failure(Exception(fallback, e))
         }
     }
 
@@ -126,5 +143,28 @@ class IiniciaRepositoryImpl(
 
     override fun logout() {
         tokenStorage.clearSession()
+    }
+
+    companion object {
+        /**
+         * Parsea el cuerpo de error JSON devuelto por el backend NestJS (`{ "message": "..." }`)
+         * y devuelve el mensaje en español, o [fallbackMessage] si el parseo falla.
+         */
+        fun parseErrorMessage(rawErrorBody: String?, fallbackMessage: String): String {
+            if (rawErrorBody.isNullOrBlank()) return fallbackMessage
+            return try {
+                val jsonObject = JsonParser.parseString(rawErrorBody).asJsonObject
+                val messageElement = jsonObject.get("message") ?: return fallbackMessage
+                val extracted = when {
+                    messageElement.isJsonPrimitive -> messageElement.asString
+                    messageElement.isJsonArray && messageElement.asJsonArray.size() > 0 ->
+                        messageElement.asJsonArray[0].asString
+                    else -> null
+                }
+                extracted?.takeIf { it.isNotBlank() } ?: fallbackMessage
+            } catch (_: Exception) {
+                fallbackMessage
+            }
+        }
     }
 }
