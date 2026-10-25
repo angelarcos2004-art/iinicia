@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'node:crypto';
+import * as http from 'node:http';
+import * as https from 'node:https';
 
 interface MoodleUsuario {
   id: number;
@@ -151,6 +153,64 @@ export class MoodleService {
     return `${randomBytes(18).toString('base64url')}aZ9#`;
   }
 
+  /**
+   * Moodle redirige (303 a su $CFG->wwwroot) cualquier petición cuyo Host no
+   * coincida con ese wwwroot configurado — incluida webservice/rest/server.php.
+   * En Docker, el backend llega a Moodle por el nombre de servicio interno
+   * ("moodle"), distinto del wwwroot público ("localhost:8080"), y fetch()
+   * no puede forzar el header Host (la spec Fetch lo prohíbe), así que la
+   * petición termina siguiendo esa redirección hacia sí mismo y falla.
+   * MOODLE_HOST_HEADER (opcional, solo se usa en Docker) fuerza el Host
+   * correcto usando node:http directamente.
+   */
+  private async postForm(
+    url: string,
+    body: URLSearchParams,
+  ): Promise<{ status: number; json: () => Promise<unknown> }> {
+    const hostHeader = this.config.get<string>('MOODLE_HOST_HEADER');
+    if (!hostHeader) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      return { status: response.status, json: () => response.json() };
+    }
+
+    const bodyText = body.toString();
+    const target = new URL(url);
+    const client = target.protocol === 'https:' ? https : http;
+    const { status, text } = await new Promise<{ status: number; text: string }>(
+      (resolve, reject) => {
+        const req = client.request(
+          {
+            hostname: target.hostname,
+            port: target.port || (target.protocol === 'https:' ? 443 : 80),
+            path: target.pathname,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Length': Buffer.byteLength(bodyText),
+              Host: hostHeader,
+            },
+            timeout: TIMEOUT_MS,
+          },
+          (res) => {
+            let data = '';
+            res.on('data', (chunk: Buffer) => (data += chunk));
+            res.on('end', () => resolve({ status: res.statusCode ?? 0, text: data }));
+          },
+        );
+        req.on('timeout', () => req.destroy(new Error('Moodle no respondió a tiempo')));
+        req.on('error', reject);
+        req.write(bodyText);
+        req.end();
+      },
+    );
+    return { status, json: () => Promise.resolve(JSON.parse(text)) };
+  }
+
   private async llamar<T>(wsfunction: string, params: Record<string, string>): Promise<T> {
     const baseUrl = this.config.getOrThrow<string>('MOODLE_URL').replace(/\/+$/, '');
     const token = this.config.getOrThrow<string>('MOODLE_TOKEN');
@@ -161,20 +221,15 @@ export class MoodleService {
       ...params,
     });
 
-    let response: Response;
+    let response: { status: number; json: () => Promise<unknown> };
     try {
-      response = await fetch(`${baseUrl}/webservice/rest/server.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body,
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
+      response = await this.postForm(`${baseUrl}/webservice/rest/server.php`, body);
     } catch (error) {
       this.logger.error(`No se pudo conectar con Moodle (${wsfunction}): ${String(error)}`);
       throw new BadGatewayException('No se pudo conectar con Moodle');
     }
 
-    if (!response.ok) {
+    if (response.status < 200 || response.status >= 300) {
       this.logger.error(`Moodle respondió HTTP ${response.status} (${wsfunction})`);
       throw new BadGatewayException('Moodle respondió con un error');
     }

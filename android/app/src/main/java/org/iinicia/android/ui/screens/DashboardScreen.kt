@@ -39,9 +39,9 @@ import org.iinicia.android.ui.theme.IiniciaTheme
 import org.iinicia.android.ui.viewmodel.MainUiState
 
 /**
- * Pantalla 2 - Dashboard del estudiante (Placeholder):
- * - Muestra el mensaje de bienvenida ("Bienvenido") al estudiante tras el login simulado.
- * - Incluye una lista vacía de cursos (`cursos = emptyList()`).
+ * Pantalla 2 - Dashboard del estudiante.
+ * Los cursos vienen de `GET /estudiante/cursos` (ver [MainViewModel.iniciarSesion]); la tarjeta
+ * "Lista de cursos vacía" solo se muestra cuando el backend no devuelve cursos reales.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

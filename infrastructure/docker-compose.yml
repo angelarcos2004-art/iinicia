@@ -37,20 +37,58 @@ services:
       - ./moodle-src:/var/www/html
       - moodledata_data:/var/www/moodledata
 
-  # El backend NestJS lo agrega el compañero a cargo de backend/ cuando
-  # tenga su Dockerfile. Mientras tanto corre localmente con
-  # DATABASE_URL apuntando a postgres://iinicia:<password>@localhost:5432/iinicia_backend
-  # backend:
-  #   build: ../backend
-  #   container_name: iinicia-backend
-  #   restart: unless-stopped
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   env_file:
-  #     - ../backend/.env
-  #   ports:
-  #     - "3001:3001"
+  # Requiere backend/.env ya configurado (ver backend/.env.example). DATABASE_URL
+  # y MOODLE_URL se sobreescriben aqui porque dentro de la red de Docker el
+  # backend debe usar los nombres de servicio ("postgres", "moodle"), no
+  # "localhost" como en backend/.env (pensado para correr el backend sin Docker).
+  # target: dev monta src/ como volumen y corre "nest start --watch": edita
+  # y guarda en tu editor como siempre, no hace falta reconstruir la imagen.
+  backend:
+    build:
+      context: ../backend
+      target: dev
+    container_name: iinicia-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      moodle:
+        condition: service_started
+    env_file:
+      - ../backend/.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iinicia}:${POSTGRES_PASSWORD:-iinicia_dev_password}@postgres:5432/${POSTGRES_DB:-iinicia_backend}
+      MOODLE_URL: http://moodle
+      # Moodle redirige cualquier peticion cuyo Host no coincida con su
+      # $CFG->wwwroot (localhost:8080). Este Host "falso" hace que el backend,
+      # aunque conecte por el nombre interno "moodle", pase esa validacion
+      # (ver backend/src/moodle/moodle.service.ts).
+      MOODLE_HOST_HEADER: localhost:8080
+      PORT: 3001
+    volumes:
+      - ../backend/src:/app/src
+      - ../backend/test:/app/test
+    ports:
+      - "3001:3001"
+
+  # Requiere frontend/.env.local ya configurado (ver frontend/.env.example).
+  # Todo el directorio se monta como volumen para hot-reload; node_modules y
+  # .next quedan en volumenes anonimos propios del contenedor para no pisarlos
+  # con lo que haya (o no haya) instalado en el host.
+  frontend:
+    build: ../frontend
+    container_name: iinicia-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - ../frontend/.env.local
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
 
 volumes:
   postgres_data:
