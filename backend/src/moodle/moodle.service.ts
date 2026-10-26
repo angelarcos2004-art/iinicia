@@ -123,8 +123,13 @@ export class MoodleService {
       throw new BadGatewayException('Moodle no devolvió una URL de acceso');
     }
     if (!cursoId) return loginurl;
-    const baseUrl = this.config.getOrThrow<string>('MOODLE_URL').replace(/\/+$/, '');
-    const urlDestino = `${baseUrl}/course/view.php?id=${cursoId}`;
+    // Ojo: NO usar this.config MOODLE_URL aquí. En Docker apunta al nombre
+    // interno ("http://moodle"), que el navegador del usuario no puede
+    // resolver. loginurl ya viene armada por Moodle con su wwwroot público
+    // real (ver auth_userkey auth.php get_login_url()), así que se reusa
+    // ese mismo origen para el destino tras el login.
+    const origen = new URL(loginurl).origin;
+    const urlDestino = `${origen}/course/view.php?id=${cursoId}`;
     const separador = loginurl.includes('?') ? '&' : '?';
     return `${loginurl}${separador}wantsurl=${encodeURIComponent(urlDestino)}`;
   }

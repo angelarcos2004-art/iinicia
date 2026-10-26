@@ -267,14 +267,20 @@ describe('MoodleService.solicitarUrlAutologin', () => {
     expect(p.get('user[email]')).toBe('ana@correo.com');
   });
 
-  it('agrega wantsurl al curso cuando se pide un cursoId', async () => {
-    mockFetch({ loginurl: 'http://moodle.test:8080/auth/userkey/login.php?key=abc' });
+  it('arma wantsurl con el origen público de loginurl, NUNCA con MOODLE_URL', async () => {
+    // Replica el caso real en Docker: MOODLE_URL (el nombre interno que usa
+    // el backend para llegar a Moodle, "http://moodle.test:8080" en este test)
+    // es distinto del wwwroot público con el que Moodle arma loginurl (el que
+    // sí puede resolver el navegador). Si el código usara MOODLE_URL para el
+    // wantsurl, el navegador terminaría con "No se ha podido encontrar la
+    // dirección IP del servidor de moodle" al volver del login.
+    mockFetch({ loginurl: 'http://localhost:8080/auth/userkey/login.php?key=abc' });
 
     const url = await makeService().solicitarUrlAutologin('a@b.com', 2);
 
     expect(url).toBe(
-      'http://moodle.test:8080/auth/userkey/login.php?key=abc&wantsurl=' +
-        encodeURIComponent('http://moodle.test:8080/course/view.php?id=2'),
+      'http://localhost:8080/auth/userkey/login.php?key=abc&wantsurl=' +
+        encodeURIComponent('http://localhost:8080/course/view.php?id=2'),
     );
   });
 
