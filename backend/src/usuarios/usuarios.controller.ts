@@ -1,4 +1,15 @@
-import { Body, Controller, Logger, NotFoundException, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Logger,
+  NotFoundException,
+  Param,
+  Patch,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { Roles } from '../auth/roles.decorator.js';
@@ -16,6 +27,11 @@ export interface UsuarioActualizado {
   rol: Rol;
 }
 
+export interface UsuarioListado extends UsuarioActualizado {
+  moodleUserId: number | null;
+  createdAt: Date;
+}
+
 /**
  * Administración de usuarios por roles privilegiados. Implementa el paso de
  * "admisión" de docs/requerimientos.md §12: un administrador académico
@@ -31,6 +47,24 @@ export class UsuariosController {
     private readonly moodle: MoodleService,
     private readonly config: ConfigService,
   ) {}
+
+  /** Lista de usuarios para el panel administrativo; `rol` filtra opcionalmente. */
+  @Get()
+  @Roles(Rol.Superadmin, Rol.AdminAcademico, Rol.Coordinador)
+  async listar(@Query('rol') rol?: string): Promise<UsuarioListado[]> {
+    if (rol && !Object.values(Rol).includes(rol as Rol)) {
+      throw new BadRequestException('Rol inválido');
+    }
+    const usuarios = await this.users.listar(rol as Rol | undefined);
+    return usuarios.map((u) => ({
+      id: u.id,
+      nombre: u.nombre,
+      correo: u.correo,
+      rol: u.rol,
+      moodleUserId: u.moodleUserId,
+      createdAt: u.createdAt,
+    }));
+  }
 
   @Patch(':id/rol')
   @Roles(Rol.Superadmin, Rol.AdminAcademico)

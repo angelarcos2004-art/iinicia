@@ -22,6 +22,7 @@ class InMemoryUsers {
       passwordHash: 'x',
       rol: Rol.AdminAcademico,
       moodleUserId: null,
+      createdAt: new Date('2026-01-01'),
     } as User,
     {
       id: 'u-estudiante',
@@ -30,6 +31,7 @@ class InMemoryUsers {
       passwordHash: 'x',
       rol: Rol.Estudiante,
       moodleUserId: 5,
+      createdAt: new Date('2026-01-02'),
     } as User,
     {
       id: 'u-aspirante-nuevo',
@@ -38,6 +40,16 @@ class InMemoryUsers {
       passwordHash: 'x',
       rol: Rol.Aspirante,
       moodleUserId: null,
+      createdAt: new Date('2026-01-03'),
+    } as User,
+    {
+      id: 'u-coordinador',
+      nombre: 'Coordinador Cualquiera',
+      correo: 'coordinador@correo.com',
+      passwordHash: 'x',
+      rol: Rol.Coordinador,
+      moodleUserId: null,
+      createdAt: new Date('2026-01-04'),
     } as User,
   ];
   async findById(id: string) {
@@ -50,6 +62,9 @@ class InMemoryUsers {
   async actualizarMoodleUserId(id: string, moodleUserId: number) {
     const user = this.items.find((u) => u.id === id);
     if (user) user.moodleUserId = moodleUserId;
+  }
+  async listar(rol?: Rol) {
+    return rol ? this.items.filter((u) => u.rol === rol) : this.items;
   }
 }
 
@@ -164,5 +179,89 @@ describe('PATCH /usuarios/:id/rol (e2e)', () => {
     expect(res.status).toBe(200);
     expect(res.body.rol).toBe('coordinador');
     expect(moodleFake.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+  });
+});
+
+describe('GET /usuarios (e2e)', () => {
+  let app: INestApplication;
+  let jwt: JwtService;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
+      controllers: [UsuariosController],
+      providers: [
+        JwtStrategy,
+        JwtAuthGuard,
+        RolesGuard,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    setupApp(app, 'http://localhost:3000');
+    await app.init();
+    jwt = moduleRef.get(JwtService);
+  });
+
+  afterEach(() => app.close());
+
+  it('sin token -> 401', async () => {
+    const res = await request(app.getHttpServer()).get('/usuarios');
+    expect(res.status).toBe(401);
+  });
+
+  it('con rol no autorizado (estudiante) -> 403', async () => {
+    const token = await jwt.signAsync({ sub: 'u-estudiante', rol: Rol.Estudiante });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(403);
+  });
+
+  it('admin_academico ve la lista completa', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(4);
+    expect(res.body[0]).toEqual({
+      id: 'u-admin',
+      nombre: 'Admin Académico',
+      correo: 'admin@correo.com',
+      rol: 'admin_academico',
+      moodleUserId: null,
+      createdAt: '2026-01-01T00:00:00.000Z',
+    });
+  });
+
+  it('coordinador también puede listar (solo lectura)', async () => {
+    const token = await jwt.signAsync({ sub: 'u-coordinador', rol: Rol.Coordinador });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(200);
+  });
+
+  it('filtra por ?rol=', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios?rol=aspirante')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].id).toBe('u-aspirante-nuevo');
+  });
+
+  it('?rol= inválido -> 400', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios?rol=director-de-la-nasa')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
   });
 });

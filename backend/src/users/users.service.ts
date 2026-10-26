@@ -28,6 +28,14 @@ export class UsersService {
     return this.repo.findOne({ where: { id } });
   }
 
+  /** Lista para paneles administrativos; `rol` filtra, sin paginar (aún no hace falta). */
+  listar(rol?: Rol): Promise<User[]> {
+    return this.repo.find({
+      where: rol ? { rol } : {},
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async actualizarMoodleUserId(id: string, moodleUserId: number): Promise<void> {
     await this.repo.update(id, { moodleUserId });
   }
