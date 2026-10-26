@@ -1,6 +1,7 @@
 package org.iinicia.android.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -44,6 +45,14 @@ fun IiniciaNavGraph(
         }
     }
 
+    // Login en caliente ya dispara su propia carga de cursos; esto cubre el caso de sesión
+    // persistida (se reabre la app ya logueado), donde nadie más la pide.
+    LaunchedEffect(Unit) {
+        if (uiState.usuarioAutenticado != null && uiState.dashboard == null) {
+            viewModel.cargarCursos()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = initialDestination,
@@ -75,6 +84,7 @@ fun IiniciaNavGraph(
                     navController.navigate(Screen.DetalleCurso.crearRuta(cursoId))
                 },
                 onPerfilClick = { navController.navigate(Screen.Perfil.route) },
+                onReintentarCursos = { viewModel.cargarCursos() },
                 onLogout = {
                     viewModel.cerrarSesion()
                     navController.navigate(Screen.Login.route) {
