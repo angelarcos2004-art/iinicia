@@ -33,7 +33,10 @@ data class MainUiState(
     val usuarioAutenticado: Usuario? = null,
     val cursos: List<CursoEstudiante> = emptyList(),
     val dashboard: DashboardEstudiante? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    /** Null = sin error. "Mis cursos (0)" solo significa "sin cursos" cuando esto es null. */
+    val cargandoCursos: Boolean = false,
+    val errorCursos: String? = null
 )
 
 class MainViewModel(
@@ -112,15 +115,10 @@ class MainViewModel(
 
             repository.login(correo.trim(), password)
                 .onSuccess { authResponse ->
-                    val dashboardResult = repository.getDashboardEstudiante().getOrNull()
                     _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            usuarioAutenticado = authResponse.usuario,
-                            dashboard = dashboardResult,
-                            cursos = dashboardResult?.cursos ?: emptyList()
-                        )
+                        it.copy(isLoading = false, usuarioAutenticado = authResponse.usuario)
                     }
+                    cargarCursos()
                     onLoginSuccess()
                 }
                 .onFailure { error ->
@@ -128,6 +126,31 @@ class MainViewModel(
                         it.copy(
                             isLoading = false,
                             errorMessage = error.message ?: "No se pudo iniciar sesión."
+                        )
+                    }
+                }
+        }
+    }
+
+    /**
+     * Carga (o recarga, p. ej. tras un error con "Reintentar") el dashboard del usuario ya
+     * autenticado. Si falla, lo deja explícito en `errorCursos` en vez de mostrar "0 cursos"
+     * como si de verdad no tuviera ninguno (p. ej. un timeout real contra Moodle).
+     */
+    fun cargarCursos() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(cargandoCursos = true, errorCursos = null) }
+            repository.getDashboardEstudiante()
+                .onSuccess { dashboard ->
+                    _uiState.update {
+                        it.copy(cargandoCursos = false, dashboard = dashboard, cursos = dashboard.cursos)
+                    }
+                }
+                .onFailure { error ->
+                    _uiState.update {
+                        it.copy(
+                            cargandoCursos = false,
+                            errorCursos = error.message ?: "No se pudieron cargar tus cursos. Intenta de nuevo."
                         )
                     }
                 }
@@ -154,7 +177,9 @@ class MainViewModel(
                 cursos = emptyList(),
                 correoError = null,
                 passwordError = null,
-                errorMessage = null
+                errorMessage = null,
+                cargandoCursos = false,
+                errorCursos = null
             )
         }
     }

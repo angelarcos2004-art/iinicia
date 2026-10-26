@@ -59,6 +59,7 @@ fun DashboardScreen(
     uiState: MainUiState,
     onCursoClick: (String) -> Unit = {},
     onPerfilClick: () -> Unit = {},
+    onReintentarCursos: () -> Unit = {},
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -160,7 +161,7 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Sección de cursos (lista vacía como placeholder para el primer avance)
+            // Sección de cursos
             Text(
                 text = "Mis cursos (${cursos.size})",
                 style = MaterialTheme.typography.headlineSmall,
@@ -173,7 +174,52 @@ fun DashboardScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                if (cursos.isEmpty()) {
+                if (uiState.cargandoCursos) {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Text(
+                                text = "Consultando tus cursos en Moodle…",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().padding(28.dp)
+                            )
+                        }
+                    }
+                } else if (uiState.errorCursos != null) {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(28.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = uiState.errorCursos,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.error,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                OutlinedButton(onClick = onReintentarCursos) {
+                                    Text("Reintentar")
+                                }
+                            }
+                        }
+                    }
+                } else if (cursos.isEmpty()) {
                     item {
                         Card(
                             modifier = Modifier.fillMaxWidth(),

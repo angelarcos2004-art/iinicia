@@ -1,6 +1,10 @@
 package org.iinicia.android
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.iinicia.android.data.local.InMemorySessionTokenStorage
@@ -38,6 +42,18 @@ private class FakeApiService(
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> = cursos
     override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = MoodleSsoResponse(moodleSsoUrl)
+}
+
+/** Login que siempre funciona, pero `getCursos()` falla (p. ej. timeout real contra Moodle). */
+private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
+    override suspend fun login(request: LoginRequest): AuthResponse =
+        AuthResponse(token = "jwt-falso", usuario = Usuario(id = "u1", nombre = "Ana", correo = request.correo))
+
+    override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
+    override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
+    override suspend fun getCursos(): List<CursoInscritoDto> =
+        throw java.io.IOException("Moodle no respondió a tiempo")
+    override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = throw NotImplementedError()
 }
 
 class ExampleUnitTest {
@@ -174,6 +190,37 @@ class ExampleUnitTest {
         )
 
         assertTrue(repository.getUrlCampus().isFailure)
+    }
+
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    @Test
+    fun viewModel_siFallaLaCargaDeCursos_loMuestraComoErrorNoComoListaVacia() = runTest {
+        // viewModelScope.launch necesita un Dispatchers.Main real; en un test JVM puro no
+        // existe uno por defecto, así que se instala uno de prueba para esta única prueba.
+        Dispatchers.setMain(UnconfinedTestDispatcher(testScheduler))
+        try {
+            val repository = IiniciaRepositoryImpl(
+                baseUrl = "http://10.0.2.2:3001/",
+                tokenStorage = InMemorySessionTokenStorage(),
+                isConnectToRemoteEnabled = true,
+                apiService = FakeApiServiceConCursosQueFallan()
+            )
+            val viewModel = MainViewModel(repository)
+
+            viewModel.iniciarSesion("ana@iinicia.test", "Secreto123")
+
+            val estado = viewModel.uiState.value
+            assertNotNull(estado.usuarioAutenticado) // el login sí funcionó
+            assertTrue(estado.cursos.isEmpty())
+            assertFalse(estado.cargandoCursos)
+            assertNotNull(estado.errorCursos) // "(0 cursos)" en la UI debe venir acompañado de este error
+
+            // "Reintentar" limpia y vuelve a intentar (sigue fallando con este fake, pero no debe crashear)
+            viewModel.cargarCursos()
+            assertNotNull(viewModel.uiState.value.errorCursos)
+        } finally {
+            Dispatchers.resetMain()
+        }
     }
 
     @Test
