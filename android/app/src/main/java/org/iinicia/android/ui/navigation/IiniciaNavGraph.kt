@@ -6,16 +6,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import org.iinicia.android.ui.screens.DashboardScreen
+import org.iinicia.android.ui.screens.DetalleCursoScreen
 import org.iinicia.android.ui.screens.LoginScreen
+import org.iinicia.android.ui.screens.PerfilScreen
 import org.iinicia.android.ui.viewmodel.MainViewModel
 
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
     data object Dashboard : Screen("dashboard")
+    data object Perfil : Screen("perfil")
+    data object DetalleCurso : Screen("curso/{cursoId}") {
+        const val ARG_CURSO_ID = "cursoId"
+        fun crearRuta(cursoId: String) = "curso/$cursoId"
+    }
 }
 
 @Composable
@@ -62,6 +71,10 @@ fun IiniciaNavGraph(
         composable(route = Screen.Dashboard.route) {
             DashboardScreen(
                 uiState = uiState,
+                onCursoClick = { cursoId ->
+                    navController.navigate(Screen.DetalleCurso.crearRuta(cursoId))
+                },
+                onPerfilClick = { navController.navigate(Screen.Perfil.route) },
                 onLogout = {
                     viewModel.cerrarSesion()
                     navController.navigate(Screen.Login.route) {
@@ -69,6 +82,32 @@ fun IiniciaNavGraph(
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+
+        composable(
+            route = Screen.DetalleCurso.route,
+            arguments = listOf(navArgument(Screen.DetalleCurso.ARG_CURSO_ID) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val cursoId = backStackEntry.arguments?.getString(Screen.DetalleCurso.ARG_CURSO_ID).orEmpty()
+            DetalleCursoScreen(
+                curso = viewModel.obtenerCursoPorId(cursoId),
+                onEntrarAlCampus = { viewModel.obtenerUrlCampus(cursoId) },
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = Screen.Perfil.route) {
+            PerfilScreen(
+                usuario = uiState.usuarioAutenticado,
+                onLogout = {
+                    viewModel.cerrarSesion()
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Dashboard.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                onVolver = { navController.popBackStack() }
             )
         }
     }

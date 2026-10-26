@@ -122,6 +122,11 @@ data class CursoInscritoDto(
     val progreso: Int?
 )
 
+/** Respuesta de `GET /estudiante/moodle-sso`: URL de un solo uso, expira en segundos. */
+data class MoodleSsoResponse(
+    val url: String
+)
+
 data class AvisoInstitucional(
     val id: String,
     val titulo: String,

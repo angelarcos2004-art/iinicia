@@ -134,6 +134,17 @@ class MainViewModel(
         }
     }
 
+    /** Curso ya cargado en memoria (viene de `iniciarSesion`); evita otra llamada de red. */
+    fun obtenerCursoPorId(cursoId: String): CursoEstudiante? =
+        _uiState.value.cursos.firstOrNull { it.id == cursoId }
+
+    /**
+     * URL de un solo uso para abrir Moodle ya autenticado (SSO). Es una acción puntual del
+     * botón "Entrar al Campus": la pantalla la pide y abre el navegador, no vive en uiState.
+     */
+    suspend fun obtenerUrlCampus(cursoId: String?): Result<String> =
+        repository.getUrlCampus(cursoId?.toIntOrNull())
+
     fun cerrarSesion() {
         repository.logout()
         _uiState.update {
