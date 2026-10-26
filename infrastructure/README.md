@@ -301,6 +301,66 @@ idempotente (ver CLAUDE.md y docs/requerimientos.md sección 13). Pasos:
    El token ya generado en esta máquina está en la sección "Estado
    actual" arriba.
 
+## SSO portal → Moodle (auth_userkey)
+
+`GET /estudiante/moodle-sso` (backend) devuelve una URL de un solo uso
+que entra a Moodle ya autenticado, sin pedir contraseña — es el botón
+"Entrar al Campus" de Mi IINICIA. Usa el plugin de terceros
+[`auth_userkey`](https://github.com/catalyst/moodle-auth_userkey)
+(gratuito, GPL), vendorizado en `moodle-custom/auth/userkey/` y montado
+sobre `moodle-src` vía `docker-compose.yml` — **nunca se copia dentro de
+`moodle-src/`**, que es el checkout del core sin versionar.
+
+Se investigó primero el mecanismo nativo de Moodle
+(`tool_mobile_get_autologin_key`), pero exige HTTPS (`is_https()` en
+`admin/tool/mobile/classes/api.php`) y que el request venga con el
+User-Agent de la app oficial de Moodle (`core_useragent::is_moodle_app()`
+en `classes/external.php`) — no sirve para un BFF propio sin saltarse esa
+protección a propósito. `auth_userkey` sí está pensado exactamente para
+esto: el backend pide por email una URL de login con hash+expiración
+corta (`auth_userkey_request_login_url`), sin exigir HTTPS ni la app.
+
+Ya configurado en esta máquina (idempotente, repetible en una
+instalación nueva):
+
+```bash
+# 1. El plugin ya está en moodle-custom/auth/userkey/ y montado en
+#    docker-compose.yml. Si cambias el código del plugin o es la
+#    primera vez, hay que registrar/actualizar en Moodle:
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php admin/cli/upgrade.php --non-interactive
+
+# 2. Habilitar el método de autenticación (mantén los que ya tengas en
+#    $CFG->auth, solo agrega "userkey"; "manual" siempre está implícito,
+#    no hace falta listarlo):
+docker compose exec -T moodle php admin/cli/cfg.php --name=auth --set="email,userkey"
+
+# 3. Agregar la función al servicio ya existente (mismo patrón que el
+#    script de "Habilitar Web Services" arriba, por si no está):
+cat > add-userkey-function.php << 'EOF'
+<?php
+define('CLI_SCRIPT', true);
+require('/var/www/html/config.php');
+require_once($CFG->dirroot . '/webservice/lib.php');
+$service = (new webservice())->get_external_service_by_shortname('iinicia_backend');
+$existing = array_column(
+    $DB->get_records('external_services_functions', ['externalserviceid' => $service->id]),
+    'functionname',
+);
+if (!in_array('auth_userkey_request_login_url', $existing, true)) {
+    (new webservice())->add_external_function_to_service('auth_userkey_request_login_url', $service->id);
+}
+echo "OK\n";
+EOF
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < add-userkey-function.php
+rm add-userkey-function.php
+```
+
+La configuración del plugin (mapeo por `email`, sin crear/actualizar
+usuarios, sin restricción de IP) se deja en sus valores por defecto —
+son exactamente los que necesitamos. El `key` que genera expira en 60s
+y sirve una sola vez: el backend lo pide justo antes de redirigir,
+nunca lo guarda (ver `MoodleService.solicitarUrlAutologin`).
+
 ## Por qué el backend en Docker necesita MOODLE_HOST_HEADER
 
 El servicio `backend` del `docker-compose.yml` llama a Moodle por el
@@ -340,7 +400,20 @@ docker compose down -v            # apagar y BORRAR los datos (reinstala desde c
 
 ## Siguiente fase (no es parte de esta entrega)
 
-- Tema/plugins propios en `moodle-custom/` (nunca modificar
-  `moodle-src/` directamente — eso es el core de Moodle).
+- Tema propio de Moodle en `moodle-custom/` (igual que `auth/userkey`,
+  nunca modificar `moodle-src/` directamente — eso es el core de
+  Moodle).
 - Dominios reales (`aula.iinicia.org`, `api.iinicia.org`) y HTTPS, solo
   para ambientes STAGING/PRODUCTION — no aplica a desarrollo local.
+- **Keycloak / OIDC (docs/requerimientos.md sección 10) — pendiente.**
+  El SSO portal→Moodle de hoy (`GET /estudiante/moodle-sso`, plugin
+  `auth_userkey`) es un puente punto a punto: el backend usa su token
+  admin de Moodle para pedir una URL de login de un solo uso a nombre
+  del usuario. Resuelve el síntoma (no se pide una segunda contraseña
+  para entrar al LMS desde el portal web) pero no es una identidad
+  única: Android no está cubierto, no hay MFA ni revocación de sesión
+  centralizada, y Moodle sigue sin saber nada de la identidad real del
+  portal (solo recibe URLs firmadas por el backend). Resolverlo de
+  fondo implica levantar Keycloak como IdP, que portal/Moodle/Android
+  hagan el mismo flujo OAuth2/OIDC contra él, y cambiar Moodle de
+  `auth_userkey` a `auth_oidc`.

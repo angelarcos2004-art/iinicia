@@ -124,3 +124,14 @@ export async function registrarAspirante(
 export async function obtenerMisCursos(token: string): Promise<CursoInscrito[]> {
   return getJSON<CursoInscrito[]>("/estudiante/cursos", token);
 }
+
+/**
+ * URL de un solo uso para entrar a Moodle ya autenticado (SSO), sin pedir
+ * contraseña. Expira en segundos: hay que pedirla justo antes de navegar,
+ * nunca guardarla ni reutilizarla.
+ */
+export async function obtenerUrlCampus(token: string, cursoId?: number): Promise<string> {
+  const query = cursoId ? `?cursoId=${cursoId}` : "";
+  const { url } = await getJSON<{ url: string }>(`/estudiante/moodle-sso${query}`, token);
+  return url;
+}

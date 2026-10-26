@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { ButtonLink } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CountUp } from "@/components/ui/count-up";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
-import { ApiError, obtenerMisCursos } from "@/lib/api";
+import { ApiError, obtenerMisCursos, obtenerUrlCampus } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
 import type { CursoInscrito, Rol } from "@/lib/types";
@@ -22,8 +22,6 @@ const ROL_LABEL: Record<Rol, string> = {
   estudiante: "Estudiante",
   aspirante: "Aspirante",
 };
-
-const MOODLE_URL = process.env.NEXT_PUBLIC_MOODLE_URL;
 
 function formatFecha(fechaIso: string) {
   return new Date(fechaIso).toLocaleDateString("es-MX", {
@@ -48,6 +46,31 @@ export default function MiIiniciaPage() {
   const [cursos, setCursos] = useState<CursoInscrito[] | null>(null);
   const [cargandoCursos, setCargandoCursos] = useState(true);
   const [errorCursos, setErrorCursos] = useState<string | null>(null);
+  const [entrandoACursoId, setEntrandoACursoId] = useState<number | null>(null);
+  const [errorCampus, setErrorCampus] = useState<string | null>(null);
+
+  /**
+   * SSO vía auth_userkey (backend/src/moodle/moodle.service.ts): la url de
+   * autologin expira en segundos y sirve una sola vez, así que se pide justo
+   * antes de navegar, nunca se guarda ni se reutiliza.
+   */
+  async function entrarAlCampus(cursoId: number) {
+    if (!sesion) return;
+    setErrorCampus(null);
+    setEntrandoACursoId(cursoId);
+    try {
+      const url = await obtenerUrlCampus(sesion.token, cursoId);
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      setErrorCampus(
+        error instanceof ApiError
+          ? error.message
+          : "No se pudo generar el acceso a Moodle. Intenta más tarde.",
+      );
+    } finally {
+      setEntrandoACursoId(null);
+    }
+  }
 
   useEffect(() => {
     if (!cargando && !sesion) {
@@ -171,17 +194,14 @@ export default function MiIiniciaPage() {
                           </span>
                         </>
                       )}
-                      {MOODLE_URL && (
-                        <ButtonLink
-                          href={`${MOODLE_URL}/course/view.php?id=${curso.id}`}
-                          variant="outline"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-1 h-10 w-fit px-4 text-label-sm"
-                        >
-                          Ingresar al curso
-                        </ButtonLink>
-                      )}
+                      <Button
+                        variant="outline"
+                        onClick={() => entrarAlCampus(curso.id)}
+                        disabled={entrandoACursoId === curso.id}
+                        className="mt-1 h-10 w-fit px-4 text-label-sm"
+                      >
+                        {entrandoACursoId === curso.id ? "Entrando…" : "Entrar al Campus"}
+                      </Button>
                     </Card>
                   </Reveal>
                 );

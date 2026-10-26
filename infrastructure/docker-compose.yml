@@ -36,6 +36,9 @@ services:
     volumes:
       - ./moodle-src:/var/www/html
       - moodledata_data:/var/www/moodledata
+      # Plugins propios (nunca se tocan dentro de moodle-src, que es el
+      # checkout del core sin versionar). Ver moodle-custom/README.md.
+      - ./moodle-custom/auth/userkey:/var/www/html/auth/userkey
 
   # Requiere backend/.env ya configurado (ver backend/.env.example). DATABASE_URL
   # y MOODLE_URL se sobreescriben aqui porque dentro de la red de Docker el

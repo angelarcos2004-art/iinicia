@@ -38,6 +38,7 @@ class InMemoryUsers {
 
 const moodleFake = {
   obtenerCursosDeUsuario: vi.fn(),
+  solicitarUrlAutologin: vi.fn(),
 };
 
 describe('GET /estudiante/cursos (e2e)', () => {
@@ -46,6 +47,7 @@ describe('GET /estudiante/cursos (e2e)', () => {
 
   beforeEach(async () => {
     moodleFake.obtenerCursosDeUsuario.mockReset();
+    moodleFake.solicitarUrlAutologin.mockReset();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [EstudianteController],
@@ -98,5 +100,66 @@ describe('GET /estudiante/cursos (e2e)', () => {
     const res = await request(app.getHttpServer()).get('/estudiante/cursos');
     expect(res.status).toBe(401);
     expect(typeof res.body.message).toBe('string');
+  });
+});
+
+describe('GET /estudiante/moodle-sso (e2e)', () => {
+  let app: INestApplication;
+  let jwt: JwtService;
+
+  beforeEach(async () => {
+    moodleFake.obtenerCursosDeUsuario.mockReset();
+    moodleFake.solicitarUrlAutologin.mockReset();
+    const moduleRef = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
+      controllers: [EstudianteController],
+      providers: [
+        JwtStrategy,
+        JwtAuthGuard,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret' } },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    setupApp(app, 'http://localhost:3000');
+    await app.init();
+    jwt = moduleRef.get(JwtService);
+  });
+
+  afterEach(() => app.close());
+
+  it('devuelve la url de autologin del usuario vinculado a Moodle', async () => {
+    moodleFake.solicitarUrlAutologin.mockResolvedValue(
+      'http://localhost:8080/auth/userkey/login.php?key=abc',
+    );
+    const token = await jwt.signAsync({ sub: 'u-con-moodle', rol: Rol.Estudiante });
+
+    const res = await request(app.getHttpServer())
+      .get('/estudiante/moodle-sso')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ url: 'http://localhost:8080/auth/userkey/login.php?key=abc' });
+    expect(moodleFake.solicitarUrlAutologin).toHaveBeenCalledWith(
+      'con-moodle@correo.com',
+      undefined,
+    );
+  });
+
+  it('400 (sin llamar a Moodle) si el usuario no tiene moodleUserId', async () => {
+    const token = await jwt.signAsync({ sub: 'u-sin-moodle', rol: Rol.Aspirante });
+
+    const res = await request(app.getHttpServer())
+      .get('/estudiante/moodle-sso')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(400);
+    expect(moodleFake.solicitarUrlAutologin).not.toHaveBeenCalled();
+  });
+
+  it('sin token -> 401', async () => {
+    const res = await request(app.getHttpServer()).get('/estudiante/moodle-sso');
+    expect(res.status).toBe(401);
   });
 });
