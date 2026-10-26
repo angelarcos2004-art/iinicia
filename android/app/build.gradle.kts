@@ -1,7 +1,19 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
+
+// Permite sobreescribir la URL del backend sin tocar código ni el repo: agrega
+// `apiBaseUrl=http://TU-IP-DE-RED:3001/` a android/local.properties (ya
+// gitignored, es por máquina). Necesario en un dispositivo físico, donde
+// 10.0.2.2 no existe (ese alias solo funciona dentro del emulador).
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+val apiBaseUrl = (localProperties.getProperty("apiBaseUrl") ?: "http://10.0.2.2:3001/")
 
 android {
     namespace = "org.iinicia.android"
@@ -16,10 +28,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // URL base configurable del BFF IINICIA (NestJS). 10.0.2.2 es como el emulador
-        // de Android ve "localhost" de la máquina anfitriona (donde corre el backend).
-        // En un dispositivo físico, cambiar a la IP de red de la máquina con el backend.
-        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:3001/\"")
+        // URL base del BFF IINICIA (NestJS). Por defecto 10.0.2.2, el alias con el
+        // que el EMULADOR ve el "localhost" de la máquina anfitriona. En un
+        // dispositivo físico eso no resuelve a nada: define `apiBaseUrl` en
+        // local.properties con la IP de red de la máquina del backend.
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
     }
 
     buildTypes {
