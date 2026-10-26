@@ -8,6 +8,7 @@ import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.EstadoCurso
 import org.iinicia.android.data.model.LoginRequest
+import org.iinicia.android.data.model.MoodleSsoResponse
 import org.iinicia.android.data.model.RegistroRequest
 import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
@@ -28,11 +29,15 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 /** Implementación falsa de [IiniciaApiService] para pruebas sin red real. */
-private class FakeApiService(private val cursos: List<CursoInscritoDto>) : IiniciaApiService {
+private class FakeApiService(
+    private val cursos: List<CursoInscritoDto>,
+    private val moodleSsoUrl: String = "http://localhost:8080/auth/userkey/login.php?key=abc"
+) : IiniciaApiService {
     override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
     override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> = cursos
+    override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = MoodleSsoResponse(moodleSsoUrl)
 }
 
 class ExampleUnitTest {
@@ -144,6 +149,34 @@ class ExampleUnitTest {
     }
 
     @Test
+    fun repository_getUrlCampus_devuelveLaUrlDeAutologinDelBackend() = runTest {
+        val fakeApi = FakeApiService(
+            cursos = emptyList(),
+            moodleSsoUrl = "http://localhost:8080/auth/userkey/login.php?key=xyz"
+        )
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val result = repository.getUrlCampus(cursoId = 2)
+        assertTrue(result.isSuccess)
+        assertEquals("http://localhost:8080/auth/userkey/login.php?key=xyz", result.getOrThrow())
+    }
+
+    @Test
+    fun repository_getUrlCampus_fallaSinConexionAlBackendReal() = runTest {
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = false,
+            apiService = FakeApiService(cursos = emptyList())
+        )
+
+        assertTrue(repository.getUrlCampus().isFailure)
+    }
+
+    @Test
     fun repository_loginHttpException_parsesBackendJsonMessageInSpanish() = runTest {
         val fakeApi = object : IiniciaApiService {
             override suspend fun login(request: LoginRequest): AuthResponse {
@@ -161,6 +194,10 @@ class ExampleUnitTest {
             }
 
             override suspend fun getCursos(): List<CursoInscritoDto> {
+                throw UnsupportedOperationException()
+            }
+
+            override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse {
                 throw UnsupportedOperationException()
             }
         }
