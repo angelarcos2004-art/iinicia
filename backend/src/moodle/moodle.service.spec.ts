@@ -254,3 +254,45 @@ describe('MoodleService.obtenerCursosDeUsuario', () => {
     );
   });
 });
+
+describe('MoodleService.solicitarUrlAutologin', () => {
+  it('pide la url por email (auth_userkey_request_login_url) y la devuelve tal cual', async () => {
+    const fetchFn = mockFetch({ loginurl: 'http://moodle.test:8080/auth/userkey/login.php?key=abc' });
+
+    const url = await makeService().solicitarUrlAutologin('Ana@Correo.com ');
+
+    expect(url).toBe('http://moodle.test:8080/auth/userkey/login.php?key=abc');
+    const p = paramsDeLlamada(fetchFn, 0);
+    expect(p.get('wsfunction')).toBe('auth_userkey_request_login_url');
+    expect(p.get('user[email]')).toBe('ana@correo.com');
+  });
+
+  it('agrega wantsurl al curso cuando se pide un cursoId', async () => {
+    mockFetch({ loginurl: 'http://moodle.test:8080/auth/userkey/login.php?key=abc' });
+
+    const url = await makeService().solicitarUrlAutologin('a@b.com', 2);
+
+    expect(url).toBe(
+      'http://moodle.test:8080/auth/userkey/login.php?key=abc&wantsurl=' +
+        encodeURIComponent('http://moodle.test:8080/course/view.php?id=2'),
+    );
+  });
+
+  it('lanza 502 si Moodle no devuelve loginurl', async () => {
+    mockFetch({ loginurl: '' });
+    await expect(makeService().solicitarUrlAutologin('a@b.com')).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+  });
+
+  it('lanza 502 si Moodle rechaza la petición (p. ej. plugin deshabilitado)', async () => {
+    mockFetch({
+      exception: 'webservice_access_exception',
+      errorcode: 'nopermissions',
+      message: 'pluginisdisabled',
+    });
+    await expect(makeService().solicitarUrlAutologin('a@b.com')).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+  });
+});

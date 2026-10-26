@@ -107,6 +107,28 @@ export class MoodleService {
     }));
   }
 
+  /**
+   * URL de un solo uso (auth_userkey, ver infrastructure/moodle-custom/auth/userkey)
+   * que entra a Moodle ya autenticado, sin pedir contraseña. La key expira en
+   * segundos y solo sirve una vez, así que hay que generarla justo antes de
+   * redirigir al usuario, nunca guardarla.
+   */
+  async solicitarUrlAutologin(correo: string, cursoId?: number): Promise<string> {
+    const email = correo.trim().toLowerCase();
+    const { loginurl } = await this.llamar<{ loginurl: string }>(
+      'auth_userkey_request_login_url',
+      { 'user[email]': email },
+    );
+    if (!loginurl) {
+      throw new BadGatewayException('Moodle no devolvió una URL de acceso');
+    }
+    if (!cursoId) return loginurl;
+    const baseUrl = this.config.getOrThrow<string>('MOODLE_URL').replace(/\/+$/, '');
+    const urlDestino = `${baseUrl}/course/view.php?id=${cursoId}`;
+    const separador = loginurl.includes('?') ? '&' : '?';
+    return `${loginurl}${separador}wantsurl=${encodeURIComponent(urlDestino)}`;
+  }
+
   private async buscarCursoPorShortname(shortname: string): Promise<number | null> {
     const respuesta = await this.llamar<{ courses?: MoodleUsuario[] }>(
       'core_course_get_courses_by_field',

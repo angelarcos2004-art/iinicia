@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import type { UsuarioAutenticado } from '../auth/jwt.strategy.js';
 import { UsuarioActual } from '../auth/usuario-actual.decorator.js';
@@ -39,5 +39,26 @@ export class EstudianteController {
       shortname: c.shortname,
       progreso: c.progress,
     }));
+  }
+
+  /**
+   * URL de un solo uso para entrar a Moodle ya autenticado (SSO vía
+   * auth_userkey), sin pedir una segunda contraseña. Requiere que el usuario
+   * ya tenga cuenta Moodle vinculada.
+   */
+  @Get('moodle-sso')
+  async entrarAlCampus(
+    @UsuarioActual() usuarioActual: UsuarioAutenticado,
+    @Query('cursoId') cursoId?: string,
+  ): Promise<{ url: string }> {
+    const user = await this.users.findById(usuarioActual.id);
+    if (!user?.moodleUserId) {
+      throw new BadRequestException('Tu cuenta todavía no está vinculada a Moodle');
+    }
+    const url = await this.moodle.solicitarUrlAutologin(
+      user.correo,
+      cursoId ? Number(cursoId) : undefined,
+    );
+    return { url };
   }
 }
