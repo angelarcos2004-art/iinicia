@@ -80,6 +80,11 @@ dependencies {
     // Almacenamiento cifrado del token de sesión (Requerimiento 9.3: nunca contraseñas en texto plano)
     implementation(libs.androidx.security.crypto)
 
+    // Custom Tabs: abre Moodle dentro de la app (barra propia, swipe-back), no en el
+    // navegador externo. No es un WebView completo (reqs 9: "no debe limitarse a ser una
+    // WebView"), solo para el SSO puntual de "Entrar al Campus".
+    implementation(libs.androidx.browser)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
