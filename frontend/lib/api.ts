@@ -1,5 +1,12 @@
 import { buildMockAuthResponse } from "./mock-data";
-import type { AuthResponse, CursoInscrito, LoginInput, RegistroAspiranteInput } from "./types";
+import type {
+  AuthResponse,
+  CursoInscrito,
+  LoginInput,
+  RegistroAspiranteInput,
+  Rol,
+  UsuarioListado,
+} from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -26,6 +33,35 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
     response = await fetch(`${API_URL}${path}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (networkError) {
+    throw new BackendUnavailableError(
+      `No se pudo conectar con el backend (${String(networkError)})`,
+    );
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new ApiError(
+      data?.message ?? `El backend respondió con error ${response.status}`,
+      response.status,
+    );
+  }
+
+  return response.json() as Promise<T>;
+}
+
+async function patchJSON<T>(path: string, token: string, body: unknown): Promise<T> {
+  if (!API_URL) {
+    throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(body),
     });
   } catch (networkError) {
@@ -134,4 +170,19 @@ export async function obtenerUrlCampus(token: string, cursoId?: number): Promise
   const query = cursoId ? `?cursoId=${cursoId}` : "";
   const { url } = await getJSON<{ url: string }>(`/estudiante/moodle-sso${query}`, token);
   return url;
+}
+
+/** Panel administrativo: lista de usuarios, con filtro opcional por rol. */
+export async function obtenerUsuarios(token: string, rol?: Rol): Promise<UsuarioListado[]> {
+  const query = rol ? `?rol=${rol}` : "";
+  return getJSON<UsuarioListado[]>(`/usuarios${query}`, token);
+}
+
+/** Cambia el rol de un usuario (admisión, promoción, etc.). Solo superadmin/admin_academico. */
+export async function actualizarRolUsuario(
+  token: string,
+  id: string,
+  rol: Rol,
+): Promise<UsuarioListado> {
+  return patchJSON<UsuarioListado>(`/usuarios/${id}/rol`, token, { rol });
 }

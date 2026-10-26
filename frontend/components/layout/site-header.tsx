@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 
+const ROLES_CON_PANEL_ADMIN = ["superadmin", "admin_academico", "coordinador"];
+
 const NAV_LINKS = [
   { href: "/#inicio", label: "Inicio" },
   { href: "/#universidad", label: "Universidad" },
@@ -147,6 +149,14 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 xl:flex">
           {sesion ? (
             <>
+              {ROLES_CON_PANEL_ADMIN.includes(sesion.usuario.rol) && (
+                <Link
+                  href="/admin/usuarios"
+                  className="text-label-md font-display font-semibold text-ink-muted hover:text-secondary"
+                >
+                  Usuarios
+                </Link>
+              )}
               <Link
                 href="/mi-iinicia"
                 className="text-label-md font-display font-semibold text-ink hover:text-secondary"
@@ -239,6 +249,15 @@ export function SiteHeader() {
         >
           {sesion ? (
             <>
+              {ROLES_CON_PANEL_ADMIN.includes(sesion.usuario.rol) && (
+                <Link
+                  href="/admin/usuarios"
+                  className="rounded-md px-3 py-2.5 text-label-lg font-display font-semibold text-ink hover:bg-surface-subtle"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Usuarios
+                </Link>
+              )}
               <Link
                 href="/mi-iinicia"
                 className="rounded-md px-3 py-2.5 text-label-lg font-display font-semibold text-ink hover:bg-surface-subtle"

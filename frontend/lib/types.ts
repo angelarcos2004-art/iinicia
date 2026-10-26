@@ -27,6 +27,12 @@ export interface Usuario {
   rol: Rol;
 }
 
+/** Fila del panel administrativo (GET /usuarios). */
+export interface UsuarioListado extends Usuario {
+  moodleUserId: number | null;
+  createdAt: string;
+}
+
 export interface AuthResponse {
   token: string;
   usuario: Usuario;
