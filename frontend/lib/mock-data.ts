@@ -7,9 +7,8 @@ import type {
 } from "./types";
 
 /**
- * Catálogo de oferta académica de ejemplo. Mientras el backend (CLAUDE.md:
- * backend/) no expone un endpoint de programas, la página de oferta
- * académica consume estos datos directamente.
+ * Catálogo de oferta académica de respaldo: solo se usa si el backend (GET /programas) no
+ * responde, para que el home y el registro de aspirantes sigan funcionando sin conexión.
  */
 export const MOCK_PROGRAMAS: Programa[] = [
   {
@@ -20,6 +19,7 @@ export const MOCK_PROGRAMAS: Programa[] = [
       "Forma parte de la próxima generación de ingenieros especializados en IA aplicada.",
     duracion: "12 cuatrimestres",
     modalidad: "en_linea",
+    moodleCourseShortname: null,
   },
   {
     id: "lic-admon-negocios",
@@ -29,6 +29,7 @@ export const MOCK_PROGRAMAS: Programa[] = [
       "Desarrolla modelos de negocio y estrategias digitales para empresas en crecimiento.",
     duracion: "12 cuatrimestres",
     modalidad: "en_linea",
+    moodleCourseShortname: null,
   },
   {
     id: "dip-cloud-kubernetes",
@@ -38,6 +39,7 @@ export const MOCK_PROGRAMAS: Programa[] = [
       "Diseña e implementa arquitecturas en la nube listas para producción.",
     duracion: "4 meses",
     modalidad: "en_linea",
+    moodleCourseShortname: null,
   },
   {
     id: "dip-gestion-proyectos",
@@ -47,6 +49,7 @@ export const MOCK_PROGRAMAS: Programa[] = [
       "Planifica y da seguimiento a proyectos tecnológicos con metodologías ágiles.",
     duracion: "3 meses",
     modalidad: "hibrida",
+    moodleCourseShortname: null,
   },
   {
     id: "cert-ciberseguridad-soc",
@@ -56,6 +59,7 @@ export const MOCK_PROGRAMAS: Programa[] = [
       "Capacítate en detección y respuesta a incidentes de seguridad informática.",
     duracion: "6 semanas",
     modalidad: "en_linea",
+    moodleCourseShortname: null,
   },
 ];
 

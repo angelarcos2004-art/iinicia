@@ -13,8 +13,9 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { Reveal } from "@/components/ui/reveal";
 import { Select } from "@/components/ui/select";
 import { SectionBg } from "@/components/ui/section-bg";
+import { obtenerProgramas } from "@/lib/api";
 import { MOCK_PROGRAMAS } from "@/lib/mock-data";
-import type { TipoPrograma } from "@/lib/types";
+import type { Programa, TipoPrograma } from "@/lib/types";
 
 const STATS = [
   { valor: "100%", etiqueta: "Programas con RVOE" },
@@ -242,6 +243,22 @@ const PROGRAMAS_INTERES = [
 
 export default function HomePage() {
   const [tiposActivos, setTiposActivos] = useState<Set<TipoPrograma>>(new Set());
+  const [programas, setProgramas] = useState<Programa[]>(MOCK_PROGRAMAS);
+
+  useEffect(() => {
+    let cancelado = false;
+    obtenerProgramas()
+      .then((data) => {
+        if (!cancelado) setProgramas(data);
+      })
+      .catch(() => {
+        // Si falla con un error real (no "backend no disponible"), se queda con el
+        // catálogo de respaldo ya cargado en vez de dejar la sección vacía.
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, []);
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [heroOffset, setHeroOffset] = useState(0);
@@ -278,9 +295,9 @@ export default function HomePage() {
   }
 
   const programasFiltrados = useMemo(() => {
-    if (tiposActivos.size === 0) return MOCK_PROGRAMAS;
-    return MOCK_PROGRAMAS.filter((programa) => tiposActivos.has(programa.tipo));
-  }, [tiposActivos]);
+    if (tiposActivos.size === 0) return programas;
+    return programas.filter((programa) => tiposActivos.has(programa.tipo));
+  }, [tiposActivos, programas]);
 
   // Este formulario todavía no tiene un endpoint propio en el backend
   // (solo existe /auth/login y /auth/registro); por ahora solo valida en

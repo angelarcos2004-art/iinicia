@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import { AuthService } from './auth.service.js';
 import type { MailService } from '../mail/mail.service.js';
 import type { MoodleService } from '../moodle/moodle.service.js';
+import type { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
 import type { UsersService } from '../users/users.service.js';
@@ -31,6 +32,7 @@ function makeService(
     get: (key: string, def?: string) => env[key] ?? def,
   } as unknown as ConfigService;
   const mail = { enviarRecuperacion: vi.fn().mockResolvedValue(undefined) };
+  const programas = { obtenerMoodleCourseShortname: vi.fn().mockResolvedValue(null) };
   return {
     service: new AuthService(
       users as unknown as UsersService,
@@ -38,11 +40,13 @@ function makeService(
       moodle,
       config,
       mail as unknown as MailService,
+      programas as unknown as ProgramasService,
     ),
     users,
     jwt,
     moodle,
     mail,
+    programas,
   };
 }
 
@@ -157,6 +161,14 @@ describe('AuthService', () => {
       const { service, moodle } = makeService(null, 42, { MOODLE_TEST_COURSE: 'OTRO101' });
       await service.registro(dto);
       expect(moodle.matricularEnCurso).toHaveBeenCalledWith(42, 'OTRO101');
+    });
+
+    it('si el programa de interés tiene un curso de Moodle asignado, matricula ahí (no en el default)', async () => {
+      const { service, moodle, programas } = makeService(null, 42);
+      programas.obtenerMoodleCourseShortname.mockResolvedValue('LIC-SOFTWARE-IA');
+      await service.registro(dto);
+      expect(programas.obtenerMoodleCourseShortname).toHaveBeenCalledWith('p1');
+      expect(moodle.matricularEnCurso).toHaveBeenCalledWith(42, 'LIC-SOFTWARE-IA');
     });
 
     it('si matricularEnCurso falla, el registro igual se completa y el id Moodle se conserva', async () => {

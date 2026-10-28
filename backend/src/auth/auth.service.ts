@@ -11,6 +11,7 @@ import { randomBytes } from 'node:crypto';
 import { MailService } from '../mail/mail.service.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleService } from '../moodle/moodle.service.js';
+import { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
 import { UsersService } from '../users/users.service.js';
@@ -44,6 +45,7 @@ export class AuthService {
     private readonly moodle: MoodleService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
+    private readonly programas: ProgramasService,
   ) {}
 
   async login(dto: LoginDto): Promise<AuthResponse> {
@@ -129,10 +131,12 @@ export class AuthService {
    * demostracion funcional de la integracion. Nunca bloquea login/registro:
    * ver vincularYMatricularMoodle.
    */
-  private vincularMoodle(user: User): Promise<User> {
+  private async vincularMoodle(user: User): Promise<User> {
+    const curso = await this.programas.obtenerMoodleCourseShortname(user.programaInteresId);
     return vincularYMatricularMoodle(
       { users: this.users, moodle: this.moodle, config: this.config, logger: this.logger },
       user,
+      curso,
     );
   }
 

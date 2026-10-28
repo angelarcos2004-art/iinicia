@@ -9,6 +9,7 @@ import { AuthService } from '../src/auth/auth.service.js';
 import { JwtStrategy } from '../src/auth/jwt.strategy.js';
 import { MailService } from '../src/mail/mail.service.js';
 import { MoodleService } from '../src/moodle/moodle.service.js';
+import { ProgramasService } from '../src/programas/programas.service.js';
 import { Rol } from '../src/users/rol.enum.js';
 import type { User } from '../src/users/user.entity.js';
 import { UsersService } from '../src/users/users.service.js';
@@ -68,6 +69,11 @@ const mailFake = {
   enviarRecuperacion: vi.fn().mockResolvedValue(undefined),
 };
 
+/** ProgramasService falso: sin programas de prueba, siempre usa el curso default. */
+const programasFake = {
+  obtenerMoodleCourseShortname: vi.fn().mockResolvedValue(null),
+};
+
 const registroValido = {
   nombreCompleto: 'Ana Pérez',
   correo: 'Ana@Correo.com',
@@ -94,6 +100,7 @@ describe('Auth (e2e)', () => {
         { provide: UsersService, useClass: InMemoryUsers },
         { provide: MoodleService, useValue: moodleFake },
         { provide: MailService, useValue: mailFake },
+        { provide: ProgramasService, useValue: programasFake },
         {
           provide: ConfigService,
           useValue: {
