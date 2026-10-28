@@ -255,6 +255,57 @@ describe('MoodleService.obtenerCursosDeUsuario', () => {
   });
 });
 
+describe('MoodleService.obtenerActividadesProximas', () => {
+  it('mapea los eventos y pide timesortfrom = ahora', async () => {
+    const fetchFn = mockFetch({
+      events: [
+        {
+          id: 5,
+          name: 'Entrega Tarea 1',
+          timesort: 1_700_000_000,
+          course: { fullname: 'Test course: XS' },
+          action: { url: 'http://moodle.test:8080/mod/assign/view.php?id=5' },
+        },
+      ],
+    });
+
+    const actividades = await makeService().obtenerActividadesProximas(17);
+
+    expect(actividades).toEqual([
+      {
+        id: 5,
+        titulo: 'Entrega Tarea 1',
+        curso: 'Test course: XS',
+        fecha: new Date(1_700_000_000 * 1000).toISOString(),
+        url: 'http://moodle.test:8080/mod/assign/view.php?id=5',
+      },
+    ]);
+    const p = paramsDeLlamada(fetchFn, 0);
+    expect(p.get('wsfunction')).toBe('core_calendar_get_action_events_by_timesort');
+    expect(p.get('userid')).toBe('17');
+    expect(Number(p.get('timesortfrom'))).toBeGreaterThan(0);
+  });
+
+  it('devuelve lista vacía si Moodle no reporta eventos', async () => {
+    mockFetch({ events: [] });
+    await expect(makeService().obtenerActividadesProximas(17)).resolves.toEqual([]);
+  });
+
+  it('usa curso vacío y url null cuando Moodle no los incluye', async () => {
+    mockFetch({ events: [{ id: 1, name: 'Evento', timesort: 1_700_000_000 }] });
+    const actividades = await makeService().obtenerActividadesProximas(17);
+    expect(actividades[0].curso).toBe('');
+    expect(actividades[0].url).toBeNull();
+  });
+
+  it('lanza 502 si Moodle falla', async () => {
+    mockFetch(new Response('boom', { status: 500 }));
+    await expect(makeService().obtenerActividadesProximas(17)).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+  });
+});
+
 describe('MoodleService.solicitarUrlAutologin', () => {
   it('pide la url por email (auth_userkey_request_login_url) y la devuelve tal cual', async () => {
     const fetchFn = mockFetch({ loginurl: 'http://moodle.test:8080/auth/userkey/login.php?key=abc' });

@@ -74,6 +74,18 @@ export interface CursoInscrito {
   progreso: number | null;
 }
 
+/**
+ * Próxima actividad con fecha límite (GET /estudiante/actividades), tal como la devuelve el
+ * backend desde Moodle (`core_calendar_get_action_events_by_timesort`).
+ */
+export interface ActividadProxima {
+  id: number;
+  titulo: string;
+  curso: string;
+  fecha: string;
+  url: string | null;
+}
+
 export interface AvisoInstitucional {
   id: string;
   titulo: string;

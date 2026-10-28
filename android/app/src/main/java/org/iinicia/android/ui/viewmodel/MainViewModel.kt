@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.CursoEstudiante
 import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.Usuario
@@ -32,6 +33,7 @@ data class MainUiState(
     val passwordError: String? = null,
     val usuarioAutenticado: Usuario? = null,
     val cursos: List<CursoEstudiante> = emptyList(),
+    val actividades: List<ActividadProximaDto> = emptyList(),
     val dashboard: DashboardEstudiante? = null,
     val errorMessage: String? = null,
     /** Null = sin error. "Mis cursos (0)" solo significa "sin cursos" cuando esto es null. */
@@ -143,7 +145,12 @@ class MainViewModel(
             repository.getDashboardEstudiante()
                 .onSuccess { dashboard ->
                     _uiState.update {
-                        it.copy(cargandoCursos = false, dashboard = dashboard, cursos = dashboard.cursos)
+                        it.copy(
+                            cargandoCursos = false,
+                            dashboard = dashboard,
+                            cursos = dashboard.cursos,
+                            actividades = dashboard.actividades
+                        )
                     }
                 }
                 .onFailure { error ->
@@ -175,6 +182,7 @@ class MainViewModel(
                 usuarioAutenticado = null,
                 dashboard = null,
                 cursos = emptyList(),
+                actividades = emptyList(),
                 correoError = null,
                 passwordError = null,
                 errorMessage = null,

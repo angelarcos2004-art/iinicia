@@ -27,6 +27,24 @@ interface MoodleErrorBody {
   message?: string;
 }
 
+interface MoodleActionEvent {
+  id: number;
+  name: string;
+  timesort: number;
+  course?: { fullname?: string };
+  action?: { url?: string };
+  url?: string;
+}
+
+export interface MoodleActividadProxima {
+  id: number;
+  titulo: string;
+  curso: string;
+  /** Fecha límite, en ISO-8601 (viene de `timesort`, en segundos UTC). */
+  fecha: string;
+  url: string | null;
+}
+
 const TIMEOUT_MS = 10_000;
 
 /**
@@ -104,6 +122,33 @@ export class MoodleService {
       shortname: c.shortname,
       fullname: c.fullname,
       progress: typeof c.progress === 'number' ? c.progress : null,
+    }));
+  }
+
+  /**
+   * Próximas actividades con fecha límite (tareas, cuestionarios, etc.) del usuario en
+   * cualquiera de sus cursos, vía `core_calendar_get_action_events_by_timesort`: la misma
+   * función que usa la app móvil oficial de Moodle para "Próximos eventos". Solo trae eventos
+   * desde ahora en adelante (no actividades ya vencidas).
+   */
+  async obtenerActividadesProximas(moodleUserId: number): Promise<MoodleActividadProxima[]> {
+    const ahora = Math.floor(Date.now() / 1000);
+    const respuesta = await this.llamar<{ events?: MoodleActionEvent[] }>(
+      'core_calendar_get_action_events_by_timesort',
+      {
+        userid: String(moodleUserId),
+        timesortfrom: String(ahora),
+        limitnum: '10',
+      },
+    );
+    const eventos = respuesta?.events;
+    if (!Array.isArray(eventos)) return [];
+    return eventos.map((e) => ({
+      id: e.id,
+      titulo: e.name,
+      curso: e.course?.fullname ?? '',
+      fecha: new Date(e.timesort * 1000).toISOString(),
+      url: e.action?.url ?? e.url ?? null,
     }));
   }
 

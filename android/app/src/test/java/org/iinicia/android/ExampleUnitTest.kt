@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.setMain
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.iinicia.android.data.local.InMemorySessionTokenStorage
+import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.EstadoCurso
@@ -35,12 +36,16 @@ import retrofit2.Response
 /** Implementación falsa de [IiniciaApiService] para pruebas sin red real. */
 private class FakeApiService(
     private val cursos: List<CursoInscritoDto>,
-    private val moodleSsoUrl: String = "http://localhost:8080/auth/userkey/login.php?key=abc"
+    private val moodleSsoUrl: String = "http://localhost:8080/auth/userkey/login.php?key=abc",
+    private val actividades: List<ActividadProximaDto> = emptyList(),
+    private val actividadesFallan: Boolean = false
 ) : IiniciaApiService {
     override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
     override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> = cursos
+    override suspend fun getActividadesProximas(): List<ActividadProximaDto> =
+        if (actividadesFallan) throw java.io.IOException("Moodle no respondió a tiempo") else actividades
     override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = MoodleSsoResponse(moodleSsoUrl)
 }
 
@@ -53,6 +58,7 @@ private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> =
         throw java.io.IOException("Moodle no respondió a tiempo")
+    override suspend fun getActividadesProximas(): List<ActividadProximaDto> = emptyList()
     override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = throw NotImplementedError()
 }
 
@@ -165,6 +171,44 @@ class ExampleUnitTest {
     }
 
     @Test
+    fun repository_getDashboardEstudiante_incluyeActividadesDelBackend() = runTest {
+        val fakeApi = FakeApiService(
+            cursos = emptyList(),
+            actividades = listOf(
+                ActividadProximaDto(id = 5, titulo = "Entrega Tarea 1", curso = "Curso X", fecha = "2026-11-01T00:00:00.000Z", url = null)
+            )
+        )
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val dashboard = repository.getDashboardEstudiante().getOrThrow()
+        assertEquals(1, dashboard.actividades.size)
+        assertEquals("Entrega Tarea 1", dashboard.actividades.single().titulo)
+    }
+
+    @Test
+    fun repository_getDashboardEstudiante_siActividadesFalla_noTumbaElDashboard() = runTest {
+        val fakeApi = FakeApiService(
+            cursos = listOf(CursoInscritoDto(id = 2, nombre = "Curso", shortname = "X", progreso = null)),
+            actividadesFallan = true
+        )
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val result = repository.getDashboardEstudiante()
+        assertTrue(result.isSuccess)
+        val dashboard = result.getOrThrow()
+        assertTrue(dashboard.actividades.isEmpty())
+        assertEquals(1, dashboard.cursos.size)
+    }
+
+    @Test
     fun repository_getUrlCampus_devuelveLaUrlDeAutologinDelBackend() = runTest {
         val fakeApi = FakeApiService(
             cursos = emptyList(),
@@ -241,6 +285,10 @@ class ExampleUnitTest {
             }
 
             override suspend fun getCursos(): List<CursoInscritoDto> {
+                throw UnsupportedOperationException()
+            }
+
+            override suspend fun getActividadesProximas(): List<ActividadProximaDto> {
                 throw UnsupportedOperationException()
             }
 

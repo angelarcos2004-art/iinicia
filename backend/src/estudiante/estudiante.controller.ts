@@ -12,6 +12,14 @@ export interface CursoInscrito {
   progreso: number | null;
 }
 
+export interface ActividadProxima {
+  id: number;
+  titulo: string;
+  curso: string;
+  fecha: string;
+  url: string | null;
+}
+
 @Controller('estudiante')
 @UseGuards(JwtAuthGuard)
 export class EstudianteController {
@@ -39,6 +47,22 @@ export class EstudianteController {
       shortname: c.shortname,
       progreso: c.progress,
     }));
+  }
+
+  /**
+   * Próximas actividades con fecha límite (tareas, cuestionarios, etc.) de todos los cursos
+   * del usuario. Mismo criterio que `misCursos`: sin cuenta Moodle vinculada, lista vacía en
+   * vez de error.
+   */
+  @Get('actividades')
+  async proximasActividades(
+    @UsuarioActual() usuarioActual: UsuarioAutenticado,
+  ): Promise<ActividadProxima[]> {
+    const user = await this.users.findById(usuarioActual.id);
+    if (!user?.moodleUserId) {
+      return [];
+    }
+    return this.moodle.obtenerActividadesProximas(user.moodleUserId);
   }
 
   /**

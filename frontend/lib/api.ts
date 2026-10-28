@@ -1,5 +1,6 @@
 import { buildMockAuthResponse } from "./mock-data";
 import type {
+  ActividadProxima,
   AuthResponse,
   CursoInscrito,
   LoginInput,
@@ -170,6 +171,14 @@ export async function obtenerUrlCampus(token: string, cursoId?: number): Promise
   const query = cursoId ? `?cursoId=${cursoId}` : "";
   const { url } = await getJSON<{ url: string }>(`/estudiante/moodle-sso${query}`, token);
   return url;
+}
+
+/**
+ * Próximas actividades con fecha límite (tareas, cuestionarios, etc.) de todos los cursos del
+ * usuario. Mismo criterio que `obtenerMisCursos`: información real, sin fallback simulado.
+ */
+export async function obtenerProximasActividades(token: string): Promise<ActividadProxima[]> {
+  return getJSON<ActividadProxima[]>("/estudiante/actividades", token);
 }
 
 /** Panel administrativo: lista de usuarios, con filtro opcional por rol. */

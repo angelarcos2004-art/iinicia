@@ -9,10 +9,10 @@ import { CountUp } from "@/components/ui/count-up";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
-import { ApiError, obtenerMisCursos, obtenerUrlCampus } from "@/lib/api";
+import { ApiError, obtenerMisCursos, obtenerProximasActividades, obtenerUrlCampus } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
-import type { CursoInscrito, Rol } from "@/lib/types";
+import type { ActividadProxima, CursoInscrito, Rol } from "@/lib/types";
 
 const ROL_LABEL: Record<Rol, string> = {
   superadmin: "Superadministrador",
@@ -48,6 +48,9 @@ export default function MiIiniciaPage() {
   const [errorCursos, setErrorCursos] = useState<string | null>(null);
   const [entrandoACursoId, setEntrandoACursoId] = useState<number | null>(null);
   const [errorCampus, setErrorCampus] = useState<string | null>(null);
+  const [actividades, setActividades] = useState<ActividadProxima[] | null>(null);
+  const [cargandoActividades, setCargandoActividades] = useState(true);
+  const [errorActividades, setErrorActividades] = useState<string | null>(null);
 
   /**
    * SSO vía auth_userkey (backend/src/moodle/moodle.service.ts): la url de
@@ -96,6 +99,31 @@ export default function MiIiniciaPage() {
       })
       .finally(() => {
         if (!cancelado) setCargandoCursos(false);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [sesion]);
+
+  useEffect(() => {
+    if (!sesion) return;
+    let cancelado = false;
+
+    obtenerProximasActividades(sesion.token)
+      .then((data) => {
+        if (!cancelado) setActividades(data);
+      })
+      .catch((error) => {
+        if (cancelado) return;
+        setErrorActividades(
+          error instanceof ApiError
+            ? error.message
+            : "No se pudieron cargar tus próximas actividades. Intenta más tarde.",
+        );
+      })
+      .finally(() => {
+        if (!cancelado) setCargandoActividades(false);
       });
 
     return () => {
@@ -212,6 +240,35 @@ export default function MiIiniciaPage() {
 
         <div className="flex flex-col gap-4">
           <h2 className="text-headline-sm font-display font-bold text-primary">
+            Próximas actividades
+          </h2>
+          {cargandoActividades ? (
+            <p className="text-body-sm text-ink-muted">Consultando tus actividades en Moodle…</p>
+          ) : errorActividades ? (
+            <Card className="text-body-sm text-error">{errorActividades}</Card>
+          ) : !actividades || actividades.length === 0 ? (
+            <Card className="text-body-sm text-ink-muted">
+              No tienes actividades con fecha límite próxima.
+            </Card>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {actividades.map((actividad, i) => (
+                <Reveal key={actividad.id} delay={i * 90}>
+                  <Card>
+                    <time className="mb-1 block text-label-sm font-display font-semibold text-ink-muted">
+                      {formatFecha(actividad.fecha)}
+                    </time>
+                    <h3 className="mb-1 text-body-lg font-display font-bold text-primary">
+                      {actividad.titulo}
+                    </h3>
+                    <p className="text-body-sm text-ink-muted">{actividad.curso}</p>
+                  </Card>
+                </Reveal>
+              ))}
+            </div>
+          )}
+
+          <h2 className="mt-4 text-headline-sm font-display font-bold text-primary">
             Avisos institucionales
           </h2>
           <div className="flex flex-col gap-4">
