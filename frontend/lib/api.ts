@@ -174,6 +174,16 @@ export async function obtenerUrlCampus(token: string, cursoId?: number): Promise
 }
 
 /**
+ * Igual que `obtenerUrlCampus`, pero para abrir directo una actividad (la `url` que devuelve
+ * `obtenerProximasActividades`) en vez del curso completo.
+ */
+export async function obtenerUrlCampusActividad(token: string, actividadUrl: string): Promise<string> {
+  const query = `?actividadUrl=${encodeURIComponent(actividadUrl)}`;
+  const { url } = await getJSON<{ url: string }>(`/estudiante/moodle-sso${query}`, token);
+  return url;
+}
+
+/**
  * Próximas actividades con fecha límite (tareas, cuestionarios, etc.) de todos los cursos del
  * usuario. Mismo criterio que `obtenerMisCursos`: información real, sin fallback simulado.
  */

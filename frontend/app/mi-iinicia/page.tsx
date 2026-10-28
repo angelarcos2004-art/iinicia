@@ -9,7 +9,13 @@ import { CountUp } from "@/components/ui/count-up";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
-import { ApiError, obtenerMisCursos, obtenerProximasActividades, obtenerUrlCampus } from "@/lib/api";
+import {
+  ApiError,
+  obtenerMisCursos,
+  obtenerProximasActividades,
+  obtenerUrlCampus,
+  obtenerUrlCampusActividad,
+} from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
 import type { ActividadProxima, CursoInscrito, Rol } from "@/lib/types";
@@ -51,6 +57,7 @@ export default function MiIiniciaPage() {
   const [actividades, setActividades] = useState<ActividadProxima[] | null>(null);
   const [cargandoActividades, setCargandoActividades] = useState(true);
   const [errorActividades, setErrorActividades] = useState<string | null>(null);
+  const [abriendoActividadId, setAbriendoActividadId] = useState<number | null>(null);
 
   /**
    * SSO vía auth_userkey (backend/src/moodle/moodle.service.ts): la url de
@@ -72,6 +79,25 @@ export default function MiIiniciaPage() {
       );
     } finally {
       setEntrandoACursoId(null);
+    }
+  }
+
+  /** Misma idea que `entrarAlCampus`, pero aterriza directo en la actividad (no en el curso). */
+  async function abrirActividad(actividad: ActividadProxima) {
+    if (!sesion || !actividad.url) return;
+    setErrorCampus(null);
+    setAbriendoActividadId(actividad.id);
+    try {
+      const url = await obtenerUrlCampusActividad(sesion.token, actividad.url);
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      setErrorCampus(
+        error instanceof ApiError
+          ? error.message
+          : "No se pudo generar el acceso a Moodle. Intenta más tarde.",
+      );
+    } finally {
+      setAbriendoActividadId(null);
     }
   }
 
@@ -159,6 +185,10 @@ export default function MiIiniciaPage() {
         </div>
         <p className="text-body-md text-ink-muted">{cuatrimestre} · Mi IINICIA</p>
       </Reveal>
+
+      {errorCampus && (
+        <Card className="mb-6 text-body-sm text-error">{errorCampus}</Card>
+      )}
 
       <Reveal>
         <Card className="mb-8 flex flex-col gap-4">
@@ -262,6 +292,16 @@ export default function MiIiniciaPage() {
                       {actividad.titulo}
                     </h3>
                     <p className="text-body-sm text-ink-muted">{actividad.curso}</p>
+                    {actividad.url && (
+                      <Button
+                        variant="outline"
+                        onClick={() => abrirActividad(actividad)}
+                        disabled={abriendoActividadId === actividad.id}
+                        className="mt-2 h-9 w-fit px-3 text-label-sm"
+                      >
+                        {abriendoActividadId === actividad.id ? "Abriendo…" : "Abrir en Moodle"}
+                      </Button>
+                    )}
                   </Card>
                 </Reveal>
               ))}

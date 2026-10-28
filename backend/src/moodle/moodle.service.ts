@@ -158,7 +158,11 @@ export class MoodleService {
    * segundos y solo sirve una vez, así que hay que generarla justo antes de
    * redirigir al usuario, nunca guardarla.
    */
-  async solicitarUrlAutologin(correo: string, cursoId?: number): Promise<string> {
+  async solicitarUrlAutologin(
+    correo: string,
+    cursoId?: number,
+    actividadUrl?: string,
+  ): Promise<string> {
     const email = correo.trim().toLowerCase();
     const { loginurl } = await this.llamar<{ loginurl: string }>(
       'auth_userkey_request_login_url',
@@ -167,16 +171,37 @@ export class MoodleService {
     if (!loginurl) {
       throw new BadGatewayException('Moodle no devolvió una URL de acceso');
     }
-    if (!cursoId) return loginurl;
+    if (!cursoId && !actividadUrl) return loginurl;
     // Ojo: NO usar this.config MOODLE_URL aquí. En Docker apunta al nombre
     // interno ("http://moodle"), que el navegador del usuario no puede
     // resolver. loginurl ya viene armada por Moodle con su wwwroot público
     // real (ver auth_userkey auth.php get_login_url()), así que se reusa
     // ese mismo origen para el destino tras el login.
     const origen = new URL(loginurl).origin;
-    const urlDestino = `${origen}/course/view.php?id=${cursoId}`;
+    const urlDestino = actividadUrl
+      ? this.validarMismoOrigen(actividadUrl, origen)
+      : `${origen}/course/view.php?id=${cursoId}`;
     const separador = loginurl.includes('?') ? '&' : '?';
     return `${loginurl}${separador}wantsurl=${encodeURIComponent(urlDestino)}`;
+  }
+
+  /**
+   * `actividadUrl` viene de `core_calendar_get_action_events_by_timesort` (ver
+   * `obtenerActividadesProximas`), así que en teoría ya es de este mismo Moodle, pero como
+   * llega hasta aquí por un query param que el cliente controla, se revalida el origen antes
+   * de usarla como `wantsurl` (evita que alguien la cambie por una URL arbitraria).
+   */
+  private validarMismoOrigen(url: string, origenEsperado: string): string {
+    let origenReal: string;
+    try {
+      origenReal = new URL(url).origin;
+    } catch {
+      throw new BadRequestException('URL de actividad inválida');
+    }
+    if (origenReal !== origenEsperado) {
+      throw new BadRequestException('La actividad no pertenece a esta instancia de Moodle');
+    }
+    return url;
   }
 
   private async buscarCursoPorShortname(shortname: string): Promise<number | null> {

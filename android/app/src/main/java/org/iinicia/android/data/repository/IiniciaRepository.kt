@@ -32,7 +32,7 @@ interface IiniciaRepository {
     suspend fun getDashboardEstudiante(): Result<DashboardEstudiante>
     suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>>
     suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante>
-    suspend fun getUrlCampus(cursoId: Int? = null): Result<String>
+    suspend fun getUrlCampus(cursoId: Int? = null, actividadUrl: String? = null): Result<String>
     fun logout()
 }
 
@@ -150,11 +150,11 @@ class IiniciaRepositoryImpl(
         }
     }
 
-    override suspend fun getUrlCampus(cursoId: Int?): Result<String> = runCatching {
+    override suspend fun getUrlCampus(cursoId: Int?, actividadUrl: String?): Result<String> = runCatching {
         if (!isConnectToRemoteEnabled) {
             throw IllegalStateException("El acceso a Moodle requiere conexión al backend real.")
         }
-        apiService.getMoodleSsoUrl(cursoId).url
+        apiService.getMoodleSsoUrl(cursoId, actividadUrl).url
     }
 
     override fun logout() {

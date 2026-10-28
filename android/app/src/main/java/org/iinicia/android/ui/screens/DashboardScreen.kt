@@ -1,5 +1,8 @@
 package org.iinicia.android.ui.screens
 
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,15 +34,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.iinicia.android.data.model.CursoEstudiante
 import org.iinicia.android.ui.components.ConfirmarCerrarSesionDialog
 import org.iinicia.android.ui.theme.IiniciaAccent
@@ -60,11 +67,16 @@ fun DashboardScreen(
     onCursoClick: (String) -> Unit = {},
     onPerfilClick: () -> Unit = {},
     onReintentarCursos: () -> Unit = {},
+    onAbrirActividad: suspend (String) -> Result<String> = { Result.failure(UnsupportedOperationException()) },
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cursos: List<CursoEstudiante> = uiState.cursos
     var mostrarConfirmacionLogout by remember { mutableStateOf(false) }
+    var abriendoActividadId by remember { mutableStateOf<Int?>(null) }
+    var errorActividad by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     if (mostrarConfirmacionLogout) {
         ConfirmarCerrarSesionDialog(
@@ -361,8 +373,54 @@ fun DashboardScreen(
                                     style = MaterialTheme.typography.labelSmall,
                                     color = IiniciaSecondary
                                 )
+                                val actividadUrl = actividad.url
+                                if (actividadUrl != null) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    OutlinedButton(
+                                        onClick = {
+                                            errorActividad = null
+                                            abriendoActividadId = actividad.id
+                                            scope.launch {
+                                                onAbrirActividad(actividadUrl)
+                                                    .onSuccess { ssoUrl ->
+                                                        abriendoActividadId = null
+                                                        val colorScheme = CustomTabColorSchemeParams.Builder()
+                                                            .setToolbarColor(IiniciaPrimary.toArgb())
+                                                            .build()
+                                                        val customTabsIntent = CustomTabsIntent.Builder()
+                                                            .setDefaultColorSchemeParams(colorScheme)
+                                                            .setShowTitle(true)
+                                                            .build()
+                                                        try {
+                                                            customTabsIntent.launchUrl(context, Uri.parse(ssoUrl))
+                                                        } catch (e: android.content.ActivityNotFoundException) {
+                                                            errorActividad = "No se encontró un navegador para abrir Moodle."
+                                                        }
+                                                    }
+                                                    .onFailure { error ->
+                                                        abriendoActividadId = null
+                                                        errorActividad = error.message
+                                                            ?: "No se pudo abrir la actividad. Intenta más tarde."
+                                                    }
+                                            }
+                                        },
+                                        enabled = abriendoActividadId != actividad.id
+                                    ) {
+                                        Text(if (abriendoActividadId == actividad.id) "Abriendo…" else "Abrir en Moodle")
+                                    }
+                                }
                             }
                         }
+                    }
+                }
+
+                if (errorActividad != null) {
+                    item {
+                        Text(
+                            text = errorActividad.orEmpty(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                 }
             }
