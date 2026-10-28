@@ -127,6 +127,11 @@ data class MoodleSsoResponse(
     val url: String
 )
 
+/** Cuerpo de `PATCH /estudiante/push-token`. */
+data class RegistrarPushTokenRequest(
+    val token: String
+)
+
 /**
  * Próxima actividad con fecha límite (`GET /estudiante/actividades`), tal como la devuelve el
  * backend desde Moodle (`core_calendar_get_action_events_by_timesort`).

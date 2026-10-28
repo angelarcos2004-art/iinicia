@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 // Permite sobreescribir la URL del backend sin tocar código ni el repo: agrega
@@ -84,6 +85,13 @@ dependencies {
     // navegador externo. No es un WebView completo (reqs 9: "no debe limitarse a ser una
     // WebView"), solo para el SSO puntual de "Entrar al Campus".
     implementation(libs.androidx.browser)
+
+    // Notificaciones push (Requerimiento 9.1/9.2). google-services.json en este repo es un
+    // placeholder (ver su comentario): compila y corre, pero no recibe push reales hasta que
+    // se reemplace por el de un proyecto Firebase real y el backend tenga
+    // FIREBASE_SERVICE_ACCOUNT configurado.
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

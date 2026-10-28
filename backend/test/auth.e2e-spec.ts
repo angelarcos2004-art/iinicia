@@ -7,6 +7,7 @@ import { setupApp } from '../src/app.setup.js';
 import { AuthController } from '../src/auth/auth.controller.js';
 import { AuthService } from '../src/auth/auth.service.js';
 import { JwtStrategy } from '../src/auth/jwt.strategy.js';
+import { MailService } from '../src/mail/mail.service.js';
 import { MoodleService } from '../src/moodle/moodle.service.js';
 import { Rol } from '../src/users/rol.enum.js';
 import type { User } from '../src/users/user.entity.js';
@@ -36,12 +37,35 @@ class InMemoryUsers {
     const user = this.items.find((u) => u.id === id);
     if (user) user.moodleUserId = moodleUserId;
   }
+  async guardarTokenRecuperacion(id: string, tokenHash: string, expira: Date) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) {
+      user.resetPasswordTokenHash = tokenHash;
+      user.resetPasswordExpira = expira;
+    }
+  }
+  async limpiarTokenRecuperacion(id: string) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) {
+      user.resetPasswordTokenHash = null;
+      user.resetPasswordExpira = null;
+    }
+  }
+  async actualizarPasswordHash(id: string, passwordHash: string) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) user.passwordHash = passwordHash;
+  }
 }
 
 /** MoodleService falso: estas pruebas no deben depender de un Moodle real. */
 const moodleFake = {
   buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(555),
   matricularEnCurso: vi.fn().mockResolvedValue(undefined),
+};
+
+/** MailService falso: captura el enlace en vez de intentar enviar un correo real. */
+const mailFake = {
+  enviarRecuperacion: vi.fn().mockResolvedValue(undefined),
 };
 
 const registroValido = {
@@ -60,6 +84,7 @@ describe('Auth (e2e)', () => {
   beforeEach(async () => {
     moodleFake.buscarOCrearUsuarioMoodle.mockClear();
     moodleFake.matricularEnCurso.mockClear();
+    mailFake.enviarRecuperacion.mockClear();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [AuthController],
@@ -68,6 +93,7 @@ describe('Auth (e2e)', () => {
         JwtStrategy,
         { provide: UsersService, useClass: InMemoryUsers },
         { provide: MoodleService, useValue: moodleFake },
+        { provide: MailService, useValue: mailFake },
         {
           provide: ConfigService,
           useValue: {
@@ -235,5 +261,106 @@ describe('Auth (e2e)', () => {
     const res = await request(app.getHttpServer()).get('/nada');
     expect(res.status).toBe(404);
     expect(typeof res.body.message).toBe('string');
+  });
+
+  describe('Recuperación de contraseña', () => {
+    /** Extrae el token del enlace que MailService.enviarRecuperacion recibió. */
+    function tokenDelUltimoEnlace(): string {
+      const enlace = mailFake.enviarRecuperacion.mock.calls.at(-1)?.[1] as string;
+      return new URL(enlace).searchParams.get('token')!;
+    }
+
+    it('POST /auth/recuperar con correo existente envía el enlace y responde con mensaje genérico', async () => {
+      await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      const res = await request(app.getHttpServer())
+        .post('/auth/recuperar')
+        .send({ correo: 'ana@correo.com' });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ mensaje: expect.any(String) });
+      expect(mailFake.enviarRecuperacion).toHaveBeenCalledWith('ana@correo.com', expect.any(String));
+    });
+
+    it('POST /auth/recuperar con correo inexistente responde igual, sin enviar nada', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/auth/recuperar')
+        .send({ correo: 'nadie@correo.com' });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ mensaje: expect.any(String) });
+      expect(mailFake.enviarRecuperacion).not.toHaveBeenCalled();
+    });
+
+    it('POST /auth/recuperar con correo inválido -> 400', async () => {
+      const res = await request(app.getHttpServer()).post('/auth/recuperar').send({ correo: 'no-es-correo' });
+      expect(res.status).toBe(400);
+    });
+
+    it('flujo completo: recuperar -> restablecer -> login con la nueva contraseña', async () => {
+      await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      await request(app.getHttpServer()).post('/auth/recuperar').send({ correo: 'ana@correo.com' });
+      const token = tokenDelUltimoEnlace();
+
+      const restablecer = await request(app.getHttpServer()).post('/auth/restablecer').send({
+        correo: 'ana@correo.com',
+        token,
+        nuevaPassword: 'NuevaSegura123',
+      });
+      expect(restablecer.status).toBe(200);
+
+      const loginViejo = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ correo: 'ana@correo.com', password: 'secreto123' });
+      expect(loginViejo.status).toBe(401);
+
+      const loginNuevo = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ correo: 'ana@correo.com', password: 'NuevaSegura123' });
+      expect(loginNuevo.status).toBe(200);
+    });
+
+    it('el token de recuperación no sirve dos veces', async () => {
+      await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      await request(app.getHttpServer()).post('/auth/recuperar').send({ correo: 'ana@correo.com' });
+      const token = tokenDelUltimoEnlace();
+
+      await request(app.getHttpServer()).post('/auth/restablecer').send({
+        correo: 'ana@correo.com',
+        token,
+        nuevaPassword: 'NuevaSegura123',
+      });
+      const segundoIntento = await request(app.getHttpServer()).post('/auth/restablecer').send({
+        correo: 'ana@correo.com',
+        token,
+        nuevaPassword: 'OtraSegura456',
+      });
+      expect(segundoIntento.status).toBe(400);
+    });
+
+    it('POST /auth/restablecer con token incorrecto -> 400 { message }', async () => {
+      await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      await request(app.getHttpServer()).post('/auth/recuperar').send({ correo: 'ana@correo.com' });
+
+      const res = await request(app.getHttpServer()).post('/auth/restablecer').send({
+        correo: 'ana@correo.com',
+        token: 'token-que-no-es',
+        nuevaPassword: 'NuevaSegura123',
+      });
+      expect(res.status).toBe(400);
+      expect(typeof res.body.message).toBe('string');
+    });
+
+    it('POST /auth/restablecer con contraseña demasiado corta -> 400', async () => {
+      await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+      await request(app.getHttpServer()).post('/auth/recuperar').send({ correo: 'ana@correo.com' });
+      const token = tokenDelUltimoEnlace();
+
+      const res = await request(app.getHttpServer()).post('/auth/restablecer').send({
+        correo: 'ana@correo.com',
+        token,
+        nuevaPassword: '123',
+      });
+      expect(res.status).toBe(400);
+    });
   });
 });

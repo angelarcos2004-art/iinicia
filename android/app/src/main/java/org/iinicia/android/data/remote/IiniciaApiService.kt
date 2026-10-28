@@ -5,10 +5,12 @@ import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.MoodleSsoResponse
+import org.iinicia.android.data.model.RegistrarPushTokenRequest
 import org.iinicia.android.data.model.RegistroRequest
 import org.iinicia.android.data.model.Usuario
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -56,4 +58,8 @@ interface IiniciaApiService {
         @Query("cursoId") cursoId: Int? = null,
         @Query("actividadUrl") actividadUrl: String? = null
     ): MoodleSsoResponse
+
+    /** Registra (o reemplaza) el token FCM del dispositivo actual, para notificaciones push. */
+    @PATCH("estudiante/push-token")
+    suspend fun registrarPushToken(@Body request: RegistrarPushTokenRequest)
 }

@@ -7,6 +7,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
+import { randomBytes } from 'node:crypto';
+import { MailService } from '../mail/mail.service.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleService } from '../moodle/moodle.service.js';
 import { Rol } from '../users/rol.enum.js';
@@ -14,6 +16,7 @@ import type { User } from '../users/user.entity.js';
 import { UsersService } from '../users/users.service.js';
 import type { LoginDto } from './dto/login.dto.js';
 import type { RegistroDto } from './dto/registro.dto.js';
+import type { RestablecerDto } from './dto/restablecer.dto.js';
 
 export interface UsuarioPublico {
   id: string;
@@ -40,6 +43,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly moodle: MoodleService,
     private readonly config: ConfigService,
+    private readonly mail: MailService,
   ) {}
 
   async login(dto: LoginDto): Promise<AuthResponse> {
@@ -80,6 +84,40 @@ export class AuthService {
     }
     user = await this.vincularMoodle(user);
     return this.buildResponse(user);
+  }
+
+  /**
+   * Genera un enlace de recuperación de un solo uso (expira en 1 hora) y lo envía por correo.
+   * Siempre "funciona" igual exista o no la cuenta: nunca hay que revelar qué correos están
+   * registrados (docs/requerimientos.md Sec. 16, privacidad/seguridad).
+   */
+  async recuperar(correo: string): Promise<void> {
+    const user = await this.users.findByCorreo(correo);
+    if (!user) return;
+
+    const tokenCrudo = randomBytes(32).toString('base64url');
+    const tokenHash = await bcrypt.hash(tokenCrudo, BCRYPT_ROUNDS);
+    const expira = new Date(Date.now() + 60 * 60 * 1000);
+    await this.users.guardarTokenRecuperacion(user.id, tokenHash, expira);
+
+    const frontendUrl = this.config.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const enlace = `${frontendUrl}/restablecer?correo=${encodeURIComponent(user.correo)}&token=${tokenCrudo}`;
+    await this.mail.enviarRecuperacion(user.correo, enlace);
+  }
+
+  /** Verifica el token (hash + expiración) y reemplaza la contraseña. Invalida el token al usarlo. */
+  async restablecer(dto: RestablecerDto): Promise<void> {
+    const user = await this.users.findByCorreo(dto.correo);
+    const vencido = !user?.resetPasswordExpira || user.resetPasswordExpira.getTime() < Date.now();
+    const coincide =
+      user?.resetPasswordTokenHash && (await bcrypt.compare(dto.token, user.resetPasswordTokenHash));
+    if (!user || !coincide || vencido) {
+      throw new BadRequestException('El enlace de recuperación es inválido o ya venció');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.nuevaPassword, BCRYPT_ROUNDS);
+    await this.users.actualizarPasswordHash(user.id, passwordHash);
+    await this.users.limpiarTokenRecuperacion(user.id);
   }
 
   /**

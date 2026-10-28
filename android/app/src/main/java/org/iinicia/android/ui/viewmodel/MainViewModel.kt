@@ -3,6 +3,7 @@ package org.iinicia.android.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -121,6 +122,7 @@ class MainViewModel(
                         it.copy(isLoading = false, usuarioAutenticado = authResponse.usuario)
                     }
                     cargarCursos()
+                    registrarTokenPushActual()
                     onLoginSuccess()
                 }
                 .onFailure { error ->
@@ -178,6 +180,24 @@ class MainViewModel(
     /** Igual que [obtenerUrlCampus], pero aterriza directo en la actividad (no en el curso). */
     suspend fun obtenerUrlCampusActividad(actividadUrl: String): Result<String> =
         repository.getUrlCampus(actividadUrl = actividadUrl)
+
+    /**
+     * Registra el token FCM del dispositivo justo después de iniciar sesión (cubre el caso
+     * normal: el token ya existía desde antes de este login, así que
+     * [IiniciaFirebaseMessagingService.onNewToken] no vuelve a dispararse). Nunca bloquea el
+     * login ni muestra error: es una mejora de la experiencia, no una condición para usar la app.
+     */
+    private fun registrarTokenPushActual() {
+        try {
+            FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                viewModelScope.launch { repository.registrarTokenPush(token) }
+            }
+        } catch (e: Exception) {
+            // Firebase no inicializado (p. ej. pruebas unitarias en JVM puro, sin contexto
+            // Android real) o google-services.json inválido: el login ya funcionó, esto es
+            // solo una mejora adicional, así que no debe propagarse.
+        }
+    }
 
     fun cerrarSesion() {
         repository.logout()

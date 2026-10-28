@@ -34,6 +34,10 @@ class InMemoryUsers {
   async findById(id: string) {
     return this.items.find((u) => u.id === id) ?? null;
   }
+  async actualizarFcmToken(id: string, fcmToken: string) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) user.fcmToken = fcmToken;
+  }
 }
 
 const moodleFake = {
@@ -245,6 +249,62 @@ describe('GET /estudiante/moodle-sso (e2e)', () => {
 
   it('sin token -> 401', async () => {
     const res = await request(app.getHttpServer()).get('/estudiante/moodle-sso');
+    expect(res.status).toBe(401);
+  });
+});
+
+describe('PATCH /estudiante/push-token (e2e)', () => {
+  let app: INestApplication;
+  let jwt: JwtService;
+  let users: InMemoryUsers;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
+      controllers: [EstudianteController],
+      providers: [
+        JwtStrategy,
+        JwtAuthGuard,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret' } },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    setupApp(app, 'http://localhost:3000');
+    await app.init();
+    jwt = moduleRef.get(JwtService);
+    users = moduleRef.get(UsersService);
+  });
+
+  afterEach(() => app.close());
+
+  it('guarda el token FCM del usuario autenticado', async () => {
+    const token = await jwt.signAsync({ sub: 'u-con-moodle', rol: Rol.Estudiante });
+
+    const res = await request(app.getHttpServer())
+      .patch('/estudiante/push-token')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ token: 'token-fcm-abc' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ok: true });
+    expect(users.items.find((u) => u.id === 'u-con-moodle')?.fcmToken).toBe('token-fcm-abc');
+  });
+
+  it('400 si el token viene vacío', async () => {
+    const jwtToken = await jwt.signAsync({ sub: 'u-con-moodle', rol: Rol.Estudiante });
+    const res = await request(app.getHttpServer())
+      .patch('/estudiante/push-token')
+      .set('Authorization', `Bearer ${jwtToken}`)
+      .send({ token: '' });
+    expect(res.status).toBe(400);
+  });
+
+  it('sin token JWT -> 401', async () => {
+    const res = await request(app.getHttpServer())
+      .patch('/estudiante/push-token')
+      .send({ token: 'token-fcm-abc' });
     expect(res.status).toBe(401);
   });
 });

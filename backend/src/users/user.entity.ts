@@ -42,6 +42,17 @@ export class User {
   @Column({ name: 'desea_informacion_becas', type: 'boolean', default: false })
   deseaInformacionBecas!: boolean;
 
+  /** Token FCM del dispositivo Android actual del usuario (ver backend/src/push). */
+  @Column({ name: 'fcm_token', type: 'varchar', length: 255, nullable: true })
+  fcmToken!: string | null;
+
+  /** Hash (bcrypt) del token de recuperación de contraseña vigente, si hay uno. */
+  @Column({ name: 'reset_password_token_hash', type: 'varchar', length: 100, nullable: true })
+  resetPasswordTokenHash!: string | null;
+
+  @Column({ name: 'reset_password_expira', type: 'timestamp', nullable: true })
+  resetPasswordExpira!: Date | null;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
