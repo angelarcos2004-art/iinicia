@@ -106,6 +106,13 @@ class IiniciaRepositoryImpl(
             } else {
                 emptyList()
             }
+            // Si Moodle falla al pedir actividades, no se tumba todo el dashboard: los
+            // cursos ya cargados son más importantes que esta lista secundaria.
+            val actividades = if (isConnectToRemoteEnabled) {
+                runCatching { apiService.getActividadesProximas() }.getOrDefault(emptyList())
+            } else {
+                emptyList()
+            }
             DashboardEstudiante(
                 usuario = usuario,
                 cuatrimestre = "1er cuatrimestre",
@@ -113,7 +120,8 @@ class IiniciaRepositoryImpl(
                 creditosTotales = 300,
                 progresoCurricular = 0,
                 cursos = cursos,
-                avisos = emptyList()
+                avisos = emptyList(),
+                actividades = actividades
             )
         }
     }

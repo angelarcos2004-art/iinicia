@@ -307,9 +307,78 @@ fun DashboardScreen(
                         }
                     }
                 }
+
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Próximas actividades",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = IiniciaPrimary
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                if (uiState.actividades.isEmpty()) {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Text(
+                                text = "No tienes actividades con fecha límite próxima.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().padding(20.dp)
+                            )
+                        }
+                    }
+                } else {
+                    items(uiState.actividades, key = { it.id }) { actividad ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = actividad.titulo,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = IiniciaPrimary
+                                )
+                                if (actividad.curso.isNotBlank()) {
+                                    Text(
+                                        text = actividad.curso,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                                Text(
+                                    text = formatFechaActividad(actividad.fecha),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = IiniciaSecondary
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+/**
+ * Convierte el ISO-8601 que devuelve el backend ("2026-11-01T00:00:00.000Z") a "01/11/2026" sin
+ * depender de java.time (minSdk 24, sin core library desugaring en este módulo).
+ */
+private fun formatFechaActividad(fechaIso: String): String {
+    if (fechaIso.length < 10) return fechaIso
+    val (anio, mes, dia) = fechaIso.substring(0, 10).split("-").takeIf { it.size == 3 }
+        ?: return fechaIso
+    return "$dia/$mes/$anio"
 }
 
 @Preview(showBackground = true)

@@ -38,6 +38,7 @@ class InMemoryUsers {
 
 const moodleFake = {
   obtenerCursosDeUsuario: vi.fn(),
+  obtenerActividadesProximas: vi.fn(),
   solicitarUrlAutologin: vi.fn(),
 };
 
@@ -47,6 +48,7 @@ describe('GET /estudiante/cursos (e2e)', () => {
 
   beforeEach(async () => {
     moodleFake.obtenerCursosDeUsuario.mockReset();
+    moodleFake.obtenerActividadesProximas.mockReset();
     moodleFake.solicitarUrlAutologin.mockReset();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
@@ -103,12 +105,75 @@ describe('GET /estudiante/cursos (e2e)', () => {
   });
 });
 
+describe('GET /estudiante/actividades (e2e)', () => {
+  let app: INestApplication;
+  let jwt: JwtService;
+
+  beforeEach(async () => {
+    moodleFake.obtenerCursosDeUsuario.mockReset();
+    moodleFake.obtenerActividadesProximas.mockReset();
+    moodleFake.solicitarUrlAutologin.mockReset();
+    const moduleRef = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
+      controllers: [EstudianteController],
+      providers: [
+        JwtStrategy,
+        JwtAuthGuard,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret' } },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    setupApp(app, 'http://localhost:3000');
+    await app.init();
+    jwt = moduleRef.get(JwtService);
+  });
+
+  afterEach(() => app.close());
+
+  it('devuelve las próximas actividades del usuario vinculado a Moodle', async () => {
+    moodleFake.obtenerActividadesProximas.mockResolvedValue([
+      { id: 5, titulo: 'Entrega Tarea 1', curso: 'Test course: XS', fecha: '2026-11-01T00:00:00.000Z', url: null },
+    ]);
+    const token = await jwt.signAsync({ sub: 'u-con-moodle', rol: Rol.Estudiante });
+
+    const res = await request(app.getHttpServer())
+      .get('/estudiante/actividades')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([
+      { id: 5, titulo: 'Entrega Tarea 1', curso: 'Test course: XS', fecha: '2026-11-01T00:00:00.000Z', url: null },
+    ]);
+    expect(moodleFake.obtenerActividadesProximas).toHaveBeenCalledWith(17);
+  });
+
+  it('devuelve lista vacía (sin llamar a Moodle) si el usuario no tiene moodleUserId', async () => {
+    const token = await jwt.signAsync({ sub: 'u-sin-moodle', rol: Rol.Aspirante });
+
+    const res = await request(app.getHttpServer())
+      .get('/estudiante/actividades')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+    expect(moodleFake.obtenerActividadesProximas).not.toHaveBeenCalled();
+  });
+
+  it('sin token -> 401', async () => {
+    const res = await request(app.getHttpServer()).get('/estudiante/actividades');
+    expect(res.status).toBe(401);
+  });
+});
+
 describe('GET /estudiante/moodle-sso (e2e)', () => {
   let app: INestApplication;
   let jwt: JwtService;
 
   beforeEach(async () => {
     moodleFake.obtenerCursosDeUsuario.mockReset();
+    moodleFake.obtenerActividadesProximas.mockReset();
     moodleFake.solicitarUrlAutologin.mockReset();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],

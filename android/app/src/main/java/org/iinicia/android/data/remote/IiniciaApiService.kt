@@ -1,5 +1,6 @@
 package org.iinicia.android.data.remote
 
+import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.LoginRequest
@@ -19,6 +20,7 @@ import retrofit2.http.Query
  * - POST /auth/registro
  * - GET /auth/me
  * - GET /estudiante/cursos
+ * - GET /estudiante/actividades
  * - GET /estudiante/moodle-sso
  *
  * Regla de arquitectura:
@@ -39,6 +41,10 @@ interface IiniciaApiService {
     /** Cursos reales del estudiante autenticado, sincronizados por el backend desde Moodle. */
     @GET("estudiante/cursos")
     suspend fun getCursos(): List<CursoInscritoDto>
+
+    /** Próximas actividades con fecha límite de todos los cursos del estudiante autenticado. */
+    @GET("estudiante/actividades")
+    suspend fun getActividadesProximas(): List<ActividadProximaDto>
 
     /**
      * URL de un solo uso para entrar a Moodle ya autenticado (SSO vía auth_userkey, ver

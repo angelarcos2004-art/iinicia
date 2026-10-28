@@ -127,6 +127,18 @@ data class MoodleSsoResponse(
     val url: String
 )
 
+/**
+ * Próxima actividad con fecha límite (`GET /estudiante/actividades`), tal como la devuelve el
+ * backend desde Moodle (`core_calendar_get_action_events_by_timesort`).
+ */
+data class ActividadProximaDto(
+    val id: Int,
+    val titulo: String,
+    val curso: String,
+    val fecha: String,
+    val url: String?
+)
+
 data class AvisoInstitucional(
     val id: String,
     val titulo: String,
@@ -141,5 +153,6 @@ data class DashboardEstudiante(
     val creditosTotales: Int,
     val progresoCurricular: Int,
     val cursos: List<CursoEstudiante>,
-    val avisos: List<AvisoInstitucional>
+    val avisos: List<AvisoInstitucional>,
+    val actividades: List<ActividadProximaDto> = emptyList()
 )
