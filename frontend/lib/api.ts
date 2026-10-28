@@ -153,6 +153,24 @@ export async function registrarAspirante(
 }
 
 /**
+ * Pide el enlace de recuperación de contraseña. El backend siempre responde igual, exista o
+ * no la cuenta (nunca hay que revelar qué correos están registrados), así que esta función no
+ * necesita (ni debe) distinguir ese caso.
+ */
+export async function recuperarPassword(correo: string): Promise<void> {
+  await postJSON<{ mensaje: string }>("/auth/recuperar", { correo });
+}
+
+/** Usa el token del enlace de recuperación para fijar una nueva contraseña. */
+export async function restablecerPassword(input: {
+  correo: string;
+  token: string;
+  nuevaPassword: string;
+}): Promise<void> {
+  await postJSON<{ mensaje: string }>("/auth/restablecer", input);
+}
+
+/**
  * Cursos reales en los que el usuario autenticado está inscrito en
  * Moodle. A diferencia de login/registro, no cae a datos simulados si el
  * backend no responde: es información personal real, no tiene sentido

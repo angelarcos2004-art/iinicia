@@ -3,6 +3,7 @@ import type { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 import { AuthService } from './auth.service.js';
+import type { MailService } from '../mail/mail.service.js';
 import type { MoodleService } from '../moodle/moodle.service.js';
 import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
@@ -17,6 +18,9 @@ function makeService(
     findByCorreo: vi.fn().mockResolvedValue(existing),
     create: vi.fn(async (d: Record<string, unknown>) => ({ id: 'uuid-1', moodleUserId: null, ...d }) as unknown as User),
     actualizarMoodleUserId: vi.fn().mockResolvedValue(undefined),
+    guardarTokenRecuperacion: vi.fn().mockResolvedValue(undefined),
+    limpiarTokenRecuperacion: vi.fn().mockResolvedValue(undefined),
+    actualizarPasswordHash: vi.fn().mockResolvedValue(undefined),
   };
   const jwt = { signAsync: vi.fn().mockResolvedValue('tok') } as unknown as JwtService;
   const moodle = {
@@ -26,11 +30,19 @@ function makeService(
   const config = {
     get: (key: string, def?: string) => env[key] ?? def,
   } as unknown as ConfigService;
+  const mail = { enviarRecuperacion: vi.fn().mockResolvedValue(undefined) };
   return {
-    service: new AuthService(users as unknown as UsersService, jwt, moodle, config),
+    service: new AuthService(
+      users as unknown as UsersService,
+      jwt,
+      moodle,
+      config,
+      mail as unknown as MailService,
+    ),
     users,
     jwt,
     moodle,
+    mail,
   };
 }
 
@@ -174,6 +186,89 @@ describe('AuthService', () => {
       );
       await service.login({ correo: 'a@b.com', password: 'buena' });
       expect(moodle.matricularEnCurso).toHaveBeenCalledWith(55, 'IINICIA101');
+    });
+  });
+
+  describe('recuperar', () => {
+    it('si el correo existe, guarda un hash del token y envía el enlace por correo', async () => {
+      const { service, users, mail } = makeService({ id: 'u', correo: 'a@b.com' } as User);
+      await service.recuperar('a@b.com');
+
+      expect(users.guardarTokenRecuperacion).toHaveBeenCalledTimes(1);
+      const [id, tokenHash, expira] = users.guardarTokenRecuperacion.mock.calls[0];
+      expect(id).toBe('u');
+      expect(typeof tokenHash).toBe('string');
+      expect(expira.getTime()).toBeGreaterThan(Date.now());
+
+      expect(mail.enviarRecuperacion).toHaveBeenCalledTimes(1);
+      const [correoDestino, enlace] = mail.enviarRecuperacion.mock.calls[0];
+      expect(correoDestino).toBe('a@b.com');
+      expect(enlace).toContain('/restablecer?correo=a%40b.com&token=');
+    });
+
+    it('si el correo NO existe, no guarda token ni envía correo (pero no lanza)', async () => {
+      const { service, users, mail } = makeService(null);
+      await expect(service.recuperar('no-existe@b.com')).resolves.toBeUndefined();
+      expect(users.guardarTokenRecuperacion).not.toHaveBeenCalled();
+      expect(mail.enviarRecuperacion).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('restablecer', () => {
+    async function makeServiceConTokenVigente(tokenCrudo: string, expiraEnMs = 60 * 60 * 1000) {
+      const tokenHash = await bcrypt.hash(tokenCrudo, 4);
+      return makeService({
+        id: 'u',
+        correo: 'a@b.com',
+        resetPasswordTokenHash: tokenHash,
+        resetPasswordExpira: new Date(Date.now() + expiraEnMs),
+      } as User);
+    }
+
+    it('con token y correo correctos, actualiza la contraseña y limpia el token', async () => {
+      const { service, users } = await makeServiceConTokenVigente('token-valido');
+      await service.restablecer({
+        correo: 'a@b.com',
+        token: 'token-valido',
+        nuevaPassword: 'NuevaSegura123',
+      });
+
+      expect(users.actualizarPasswordHash).toHaveBeenCalledTimes(1);
+      const [id, passwordHash] = users.actualizarPasswordHash.mock.calls[0];
+      expect(id).toBe('u');
+      expect(await bcrypt.compare('NuevaSegura123', passwordHash)).toBe(true);
+      expect(users.limpiarTokenRecuperacion).toHaveBeenCalledWith('u');
+    });
+
+    it('rechaza un token que no coincide', async () => {
+      const { service, users } = await makeServiceConTokenVigente('token-valido');
+      await expect(
+        service.restablecer({ correo: 'a@b.com', token: 'token-incorrecto', nuevaPassword: 'NuevaSegura123' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(users.actualizarPasswordHash).not.toHaveBeenCalled();
+    });
+
+    it('rechaza un token ya vencido', async () => {
+      const { service, users } = await makeServiceConTokenVigente('token-valido', -1000);
+      await expect(
+        service.restablecer({ correo: 'a@b.com', token: 'token-valido', nuevaPassword: 'NuevaSegura123' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(users.actualizarPasswordHash).not.toHaveBeenCalled();
+    });
+
+    it('rechaza si el usuario nunca pidió recuperación (sin token guardado)', async () => {
+      const { service, users } = makeService({ id: 'u', correo: 'a@b.com' } as User);
+      await expect(
+        service.restablecer({ correo: 'a@b.com', token: 'cualquiera', nuevaPassword: 'NuevaSegura123' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(users.actualizarPasswordHash).not.toHaveBeenCalled();
+    });
+
+    it('rechaza si el correo no existe', async () => {
+      const { service } = makeService(null);
+      await expect(
+        service.restablecer({ correo: 'no-existe@b.com', token: 'x', nuevaPassword: 'NuevaSegura123' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
 });

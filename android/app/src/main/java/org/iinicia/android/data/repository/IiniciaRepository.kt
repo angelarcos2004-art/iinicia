@@ -12,6 +12,7 @@ import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.EstadoCurso
 import org.iinicia.android.data.model.LoginRequest
+import org.iinicia.android.data.model.RegistrarPushTokenRequest
 import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
 import org.iinicia.android.data.remote.IiniciaApiService
@@ -33,6 +34,7 @@ interface IiniciaRepository {
     suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>>
     suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante>
     suspend fun getUrlCampus(cursoId: Int? = null, actividadUrl: String? = null): Result<String>
+    suspend fun registrarTokenPush(token: String): Result<Unit>
     fun logout()
 }
 
@@ -155,6 +157,11 @@ class IiniciaRepositoryImpl(
             throw IllegalStateException("El acceso a Moodle requiere conexión al backend real.")
         }
         apiService.getMoodleSsoUrl(cursoId, actividadUrl).url
+    }
+
+    override suspend fun registrarTokenPush(token: String): Result<Unit> = runCatching {
+        if (!isConnectToRemoteEnabled) return@runCatching
+        apiService.registrarPushToken(RegistrarPushTokenRequest(token))
     }
 
     override fun logout() {

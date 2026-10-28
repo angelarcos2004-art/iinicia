@@ -14,6 +14,7 @@ import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.EstadoCurso
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.MoodleSsoResponse
+import org.iinicia.android.data.model.RegistrarPushTokenRequest
 import org.iinicia.android.data.model.RegistroRequest
 import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.remote.ApiConfig
@@ -48,6 +49,7 @@ private class FakeApiService(
         if (actividadesFallan) throw java.io.IOException("Moodle no respondió a tiempo") else actividades
     override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse =
         MoodleSsoResponse(moodleSsoUrl)
+    override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) = Unit
 }
 
 /** Login que siempre funciona, pero `getCursos()` falla (p. ej. timeout real contra Moodle). */
@@ -62,6 +64,7 @@ private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
     override suspend fun getActividadesProximas(): List<ActividadProximaDto> = emptyList()
     override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse =
         throw NotImplementedError()
+    override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) = Unit
 }
 
 class ExampleUnitTest {
@@ -242,6 +245,7 @@ class ExampleUnitTest {
                 actividadUrlRecibida = actividadUrl
                 return MoodleSsoResponse("http://localhost:8080/auth/userkey/login.php?key=abc")
             }
+            override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) = Unit
         }
         val repository = IiniciaRepositoryImpl(
             baseUrl = "http://10.0.2.2:3001/",
@@ -264,6 +268,43 @@ class ExampleUnitTest {
         )
 
         assertTrue(repository.getUrlCampus().isFailure)
+    }
+
+    @Test
+    fun repository_registrarTokenPush_envíaElTokenAlBackend() = runTest {
+        var tokenRecibido: String? = null
+        val fakeApi = object : IiniciaApiService {
+            override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
+            override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
+            override suspend fun getActividadesProximas(): List<ActividadProximaDto> = emptyList()
+            override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse =
+                throw NotImplementedError()
+            override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) {
+                tokenRecibido = request.token
+            }
+        }
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val result = repository.registrarTokenPush("token-fcm-xyz")
+        assertTrue(result.isSuccess)
+        assertEquals("token-fcm-xyz", tokenRecibido)
+    }
+
+    @Test
+    fun repository_registrarTokenPush_noHaceNadaSinConexionAlBackendReal() = runTest {
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = false,
+            apiService = FakeApiService(cursos = emptyList())
+        )
+
+        assertTrue(repository.registrarTokenPush("token-fcm-xyz").isSuccess)
     }
 
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
@@ -323,6 +364,10 @@ class ExampleUnitTest {
             }
 
             override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse {
+                throw UnsupportedOperationException()
+            }
+
+            override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) {
                 throw UnsupportedOperationException()
             }
         }

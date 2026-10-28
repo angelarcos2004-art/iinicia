@@ -118,7 +118,7 @@ export default function LoginPage() {
                 />
                 Recordarme
               </label>
-              <Link href="#" className="font-semibold text-secondary hover:underline">
+              <Link href="/recuperar" className="font-semibold text-secondary hover:underline">
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>

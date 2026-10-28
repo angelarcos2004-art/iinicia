@@ -1,9 +1,10 @@
-import { BadRequestException, Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Patch, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import type { UsuarioAutenticado } from '../auth/jwt.strategy.js';
 import { UsuarioActual } from '../auth/usuario-actual.decorator.js';
 import { MoodleService } from '../moodle/moodle.service.js';
 import { UsersService } from '../users/users.service.js';
+import { RegistrarPushTokenDto } from './dto/registrar-push-token.dto.js';
 
 export interface CursoInscrito {
   id: number;
@@ -63,6 +64,19 @@ export class EstudianteController {
       return [];
     }
     return this.moodle.obtenerActividadesProximas(user.moodleUserId);
+  }
+
+  /**
+   * Guarda (o reemplaza) el token FCM del dispositivo Android actual del usuario, para poder
+   * enviarle notificaciones push (ver backend/src/push y UsuariosController.notificar).
+   */
+  @Patch('push-token')
+  async registrarPushToken(
+    @UsuarioActual() usuarioActual: UsuarioAutenticado,
+    @Body() dto: RegistrarPushTokenDto,
+  ): Promise<{ ok: true }> {
+    await this.users.actualizarFcmToken(usuarioActual.id, dto.token);
+    return { ok: true };
   }
 
   /**

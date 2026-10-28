@@ -50,6 +50,20 @@ export class UsersService {
     await this.repo.update(id, { passwordHash });
   }
 
+  /** El dispositivo Android reemplaza su token anterior cada vez que FCM lo rota. */
+  async actualizarFcmToken(id: string, fcmToken: string): Promise<void> {
+    await this.repo.update(id, { fcmToken });
+  }
+
+  async guardarTokenRecuperacion(id: string, tokenHash: string, expira: Date): Promise<void> {
+    await this.repo.update(id, { resetPasswordTokenHash: tokenHash, resetPasswordExpira: expira });
+  }
+
+  /** Se llama tras un restablecimiento exitoso (o al generar uno nuevo que lo invalida). */
+  async limpiarTokenRecuperacion(id: string): Promise<void> {
+    await this.repo.update(id, { resetPasswordTokenHash: null, resetPasswordExpira: null });
+  }
+
   create(data: CrearUsuarioData): Promise<User> {
     const user = this.repo.create({
       nombre: data.nombre.trim(),

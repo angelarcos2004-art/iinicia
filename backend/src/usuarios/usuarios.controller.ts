@@ -7,6 +7,7 @@ import {
   NotFoundException,
   Param,
   Patch,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -16,9 +17,11 @@ import { Roles } from '../auth/roles.decorator.js';
 import { RolesGuard } from '../auth/roles.guard.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleService } from '../moodle/moodle.service.js';
+import { PushService } from '../push/push.service.js';
 import { Rol } from '../users/rol.enum.js';
 import { UsersService } from '../users/users.service.js';
 import { ActualizarRolDto } from './dto/actualizar-rol.dto.js';
+import { NotificarDto } from './dto/notificar.dto.js';
 
 export interface UsuarioActualizado {
   id: string;
@@ -46,6 +49,7 @@ export class UsuariosController {
     private readonly users: UsersService,
     private readonly moodle: MoodleService,
     private readonly config: ConfigService,
+    private readonly push: PushService,
   ) {}
 
   /** Lista de usuarios para el panel administrativo; `rol` filtra opcionalmente. */
@@ -90,5 +94,25 @@ export class UsuariosController {
     }
 
     return { id: user.id, nombre: user.nombre, correo: user.correo, rol: user.rol };
+  }
+
+  /**
+   * Notificación push controlada a un estudiante (docs/requerimientos.md CA-14: "las
+   * notificaciones móviles pueden enviarse a estudiantes de forma controlada"). Requiere que
+   * el usuario ya haya abierto la app Android con sesión iniciada al menos una vez (eso es lo
+   * que registra el token, ver EstudianteController.registrarPushToken).
+   */
+  @Post(':id/notificar')
+  @Roles(Rol.Superadmin, Rol.AdminAcademico, Rol.Coordinador, Rol.Profesor)
+  async notificar(@Param('id') id: string, @Body() dto: NotificarDto): Promise<{ enviado: true }> {
+    const user = await this.users.findById(id);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    if (!user.fcmToken) {
+      throw new BadRequestException('Este usuario no tiene un dispositivo registrado para notificaciones');
+    }
+    await this.push.enviar(user.fcmToken, dto.titulo, dto.mensaje);
+    return { enviado: true };
   }
 }

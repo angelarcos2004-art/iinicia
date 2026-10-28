@@ -1,0 +1,30 @@
+{
+  "_comment": "PLACEHOLDER: reemplaza este archivo completo por el google-services.json real de un proyecto Firebase (Firebase console > Configuración del proyecto > tus apps > Android, applicationId org.iinicia.android). Sin eso, la app compila y corre, pero FCM no puede conectarse de verdad (las notificaciones push no llegan).",
+  "project_info": {
+    "project_number": "000000000000",
+    "project_id": "iinicia-placeholder",
+    "storage_bucket": "iinicia-placeholder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+        "android_client_info": {
+          "package_name": "org.iinicia.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyPLACEHOLDERPLACEHOLDERPLACEHOLDERPLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
