@@ -32,9 +32,12 @@ export class PushService {
   }
 
   /**
-   * `data` viaja junto a la notificación visible y es lo que Android usa para el deep link al
-   * tocarla (p. ej. `{ cursoId: '...' }` abre directo el detalle de ese curso en vez de solo la
-   * app). Todos sus valores deben ser string: así los exige FCM.
+   * Se envía solo como "data message" (sin bloque `notification`) a propósito: con un mensaje
+   * combinado, Android solo invoca `onMessageReceived` cuando la app está en foreground — en
+   * background o cerrada, el sistema muestra la notificación él mismo, con el ícono/acción por
+   * defecto, ignorando nuestro deep link y la preferencia de "notificaciones configurables por
+   * el usuario" (requerimiento 9.3). Solo-data garantiza que siempre pase por nuestro código.
+   * `data` incluye cursoId cuando se da, para el deep link al tocarla.
    */
   async enviar(
     token: string,
@@ -42,12 +45,13 @@ export class PushService {
     mensaje: string,
     data?: Record<string, string>,
   ): Promise<void> {
+    const payload = { titulo, mensaje, ...(data ?? {}) };
     if (!this.app) {
-      this.logger.log(`[push simulado] -> ${token}: "${titulo}" · "${mensaje}" ${JSON.stringify(data ?? {})}`);
+      this.logger.log(`[push simulado] -> ${token}: ${JSON.stringify(payload)}`);
       return;
     }
     try {
-      await getMessaging(this.app).send({ token, notification: { title: titulo, body: mensaje }, data });
+      await getMessaging(this.app).send({ token, data: payload });
     } catch (error) {
       this.logger.error(`No se pudo enviar la notificación push: ${String(error)}`);
     }

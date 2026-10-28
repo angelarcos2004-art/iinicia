@@ -41,7 +41,9 @@ data class MainUiState(
     val cargandoCursos: Boolean = false,
     val errorCursos: String? = null,
     /** URL de un solo uso para CampusWebViewScreen; se limpia al volver de esa pantalla. */
-    val urlCampusActual: String? = null
+    val urlCampusActual: String? = null,
+    /** Preferencia del dispositivo (requerimiento 9.3), editable desde PerfilScreen. */
+    val notificacionesHabilitadas: Boolean = true
 )
 
 class MainViewModel(
@@ -51,7 +53,8 @@ class MainViewModel(
     private val _uiState = MutableStateFlow(
         MainUiState(
             baseUrl = repository.baseUrl,
-            usuarioAutenticado = repository.getCurrentSessionUser()
+            usuarioAutenticado = repository.getCurrentSessionUser(),
+            notificacionesHabilitadas = repository.notificacionesHabilitadas()
         )
     )
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -187,6 +190,14 @@ class MainViewModel(
     /** Guarda (o limpia, con null) la URL que CampusWebViewScreen debe mostrar. */
     fun fijarUrlCampus(url: String?) {
         _uiState.update { it.copy(urlCampusActual = url) }
+    }
+
+    /** Alternado desde PerfilScreen (requerimiento 9.3: "notificaciones configurables por el
+     * usuario"). IiniciaFirebaseMessagingService revisa esta misma preferencia antes de
+     * mostrar cualquier push. */
+    fun alternarNotificaciones(habilitadas: Boolean) {
+        repository.setNotificacionesHabilitadas(habilitadas)
+        _uiState.update { it.copy(notificacionesHabilitadas = habilitadas) }
     }
 
     /**

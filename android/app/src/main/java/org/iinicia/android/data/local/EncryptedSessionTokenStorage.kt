@@ -11,6 +11,7 @@ import org.iinicia.android.data.model.Usuario
 private const val PREFS_NAME = "iinicia_session"
 private const val KEY_TOKEN = "token"
 private const val KEY_USUARIO_JSON = "usuario_json"
+private const val KEY_NOTIFICACIONES_HABILITADAS = "notificaciones_habilitadas"
 
 /**
  * Persiste el JWT de sesión y el perfil público del usuario en
@@ -44,6 +45,18 @@ class EncryptedSessionTokenStorage(context: Context) : SessionTokenStorage {
     }
 
     override fun clearSession() {
-        prefs.edit { clear() }
+        // Solo la sesión: notificacionesHabilitadas es una preferencia del dispositivo, no de
+        // quién tiene sesión iniciada, así que no se borra al cerrar sesión.
+        prefs.edit {
+            remove(KEY_TOKEN)
+            remove(KEY_USUARIO_JSON)
+        }
+    }
+
+    override fun notificacionesHabilitadas(): Boolean =
+        prefs.getBoolean(KEY_NOTIFICACIONES_HABILITADAS, true)
+
+    override fun setNotificacionesHabilitadas(habilitadas: Boolean) {
+        prefs.edit { putBoolean(KEY_NOTIFICACIONES_HABILITADAS, habilitadas) }
     }
 }

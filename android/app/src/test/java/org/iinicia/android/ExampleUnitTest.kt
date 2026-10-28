@@ -271,6 +271,17 @@ class ExampleUnitTest {
     }
 
     @Test
+    fun repository_notificacionesHabilitadas_defaultTrueYSePuedeApagar() {
+        val tokenStorage = InMemorySessionTokenStorage()
+        val repository = IiniciaRepositoryImpl(tokenStorage = tokenStorage)
+
+        assertTrue(repository.notificacionesHabilitadas())
+
+        repository.setNotificacionesHabilitadas(false)
+        assertFalse(repository.notificacionesHabilitadas())
+    }
+
+    @Test
     fun repository_registrarTokenPush_envíaElTokenAlBackend() = runTest {
         var tokenRecibido: String? = null
         val fakeApi = object : IiniciaApiService {

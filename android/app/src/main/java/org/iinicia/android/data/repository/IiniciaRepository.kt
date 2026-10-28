@@ -35,6 +35,8 @@ interface IiniciaRepository {
     suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante>
     suspend fun getUrlCampus(cursoId: Int? = null, actividadUrl: String? = null): Result<String>
     suspend fun registrarTokenPush(token: String): Result<Unit>
+    fun notificacionesHabilitadas(): Boolean
+    fun setNotificacionesHabilitadas(habilitadas: Boolean)
     fun logout()
 }
 
@@ -162,6 +164,12 @@ class IiniciaRepositoryImpl(
     override suspend fun registrarTokenPush(token: String): Result<Unit> = runCatching {
         if (!isConnectToRemoteEnabled) return@runCatching
         apiService.registrarPushToken(RegistrarPushTokenRequest(token))
+    }
+
+    override fun notificacionesHabilitadas(): Boolean = tokenStorage.notificacionesHabilitadas()
+
+    override fun setNotificacionesHabilitadas(habilitadas: Boolean) {
+        tokenStorage.setNotificacionesHabilitadas(habilitadas)
     }
 
     override fun logout() {
