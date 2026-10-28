@@ -1,8 +1,5 @@
 package org.iinicia.android.ui.screens
 
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,8 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -57,18 +52,19 @@ import org.iinicia.android.ui.theme.IiniciaSecondary
  * campos no se muestran inventados: solo lo que el backend sí reporta de verdad.
  *
  * "Entrar al Campus" reutiliza el mismo SSO del portal web (auth_userkey): pide una URL de un
- * solo uso y la abre con Custom Tabs, NO con un Intent genérico a un navegador externo — así el
- * usuario nunca sale de la app (misma barra con los colores de IINICIA, swipe-back la cierra).
+ * solo uso y la abre en CampusWebViewScreen (dentro de la app, con la barra de IINICIA, sin
+ * barra de direcciones) — nunca en un navegador externo ni en Custom Tabs, para que no se vea
+ * como "una página web" con una URL de por medio.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleCursoScreen(
     curso: CursoEstudiante?,
     onEntrarAlCampus: suspend () -> Result<String>,
+    onUrlObtenida: (String) -> Unit,
     onVolver: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var abriendoCampus by remember { mutableStateOf(false) }
     var errorCampus by remember { mutableStateOf<String?>(null) }
@@ -188,18 +184,7 @@ fun DetalleCursoScreen(
                             onEntrarAlCampus()
                                 .onSuccess { url ->
                                     abriendoCampus = false
-                                    val colorScheme = CustomTabColorSchemeParams.Builder()
-                                        .setToolbarColor(IiniciaPrimary.toArgb())
-                                        .build()
-                                    val customTabsIntent = CustomTabsIntent.Builder()
-                                        .setDefaultColorSchemeParams(colorScheme)
-                                        .setShowTitle(true)
-                                        .build()
-                                    try {
-                                        customTabsIntent.launchUrl(context, Uri.parse(url))
-                                    } catch (e: android.content.ActivityNotFoundException) {
-                                        errorCampus = "No se encontró un navegador para abrir Moodle."
-                                    }
+                                    onUrlObtenida(url)
                                 }
                                 .onFailure { error ->
                                     abriendoCampus = false

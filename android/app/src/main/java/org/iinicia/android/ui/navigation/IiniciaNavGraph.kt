@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.iinicia.android.ui.screens.CampusWebViewScreen
 import org.iinicia.android.ui.screens.DashboardScreen
 import org.iinicia.android.ui.screens.DetalleCursoScreen
 import org.iinicia.android.ui.screens.LoginScreen
@@ -22,6 +23,7 @@ sealed class Screen(val route: String) {
     data object Login : Screen("login")
     data object Dashboard : Screen("dashboard")
     data object Perfil : Screen("perfil")
+    data object CampusWebView : Screen("campus")
     data object DetalleCurso : Screen("curso/{cursoId}") {
         const val ARG_CURSO_ID = "cursoId"
         fun crearRuta(cursoId: String) = "curso/$cursoId"
@@ -86,6 +88,10 @@ fun IiniciaNavGraph(
                 onPerfilClick = { navController.navigate(Screen.Perfil.route) },
                 onReintentarCursos = { viewModel.cargarCursos() },
                 onAbrirActividad = { actividadUrl -> viewModel.obtenerUrlCampusActividad(actividadUrl) },
+                onUrlObtenida = { url ->
+                    viewModel.fijarUrlCampus(url)
+                    navController.navigate(Screen.CampusWebView.route)
+                },
                 onLogout = {
                     viewModel.cerrarSesion()
                     navController.navigate(Screen.Login.route) {
@@ -104,7 +110,21 @@ fun IiniciaNavGraph(
             DetalleCursoScreen(
                 curso = viewModel.obtenerCursoPorId(cursoId),
                 onEntrarAlCampus = { viewModel.obtenerUrlCampus(cursoId) },
+                onUrlObtenida = { url ->
+                    viewModel.fijarUrlCampus(url)
+                    navController.navigate(Screen.CampusWebView.route)
+                },
                 onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = Screen.CampusWebView.route) {
+            CampusWebViewScreen(
+                url = uiState.urlCampusActual,
+                onVolver = {
+                    viewModel.fijarUrlCampus(null)
+                    navController.popBackStack()
+                }
             )
         }
 

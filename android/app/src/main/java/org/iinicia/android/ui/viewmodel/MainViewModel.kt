@@ -39,7 +39,9 @@ data class MainUiState(
     val errorMessage: String? = null,
     /** Null = sin error. "Mis cursos (0)" solo significa "sin cursos" cuando esto es null. */
     val cargandoCursos: Boolean = false,
-    val errorCursos: String? = null
+    val errorCursos: String? = null,
+    /** URL de un solo uso para CampusWebViewScreen; se limpia al volver de esa pantalla. */
+    val urlCampusActual: String? = null
 )
 
 class MainViewModel(
@@ -171,8 +173,9 @@ class MainViewModel(
         _uiState.value.cursos.firstOrNull { it.id == cursoId }
 
     /**
-     * URL de un solo uso para abrir Moodle ya autenticado (SSO). Es una acción puntual del
-     * botón "Entrar al Campus": la pantalla la pide y abre el navegador, no vive en uiState.
+     * URL de un solo uso para abrir Moodle ya autenticado (SSO), que se muestra en
+     * CampusWebViewScreen vía [fijarUrlCampus]. Es una acción puntual de los botones "Entrar al
+     * Campus"/"Abrir en Moodle", no vive en uiState hasta que se obtiene.
      */
     suspend fun obtenerUrlCampus(cursoId: String?): Result<String> =
         repository.getUrlCampus(cursoId?.toIntOrNull())
@@ -180,6 +183,11 @@ class MainViewModel(
     /** Igual que [obtenerUrlCampus], pero aterriza directo en la actividad (no en el curso). */
     suspend fun obtenerUrlCampusActividad(actividadUrl: String): Result<String> =
         repository.getUrlCampus(actividadUrl = actividadUrl)
+
+    /** Guarda (o limpia, con null) la URL que CampusWebViewScreen debe mostrar. */
+    fun fijarUrlCampus(url: String?) {
+        _uiState.update { it.copy(urlCampusActual = url) }
+    }
 
     /**
      * Registra el token FCM del dispositivo justo después de iniciar sesión (cubre el caso
@@ -211,7 +219,8 @@ class MainViewModel(
                 passwordError = null,
                 errorMessage = null,
                 cargandoCursos = false,
-                errorCursos = null
+                errorCursos = null,
+                urlCampusActual = null
             )
         }
     }
