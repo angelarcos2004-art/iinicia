@@ -8,6 +8,7 @@ import { JwtAuthGuard } from '../src/auth/jwt-auth.guard.js';
 import { JwtStrategy } from '../src/auth/jwt.strategy.js';
 import { RolesGuard } from '../src/auth/roles.guard.js';
 import { MoodleService } from '../src/moodle/moodle.service.js';
+import { ProgramasService } from '../src/programas/programas.service.js';
 import { PushService } from '../src/push/push.service.js';
 import { Rol } from '../src/users/rol.enum.js';
 import type { User } from '../src/users/user.entity.js';
@@ -41,6 +42,7 @@ class InMemoryUsers {
       passwordHash: 'x',
       rol: Rol.Aspirante,
       moodleUserId: null,
+      programaInteresId: 'lic-software-ia',
       createdAt: new Date('2026-01-03'),
     } as User,
     {
@@ -78,6 +80,10 @@ const pushFake = {
   enviar: vi.fn(),
 };
 
+const programasFake = {
+  obtenerMoodleCourseShortname: vi.fn().mockResolvedValue(null),
+};
+
 describe('PATCH /usuarios/:id/rol (e2e)', () => {
   let app: INestApplication;
   let jwt: JwtService;
@@ -87,6 +93,7 @@ describe('PATCH /usuarios/:id/rol (e2e)', () => {
     moodleFake.buscarOCrearUsuarioMoodle.mockReset().mockResolvedValue(999);
     moodleFake.matricularEnCurso.mockReset().mockResolvedValue(undefined);
     pushFake.enviar.mockReset();
+    programasFake.obtenerMoodleCourseShortname.mockReset().mockResolvedValue(null);
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [UsuariosController],
@@ -97,6 +104,7 @@ describe('PATCH /usuarios/:id/rol (e2e)', () => {
         { provide: UsersService, useClass: InMemoryUsers },
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
+        { provide: ProgramasService, useValue: programasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
@@ -165,6 +173,18 @@ describe('PATCH /usuarios/:id/rol (e2e)', () => {
     expect(moodleFake.matricularEnCurso).toHaveBeenCalledWith(999, 'IINICIA101');
   });
 
+  it('si el programa de interés del aspirante tiene curso de Moodle asignado, matricula ahí', async () => {
+    programasFake.obtenerMoodleCourseShortname.mockResolvedValue('IINICIA101-SOFTWARE');
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    await request(app.getHttpServer())
+      .patch('/usuarios/u-aspirante-nuevo/rol')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ rol: 'estudiante' });
+
+    expect(programasFake.obtenerMoodleCourseShortname).toHaveBeenCalledWith('lic-software-ia');
+    expect(moodleFake.matricularEnCurso).toHaveBeenCalledWith(999, 'IINICIA101-SOFTWARE');
+  });
+
   it('promover a estudiante a alguien que YA tiene cuenta Moodle no vuelve a crearla (idempotente)', async () => {
     const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
     const res = await request(app.getHttpServer())
@@ -204,6 +224,7 @@ describe('GET /usuarios (e2e)', () => {
         { provide: UsersService, useClass: InMemoryUsers },
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
+        { provide: ProgramasService, useValue: programasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
@@ -306,6 +327,7 @@ describe('POST /usuarios/:id/notificar (e2e)', () => {
         { provide: UsersService, useClass: InMemoryUsersConToken },
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
+        { provide: ProgramasService, useValue: programasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();

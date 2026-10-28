@@ -8,6 +8,7 @@ import { Button, ButtonLink } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 
 const ROLES_CON_PANEL_ADMIN = ["superadmin", "admin_academico", "coordinador"];
+const ROLES_CON_PANEL_PROGRAMAS = ["superadmin", "admin_academico"];
 
 const NAV_LINKS = [
   { href: "/#inicio", label: "Inicio" },
@@ -157,6 +158,14 @@ export function SiteHeader() {
                   Usuarios
                 </Link>
               )}
+              {ROLES_CON_PANEL_PROGRAMAS.includes(sesion.usuario.rol) && (
+                <Link
+                  href="/admin/programas"
+                  className="text-label-md font-display font-semibold text-ink-muted hover:text-secondary"
+                >
+                  Programas
+                </Link>
+              )}
               <Link
                 href="/mi-iinicia"
                 className="text-label-md font-display font-semibold text-ink hover:text-secondary"
@@ -256,6 +265,15 @@ export function SiteHeader() {
                   onClick={() => setMenuOpen(false)}
                 >
                   Usuarios
+                </Link>
+              )}
+              {ROLES_CON_PANEL_PROGRAMAS.includes(sesion.usuario.rol) && (
+                <Link
+                  href="/admin/programas"
+                  className="rounded-md px-3 py-2.5 text-label-lg font-display font-semibold text-ink hover:bg-surface-subtle"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Programas
                 </Link>
               )}
               <Link

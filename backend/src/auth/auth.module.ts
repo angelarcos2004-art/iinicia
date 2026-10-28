@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import type { StringValue } from 'ms';
 import { MailModule } from '../mail/mail.module.js';
 import { MoodleModule } from '../moodle/moodle.module.js';
+import { ProgramasModule } from '../programas/programas.module.js';
 import { UsersModule } from '../users/users.module.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
@@ -17,6 +18,7 @@ import { RolesGuard } from './roles.guard.js';
     UsersModule,
     MoodleModule,
     MailModule,
+    ProgramasModule,
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],

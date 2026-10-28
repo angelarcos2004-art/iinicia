@@ -1,9 +1,11 @@
-import { buildMockAuthResponse } from "./mock-data";
+import { buildMockAuthResponse, MOCK_PROGRAMAS } from "./mock-data";
 import type {
   ActividadProxima,
   AuthResponse,
   CursoInscrito,
   LoginInput,
+  Programa,
+  ProgramaInput,
   RegistroAspiranteInput,
   Rol,
   UsuarioListado,
@@ -53,7 +55,12 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-async function patchJSON<T>(path: string, token: string, body: unknown): Promise<T> {
+async function sendAuthJSON<T>(
+  method: "POST" | "PATCH",
+  path: string,
+  token: string,
+  body: unknown,
+): Promise<T> {
   if (!API_URL) {
     throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
   }
@@ -61,7 +68,7 @@ async function patchJSON<T>(path: string, token: string, body: unknown): Promise
   let response: Response;
   try {
     response = await fetch(`${API_URL}${path}`, {
-      method: "PATCH",
+      method,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(body),
     });
@@ -82,6 +89,14 @@ async function patchJSON<T>(path: string, token: string, body: unknown): Promise
   return response.json() as Promise<T>;
 }
 
+function patchJSON<T>(path: string, token: string, body: unknown): Promise<T> {
+  return sendAuthJSON<T>("PATCH", path, token, body);
+}
+
+function postAuthJSON<T>(path: string, token: string, body: unknown): Promise<T> {
+  return sendAuthJSON<T>("POST", path, token, body);
+}
+
 async function getJSON<T>(path: string, token: string): Promise<T> {
   if (!API_URL) {
     throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
@@ -92,6 +107,32 @@ async function getJSON<T>(path: string, token: string): Promise<T> {
     response = await fetch(`${API_URL}${path}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+  } catch (networkError) {
+    throw new BackendUnavailableError(
+      `No se pudo conectar con el backend (${String(networkError)})`,
+    );
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new ApiError(
+      data?.message ?? `El backend respondió con error ${response.status}`,
+      response.status,
+    );
+  }
+
+  return response.json() as Promise<T>;
+}
+
+/** Igual que getJSON, sin Authorization: para endpoints públicos (p. ej. GET /programas). */
+async function getPublicJSON<T>(path: string): Promise<T> {
+  if (!API_URL) {
+    throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`);
   } catch (networkError) {
     throw new BackendUnavailableError(
       `No se pudo conectar con el backend (${String(networkError)})`,
@@ -150,6 +191,39 @@ export async function registrarAspirante(
     }
     throw error;
   }
+}
+
+/**
+ * Catálogo de oferta académica (home y registro de aspirantes). Si el backend no responde,
+ * cae al catálogo de respaldo para que esas páginas sigan funcionando.
+ */
+export async function obtenerProgramas(): Promise<Programa[]> {
+  try {
+    return await getPublicJSON<Programa[]>("/programas");
+  } catch (error) {
+    if (error instanceof BackendUnavailableError) {
+      return withMockDelay(MOCK_PROGRAMAS);
+    }
+    throw error;
+  }
+}
+
+/** Panel administrativo: crea un programa nuevo. Solo superadmin/admin_academico. */
+export async function crearPrograma(
+  token: string,
+  id: string,
+  input: ProgramaInput,
+): Promise<Programa> {
+  return postAuthJSON<Programa>("/programas", token, { id, ...input });
+}
+
+/** Panel administrativo: edita un programa existente (incluido su curso de Moodle). */
+export async function actualizarPrograma(
+  token: string,
+  id: string,
+  input: Partial<ProgramaInput>,
+): Promise<Programa> {
+  return patchJSON<Programa>(`/programas/${id}`, token, input);
 }
 
 /**

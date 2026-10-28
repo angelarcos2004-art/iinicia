@@ -15,8 +15,10 @@ interface OnboardingDeps {
 }
 
 /**
- * Vincula (o crea, de forma idempotente) la cuenta Moodle del usuario y lo
- * matricula en el curso de prueba (MOODLE_TEST_COURSE, default IINICIA101).
+ * Vincula (o crea, de forma idempotente) la cuenta Moodle del usuario y lo matricula en un
+ * curso. `courseShortnameOverride` es el curso del programa de interés del usuario (ver
+ * ProgramasService.obtenerMoodleCourseShortname); si el programa no tiene uno asignado
+ * todavía, se usa MOODLE_TEST_COURSE (default IINICIA101) como respaldo.
  * Nunca lanza: si Moodle no responde, el usuario sigue existiendo en
  * IINICIA con moodleUserId en null (o sin matrícula) para reintentarse
  * después. Compartido entre AuthService (alta/login) y UsuariosController
@@ -25,13 +27,14 @@ interface OnboardingDeps {
 export async function vincularYMatricularMoodle(
   { users, moodle, config, logger }: OnboardingDeps,
   user: User,
+  courseShortnameOverride?: string | null,
 ): Promise<User> {
   try {
     const moodleUserId = await moodle.buscarOCrearUsuarioMoodle(user.correo, user.nombre);
     await users.actualizarMoodleUserId(user.id, moodleUserId);
     user.moodleUserId = moodleUserId;
 
-    const curso = config.get<string>('MOODLE_TEST_COURSE', 'IINICIA101');
+    const curso = courseShortnameOverride ?? config.get<string>('MOODLE_TEST_COURSE', 'IINICIA101');
     try {
       await moodle.matricularEnCurso(moodleUserId, curso);
     } catch (error) {

@@ -5,8 +5,64 @@ import bcrypt from 'bcryptjs';
 import { AppModule } from './app.module.js';
 import { vincularYMatricularMoodle } from './moodle/moodle-onboarding.js';
 import { MoodleService } from './moodle/moodle.service.js';
+import type { Programa } from './programas/programa.entity.js';
+import { ProgramasService } from './programas/programas.service.js';
 import { Rol } from './users/rol.enum.js';
 import { UsersService } from './users/users.service.js';
+
+/**
+ * Mismo catálogo que frontend/lib/mock-data.ts (MOCK_PROGRAMAS), para que ambos muestren lo
+ * mismo en cuanto el portal consuma GET /programas en vez de sus datos de ejemplo. El primero
+ * ya tiene curso de Moodle asignado (el curso de prueba real); el resto queda sin asignar a
+ * propósito, para demostrar el respaldo a MOODLE_TEST_COURSE en moodle-onboarding.ts.
+ */
+const PROGRAMAS_SEMILLA: Programa[] = [
+  {
+    id: 'lic-software-ia',
+    tipo: 'licenciatura',
+    nombre: 'Ingeniería de Software e Inteligencia Artificial',
+    descripcion: 'Forma parte de la próxima generación de ingenieros especializados en IA aplicada.',
+    duracion: '12 cuatrimestres',
+    modalidad: 'en_linea',
+    moodleCourseShortname: 'IINICIA101',
+  },
+  {
+    id: 'lic-admon-negocios',
+    tipo: 'licenciatura',
+    nombre: 'Administración de Negocios Digitales',
+    descripcion: 'Desarrolla modelos de negocio y estrategias digitales para empresas en crecimiento.',
+    duracion: '12 cuatrimestres',
+    modalidad: 'en_linea',
+    moodleCourseShortname: null,
+  },
+  {
+    id: 'dip-cloud-kubernetes',
+    tipo: 'diplomado',
+    nombre: 'Cloud Architecture & Kubernetes',
+    descripcion: 'Diseña e implementa arquitecturas en la nube listas para producción.',
+    duracion: '4 meses',
+    modalidad: 'en_linea',
+    moodleCourseShortname: null,
+  },
+  {
+    id: 'dip-gestion-proyectos',
+    tipo: 'diplomado',
+    nombre: 'Gestión de Proyectos Digitales',
+    descripcion: 'Planifica y da seguimiento a proyectos tecnológicos con metodologías ágiles.',
+    duracion: '3 meses',
+    modalidad: 'hibrida',
+    moodleCourseShortname: null,
+  },
+  {
+    id: 'cert-ciberseguridad-soc',
+    tipo: 'certificacion',
+    nombre: 'Ciberseguridad Defensiva y SOC',
+    descripcion: 'Capacítate en detección y respuesta a incidentes de seguridad informática.',
+    duracion: '6 semanas',
+    modalidad: 'en_linea',
+    moodleCourseShortname: null,
+  },
+];
 
 const BCRYPT_ROUNDS = 10;
 
@@ -70,6 +126,18 @@ async function main(): Promise<void> {
     const users = app.get(UsersService);
     const moodle = app.get(MoodleService);
     const config = app.get(ConfigService);
+    const programas = app.get(ProgramasService);
+
+    for (const data of PROGRAMAS_SEMILLA) {
+      const existente = await programas.findById(data.id);
+      if (!existente) {
+        await programas.crear(data);
+        logger.log(`Creado programa ${data.id}`);
+      } else {
+        await programas.actualizar(data.id, data);
+        logger.log(`Actualizado programa ${data.id}`);
+      }
+    }
 
     for (const data of USUARIOS_PRUEBA) {
       const passwordHash = await bcrypt.hash(data.password, BCRYPT_ROUNDS);

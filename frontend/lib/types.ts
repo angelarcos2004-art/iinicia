@@ -18,7 +18,13 @@ export interface Programa {
   descripcion: string;
   duracion: string;
   modalidad: Modalidad;
+  /** Curso de Moodle (shortname) al que se matricula a quien sea admitido en este programa.
+   * Null = todavía no tiene uno asignado (panel admin /admin/programas). */
+  moodleCourseShortname: string | null;
 }
+
+/** Datos editables de un programa (todo excepto el id, que no cambia). */
+export type ProgramaInput = Omit<Programa, "id">;
 
 export interface Usuario {
   id: string;

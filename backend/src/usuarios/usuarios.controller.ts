@@ -18,6 +18,7 @@ import { RolesGuard } from '../auth/roles.guard.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleService } from '../moodle/moodle.service.js';
 import { PushService } from '../push/push.service.js';
+import { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
 import { UsersService } from '../users/users.service.js';
 import { ActualizarRolDto } from './dto/actualizar-rol.dto.js';
@@ -50,6 +51,7 @@ export class UsuariosController {
     private readonly moodle: MoodleService,
     private readonly config: ConfigService,
     private readonly push: PushService,
+    private readonly programas: ProgramasService,
   ) {}
 
   /** Lista de usuarios para el panel administrativo; `rol` filtra opcionalmente. */
@@ -84,12 +86,14 @@ export class UsuariosController {
     await this.users.actualizarRol(id, dto.rol);
     user.rol = dto.rol;
 
-    // Al admitir a un estudiante sin cuenta Moodle previa, se vincula y
-    // matricula en el curso de prueba (mismo flujo idempotente del registro).
+    // Al admitir a un estudiante sin cuenta Moodle previa, se vincula y matricula en el curso
+    // de su programa de interés (o el curso de prueba si ese programa no tiene uno asignado).
     if (dto.rol === Rol.Estudiante && user.moodleUserId === null) {
+      const curso = await this.programas.obtenerMoodleCourseShortname(user.programaInteresId);
       user = await vincularYMatricularMoodle(
         { users: this.users, moodle: this.moodle, config: this.config, logger: this.logger },
         user,
+        curso,
       );
     }
 

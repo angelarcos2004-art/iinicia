@@ -3,15 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
-import { ApiError } from "@/lib/api";
+import { ApiError, obtenerProgramas } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import { MOCK_PROGRAMAS } from "@/lib/mock-data";
+import type { Programa } from "@/lib/types";
 
 type FormState = {
   nombreCompleto: string;
@@ -41,6 +41,22 @@ export default function RegistroPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [programas, setProgramas] = useState<Programa[]>([]);
+
+  useEffect(() => {
+    let cancelado = false;
+    obtenerProgramas()
+      .then((data) => {
+        if (!cancelado) setProgramas(data);
+      })
+      .catch(() => {
+        // Si el backend responde con un error real (no "no disponible"), el selector
+        // simplemente queda vacío: el usuario no puede enviar el formulario sin elegir uno.
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, []);
 
   function validate(): boolean {
     const nextErrors: Partial<Record<keyof FormState, string>> = {};
@@ -198,7 +214,7 @@ export default function RegistroPage() {
             error={errors.programaInteresId}
           >
             <option value="">Selecciona un programa</option>
-            {MOCK_PROGRAMAS.map((programa) => (
+            {programas.map((programa) => (
               <option key={programa.id} value={programa.id}>
                 {programa.nombre}
               </option>
