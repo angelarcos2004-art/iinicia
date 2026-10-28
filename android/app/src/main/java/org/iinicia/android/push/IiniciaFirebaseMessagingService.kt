@@ -2,7 +2,9 @@ package org.iinicia.android.push
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -10,6 +12,7 @@ import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.iinicia.android.MainActivity
 import org.iinicia.android.data.local.EncryptedSessionTokenStorage
 import org.iinicia.android.data.repository.IiniciaRepositoryImpl
 
@@ -42,16 +45,32 @@ class IiniciaFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         val titulo = message.notification?.title ?: message.data["titulo"] ?: "IINICIA"
         val cuerpo = message.notification?.body ?: message.data["mensaje"] ?: return
-        mostrarNotificacion(titulo, cuerpo)
+        mostrarNotificacion(titulo, cuerpo, message.data["cursoId"])
     }
 
-    private fun mostrarNotificacion(titulo: String, cuerpo: String) {
+    /**
+     * `cursoId` (si el backend lo envió, ver UsuariosController.notificar) es el deep link:
+     * tocar la notificación abre directo el detalle de ese curso en vez de solo el dashboard
+     * (requerimientos 9.1: "deep links hacia contenidos o actividades específicas").
+     */
+    private fun mostrarNotificacion(titulo: String, cuerpo: String, cursoId: String?) {
         crearCanalSiNoExiste()
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            if (cursoId != null) putExtra(MainActivity.EXTRA_CURSO_ID, cursoId)
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            cursoId?.hashCode() ?: 0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         val notificacion = NotificationCompat.Builder(this, CANAL_AVISOS_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(titulo)
             .setContentText(cuerpo)
             .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
         // El permiso POST_NOTIFICATIONS (Android 13+) se pide desde MainActivity; si el usuario

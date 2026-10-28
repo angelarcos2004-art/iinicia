@@ -16,4 +16,11 @@ describe('PushService.enviar', () => {
     const service = makeService({ FIREBASE_SERVICE_ACCOUNT: 'esto-no-es-json' });
     await expect(service.enviar('token-x', 'Título', 'Mensaje')).resolves.toBeUndefined();
   });
+
+  it('acepta un payload de data (p. ej. cursoId) sin FIREBASE_SERVICE_ACCOUNT configurado', async () => {
+    const service = makeService();
+    await expect(
+      service.enviar('token-x', 'Título', 'Mensaje', { cursoId: '42' }),
+    ).resolves.toBeUndefined();
+  });
 });
