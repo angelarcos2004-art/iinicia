@@ -342,6 +342,37 @@ describe('MoodleService.solicitarUrlAutologin', () => {
     );
   });
 
+  it('arma wantsurl con la url de actividad cuando se da actividadUrl', async () => {
+    mockFetch({ loginurl: 'http://localhost:8080/auth/userkey/login.php?key=abc' });
+
+    const url = await makeService().solicitarUrlAutologin(
+      'a@b.com',
+      undefined,
+      'http://localhost:8080/mod/assign/view.php?id=5',
+    );
+
+    expect(url).toBe(
+      'http://localhost:8080/auth/userkey/login.php?key=abc&wantsurl=' +
+        encodeURIComponent('http://localhost:8080/mod/assign/view.php?id=5'),
+    );
+  });
+
+  it('rechaza actividadUrl de otro origen (no pertenece a este Moodle)', async () => {
+    mockFetch({ loginurl: 'http://localhost:8080/auth/userkey/login.php?key=abc' });
+
+    await expect(
+      makeService().solicitarUrlAutologin('a@b.com', undefined, 'http://evil.example/x'),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('rechaza actividadUrl malformada', async () => {
+    mockFetch({ loginurl: 'http://localhost:8080/auth/userkey/login.php?key=abc' });
+
+    await expect(
+      makeService().solicitarUrlAutologin('a@b.com', undefined, 'no-es-una-url'),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
   it('lanza 502 si Moodle rechaza la petición (p. ej. plugin deshabilitado)', async () => {
     mockFetch({
       exception: 'webservice_access_exception',

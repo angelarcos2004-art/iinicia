@@ -209,6 +209,26 @@ describe('GET /estudiante/moodle-sso (e2e)', () => {
     expect(moodleFake.solicitarUrlAutologin).toHaveBeenCalledWith(
       'con-moodle@correo.com',
       undefined,
+      undefined,
+    );
+  });
+
+  it('pasa actividadUrl al servicio cuando se da como query param', async () => {
+    moodleFake.solicitarUrlAutologin.mockResolvedValue(
+      'http://localhost:8080/auth/userkey/login.php?key=abc&wantsurl=x',
+    );
+    const token = await jwt.signAsync({ sub: 'u-con-moodle', rol: Rol.Estudiante });
+
+    const res = await request(app.getHttpServer())
+      .get('/estudiante/moodle-sso')
+      .query({ actividadUrl: 'http://localhost:8080/mod/assign/view.php?id=5' })
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(moodleFake.solicitarUrlAutologin).toHaveBeenCalledWith(
+      'con-moodle@correo.com',
+      undefined,
+      'http://localhost:8080/mod/assign/view.php?id=5',
     );
   });
 

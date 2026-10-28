@@ -52,5 +52,8 @@ interface IiniciaApiService {
      * segundos: se abre de inmediato en el navegador del dispositivo, nunca se guarda.
      */
     @GET("estudiante/moodle-sso")
-    suspend fun getMoodleSsoUrl(@Query("cursoId") cursoId: Int? = null): MoodleSsoResponse
+    suspend fun getMoodleSsoUrl(
+        @Query("cursoId") cursoId: Int? = null,
+        @Query("actividadUrl") actividadUrl: String? = null
+    ): MoodleSsoResponse
 }

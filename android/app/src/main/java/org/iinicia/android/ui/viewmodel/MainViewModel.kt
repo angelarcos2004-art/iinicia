@@ -175,6 +175,10 @@ class MainViewModel(
     suspend fun obtenerUrlCampus(cursoId: String?): Result<String> =
         repository.getUrlCampus(cursoId?.toIntOrNull())
 
+    /** Igual que [obtenerUrlCampus], pero aterriza directo en la actividad (no en el curso). */
+    suspend fun obtenerUrlCampusActividad(actividadUrl: String): Result<String> =
+        repository.getUrlCampus(actividadUrl = actividadUrl)
+
     fun cerrarSesion() {
         repository.logout()
         _uiState.update {

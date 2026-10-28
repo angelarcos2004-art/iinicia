@@ -85,6 +85,7 @@ fun IiniciaNavGraph(
                 },
                 onPerfilClick = { navController.navigate(Screen.Perfil.route) },
                 onReintentarCursos = { viewModel.cargarCursos() },
+                onAbrirActividad = { actividadUrl -> viewModel.obtenerUrlCampusActividad(actividadUrl) },
                 onLogout = {
                     viewModel.cerrarSesion()
                     navController.navigate(Screen.Login.route) {

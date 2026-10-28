@@ -46,7 +46,8 @@ private class FakeApiService(
     override suspend fun getCursos(): List<CursoInscritoDto> = cursos
     override suspend fun getActividadesProximas(): List<ActividadProximaDto> =
         if (actividadesFallan) throw java.io.IOException("Moodle no respondió a tiempo") else actividades
-    override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = MoodleSsoResponse(moodleSsoUrl)
+    override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse =
+        MoodleSsoResponse(moodleSsoUrl)
 }
 
 /** Login que siempre funciona, pero `getCursos()` falla (p. ej. timeout real contra Moodle). */
@@ -59,7 +60,8 @@ private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
     override suspend fun getCursos(): List<CursoInscritoDto> =
         throw java.io.IOException("Moodle no respondió a tiempo")
     override suspend fun getActividadesProximas(): List<ActividadProximaDto> = emptyList()
-    override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse = throw NotImplementedError()
+    override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse =
+        throw NotImplementedError()
 }
 
 class ExampleUnitTest {
@@ -226,6 +228,34 @@ class ExampleUnitTest {
     }
 
     @Test
+    fun repository_getUrlCampus_pasaActividadUrlAlBackend() = runTest {
+        var cursoIdRecibido: Int? = -1
+        var actividadUrlRecibida: String? = null
+        val fakeApi = object : IiniciaApiService {
+            override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
+            override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
+            override suspend fun getActividadesProximas(): List<ActividadProximaDto> = emptyList()
+            override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse {
+                cursoIdRecibido = cursoId
+                actividadUrlRecibida = actividadUrl
+                return MoodleSsoResponse("http://localhost:8080/auth/userkey/login.php?key=abc")
+            }
+        }
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+
+        val result = repository.getUrlCampus(actividadUrl = "http://localhost:8080/mod/assign/view.php?id=5")
+        assertTrue(result.isSuccess)
+        assertNull(cursoIdRecibido)
+        assertEquals("http://localhost:8080/mod/assign/view.php?id=5", actividadUrlRecibida)
+    }
+
+    @Test
     fun repository_getUrlCampus_fallaSinConexionAlBackendReal() = runTest {
         val repository = IiniciaRepositoryImpl(
             baseUrl = "http://10.0.2.2:3001/",
@@ -292,7 +322,7 @@ class ExampleUnitTest {
                 throw UnsupportedOperationException()
             }
 
-            override suspend fun getMoodleSsoUrl(cursoId: Int?): MoodleSsoResponse {
+            override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse {
                 throw UnsupportedOperationException()
             }
         }

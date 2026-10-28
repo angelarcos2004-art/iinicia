@@ -74,6 +74,7 @@ export class EstudianteController {
   async entrarAlCampus(
     @UsuarioActual() usuarioActual: UsuarioAutenticado,
     @Query('cursoId') cursoId?: string,
+    @Query('actividadUrl') actividadUrl?: string,
   ): Promise<{ url: string }> {
     const user = await this.users.findById(usuarioActual.id);
     if (!user?.moodleUserId) {
@@ -82,6 +83,7 @@ export class EstudianteController {
     const url = await this.moodle.solicitarUrlAutologin(
       user.correo,
       cursoId ? Number(cursoId) : undefined,
+      actividadUrl,
     );
     return { url };
   }
