@@ -1,8 +1,5 @@
 package org.iinicia.android.ui.screens
 
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,8 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,6 +63,7 @@ fun DashboardScreen(
     onPerfilClick: () -> Unit = {},
     onReintentarCursos: () -> Unit = {},
     onAbrirActividad: suspend (String) -> Result<String> = { Result.failure(UnsupportedOperationException()) },
+    onUrlObtenida: (String) -> Unit = {},
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -76,7 +72,6 @@ fun DashboardScreen(
     var abriendoActividadId by remember { mutableStateOf<Int?>(null) }
     var errorActividad by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     if (mostrarConfirmacionLogout) {
         ConfirmarCerrarSesionDialog(
@@ -384,18 +379,7 @@ fun DashboardScreen(
                                                 onAbrirActividad(actividadUrl)
                                                     .onSuccess { ssoUrl ->
                                                         abriendoActividadId = null
-                                                        val colorScheme = CustomTabColorSchemeParams.Builder()
-                                                            .setToolbarColor(IiniciaPrimary.toArgb())
-                                                            .build()
-                                                        val customTabsIntent = CustomTabsIntent.Builder()
-                                                            .setDefaultColorSchemeParams(colorScheme)
-                                                            .setShowTitle(true)
-                                                            .build()
-                                                        try {
-                                                            customTabsIntent.launchUrl(context, Uri.parse(ssoUrl))
-                                                        } catch (e: android.content.ActivityNotFoundException) {
-                                                            errorActividad = "No se encontró un navegador para abrir Moodle."
-                                                        }
+                                                        onUrlObtenida(ssoUrl)
                                                     }
                                                     .onFailure { error ->
                                                         abriendoActividadId = null

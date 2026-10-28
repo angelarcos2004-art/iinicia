@@ -81,11 +81,6 @@ dependencies {
     // Almacenamiento cifrado del token de sesión (Requerimiento 9.3: nunca contraseñas en texto plano)
     implementation(libs.androidx.security.crypto)
 
-    // Custom Tabs: abre Moodle dentro de la app (barra propia, swipe-back), no en el
-    // navegador externo. No es un WebView completo (reqs 9: "no debe limitarse a ser una
-    // WebView"), solo para el SSO puntual de "Entrar al Campus".
-    implementation(libs.androidx.browser)
-
     // Notificaciones push (Requerimiento 9.1/9.2). google-services.json en este repo es un
     // placeholder (ver su comentario): compila y corre, pero no recibe push reales hasta que
     // se reemplace por el de un proyecto Firebase real y el backend tenga
