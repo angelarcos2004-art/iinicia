@@ -248,6 +248,7 @@ idempotente (ver CLAUDE.md y docs/requerimientos.md sección 13). Pasos:
        'enrol_manual_enrol_users',
        'core_enrol_get_users_courses',
        'core_webservice_get_site_info',
+       'core_calendar_get_action_events_by_timesort',
    ];
 
    $wsmanager = new webservice();
