@@ -145,6 +145,8 @@ fun IiniciaNavGraph(
         composable(route = Screen.Perfil.route) {
             PerfilScreen(
                 usuario = uiState.usuarioAutenticado,
+                notificacionesHabilitadas = uiState.notificacionesHabilitadas,
+                onAlternarNotificaciones = { viewModel.alternarNotificaciones(it) },
                 onLogout = {
                     viewModel.cerrarSesion()
                     navController.navigate(Screen.Login.route) {

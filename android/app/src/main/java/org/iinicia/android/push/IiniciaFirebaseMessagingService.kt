@@ -43,6 +43,9 @@ class IiniciaFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        val storage = EncryptedSessionTokenStorage(applicationContext)
+        if (!storage.notificacionesHabilitadas()) return
+
         val titulo = message.notification?.title ?: message.data["titulo"] ?: "IINICIA"
         val cuerpo = message.notification?.body ?: message.data["mensaje"] ?: return
         mostrarNotificacion(titulo, cuerpo, message.data["cursoId"])

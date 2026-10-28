@@ -15,6 +15,11 @@ interface SessionTokenStorage {
     fun getUsuario(): Usuario?
     fun saveSession(token: String, usuario: Usuario)
     fun clearSession()
+
+    /** Preferencia del dispositivo (requerimiento 9.3: "notificaciones configurables por el
+     * usuario"), no de la sesión: sobrevive a cerrar sesión. Default: habilitadas. */
+    fun notificacionesHabilitadas(): Boolean
+    fun setNotificacionesHabilitadas(habilitadas: Boolean)
 }
 
 /**
@@ -29,6 +34,9 @@ class InMemorySessionTokenStorage : SessionTokenStorage {
     @Volatile
     private var currentUsuario: Usuario? = null
 
+    @Volatile
+    private var notificacionesHabilitadas: Boolean = true
+
     override fun getToken(): String? = currentToken
 
     override fun getUsuario(): Usuario? = currentUsuario
@@ -41,5 +49,11 @@ class InMemorySessionTokenStorage : SessionTokenStorage {
     override fun clearSession() {
         currentToken = null
         currentUsuario = null
+    }
+
+    override fun notificacionesHabilitadas(): Boolean = notificacionesHabilitadas
+
+    override fun setNotificacionesHabilitadas(habilitadas: Boolean) {
+        notificacionesHabilitadas = habilitadas
     }
 }
