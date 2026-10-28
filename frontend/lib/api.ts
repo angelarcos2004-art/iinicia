@@ -297,3 +297,16 @@ export async function actualizarRolUsuario(
 ): Promise<UsuarioListado> {
   return patchJSON<UsuarioListado>(`/usuarios/${id}/rol`, token, { rol });
 }
+
+/**
+ * Notificación push controlada a un estudiante (CA-14). `cursoId` es opcional: si se da, la
+ * app Android abre directo el detalle de ese curso al tocar la notificación. El backend
+ * responde 400 si ese usuario no tiene un dispositivo registrado todavía.
+ */
+export async function enviarNotificacion(
+  token: string,
+  id: string,
+  input: { titulo: string; mensaje: string; cursoId?: string },
+): Promise<void> {
+  await postAuthJSON<{ enviado: true }>(`/usuarios/${id}/notificar`, token, input);
+}

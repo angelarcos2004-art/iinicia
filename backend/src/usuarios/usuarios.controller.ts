@@ -116,7 +116,12 @@ export class UsuariosController {
     if (!user.fcmToken) {
       throw new BadRequestException('Este usuario no tiene un dispositivo registrado para notificaciones');
     }
-    await this.push.enviar(user.fcmToken, dto.titulo, dto.mensaje);
+    await this.push.enviar(
+      user.fcmToken,
+      dto.titulo,
+      dto.mensaje,
+      dto.cursoId ? { cursoId: dto.cursoId } : undefined,
+    );
     return { enviado: true };
   }
 }

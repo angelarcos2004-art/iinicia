@@ -31,13 +31,23 @@ export class PushService {
     }
   }
 
-  async enviar(token: string, titulo: string, mensaje: string): Promise<void> {
+  /**
+   * `data` viaja junto a la notificación visible y es lo que Android usa para el deep link al
+   * tocarla (p. ej. `{ cursoId: '...' }` abre directo el detalle de ese curso en vez de solo la
+   * app). Todos sus valores deben ser string: así los exige FCM.
+   */
+  async enviar(
+    token: string,
+    titulo: string,
+    mensaje: string,
+    data?: Record<string, string>,
+  ): Promise<void> {
     if (!this.app) {
-      this.logger.log(`[push simulado] -> ${token}: "${titulo}" · "${mensaje}"`);
+      this.logger.log(`[push simulado] -> ${token}: "${titulo}" · "${mensaje}" ${JSON.stringify(data ?? {})}`);
       return;
     }
     try {
-      await getMessaging(this.app).send({ token, notification: { title: titulo, body: mensaje } });
+      await getMessaging(this.app).send({ token, notification: { title: titulo, body: mensaje }, data });
     } catch (error) {
       this.logger.error(`No se pudo enviar la notificación push: ${String(error)}`);
     }

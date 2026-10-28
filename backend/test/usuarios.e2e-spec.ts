@@ -352,7 +352,21 @@ describe('POST /usuarios/:id/notificar (e2e)', () => {
       'token-fcm-123',
       'Aviso',
       'Tu clase de mañana se reprograma.',
+      undefined,
     );
+  });
+
+  it('envía cursoId como data cuando se da, para el deep link en Android', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-con-token/notificar')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ titulo: 'Aviso', mensaje: 'Revisa el curso', cursoId: '42' });
+
+    expect(res.status).toBe(201);
+    expect(pushFake.enviar).toHaveBeenCalledWith('token-fcm-123', 'Aviso', 'Revisa el curso', {
+      cursoId: '42',
+    });
   });
 
   it('400 (sin llamar a push) si el usuario no tiene dispositivo registrado', async () => {

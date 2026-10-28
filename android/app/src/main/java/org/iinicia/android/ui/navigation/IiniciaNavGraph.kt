@@ -34,7 +34,9 @@ sealed class Screen(val route: String) {
 fun IiniciaNavGraph(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    deepLinkCursoId: String? = null,
+    onDeepLinkConsumido: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -52,6 +54,18 @@ fun IiniciaNavGraph(
     LaunchedEffect(Unit) {
         if (uiState.usuarioAutenticado != null && uiState.dashboard == null) {
             viewModel.cargarCursos()
+        }
+    }
+
+    // Deep link de una notificación push (ver MainActivity/IiniciaFirebaseMessagingService):
+    // espera a que haya sesión Y los cursos ya hayan cargado (si no, DetalleCursoScreen no
+    // encontraría el curso todavía) antes de navegar directo a su detalle.
+    LaunchedEffect(deepLinkCursoId, uiState.usuarioAutenticado, uiState.cursos) {
+        if (deepLinkCursoId != null && uiState.usuarioAutenticado != null && uiState.cursos.isNotEmpty()) {
+            navController.navigate(Screen.DetalleCurso.crearRuta(deepLinkCursoId)) {
+                launchSingleTop = true
+            }
+            onDeepLinkConsumido()
         }
     }
 
