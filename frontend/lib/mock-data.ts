@@ -135,12 +135,14 @@ const MOCK_AVISOS: AvisoInstitucional[] = [
     fecha: "2026-10-15",
     resumen:
       "Especialistas debatieron sobre el futuro del aprendizaje adaptativo y la ética en la formación profesional.",
+    imagen: "/images/aviso-conferencia-ia.jpg",
   },
   {
     id: "aviso-periodo-examenes",
     titulo: "Periodo de exámenes del 3er cuatrimestre",
     fecha: "2026-11-10",
     resumen: "Consulta las fechas y modalidades de evaluación en Mi IINICIA.",
+    imagen: "/images/aviso-periodo-examenes.jpg",
   },
 ];
 

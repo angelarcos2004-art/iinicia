@@ -150,13 +150,30 @@ const NOTICIA_DESTACADA = {
   fecha: "28 de marzo de 2026",
   resumen:
     "Con una inversión estratégica en infraestructura computacional de alto rendimiento, el Instituto abre las puertas de su nuevo centro enfocado en Machine Learning, Visión Artificial y Procesamiento de Lenguaje Natural.",
+  imagen: "/images/noticia-centro-ia.jpg",
 };
 
 const NOTICIAS = [
-  { categoria: "Becas", titulo: "Convocatoria abierta: Becas STEM Mujeres en Tecnología 2026" },
-  { categoria: "Alianzas", titulo: "Convenio con proveedores cloud para certificaciones en la nube" },
-  { categoria: "Eventos", titulo: "Simposio Internacional de Ciberseguridad y Ética de Datos" },
-  { categoria: "Vida universitaria", titulo: "Hackathon IINICIA 2026: soluciones para ciudades inteligentes" },
+  {
+    categoria: "Becas",
+    titulo: "Convocatoria abierta: Becas STEM Mujeres en Tecnología 2026",
+    imagen: "/images/noticia-becas-stem.jpg",
+  },
+  {
+    categoria: "Alianzas",
+    titulo: "Convenio con proveedores cloud para certificaciones en la nube",
+    imagen: "/images/noticia-convenio-cloud.jpg",
+  },
+  {
+    categoria: "Eventos",
+    titulo: "Simposio Internacional de Ciberseguridad y Ética de Datos",
+    imagen: "/images/noticia-simposio-ciberseguridad.jpg",
+  },
+  {
+    categoria: "Vida universitaria",
+    titulo: "Hackathon IINICIA 2026: soluciones para ciudades inteligentes",
+    imagen: "/images/noticia-hackathon.jpg",
+  },
 ];
 
 const FAQ = [
@@ -850,7 +867,7 @@ export default function HomePage() {
               <Card hoverable className="group flex h-full flex-col overflow-hidden p-0">
                 <div className="h-48 w-full overflow-hidden sm:h-56">
                   <Image
-                    src="/images/bg-abstract-2.png"
+                    src={NOTICIA_DESTACADA.imagen}
                     alt=""
                     width={1000}
                     height={500}
@@ -871,9 +888,20 @@ export default function HomePage() {
             <div className="flex flex-col gap-4">
               {NOTICIAS.map((noticia, i) => (
                 <Reveal key={noticia.titulo} delay={i * 110}>
-                  <Card hoverable className="flex flex-col gap-2">
-                    <Badge variant="neutral" className="w-fit">{noticia.categoria}</Badge>
-                    <h4 className="text-title font-display font-bold text-primary">{noticia.titulo}</h4>
+                  <Card hoverable className="group flex flex-row gap-3 overflow-hidden p-3">
+                    <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
+                      <Image
+                        src={noticia.imagen}
+                        alt=""
+                        width={128}
+                        height={128}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Badge variant="neutral" className="w-fit">{noticia.categoria}</Badge>
+                      <h4 className="text-title font-display font-bold text-primary">{noticia.titulo}</h4>
+                    </div>
                   </Card>
                 </Reveal>
               ))}

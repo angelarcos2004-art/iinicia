@@ -97,6 +97,7 @@ export interface AvisoInstitucional {
   titulo: string;
   fecha: string;
   resumen: string;
+  imagen: string;
 }
 
 export interface DashboardEstudiante {

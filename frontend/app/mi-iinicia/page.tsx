@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -332,14 +333,25 @@ export default function MiIiniciaPage() {
           <div className="flex flex-col gap-4">
             {avisos.map((aviso, i) => (
               <Reveal key={aviso.id} delay={i * 90}>
-                <Card>
-                  <time className="mb-1 block text-label-sm font-display font-semibold text-ink-muted">
-                    {formatFecha(aviso.fecha)}
-                  </time>
-                  <h3 className="mb-1 text-body-lg font-display font-bold text-primary">
-                    {aviso.titulo}
-                  </h3>
-                  <p className="text-body-sm text-ink-muted">{aviso.resumen}</p>
+                <Card className="flex flex-row gap-3 overflow-hidden p-3">
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
+                    <Image
+                      src={aviso.imagen}
+                      alt=""
+                      width={128}
+                      height={128}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <time className="mb-1 block text-label-sm font-display font-semibold text-ink-muted">
+                      {formatFecha(aviso.fecha)}
+                    </time>
+                    <h3 className="mb-1 text-body-lg font-display font-bold text-primary">
+                      {aviso.titulo}
+                    </h3>
+                    <p className="text-body-sm text-ink-muted">{aviso.resumen}</p>
+                  </div>
                 </Card>
               </Reveal>
             ))}
