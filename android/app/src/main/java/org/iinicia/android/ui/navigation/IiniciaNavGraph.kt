@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.iinicia.android.ui.screens.CampusWebViewScreen
@@ -54,6 +55,20 @@ fun IiniciaNavGraph(
     LaunchedEffect(Unit) {
         if (uiState.usuarioAutenticado != null && uiState.dashboard == null) {
             viewModel.cargarCursos()
+        }
+    }
+
+    // Cierre de sesión forzado (p. ej. JWT expirado, ver MainViewModel.cerrarSesionSiExpiro):
+    // en cuanto la sesión se pierde y no estamos ya en Login, manda para allá. Cubre el caso
+    // del logout manual (que ya navega por su cuenta) sin duplicar pantallas gracias a
+    // launchSingleTop + la comprobación de la ruta actual.
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    LaunchedEffect(uiState.usuarioAutenticado, currentBackStackEntry) {
+        if (uiState.usuarioAutenticado == null && currentBackStackEntry?.destination?.route != Screen.Login.route) {
+            navController.navigate(Screen.Login.route) {
+                popUpTo(0) { inclusive = true }
+                launchSingleTop = true
+            }
         }
     }
 

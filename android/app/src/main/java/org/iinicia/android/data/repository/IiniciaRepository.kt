@@ -24,6 +24,10 @@ import retrofit2.HttpException
  * Abstrae el origen de datos (cliente HTTP Retrofit hacia el BFF NestJS para endpoints de auth
  * y datos mock locales para el dashboard).
  */
+/** El JWT expiró (401): el repositorio ya limpió la sesión persistida; quien la reciba
+ * debe reflejarlo en el estado de UI (ver MainViewModel.cerrarSesion). */
+class SesionExpiradaException : Exception("Tu sesión expiró. Vuelve a iniciar sesión.")
+
 interface IiniciaRepository {
     val baseUrl: String
     val isConnectToRemoteEnabled: Boolean
@@ -62,6 +66,31 @@ class IiniciaRepositoryImpl(
         tokenProvider = { tokenStorage.getToken() }
     )
 ) : IiniciaRepository {
+
+    /** Igual que `runCatching`, pero si el backend responde 401 limpia la sesión persistida
+     * y falla con [SesionExpiradaException] en vez de un mensaje HTTP crudo. */
+    private suspend fun <T> conSesion(block: suspend () -> T): Result<T> {
+        return try {
+            Result.success(block())
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (httpException: HttpException) {
+            if (httpException.code() == 401) {
+                tokenStorage.clearSession()
+                return Result.failure(SesionExpiradaException())
+            }
+            val rawErrorBody = runCatching {
+                httpException.response()?.errorBody()?.string()
+            }.getOrNull()
+            val fallbackMessage = httpException.message().takeIf { it.isNotBlank() }
+                ?: "El servidor respondió con un error (${httpException.code()})."
+            Result.failure(Exception(parseErrorMessage(rawErrorBody, fallbackMessage), httpException))
+        } catch (e: Exception) {
+            val fallback = e.message?.takeIf { it.isNotBlank() }
+                ?: "No se pudo conectar con el servidor. Verifica tu conexión."
+            Result.failure(Exception(fallback, e))
+        }
+    }
 
     override fun getCurrentSessionUser(): Usuario? = tokenStorage.getUsuario()
 
@@ -103,7 +132,7 @@ class IiniciaRepositoryImpl(
      * `GET /estudiante/cursos`, que el backend sincroniza directo con Moodle.
      */
     override suspend fun getDashboardEstudiante(): Result<DashboardEstudiante> {
-        return runCatching {
+        return conSesion {
             val usuario = tokenStorage.getUsuario() ?: MockDataSource.mockUsuarioEstudiante
             val cursos = if (isConnectToRemoteEnabled) {
                 apiService.getCursos().map { it.aCursoEstudiante() }
@@ -131,7 +160,7 @@ class IiniciaRepositoryImpl(
     }
 
     override suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>> {
-        return runCatching {
+        return conSesion {
             if (isConnectToRemoteEnabled) {
                 apiService.getCursos().map { it.aCursoEstudiante() }
             } else {
@@ -141,7 +170,7 @@ class IiniciaRepositoryImpl(
     }
 
     override suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante> {
-        return runCatching {
+        return conSesion {
             if (isConnectToRemoteEnabled) {
                 apiService.getCursos()
                     .map { it.aCursoEstudiante() }
@@ -154,7 +183,7 @@ class IiniciaRepositoryImpl(
         }
     }
 
-    override suspend fun getUrlCampus(cursoId: Int?, actividadUrl: String?): Result<String> = runCatching {
+    override suspend fun getUrlCampus(cursoId: Int?, actividadUrl: String?): Result<String> = conSesion {
         if (!isConnectToRemoteEnabled) {
             throw IllegalStateException("El acceso a Moodle requiere conexión al backend real.")
         }
