@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CountUp } from "@/components/ui/count-up";
+import { Icon } from "@/components/ui/icon";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
@@ -17,7 +18,13 @@ import {
   obtenerUrlCampusActividad,
 } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
+import {
+  MOCK_DASHBOARD_ADMIN,
+  MOCK_DASHBOARD_ASPIRANTE,
+  MOCK_DASHBOARD_COORDINADOR,
+  MOCK_DASHBOARD_ESTUDIANTE,
+  MOCK_DASHBOARD_PROFESOR,
+} from "@/lib/mock-data";
 import type { ActividadProxima, CursoInscrito, Rol } from "@/lib/types";
 
 const ROL_LABEL: Record<Rol, string> = {
@@ -108,7 +115,7 @@ export default function MiIiniciaPage() {
   }, [cargando, sesion, router]);
 
   useEffect(() => {
-    if (!sesion) return;
+    if (!sesion || sesion.usuario.rol !== "estudiante") return;
     let cancelado = false;
 
     obtenerMisCursos(sesion.token)
@@ -133,7 +140,7 @@ export default function MiIiniciaPage() {
   }, [sesion]);
 
   useEffect(() => {
-    if (!sesion) return;
+    if (!sesion || sesion.usuario.rol !== "estudiante") return;
     let cancelado = false;
 
     obtenerProximasActividades(sesion.token)
@@ -171,6 +178,7 @@ export default function MiIiniciaPage() {
   const { cuatrimestre, creditosObtenidos, creditosTotales, progresoCurricular, avisos } =
     MOCK_DASHBOARD_ESTUDIANTE;
   const { usuario } = sesion;
+  const rol = usuario.rol;
 
   return (
     <section className="relative overflow-hidden">
@@ -183,36 +191,46 @@ export default function MiIiniciaPage() {
           </h1>
           <Badge variant="academic">{ROL_LABEL[usuario.rol]}</Badge>
         </div>
-        <p className="text-body-md text-ink-muted">{cuatrimestre} · Mi IINICIA</p>
+        <p className="text-body-md text-ink-muted">
+          {rol === "estudiante" ? `${cuatrimestre} · Mi IINICIA` : "Mi IINICIA"}
+        </p>
       </Reveal>
 
       {errorCampus && (
         <Card className="mb-6 text-body-sm text-error">{errorCampus}</Card>
       )}
 
-      <Reveal>
-        <Card className="mb-8 flex flex-col gap-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <span className="text-headline-md font-display font-bold text-primary">
-              <CountUp value={`${creditosObtenidos}`} />
-              <span className="text-label-sm font-display font-semibold text-ink-muted">
-                {" "}
-                / {creditosTotales} créditos
+      {rol === "estudiante" && (
+        <Reveal>
+          <Card className="mb-8 flex flex-col gap-4">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <span className="text-headline-md font-display font-bold text-primary">
+                <CountUp value={`${creditosObtenidos}`} />
+                <span className="text-label-sm font-display font-semibold text-ink-muted">
+                  {" "}
+                  / {creditosTotales} créditos
+                </span>
               </span>
-            </span>
-            <span className="text-label-md font-display font-semibold text-secondary">
-              <CountUp value={`${progresoCurricular}%`} /> del plan de estudios
-            </span>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-semibold text-ink-muted">
-              Progreso curricular total
-            </span>
-            <ProgressBar value={progresoCurricular} className="h-2.5" />
-          </div>
-        </Card>
-      </Reveal>
+              <span className="text-label-md font-display font-semibold text-secondary">
+                <CountUp value={`${progresoCurricular}%`} /> del plan de estudios
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-body-sm font-semibold text-ink-muted">
+                Progreso curricular total
+              </span>
+              <ProgressBar value={progresoCurricular} className="h-2.5" />
+            </div>
+          </Card>
+        </Reveal>
+      )}
 
+      {rol === "aspirante" && <DashboardAspirante />}
+      {rol === "profesor" && <DashboardProfesor />}
+      {rol === "coordinador" && <DashboardCoordinador />}
+      {(rol === "admin_academico" || rol === "superadmin") && <DashboardAdmin rol={rol} />}
+
+      {rol === "estudiante" && (
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <h2 className="text-headline-sm font-display font-bold text-primary">Mis cursos</h2>
@@ -328,7 +346,218 @@ export default function MiIiniciaPage() {
           </div>
         </div>
       </div>
+      )}
       </div>
     </section>
+  );
+}
+
+function DashboardAspirante() {
+  const { programaNombre, estado, pasos } = MOCK_DASHBOARD_ASPIRANTE;
+  const estadoLabel: Record<typeof estado, string> = {
+    en_revision: "En revisión",
+    admitido: "Admitido",
+    rechazado: "No admitido",
+  };
+
+  return (
+    <div className="mb-8 flex flex-col gap-4">
+      <Reveal>
+        <Card className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-label-sm font-display font-semibold uppercase tracking-wide text-ink-muted">
+                Tu solicitud
+              </p>
+              <h2 className="text-headline-sm font-display font-bold text-primary">{programaNombre}</h2>
+            </div>
+            <Badge variant="admission">{estadoLabel[estado]}</Badge>
+          </div>
+          <ul className="flex flex-col gap-2.5">
+            {pasos.map((paso) => (
+              <li key={paso.label} className="flex items-center gap-2 text-body-sm text-ink-muted">
+                <Icon
+                  name={paso.completado ? "check_circle" : "radio_button_unchecked"}
+                  className={`text-body-md ${paso.completado ? "text-success-ink" : "text-ink-muted/60"}`}
+                />
+                {paso.label}
+              </li>
+            ))}
+          </ul>
+          <ButtonLink href="/registro" variant="outline" className="mt-1 w-fit">
+            Continuar mi solicitud
+          </ButtonLink>
+        </Card>
+      </Reveal>
+    </div>
+  );
+}
+
+function DashboardProfesor() {
+  const { grupos } = MOCK_DASHBOARD_PROFESOR;
+  const totalEstudiantes = grupos.reduce((acc, g) => acc + g.estudiantes, 0);
+  const totalPendientes = grupos.reduce((acc, g) => acc + g.entregasPendientes, 0);
+
+  return (
+    <div className="mb-8 flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-primary">
+            <CountUp value={`${grupos.length}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Grupos activos</span>
+        </Card>
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-primary">
+            <CountUp value={`${totalEstudiantes}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Estudiantes en total</span>
+        </Card>
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-secondary">
+            <CountUp value={`${totalPendientes}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Entregas por calificar</span>
+        </Card>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-headline-sm font-display font-bold text-primary">Mis grupos</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {grupos.map((grupo, i) => (
+            <Reveal key={grupo.id} delay={i * 90}>
+              <Card hoverable className="flex h-full flex-col gap-2">
+                <h3 className="text-title font-display font-bold text-primary">{grupo.curso}</h3>
+                <p className="text-body-sm text-ink-muted">{grupo.periodo}</p>
+                <div className="mt-1 flex items-center justify-between text-label-sm text-ink-muted">
+                  <span>{grupo.estudiantes} estudiantes</span>
+                  {grupo.entregasPendientes > 0 && (
+                    <Badge variant="admission">{grupo.entregasPendientes} por calificar</Badge>
+                  )}
+                </div>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DashboardCoordinador() {
+  const { programa, estudiantesActivos, profesores, avancePromedio, alertas } = MOCK_DASHBOARD_COORDINADOR;
+
+  return (
+    <div className="mb-8 flex flex-col gap-6">
+      <Reveal>
+        <Card className="flex flex-col gap-1">
+          <p className="text-label-sm font-display font-semibold uppercase tracking-wide text-ink-muted">
+            Programa a tu cargo
+          </p>
+          <h2 className="text-headline-sm font-display font-bold text-primary">{programa}</h2>
+        </Card>
+      </Reveal>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-primary">
+            <CountUp value={`${estudiantesActivos}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Estudiantes activos</span>
+        </Card>
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-primary">
+            <CountUp value={`${profesores}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Profesores</span>
+        </Card>
+        <Card className="flex flex-col gap-2">
+          <span className="text-label-sm text-ink-muted">Avance promedio</span>
+          <ProgressBar value={avancePromedio} />
+          <span className="text-label-sm font-display font-semibold text-secondary">
+            <CountUp value={`${avancePromedio}%`} />
+          </span>
+        </Card>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-headline-sm font-display font-bold text-primary">Alertas</h2>
+        <div className="flex flex-col gap-3">
+          {alertas.map((alerta) => (
+            <Card key={alerta.id} className="flex items-start gap-2 text-body-sm text-ink-muted">
+              <Icon name="warning" className="mt-0.5 text-body-md text-accent" />
+              {alerta.mensaje}
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <ButtonLink href="/admin/usuarios" variant="outline" className="w-fit">
+          Ver usuarios
+        </ButtonLink>
+        <ButtonLink href="/admin/programas" variant="outline" className="w-fit">
+          Ver programas
+        </ButtonLink>
+      </div>
+    </div>
+  );
+}
+
+function DashboardAdmin({ rol }: { rol: "admin_academico" | "superadmin" }) {
+  const { usuariosPorRol, solicitudesPendientes, cuentasMoodleVinculadas } = MOCK_DASHBOARD_ADMIN;
+  const totalUsuarios = usuariosPorRol.reduce((acc, r) => acc + r.total, 0);
+
+  return (
+    <div className="mb-8 flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-primary">
+            <CountUp value={`${totalUsuarios}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Usuarios totales</span>
+        </Card>
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-primary">
+            <CountUp value={`${cuentasMoodleVinculadas}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Cuentas Moodle vinculadas</span>
+        </Card>
+        <Card className="flex flex-col gap-1">
+          <span className="text-headline-md font-display font-bold text-secondary">
+            <CountUp value={`${solicitudesPendientes}`} />
+          </span>
+          <span className="text-label-sm text-ink-muted">Solicitudes de aspirantes pendientes</span>
+        </Card>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-headline-sm font-display font-bold text-primary">Usuarios por rol</h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {usuariosPorRol.map((item) => (
+            <Card key={item.rol} className="flex flex-col gap-1 text-center">
+              <span className="text-title font-display font-bold text-primary">
+                <CountUp value={`${item.total}`} />
+              </span>
+              <span className="text-label-sm text-ink-muted">{ROL_LABEL[item.rol]}</span>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <ButtonLink href="/admin/usuarios" variant="outline" className="w-fit">
+          Administrar usuarios
+        </ButtonLink>
+        <ButtonLink href="/admin/programas" variant="outline" className="w-fit">
+          Administrar programas
+        </ButtonLink>
+        {rol === "superadmin" && (
+          <Badge variant="neutral" className="self-center">
+            Acceso de superadministrador
+          </Badge>
+        )}
+      </div>
+    </div>
   );
 }
