@@ -39,6 +39,10 @@ services:
       # Plugins propios (nunca se tocan dentro de moodle-src, que es el
       # checkout del core sin versionar). Ver moodle-custom/README.md.
       - ./moodle-custom/auth/userkey:/var/www/html/auth/userkey
+      # Evita timeouts en la primera peticion "en frio" (ver comentario en el
+      # archivo): sin esto, leer moodle-src desde un bind mount de Windows
+      # puede tardar mas que el TIMEOUT_MS de moodle.service.ts.
+      - ./moodle-custom/php/opcache-dev.ini:/usr/local/etc/php/conf.d/99-opcache-dev.ini:ro
 
   # Requiere backend/.env ya configurado (ver backend/.env.example). DATABASE_URL
   # y MOODLE_URL se sobreescriben aqui porque dentro de la red de Docker el
