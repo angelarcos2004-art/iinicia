@@ -124,7 +124,14 @@ describe('AuthService', () => {
   it('login reintenta vincular Moodle si el usuario aún no tenía moodleUserId', async () => {
     const hash = await bcrypt.hash('buena', 4);
     const { service, users, moodle } = makeService(
-      { id: 'u', correo: 'a@b.com', nombre: 'Ana', passwordHash: hash, moodleUserId: null } as User,
+      {
+        id: 'u',
+        correo: 'a@b.com',
+        nombre: 'Ana',
+        passwordHash: hash,
+        moodleUserId: null,
+        rol: Rol.Estudiante,
+      } as User,
       55,
     );
     await service.login({ correo: 'a@b.com', password: 'buena' });
@@ -136,6 +143,23 @@ describe('AuthService', () => {
     const hash = await bcrypt.hash('buena', 4);
     const { service, moodle } = makeService(
       { id: 'u', correo: 'a@b.com', nombre: 'Ana', passwordHash: hash, moodleUserId: 7 } as User,
+    );
+    await service.login({ correo: 'a@b.com', password: 'buena' });
+    expect(moodle.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+  });
+
+  it('login NO vincula a Moodle cuentas de staff (nunca deben matricularse como estudiante)', async () => {
+    const hash = await bcrypt.hash('buena', 4);
+    const { service, moodle } = makeService(
+      {
+        id: 'u',
+        correo: 'a@b.com',
+        nombre: 'Ana',
+        passwordHash: hash,
+        moodleUserId: null,
+        rol: Rol.Profesor,
+      } as User,
+      55,
     );
     await service.login({ correo: 'a@b.com', password: 'buena' });
     expect(moodle.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
@@ -193,7 +217,14 @@ describe('AuthService', () => {
     it('login que reintenta la vinculación también matricula', async () => {
       const hash = await bcrypt.hash('buena', 4);
       const { service, moodle } = makeService(
-        { id: 'u', correo: 'a@b.com', nombre: 'Ana', passwordHash: hash, moodleUserId: null } as User,
+        {
+          id: 'u',
+          correo: 'a@b.com',
+          nombre: 'Ana',
+          passwordHash: hash,
+          moodleUserId: null,
+          rol: Rol.Estudiante,
+        } as User,
         55,
       );
       await service.login({ correo: 'a@b.com', password: 'buena' });

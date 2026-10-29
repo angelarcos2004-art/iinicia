@@ -57,7 +57,12 @@ export class AuthService {
     }
     // Reintento silencioso para cuentas creadas antes de esta integracion
     // (o cuyo alta en Moodle fallo la primera vez): no bloquea el login.
-    const vinculado = user.moodleUserId === null ? await this.vincularMoodle(user) : user;
+    // Solo aspirante/estudiante: vincularYMatricularMoodle siempre matricula
+    // con rol de estudiante, nunca debe tocar cuentas de staff (profesor,
+    // coordinador, admin_academico, superadmin).
+    const debeVincularse =
+      user.moodleUserId === null && (user.rol === Rol.Estudiante || user.rol === Rol.Aspirante);
+    const vinculado = debeVincularse ? await this.vincularMoodle(user) : user;
     return this.buildResponse(vinculado);
   }
 
