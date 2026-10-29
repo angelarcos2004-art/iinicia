@@ -362,6 +362,62 @@ son exactamente los que necesitamos. El `key` que genera expira en 60s
 y sirve una sola vez: el backend lo pide justo antes de redirigir,
 nunca lo guarda (ver `MoodleService.solicitarUrlAutologin`).
 
+## Identidad visual de Moodle (CA-15: logo, favicon, color de marca)
+
+Moodle trae su tema Boost por defecto, sin tocar ningún archivo de
+`moodle-src` (nunca se modifica el core). Logo, logo compacto y favicon
+se suben vía la API de archivos de Moodle (no hay forma de subir un
+archivo con `admin/cli/cfg.php`, ese solo sirve para valores simples):
+
+```bash
+# 1. Copiar los mismos assets que ya usa el portal (frontend/public/) al contenedor
+MSYS_NO_PATHCONV=1 docker cp ../frontend/public/logo-inicia.png iinicia-moodle:/tmp/logo-inicia.png
+MSYS_NO_PATHCONV=1 docker cp ../frontend/public/logo-iinicia-oscuro-letras.ico iinicia-moodle:/tmp/favicon.ico
+
+# 2. Registrarlos como logo/logocompact/favicon vía la API de archivos
+cat > set-branding.php << 'EOF'
+<?php
+define('CLI_SCRIPT', true);
+require('/var/www/html/config.php');
+
+function set_stored_file(string $setting, string $filearea, string $path, string $filename): void {
+    $syscontext = context_system::instance();
+    $fs = get_file_storage();
+    $fs->delete_area_files($syscontext->id, 'core_admin', $filearea, 0);
+    $fs->create_file_from_pathname([
+        'contextid' => $syscontext->id,
+        'component' => 'core_admin',
+        'filearea'  => $filearea,
+        'itemid'    => 0,
+        'filepath'  => '/',
+        'filename'  => $filename,
+    ], $path);
+    set_config($setting, '/' . $filename, 'core_admin');
+}
+
+set_stored_file('logo', 'logo', '/tmp/logo-inicia.png', 'logo-inicia.png');
+set_stored_file('logocompact', 'logocompact', '/tmp/logo-inicia.png', 'logo-inicia.png');
+set_stored_file('favicon', 'favicon', '/tmp/favicon.ico', 'favicon.ico');
+theme_reset_all_caches();
+echo "OK\n";
+EOF
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < set-branding.php
+rm set-branding.php
+
+# 3. Color de marca (mismo azul marino del portal y Android, ver android/README.md)
+docker compose exec -T moodle php admin/cli/cfg.php --component=theme_boost --name=brandcolor --set="#0B2A5B"
+docker compose exec -T moodle php admin/cli/cfg.php --name=sitename --set="IINICIA Campus Virtual"
+
+# 4. Purgar caché de temas para que recompile el SCSS con el nuevo color
+docker compose exec -T moodle php admin/cli/purge_caches.php
+```
+
+Esto NO cubre un theme a medida (tipografía, layout, componentes) — es
+el ajuste de bajo riesgo (sin plugin de tema nuevo, sin tocar
+`moodle-src`) que da identidad coherente con el portal y Android: logo,
+favicon y color primario. Un theme propio completo queda para una fase
+posterior si hace falta más que esto.
+
 ## Por qué el backend en Docker necesita MOODLE_HOST_HEADER
 
 El servicio `backend` del `docker-compose.yml` llama a Moodle por el
