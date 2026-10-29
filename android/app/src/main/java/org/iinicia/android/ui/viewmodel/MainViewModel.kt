@@ -15,6 +15,7 @@ import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.Usuario
 import org.iinicia.android.data.repository.IiniciaRepository
 import org.iinicia.android.data.repository.IiniciaRepositoryImpl
+import org.iinicia.android.data.repository.SesionExpiradaException
 
 data class LoginValidationResult(
     val correoError: String? = null,
@@ -161,11 +162,15 @@ class MainViewModel(
                     }
                 }
                 .onFailure { error ->
-                    _uiState.update {
-                        it.copy(
-                            cargandoCursos = false,
-                            errorCursos = error.message ?: "No se pudieron cargar tus cursos. Intenta de nuevo."
-                        )
+                    if (error is SesionExpiradaException) {
+                        cerrarSesion()
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                cargandoCursos = false,
+                                errorCursos = error.message ?: "No se pudieron cargar tus cursos. Intenta de nuevo."
+                            )
+                        }
                     }
                 }
         }
@@ -181,11 +186,20 @@ class MainViewModel(
      * Campus"/"Abrir en Moodle", no vive en uiState hasta que se obtiene.
      */
     suspend fun obtenerUrlCampus(cursoId: String?): Result<String> =
-        repository.getUrlCampus(cursoId?.toIntOrNull())
+        cerrarSesionSiExpiro(repository.getUrlCampus(cursoId?.toIntOrNull()))
 
     /** Igual que [obtenerUrlCampus], pero aterriza directo en la actividad (no en el curso). */
     suspend fun obtenerUrlCampusActividad(actividadUrl: String): Result<String> =
-        repository.getUrlCampus(actividadUrl = actividadUrl)
+        cerrarSesionSiExpiro(repository.getUrlCampus(actividadUrl = actividadUrl))
+
+    /** Si `resultado` falló porque el JWT expiró, refleja el cierre de sesión en uiState
+     * (NavGraph observa `usuarioAutenticado` y redirige a Login). */
+    private fun <T> cerrarSesionSiExpiro(resultado: Result<T>): Result<T> {
+        if (resultado.exceptionOrNull() is SesionExpiradaException) {
+            cerrarSesion()
+        }
+        return resultado
+    }
 
     /** Guarda (o limpia, con null) la URL que CampusWebViewScreen debe mostrar. */
     fun fijarUrlCampus(url: String?) {

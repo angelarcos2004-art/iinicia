@@ -54,8 +54,19 @@ function estadoCurso(progreso: number | null): { label: string; variant: "active
 }
 
 export default function MiIiniciaPage() {
-  const { sesion, cargando } = useAuth();
+  const { sesion, cargando, logout } = useAuth();
   const router = useRouter();
+
+  /** El token JWT expira a la hora (backend/src/auth/auth.module.ts); si una
+   * llamada regresa 401 no es un error real, es que la sesión venció. */
+  function manejarNoAutorizado(error: unknown): boolean {
+    if (error instanceof ApiError && error.status === 401) {
+      logout();
+      router.replace("/login");
+      return true;
+    }
+    return false;
+  }
 
   const [cursos, setCursos] = useState<CursoInscrito[] | null>(null);
   const [cargandoCursos, setCargandoCursos] = useState(true);
@@ -80,6 +91,7 @@ export default function MiIiniciaPage() {
       const url = await obtenerUrlCampus(sesion.token, cursoId);
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (error) {
+      if (manejarNoAutorizado(error)) return;
       setErrorCampus(
         error instanceof ApiError
           ? error.message
@@ -99,6 +111,7 @@ export default function MiIiniciaPage() {
       const url = await obtenerUrlCampusActividad(sesion.token, actividad.url);
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (error) {
+      if (manejarNoAutorizado(error)) return;
       setErrorCampus(
         error instanceof ApiError
           ? error.message
@@ -125,6 +138,7 @@ export default function MiIiniciaPage() {
       })
       .catch((error) => {
         if (cancelado) return;
+        if (manejarNoAutorizado(error)) return;
         setErrorCursos(
           error instanceof ApiError
             ? error.message
@@ -150,6 +164,7 @@ export default function MiIiniciaPage() {
       })
       .catch((error) => {
         if (cancelado) return;
+        if (manejarNoAutorizado(error)) return;
         setErrorActividades(
           error instanceof ApiError
             ? error.message
