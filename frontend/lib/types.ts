@@ -108,3 +108,32 @@ export interface DashboardEstudiante {
   cursos: CursoEstudiante[];
   avisos: AvisoInstitucional[];
 }
+
+/** Datos simulados (ver mock-data.ts): el backend aún no expone un reporte de grupos. */
+export interface GrupoProfesor {
+  id: string;
+  curso: string;
+  periodo: string;
+  estudiantes: number;
+  entregasPendientes: number;
+}
+
+export interface SolicitudAspirante {
+  programaNombre: string;
+  estado: "en_revision" | "admitido" | "rechazado";
+  pasos: { label: string; completado: boolean }[];
+}
+
+export interface ResumenCoordinacion {
+  programa: string;
+  estudiantesActivos: number;
+  profesores: number;
+  avancePromedio: number;
+  alertas: { id: string; mensaje: string }[];
+}
+
+export interface ResumenAdmin {
+  usuariosPorRol: { rol: Rol; total: number }[];
+  solicitudesPendientes: number;
+  cuentasMoodleVinculadas: number;
+}

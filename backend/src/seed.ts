@@ -62,6 +62,34 @@ const PROGRAMAS_SEMILLA: Programa[] = [
     modalidad: 'en_linea',
     moodleCourseShortname: null,
   },
+  {
+    id: 'lic-ciencia-datos',
+    tipo: 'licenciatura',
+    nombre: 'Licenciatura en Ciencia de Datos',
+    descripcion:
+      'Domina estadística aplicada, machine learning y visualización de datos para la toma de decisiones.',
+    duracion: '12 cuatrimestres',
+    modalidad: 'en_linea',
+    moodleCourseShortname: null,
+  },
+  {
+    id: 'dip-ux-ui',
+    tipo: 'diplomado',
+    nombre: 'Diplomado en UX/UI y Diseño de Producto',
+    descripcion: 'Investigación de usuarios, prototipado y sistemas de diseño para productos digitales.',
+    duracion: '3 meses',
+    modalidad: 'hibrida',
+    moodleCourseShortname: null,
+  },
+  {
+    id: 'cert-devops-cicd',
+    tipo: 'certificacion',
+    nombre: 'Certificación en DevOps y CI/CD',
+    descripcion: 'Automatiza integración, pruebas y despliegue continuo con herramientas usadas en la industria.',
+    duracion: '6 semanas',
+    modalidad: 'en_linea',
+    moodleCourseShortname: null,
+  },
 ];
 
 const BCRYPT_ROUNDS = 10;
