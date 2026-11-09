@@ -8,15 +8,17 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
+import { Select } from "@/components/ui/select";
 import {
   ApiError,
   actualizarRolUsuario,
   asignarCursoUsuario,
   enviarNotificacion,
+  obtenerCursosMoodle,
   obtenerUsuarios,
 } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import type { Rol, UsuarioListado } from "@/lib/types";
+import type { CursoMoodle, Rol, UsuarioListado } from "@/lib/types";
 
 const ROL_LABEL: Record<Rol, string> = {
   superadmin: "Superadministrador",
@@ -62,6 +64,8 @@ export default function AdminUsuariosPage() {
   const [cursoShortname, setCursoShortname] = useState("");
   const [asignandoCurso, setAsignandoCurso] = useState(false);
   const [resultadoMatricula, setResultadoMatricula] = useState<Record<string, string>>({});
+  const [cursosMoodle, setCursosMoodle] = useState<CursoMoodle[] | null>(null);
+  const [errorCursos, setErrorCursos] = useState<string | null>(null);
 
   useEffect(() => {
     if (cargando) return;
@@ -91,6 +95,23 @@ export default function AdminUsuariosPage() {
       cancelado = true;
     };
   }, [tieneAcceso, sesion, filtroRol]);
+
+  useEffect(() => {
+    if (!sesion || !ROLES_QUE_PUEDEN_CAMBIAR_ROL.includes(sesion.usuario.rol)) return;
+    let cancelado = false;
+    obtenerCursosMoodle(sesion.token)
+      .then((data) => {
+        if (!cancelado) setCursosMoodle(data);
+      })
+      .catch((err) => {
+        if (!cancelado) {
+          setErrorCursos(err instanceof ApiError ? err.message : "No se pudo cargar el catálogo de cursos de Moodle.");
+        }
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, [sesion]);
 
   async function cambiarRol(usuario: UsuarioListado, nuevoRol: Rol) {
     if (!sesion || nuevoRol === usuario.rol) return;
@@ -156,7 +177,7 @@ export default function AdminUsuariosPage() {
   async function handleAsignarCurso(usuario: UsuarioListado) {
     if (!sesion) return;
     if (!cursoShortname.trim()) {
-      setResultadoMatricula((prev) => ({ ...prev, [usuario.id]: "Indica el curso (shortname) de Moodle." }));
+      setResultadoMatricula((prev) => ({ ...prev, [usuario.id]: "Selecciona un curso de Moodle." }));
       return;
     }
     setAsignandoCurso(true);
@@ -237,6 +258,7 @@ export default function AdminUsuariosPage() {
                   <th className="px-5 py-3">Nombre</th>
                   <th className="px-5 py-3">Correo</th>
                   <th className="px-5 py-3">Rol</th>
+                  <th className="px-5 py-3">Programa de interés</th>
                   <th className="px-5 py-3">Moodle</th>
                   <th className="px-5 py-3">Alta</th>
                   {(puedeEditar || puedeNotificar) && <th className="px-5 py-3" />}
@@ -266,6 +288,9 @@ export default function AdminUsuariosPage() {
                         ) : (
                           <Badge variant="academic">{ROL_LABEL[usuario.rol]}</Badge>
                         )}
+                      </td>
+                      <td className="px-5 py-3 text-body-sm text-ink-muted">
+                        {usuario.programaInteresNombre ?? "—"}
                       </td>
                       <td className="px-5 py-3 text-body-sm text-ink-muted">
                         {usuario.moodleUserId ? `#${usuario.moodleUserId}` : "—"}
@@ -300,17 +325,35 @@ export default function AdminUsuariosPage() {
                     </tr>
                     {matriculandoId === usuario.id && (
                       <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
-                        <td colSpan={6} className="px-5 py-4">
+                        <td colSpan={7} className="px-5 py-4">
                           <div className="flex flex-col gap-3 md:flex-row md:items-end">
-                            <Input
-                              id={`matricula-curso-${usuario.id}`}
-                              label="Curso de Moodle (shortname)"
-                              hint="Vincula la cuenta Moodle si aún no existe y matricula ahí."
-                              placeholder="Ej. IINICIA101-SOFTWARE"
-                              value={cursoShortname}
-                              onChange={(e) => setCursoShortname(e.target.value)}
-                              className="md:w-64"
-                            />
+                            {cursosMoodle ? (
+                              <Select
+                                id={`matricula-curso-${usuario.id}`}
+                                label="Curso de Moodle"
+                                hint="Lista en vivo de Moodle: se actualiza sola si se crean más cursos."
+                                value={cursoShortname}
+                                onChange={(e) => setCursoShortname(e.target.value)}
+                                className="md:w-72"
+                              >
+                                <option value="">Selecciona un curso…</option>
+                                {cursosMoodle.map((curso) => (
+                                  <option key={curso.id} value={curso.shortname}>
+                                    {curso.fullname}
+                                  </option>
+                                ))}
+                              </Select>
+                            ) : (
+                              <Input
+                                id={`matricula-curso-${usuario.id}`}
+                                label="Curso de Moodle (shortname)"
+                                hint={errorCursos ?? "Cargando catálogo de Moodle…"}
+                                placeholder="Ej. IINICIA101-SOFTWARE"
+                                value={cursoShortname}
+                                onChange={(e) => setCursoShortname(e.target.value)}
+                                className="md:w-64"
+                              />
+                            )}
                             <Button
                               variant="primary"
                               disabled={asignandoCurso}
@@ -330,7 +373,7 @@ export default function AdminUsuariosPage() {
                     )}
                     {notificandoId === usuario.id && (
                       <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
-                        <td colSpan={6} className="px-5 py-4">
+                        <td colSpan={7} className="px-5 py-4">
                           <div className="flex flex-col gap-3 md:flex-row md:items-end">
                             <Input
                               id={`notif-titulo-${usuario.id}`}

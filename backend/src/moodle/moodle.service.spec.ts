@@ -306,6 +306,26 @@ describe('MoodleService.obtenerActividadesProximas', () => {
   });
 });
 
+describe('MoodleService.listarCursos', () => {
+  it('mapea los cursos y excluye el curso "sitio" (id 1)', async () => {
+    const fetchFn = mockFetch([
+      { id: 1, shortname: 'SITE', fullname: 'Sitio' },
+      { id: 2, shortname: 'IINICIA101', fullname: 'Curso de prueba' },
+    ]);
+
+    const cursos = await makeService().listarCursos();
+
+    expect(cursos).toEqual([{ id: 2, shortname: 'IINICIA101', fullname: 'Curso de prueba' }]);
+    const p = paramsDeLlamada(fetchFn, 0);
+    expect(p.get('wsfunction')).toBe('core_course_get_courses');
+  });
+
+  it('lanza 502 si Moodle falla', async () => {
+    mockFetch(new Response('boom', { status: 500 }));
+    await expect(makeService().listarCursos()).rejects.toBeInstanceOf(BadGatewayException);
+  });
+});
+
 describe('MoodleService.solicitarUrlAutologin', () => {
   it('pide la url por email (auth_userkey_request_login_url) y la devuelve tal cual', async () => {
     const fetchFn = mockFetch({ loginurl: 'http://moodle.test:8080/auth/userkey/login.php?key=abc' });
