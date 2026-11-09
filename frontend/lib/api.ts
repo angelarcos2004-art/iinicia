@@ -299,6 +299,19 @@ export async function actualizarRolUsuario(
 }
 
 /**
+ * Matricula a un aspirante o estudiante en el curso de Moodle elegido por el admin: vincula su
+ * cuenta Moodle si aún no existe y lo matricula ahí (idempotente, puede repetirse para
+ * matricular en más cursos). Solo superadmin/admin_academico.
+ */
+export async function asignarCursoUsuario(
+  token: string,
+  id: string,
+  cursoShortname: string,
+): Promise<UsuarioListado> {
+  return postAuthJSON<UsuarioListado>(`/usuarios/${id}/matricula`, token, { cursoShortname });
+}
+
+/**
  * Notificación push controlada a un estudiante (CA-14). `cursoId` es opcional: si se da, la
  * app Android abre directo el detalle de ese curso al tocar la notificación. El backend
  * responde 400 si ese usuario no tiene un dispositivo registrado todavía.

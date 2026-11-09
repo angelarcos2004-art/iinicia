@@ -8,7 +8,13 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
-import { ApiError, actualizarRolUsuario, enviarNotificacion, obtenerUsuarios } from "@/lib/api";
+import {
+  ApiError,
+  actualizarRolUsuario,
+  asignarCursoUsuario,
+  enviarNotificacion,
+  obtenerUsuarios,
+} from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import type { Rol, UsuarioListado } from "@/lib/types";
 
@@ -26,6 +32,9 @@ const ROLES_QUE_PUEDEN_CAMBIAR_ROL: Rol[] = ["superadmin", "admin_academico"];
 const ROLES_QUE_PUEDEN_NOTIFICAR: Rol[] = ["superadmin", "admin_academico", "coordinador", "profesor"];
 
 const FORM_NOTIFICACION_INICIAL = { titulo: "", mensaje: "", cursoId: "" };
+
+/** Roles a los que se puede matricular en un curso de Moodle (ver backend: POST /usuarios/:id/matricula). */
+const ROLES_MATRICULABLES: Rol[] = ["aspirante", "estudiante"];
 
 function formatFecha(fechaIso: string) {
   return new Date(fechaIso).toLocaleDateString("es-MX", {
@@ -48,6 +57,11 @@ export default function AdminUsuariosPage() {
   const [formNotif, setFormNotif] = useState(FORM_NOTIFICACION_INICIAL);
   const [enviandoNotif, setEnviandoNotif] = useState(false);
   const [resultadoNotif, setResultadoNotif] = useState<Record<string, string>>({});
+
+  const [matriculandoId, setMatriculandoId] = useState<string | null>(null);
+  const [cursoShortname, setCursoShortname] = useState("");
+  const [asignandoCurso, setAsignandoCurso] = useState(false);
+  const [resultadoMatricula, setResultadoMatricula] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (cargando) return;
@@ -129,6 +143,45 @@ export default function AdminUsuariosPage() {
     }
   }
 
+  function alternarPanelMatricula(usuario: UsuarioListado) {
+    if (matriculandoId === usuario.id) {
+      setMatriculandoId(null);
+      return;
+    }
+    setMatriculandoId(usuario.id);
+    setCursoShortname("");
+    setResultadoMatricula((prev) => ({ ...prev, [usuario.id]: "" }));
+  }
+
+  async function handleAsignarCurso(usuario: UsuarioListado) {
+    if (!sesion) return;
+    if (!cursoShortname.trim()) {
+      setResultadoMatricula((prev) => ({ ...prev, [usuario.id]: "Indica el curso (shortname) de Moodle." }));
+      return;
+    }
+    setAsignandoCurso(true);
+    try {
+      const actualizado = await asignarCursoUsuario(sesion.token, usuario.id, cursoShortname.trim());
+      setUsuarios(
+        (prev) =>
+          prev?.map((u) => (u.id === usuario.id ? { ...u, moodleUserId: actualizado.moodleUserId } : u)) ??
+          prev,
+      );
+      setResultadoMatricula((prev) => ({
+        ...prev,
+        [usuario.id]: `Matriculado en "${cursoShortname.trim()}".`,
+      }));
+      setCursoShortname("");
+    } catch (err) {
+      setResultadoMatricula((prev) => ({
+        ...prev,
+        [usuario.id]: err instanceof ApiError ? err.message : "No se pudo matricular al usuario.",
+      }));
+    } finally {
+      setAsignandoCurso(false);
+    }
+  }
+
   if (cargando || !tieneAcceso) {
     return (
       <section className="mx-auto max-w-7xl px-margin-mobile py-space-xl md:px-margin-desktop">
@@ -186,7 +239,7 @@ export default function AdminUsuariosPage() {
                   <th className="px-5 py-3">Rol</th>
                   <th className="px-5 py-3">Moodle</th>
                   <th className="px-5 py-3">Alta</th>
-                  {puedeNotificar && <th className="px-5 py-3" />}
+                  {(puedeEditar || puedeNotificar) && <th className="px-5 py-3" />}
                 </tr>
               </thead>
               <tbody>
@@ -220,18 +273,61 @@ export default function AdminUsuariosPage() {
                       <td className="px-5 py-3 text-body-sm text-ink-muted">
                         {formatFecha(usuario.createdAt)}
                       </td>
-                      {puedeNotificar && (
+                      {(puedeEditar || puedeNotificar) && (
                         <td className="px-5 py-3">
-                          <Button
-                            variant="outline"
-                            className="h-9 px-3 text-label-sm"
-                            onClick={() => alternarPanelNotificar(usuario)}
-                          >
-                            {notificandoId === usuario.id ? "Cancelar" : "Notificar"}
-                          </Button>
+                          <div className="flex gap-2">
+                            {puedeEditar && ROLES_MATRICULABLES.includes(usuario.rol) && (
+                              <Button
+                                variant="outline"
+                                className="h-9 px-3 text-label-sm"
+                                onClick={() => alternarPanelMatricula(usuario)}
+                              >
+                                {matriculandoId === usuario.id ? "Cancelar" : "Matricular"}
+                              </Button>
+                            )}
+                            {puedeNotificar && (
+                              <Button
+                                variant="outline"
+                                className="h-9 px-3 text-label-sm"
+                                onClick={() => alternarPanelNotificar(usuario)}
+                              >
+                                {notificandoId === usuario.id ? "Cancelar" : "Notificar"}
+                              </Button>
+                            )}
+                          </div>
                         </td>
                       )}
                     </tr>
+                    {matriculandoId === usuario.id && (
+                      <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
+                        <td colSpan={6} className="px-5 py-4">
+                          <div className="flex flex-col gap-3 md:flex-row md:items-end">
+                            <Input
+                              id={`matricula-curso-${usuario.id}`}
+                              label="Curso de Moodle (shortname)"
+                              hint="Vincula la cuenta Moodle si aún no existe y matricula ahí."
+                              placeholder="Ej. IINICIA101-SOFTWARE"
+                              value={cursoShortname}
+                              onChange={(e) => setCursoShortname(e.target.value)}
+                              className="md:w-64"
+                            />
+                            <Button
+                              variant="primary"
+                              disabled={asignandoCurso}
+                              onClick={() => handleAsignarCurso(usuario)}
+                              className="h-12"
+                            >
+                              {asignandoCurso ? "Matriculando…" : "Matricular"}
+                            </Button>
+                          </div>
+                          {resultadoMatricula[usuario.id] && (
+                            <p className="mt-2 text-body-sm text-ink-muted">
+                              {resultadoMatricula[usuario.id]}
+                            </p>
+                          )}
+                        </td>
+                      </tr>
+                    )}
                     {notificandoId === usuario.id && (
                       <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
                         <td colSpan={6} className="px-5 py-4">

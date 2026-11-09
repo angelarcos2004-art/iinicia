@@ -209,6 +209,123 @@ describe('PATCH /usuarios/:id/rol (e2e)', () => {
   });
 });
 
+describe('POST /usuarios/:id/matricula (e2e)', () => {
+  let app: INestApplication;
+  let jwt: JwtService;
+  let users: InMemoryUsers;
+
+  beforeEach(async () => {
+    moodleFake.buscarOCrearUsuarioMoodle.mockReset().mockResolvedValue(999);
+    moodleFake.matricularEnCurso.mockReset().mockResolvedValue(undefined);
+    const moduleRef = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
+      controllers: [UsuariosController],
+      providers: [
+        JwtStrategy,
+        JwtAuthGuard,
+        RolesGuard,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
+        { provide: PushService, useValue: pushFake },
+        { provide: ProgramasService, useValue: programasFake },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    setupApp(app, 'http://localhost:3000');
+    await app.init();
+    jwt = moduleRef.get(JwtService);
+    users = moduleRef.get(UsersService);
+  });
+
+  afterEach(() => app.close());
+
+  it('sin token -> 401', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-aspirante-nuevo/matricula')
+      .send({ cursoShortname: 'IINICIA101-SOFTWARE' });
+    expect(res.status).toBe(401);
+  });
+
+  it('con rol no autorizado (coordinador) -> 403', async () => {
+    const token = await jwt.signAsync({ sub: 'u-coordinador', rol: Rol.Coordinador });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-aspirante-nuevo/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ cursoShortname: 'IINICIA101-SOFTWARE' });
+    expect(res.status).toBe(403);
+  });
+
+  it('usuario inexistente -> 404', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/no-existe/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ cursoShortname: 'IINICIA101-SOFTWARE' });
+    expect(res.status).toBe(404);
+  });
+
+  it('sin cursoShortname en el body -> 400', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-aspirante-nuevo/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({});
+    expect(res.status).toBe(400);
+  });
+
+  it('admin_academico matricula a un aspirante en el curso que elige, sin cambiar su rol', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-aspirante-nuevo/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ cursoShortname: 'IINICIA101-SOFTWARE' });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toEqual({
+      id: 'u-aspirante-nuevo',
+      nombre: 'Aspirante Nuevo',
+      correo: 'aspirante@correo.com',
+      rol: 'aspirante',
+      moodleUserId: 999,
+      createdAt: '2026-01-03T00:00:00.000Z',
+    });
+    expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith(
+      'aspirante@correo.com',
+      'Aspirante Nuevo',
+    );
+    expect(moodleFake.matricularEnCurso).toHaveBeenCalledWith(999, 'IINICIA101-SOFTWARE');
+    expect(users.items.find((u) => u.id === 'u-aspirante-nuevo')?.moodleUserId).toBe(999);
+  });
+
+  it('matricula a un estudiante que ya tiene cuenta Moodle en un curso adicional (vincular es idempotente: devuelve el mismo id)', async () => {
+    moodleFake.buscarOCrearUsuarioMoodle.mockResolvedValue(5);
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-estudiante/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ cursoShortname: 'IINICIA102' });
+
+    expect(res.status).toBe(201);
+    expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith(
+      'estudiante@correo.com',
+      'Estudiante Cualquiera',
+    );
+    expect(moodleFake.matricularEnCurso).toHaveBeenCalledWith(5, 'IINICIA102');
+  });
+
+  it('400 si el usuario no es aspirante ni estudiante (p.ej. coordinador)', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-coordinador/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ cursoShortname: 'IINICIA101' });
+
+    expect(res.status).toBe(400);
+    expect(moodleFake.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+  });
+});
+
 describe('GET /usuarios (e2e)', () => {
   let app: INestApplication;
   let jwt: JwtService;

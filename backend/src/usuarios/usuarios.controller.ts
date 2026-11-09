@@ -22,6 +22,7 @@ import { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
 import { UsersService } from '../users/users.service.js';
 import { ActualizarRolDto } from './dto/actualizar-rol.dto.js';
+import { AsignarCursoDto } from './dto/asignar-curso.dto.js';
 import { NotificarDto } from './dto/notificar.dto.js';
 
 export interface UsuarioActualizado {
@@ -98,6 +99,43 @@ export class UsuariosController {
     }
 
     return { id: user.id, nombre: user.nombre, correo: user.correo, rol: user.rol };
+  }
+
+  /**
+   * El administrador asigna (matricula) a un aspirante o estudiante en un curso de Moodle
+   * elegido explícitamente por él, a diferencia de `actualizarRol`, que infiere el curso del
+   * programa de interés que el usuario eligió al registrarse. Vincula la cuenta Moodle si
+   * aún no existe y puede repetirse para matricular en más cursos (matricularEnCurso es
+   * idempotente).
+   */
+  @Post(':id/matricula')
+  @Roles(Rol.Superadmin, Rol.AdminAcademico)
+  async asignarCurso(
+    @Param('id') id: string,
+    @Body() dto: AsignarCursoDto,
+  ): Promise<UsuarioListado> {
+    const user = await this.users.findById(id);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    if (user.rol !== Rol.Aspirante && user.rol !== Rol.Estudiante) {
+      throw new BadRequestException('Solo aspirantes o estudiantes pueden matricularse en Moodle');
+    }
+
+    const actualizado = await vincularYMatricularMoodle(
+      { users: this.users, moodle: this.moodle, config: this.config, logger: this.logger },
+      user,
+      dto.cursoShortname,
+    );
+
+    return {
+      id: actualizado.id,
+      nombre: actualizado.nombre,
+      correo: actualizado.correo,
+      rol: actualizado.rol,
+      moodleUserId: actualizado.moodleUserId,
+      createdAt: actualizado.createdAt,
+    };
   }
 
   /**
