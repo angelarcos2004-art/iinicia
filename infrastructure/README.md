@@ -209,6 +209,37 @@ Es normal que imprima dos avisos `email_to_user(): Invalid address` — no
 hay servidor de correo configurado en este entorno local, no afecta la
 creación del usuario.
 
+### Catálogo de cursos realistas para pruebas
+
+Además del curso genérico `IINICIA101` de arriba, `moodle-seed-cursos.php`
+(en este mismo directorio) crea 3 cursos con contenido real — páginas,
+una tarea con fecha límite, un cuestionario con 2 preguntas y un foro con
+una discusión — para poder probar el selector de curso del botón
+"Matricular" del panel admin (`POST /usuarios/:id/matricula`) con más de
+una opción real:
+
+| Shortname | Tema |
+| --- | --- |
+| `IINICIA-SOFT1` | Fundamentos de Ingeniería de Software e IA |
+| `IINICIA-CIBER1` | Ciberseguridad Defensiva y SOC |
+| `IINICIA-NEG1` | Administración de Negocios Digitales |
+
+```bash
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < moodle-seed-cursos.php
+```
+
+`profesor.prueba` queda matriculado como `editingteacher` en los 3. A
+propósito **no** se matricula a `estudiante.prueba` ni se vinculan estos
+cursos a los programas académicos (`PROGRAMAS_SEMILLA` en
+`backend/src/seed.ts`): el acceso a Moodle solo lo debe conceder un
+administrador de forma explícita (ver `AuthService.registro`/`.login` en
+el backend, y `docs/requerimientos.md` §12) — usa el botón "Matricular"
+del panel admin para probarlo.
+
+Idempotente a nivel de curso: si el shortname ya existe, se omite por
+completo (no actualiza contenido). Para rehacer uno, bórralo primero
+desde Moodle y vuelve a correr el script.
+
 ## Habilitar Web Services (para que el backend conecte)
 
 El backend necesita conectarse a Moodle vía Web Services/REST, de forma
