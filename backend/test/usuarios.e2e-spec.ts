@@ -82,6 +82,8 @@ const pushFake = {
 
 const programasFake = {
   obtenerMoodleCourseShortname: vi.fn().mockResolvedValue(null),
+  listar: vi.fn().mockResolvedValue([]),
+  findById: vi.fn().mockResolvedValue(null),
 };
 
 describe('PATCH /usuarios/:id/rol (e2e)', () => {
@@ -289,6 +291,7 @@ describe('POST /usuarios/:id/matricula (e2e)', () => {
       rol: 'aspirante',
       moodleUserId: 999,
       createdAt: '2026-01-03T00:00:00.000Z',
+      programaInteresNombre: 'lic-software-ia',
     });
     expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith(
       'aspirante@correo.com',
@@ -381,6 +384,7 @@ describe('GET /usuarios (e2e)', () => {
       rol: 'admin_academico',
       moodleUserId: null,
       createdAt: '2026-01-01T00:00:00.000Z',
+      programaInteresNombre: null,
     });
   });
 
@@ -409,6 +413,68 @@ describe('GET /usuarios (e2e)', () => {
       .get('/usuarios?rol=director-de-la-nasa')
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(400);
+  });
+
+  it('resuelve el nombre del programa de interés cuando existe en el catálogo', async () => {
+    programasFake.listar.mockResolvedValue([
+      { id: 'lic-software-ia', nombre: 'Lic. en Software con IA' },
+    ]);
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios?rol=aspirante')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.body[0].programaInteresNombre).toBe('Lic. en Software con IA');
+    programasFake.listar.mockResolvedValue([]);
+  });
+});
+
+describe('GET /usuarios/cursos-moodle (e2e)', () => {
+  let app: INestApplication;
+  let jwt: JwtService;
+
+  beforeEach(async () => {
+    moodleFake.listarCursos = vi.fn().mockResolvedValue([
+      { id: 2, shortname: 'IINICIA101', fullname: 'Curso de prueba' },
+    ]);
+    const moduleRef = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
+      controllers: [UsuariosController],
+      providers: [
+        JwtStrategy,
+        JwtAuthGuard,
+        RolesGuard,
+        { provide: UsersService, useClass: InMemoryUsers },
+        { provide: MoodleService, useValue: moodleFake },
+        { provide: PushService, useValue: pushFake },
+        { provide: ProgramasService, useValue: programasFake },
+        { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    setupApp(app, 'http://localhost:3000');
+    await app.init();
+    jwt = moduleRef.get(JwtService);
+  });
+
+  afterEach(() => app.close());
+
+  it('devuelve el catálogo real de cursos de Moodle', async () => {
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios/cursos-moodle')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([{ id: 2, shortname: 'IINICIA101', fullname: 'Curso de prueba' }]);
+  });
+
+  it('con rol no autorizado (coordinador) -> 403', async () => {
+    const token = await jwt.signAsync({ sub: 'u-coordinador', rol: Rol.Coordinador });
+    const res = await request(app.getHttpServer())
+      .get('/usuarios/cursos-moodle')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(403);
   });
 });
 

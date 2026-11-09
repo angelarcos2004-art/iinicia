@@ -37,6 +37,15 @@ export interface Usuario {
 export interface UsuarioListado extends Usuario {
   moodleUserId: number | null;
   createdAt: string;
+  /** Programa que el usuario eligió al registrarse, o null si no tiene. */
+  programaInteresNombre: string | null;
+}
+
+/** Curso real de Moodle (GET /usuarios/cursos-moodle), para elegir al matricular. */
+export interface CursoMoodle {
+  id: number;
+  shortname: string;
+  fullname: string;
 }
 
 export interface AuthResponse {

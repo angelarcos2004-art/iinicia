@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { Roles } from '../auth/roles.decorator.js';
 import { RolesGuard } from '../auth/roles.guard.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
-import { MoodleService } from '../moodle/moodle.service.js';
+import { MoodleCurso, MoodleService } from '../moodle/moodle.service.js';
 import { PushService } from '../push/push.service.js';
 import { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
@@ -35,6 +35,8 @@ export interface UsuarioActualizado {
 export interface UsuarioListado extends UsuarioActualizado {
   moodleUserId: number | null;
   createdAt: Date;
+  /** Programa que el usuario eligió al registrarse (ver ProgramasService), o null si no tiene. */
+  programaInteresNombre: string | null;
 }
 
 /**
@@ -63,6 +65,8 @@ export class UsuariosController {
       throw new BadRequestException('Rol inválido');
     }
     const usuarios = await this.users.listar(rol as Rol | undefined);
+    const programas = await this.programas.listar();
+    const nombrePorProgramaId = new Map(programas.map((p) => [p.id, p.nombre]));
     return usuarios.map((u) => ({
       id: u.id,
       nombre: u.nombre,
@@ -70,7 +74,17 @@ export class UsuariosController {
       rol: u.rol,
       moodleUserId: u.moodleUserId,
       createdAt: u.createdAt,
+      programaInteresNombre: u.programaInteresId
+        ? nombrePorProgramaId.get(u.programaInteresId) ?? u.programaInteresId
+        : null,
     }));
+  }
+
+  /** Catálogo de cursos real de Moodle, para que el admin elija al matricular (ver POST :id/matricula). */
+  @Get('cursos-moodle')
+  @Roles(Rol.Superadmin, Rol.AdminAcademico)
+  async listarCursosMoodle(): Promise<MoodleCurso[]> {
+    return this.moodle.listarCursos();
   }
 
   @Patch(':id/rol')
@@ -135,7 +149,14 @@ export class UsuariosController {
       rol: actualizado.rol,
       moodleUserId: actualizado.moodleUserId,
       createdAt: actualizado.createdAt,
+      programaInteresNombre: await this.nombrePrograma(actualizado.programaInteresId),
     };
+  }
+
+  private async nombrePrograma(programaInteresId: string | null): Promise<string | null> {
+    if (!programaInteresId) return null;
+    const programa = await this.programas.findById(programaInteresId);
+    return programa?.nombre ?? programaInteresId;
   }
 
   /**

@@ -3,6 +3,7 @@ import type {
   ActividadProxima,
   AuthResponse,
   CursoInscrito,
+  CursoMoodle,
   LoginInput,
   Programa,
   ProgramaInput,
@@ -309,6 +310,11 @@ export async function asignarCursoUsuario(
   cursoShortname: string,
 ): Promise<UsuarioListado> {
   return postAuthJSON<UsuarioListado>(`/usuarios/${id}/matricula`, token, { cursoShortname });
+}
+
+/** Catálogo real de cursos de Moodle, para elegirlo de una lista al matricular. */
+export async function obtenerCursosMoodle(token: string): Promise<CursoMoodle[]> {
+  return getJSON<CursoMoodle[]>("/usuarios/cursos-moodle", token);
 }
 
 /**

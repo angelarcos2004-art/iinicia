@@ -21,6 +21,12 @@ interface MoodleCursoInscrito {
   progress: number | null;
 }
 
+export interface MoodleCurso {
+  id: number;
+  shortname: string;
+  fullname: string;
+}
+
 interface MoodleErrorBody {
   exception?: string;
   errorcode?: string;
@@ -202,6 +208,19 @@ export class MoodleService {
       throw new BadRequestException('La actividad no pertenece a esta instancia de Moodle');
     }
     return url;
+  }
+
+  /**
+   * Todos los cursos reales de Moodle (excluye el curso "sitio", id 1), para que el admin
+   * elija de una lista en vez de escribir el shortname a mano. Siempre refleja el catálogo
+   * actual de Moodle: no hay copia local que se desactualice.
+   */
+  async listarCursos(): Promise<MoodleCurso[]> {
+    const cursos = await this.llamar<MoodleCurso[]>('core_course_get_courses', {});
+    if (!Array.isArray(cursos)) return [];
+    return cursos
+      .filter((c) => c.id !== 1)
+      .map((c) => ({ id: c.id, shortname: c.shortname, fullname: c.fullname }));
   }
 
   private async buscarCursoPorShortname(shortname: string): Promise<number | null> {
