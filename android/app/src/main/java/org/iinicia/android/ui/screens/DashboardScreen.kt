@@ -242,14 +242,15 @@ fun DashboardScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Lista de cursos vacía",
+                                    text = "Aún no tienes acceso a ningún curso",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = IiniciaPrimary,
                                     textAlign = TextAlign.Center
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
-                                    text = "Aún no tienes cursos activos sincronizados desde el BFF.",
+                                    text = "Cuando un administrador autorice tu acceso a Moodle, " +
+                                        "tus cursos aparecerán aquí automáticamente.",
                                     style = MaterialTheme.typography.bodyMedium,
                                     textAlign = TextAlign.Center
                                 )
