@@ -8,8 +8,6 @@ import { AuthController } from '../src/auth/auth.controller.js';
 import { AuthService } from '../src/auth/auth.service.js';
 import { JwtStrategy } from '../src/auth/jwt.strategy.js';
 import { MailService } from '../src/mail/mail.service.js';
-import { MoodleService } from '../src/moodle/moodle.service.js';
-import { ProgramasService } from '../src/programas/programas.service.js';
 import { Rol } from '../src/users/rol.enum.js';
 import type { User } from '../src/users/user.entity.js';
 import { UsersService } from '../src/users/users.service.js';
@@ -58,20 +56,9 @@ class InMemoryUsers {
   }
 }
 
-/** MoodleService falso: estas pruebas no deben depender de un Moodle real. */
-const moodleFake = {
-  buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(555),
-  matricularEnCurso: vi.fn().mockResolvedValue(undefined),
-};
-
 /** MailService falso: captura el enlace en vez de intentar enviar un correo real. */
 const mailFake = {
   enviarRecuperacion: vi.fn().mockResolvedValue(undefined),
-};
-
-/** ProgramasService falso: sin programas de prueba, siempre usa el curso default. */
-const programasFake = {
-  obtenerMoodleCourseShortname: vi.fn().mockResolvedValue(null),
 };
 
 const registroValido = {
@@ -88,8 +75,6 @@ describe('Auth (e2e)', () => {
   let jwt: JwtService;
 
   beforeEach(async () => {
-    moodleFake.buscarOCrearUsuarioMoodle.mockClear();
-    moodleFake.matricularEnCurso.mockClear();
     mailFake.enviarRecuperacion.mockClear();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
@@ -98,9 +83,7 @@ describe('Auth (e2e)', () => {
         AuthService,
         JwtStrategy,
         { provide: UsersService, useClass: InMemoryUsers },
-        { provide: MoodleService, useValue: moodleFake },
         { provide: MailService, useValue: mailFake },
-        { provide: ProgramasService, useValue: programasFake },
         {
           provide: ConfigService,
           useValue: {
@@ -132,16 +115,18 @@ describe('Auth (e2e)', () => {
     expect(payload.sub).toBe(res.body.usuario.id);
   });
 
-  it('POST /auth/registro vincula al usuario con Moodle (idempotente)', async () => {
-    await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
-    expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith('ana@correo.com', 'Ana Pérez');
+  it('POST /auth/registro no depende de Moodle: tener cuenta no da acceso automático (docs/requerimientos.md §12, solo un admin lo concede vía /usuarios)', async () => {
+    const res = await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+    expect(res.status).toBe(200);
+    expect(res.body.usuario.rol).toBe('aspirante');
+  });
 
+  it('POST /auth/login tampoco depende de Moodle', async () => {
+    await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ correo: 'ana@correo.com', password: 'secreto123' });
     expect(res.status).toBe(200);
-    // Ya tenia moodleUserId desde el registro: el login no vuelve a llamar a Moodle.
-    expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledTimes(1);
   });
 
   it('POST /auth/registro con correo duplicado -> 400 { message }', async () => {

@@ -1,17 +1,9 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'node:crypto';
 import { MailService } from '../mail/mail.service.js';
-import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
-import { MoodleService } from '../moodle/moodle.service.js';
-import { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
 import { UsersService } from '../users/users.service.js';
@@ -37,15 +29,11 @@ const DUMMY_HASH = bcrypt.hashSync('iinicia-dummy-password', BCRYPT_ROUNDS);
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
-
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
-    private readonly moodle: MoodleService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
-    private readonly programas: ProgramasService,
   ) {}
 
   async login(dto: LoginDto): Promise<AuthResponse> {
@@ -55,17 +43,14 @@ export class AuthService {
     if (!user || !ok) {
       throw new UnauthorizedException('Correo o contraseña incorrectos');
     }
-    // Reintento silencioso para cuentas creadas antes de esta integracion
-    // (o cuyo alta en Moodle fallo la primera vez): no bloquea el login.
-    // Solo aspirante/estudiante: vincularYMatricularMoodle siempre matricula
-    // con rol de estudiante, nunca debe tocar cuentas de staff (profesor,
-    // coordinador, admin_academico, superadmin).
-    const debeVincularse =
-      user.moodleUserId === null && (user.rol === Rol.Estudiante || user.rol === Rol.Aspirante);
-    const vinculado = debeVincularse ? await this.vincularMoodle(user) : user;
-    return this.buildResponse(vinculado);
+    return this.buildResponse(user);
   }
 
+  /**
+   * Crea la cuenta como aspirante, sin tocar Moodle (docs/requerimientos.md §12: "tener una
+   * cuenta no debe implicar acceso automático a los cursos"). El acceso a Moodle solo lo
+   * concede un administrador, vía UsuariosController.actualizarRol o .asignarCurso.
+   */
   async registro(dto: RegistroDto): Promise<AuthResponse> {
     if (await this.users.findByCorreo(dto.correo)) {
       throw new BadRequestException('Ya existe una cuenta con ese correo');
@@ -89,7 +74,6 @@ export class AuthService {
       }
       throw error;
     }
-    user = await this.vincularMoodle(user);
     return this.buildResponse(user);
   }
 
@@ -125,24 +109,6 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(dto.nuevaPassword, BCRYPT_ROUNDS);
     await this.users.actualizarPasswordHash(user.id, passwordHash);
     await this.users.limpiarTokenRecuperacion(user.id);
-  }
-
-  /**
-   * Vincula (o crea, de forma idempotente) la cuenta Moodle del usuario y lo
-   * matricula en el curso de prueba. Nota: docs/requerimientos.md describe
-   * esto ocurriendo cuando un aspirante es *admitido* por un administrador
-   * academico (ver UsuariosController.actualizarRol), no en el
-   * autorregistro. Para esta fase se dispara aqui tambien, como
-   * demostracion funcional de la integracion. Nunca bloquea login/registro:
-   * ver vincularYMatricularMoodle.
-   */
-  private async vincularMoodle(user: User): Promise<User> {
-    const curso = await this.programas.obtenerMoodleCourseShortname(user.programaInteresId);
-    return vincularYMatricularMoodle(
-      { users: this.users, moodle: this.moodle, config: this.config, logger: this.logger },
-      user,
-      curso,
-    );
   }
 
   private async buildResponse(user: User): Promise<AuthResponse> {
