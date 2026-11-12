@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
+import { OAuth2Client } from 'google-auth-library';
 import { randomBytes } from 'node:crypto';
 import { MailService } from '../mail/mail.service.js';
 import { Rol } from '../users/rol.enum.js';
@@ -29,12 +30,16 @@ const DUMMY_HASH = bcrypt.hashSync('iinicia-dummy-password', BCRYPT_ROUNDS);
 
 @Injectable()
 export class AuthService {
+  private readonly googleClient: OAuth2Client;
+
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
-  ) {}
+  ) {
+    this.googleClient = new OAuth2Client(this.config.get<string>('GOOGLE_CLIENT_ID'));
+  }
 
   async login(dto: LoginDto): Promise<AuthResponse> {
     const user = await this.users.findByCorreo(dto.correo);
@@ -42,6 +47,35 @@ export class AuthService {
     const ok = await bcrypt.compare(dto.password, hash);
     if (!user || !ok) {
       throw new UnauthorizedException('Correo o contraseña incorrectos');
+    }
+    return this.buildResponse(user);
+  }
+
+  /**
+   * Verifica el idToken de Google (firma + audiencia GOOGLE_CLIENT_ID) y entra con la cuenta
+   * cuyo correo coincida, creándola como aspirante si es la primera vez que inicia sesión así.
+   */
+  async loginConGoogle(idToken: string): Promise<AuthResponse> {
+    const ticket = await this.googleClient.verifyIdToken({
+      idToken,
+      audience: this.config.getOrThrow<string>('GOOGLE_CLIENT_ID'),
+    }).catch(() => {
+      throw new UnauthorizedException('Token de Google inválido');
+    });
+    const payload = ticket.getPayload();
+    if (!payload?.email || !payload.email_verified) {
+      throw new UnauthorizedException('Token de Google inválido');
+    }
+
+    let user = await this.users.findByCorreo(payload.email);
+    if (!user) {
+      const passwordHash = await bcrypt.hash(randomBytes(32).toString('base64url'), BCRYPT_ROUNDS);
+      user = await this.users.create({
+        nombre: payload.name ?? payload.email,
+        correo: payload.email,
+        passwordHash,
+        rol: Rol.Aspirante,
+      });
     }
     return this.buildResponse(user);
   }

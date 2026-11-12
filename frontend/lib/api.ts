@@ -179,6 +179,11 @@ export async function login(input: LoginInput): Promise<AuthResponse> {
   }
 }
 
+/** Inicia sesión con el idToken que entrega Google Identity Services. */
+export async function loginConGoogle(idToken: string): Promise<AuthResponse> {
+  return postJSON<AuthResponse>("/auth/google", { idToken });
+}
+
 /**
  * Registra un aspirante contra el backend IINICIA. Mismo criterio de
  * fallback a datos mock que `login`.

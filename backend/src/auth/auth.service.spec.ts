@@ -2,6 +2,7 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import type { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
+import { OAuth2Client } from 'google-auth-library';
 import { AuthService } from './auth.service.js';
 import type { MailService } from '../mail/mail.service.js';
 import { Rol } from '../users/rol.enum.js';
@@ -19,6 +20,10 @@ function makeService(existing: User | null, env: Record<string, string> = {}) {
   const jwt = { signAsync: vi.fn().mockResolvedValue('tok') } as unknown as JwtService;
   const config = {
     get: (key: string, def?: string) => env[key] ?? def,
+    getOrThrow: (key: string) => {
+      if (env[key] === undefined) throw new Error(`falta ${key} en el entorno de prueba`);
+      return env[key];
+    },
   } as unknown as ConfigService;
   const mail = { enviarRecuperacion: vi.fn().mockResolvedValue(undefined) };
   return {
@@ -81,6 +86,48 @@ describe('AuthService', () => {
     const res = await service.login({ correo: 'a@b.com', password: 'buena' });
     expect(res.token).toBe('tok');
     expect(res.usuario.rol).toBe(Rol.Aspirante);
+  });
+
+  describe('loginConGoogle', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('con un idToken válido de un correo nuevo, crea la cuenta como aspirante', async () => {
+      vi.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
+        getPayload: () => ({ email: 'nueva@b.com', email_verified: true, name: 'Nueva' }),
+      } as never);
+      const { service, users } = makeService(null, { GOOGLE_CLIENT_ID: 'cid' });
+
+      const res = await service.loginConGoogle('token-google');
+
+      expect(users.create).toHaveBeenCalledWith(
+        expect.objectContaining({ correo: 'nueva@b.com', nombre: 'Nueva', rol: Rol.Aspirante }),
+      );
+      expect(res.token).toBe('tok');
+    });
+
+    it('con un idToken válido de un correo existente, entra sin crear otra cuenta', async () => {
+      vi.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
+        getPayload: () => ({ email: 'a@b.com', email_verified: true, name: 'Ana' }),
+      } as never);
+      const { service, users } = makeService(
+        { id: 'u', correo: 'a@b.com', nombre: 'Ana', rol: Rol.Aspirante } as User,
+        { GOOGLE_CLIENT_ID: 'cid' },
+      );
+
+      const res = await service.loginConGoogle('token-google');
+
+      expect(users.create).not.toHaveBeenCalled();
+      expect(res.usuario.correo).toBe('a@b.com');
+    });
+
+    it('rechaza un idToken inválido o sin verificar', async () => {
+      vi.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockRejectedValue(new Error('firma inválida'));
+      const { service } = makeService(null, { GOOGLE_CLIENT_ID: 'cid' });
+
+      await expect(service.loginConGoogle('token-malo')).rejects.toBeInstanceOf(UnauthorizedException);
+    });
   });
 
   describe('recuperar', () => {

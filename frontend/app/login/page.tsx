@@ -7,12 +7,13 @@ import { useState, type FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, loginConGoogle } = useAuth();
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [recordarme, setRecordarme] = useState(true);
@@ -50,6 +51,20 @@ export default function LoginPage() {
       );
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleGoogleCredential(idToken: string) {
+    setSubmitError(null);
+    try {
+      await loginConGoogle(idToken);
+      router.push("/mi-iinicia");
+    } catch (error) {
+      setSubmitError(
+        error instanceof ApiError
+          ? error.message
+          : "No pudimos iniciar tu sesión con Google. Intenta de nuevo.",
+      );
     }
   }
 
@@ -129,6 +144,14 @@ export default function LoginPage() {
               {submitting ? "Iniciando sesión…" : "Iniciar sesión"}
             </Button>
           </form>
+
+          <div className="flex items-center gap-3 text-body-sm text-ink-muted">
+            <span className="h-px flex-1 bg-border-subtle" />
+            <span>o</span>
+            <span className="h-px flex-1 bg-border-subtle" />
+          </div>
+
+          <GoogleLoginButton onCredential={handleGoogleCredential} />
 
           <p className="text-center text-body-sm text-ink-muted">
             ¿Aún no tienes cuenta?{" "}
