@@ -5,6 +5,8 @@ import type {
   CursoInscrito,
   CursoMoodle,
   LoginInput,
+  Materia,
+  MateriaInput,
   Programa,
   ProgramaInput,
   RegistroAspiranteInput,
@@ -225,6 +227,49 @@ export async function actualizarPrograma(
   input: Partial<ProgramaInput>,
 ): Promise<Programa> {
   return patchJSON<Programa>(`/programas/${id}`, token, input);
+}
+
+/** Panel administrativo (/admin/materias): materias de una carrera, para armar su seriación. */
+export async function obtenerMaterias(token: string, programaId?: string): Promise<Materia[]> {
+  const query = programaId ? `?programaId=${encodeURIComponent(programaId)}` : "";
+  return getJSON<Materia[]>(`/materias${query}`, token);
+}
+
+/** Crea una materia nueva dentro de una carrera, con sus prerequisitos (ids de otras materias). */
+export async function crearMateria(token: string, input: MateriaInput): Promise<Materia> {
+  return postAuthJSON<Materia>("/materias", token, input);
+}
+
+/** Edita una materia existente (nombre, curso de Moodle o sus prerequisitos). */
+export async function actualizarMateria(
+  token: string,
+  id: string,
+  input: Partial<Omit<MateriaInput, "id" | "programaId">>,
+): Promise<Materia> {
+  return patchJSON<Materia>(`/materias/${id}`, token, input);
+}
+
+/**
+ * Borra una materia. El backend rechaza (400) borrar una que otra materia todavía tiene
+ * como prerequisito, para no dejar un prerequisito fantasma que deje avanzar a cualquiera.
+ */
+export async function eliminarMateria(token: string, id: string): Promise<void> {
+  if (!API_URL) {
+    throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
+  }
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}/materias/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (networkError) {
+    throw new BackendUnavailableError(`No se pudo conectar con el backend (${String(networkError)})`);
+  }
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new ApiError(data?.message ?? `El backend respondió con error ${response.status}`, response.status);
+  }
 }
 
 /**

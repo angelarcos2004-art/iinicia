@@ -255,6 +255,20 @@ describe('MoodleService.obtenerCursosDeUsuario', () => {
   });
 });
 
+describe('MoodleService.obtenerCursosAprobados', () => {
+  it('solo incluye los cursos con 100% de avance', async () => {
+    mockFetch([
+      { id: 1, shortname: 'CALCULO1', fullname: 'Cálculo I', progress: 100 },
+      { id: 2, shortname: 'CALCULO2', fullname: 'Cálculo II', progress: 40 },
+      { id: 3, shortname: 'FISICA1', fullname: 'Física I', progress: null },
+    ]);
+
+    const aprobados = await makeService().obtenerCursosAprobados(17);
+
+    expect(aprobados).toEqual(new Set(['CALCULO1']));
+  });
+});
+
 describe('MoodleService.obtenerActividadesProximas', () => {
   it('mapea los eventos y pide timesortfrom = ahora', async () => {
     const fetchFn = mockFetch({

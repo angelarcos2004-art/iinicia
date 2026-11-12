@@ -166,6 +166,14 @@ export function SiteHeader() {
                   Programas
                 </Link>
               )}
+              {ROLES_CON_PANEL_PROGRAMAS.includes(sesion.usuario.rol) && (
+                <Link
+                  href="/admin/materias"
+                  className="text-label-md font-display font-semibold text-ink-muted hover:text-secondary"
+                >
+                  Materias
+                </Link>
+              )}
               <Link
                 href="/mi-iinicia"
                 className="text-label-md font-display font-semibold text-ink hover:text-secondary"
@@ -274,6 +282,15 @@ export function SiteHeader() {
                   onClick={() => setMenuOpen(false)}
                 >
                   Programas
+                </Link>
+              )}
+              {ROLES_CON_PANEL_PROGRAMAS.includes(sesion.usuario.rol) && (
+                <Link
+                  href="/admin/materias"
+                  className="rounded-md px-3 py-2.5 text-label-lg font-display font-semibold text-ink hover:bg-surface-subtle"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Materias
                 </Link>
               )}
               <Link

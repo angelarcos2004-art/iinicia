@@ -26,6 +26,22 @@ export interface Programa {
 /** Datos editables de un programa (todo excepto el id, que no cambia). */
 export type ProgramaInput = Omit<Programa, "id">;
 
+/**
+ * Materia (curso de Moodle) dentro de una carrera, con prerequisitos (ids de otras materias
+ * de la misma carrera) para la seriación: ver /admin/materias. Solo bloquea el avance a
+ * quienes eligieron esa carrera como programa de interés.
+ */
+export interface Materia {
+  id: string;
+  programaId: string;
+  nombre: string;
+  moodleCourseShortname: string;
+  prerequisitos: string[];
+}
+
+/** Datos editables de una materia al crearla (el id y el programa no cambian después). */
+export type MateriaInput = Materia;
+
 export interface Usuario {
   id: string;
   nombre: string;

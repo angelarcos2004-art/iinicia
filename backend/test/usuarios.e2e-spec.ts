@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { BadRequestException, INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
@@ -7,6 +7,7 @@ import { setupApp } from '../src/app.setup.js';
 import { JwtAuthGuard } from '../src/auth/jwt-auth.guard.js';
 import { JwtStrategy } from '../src/auth/jwt.strategy.js';
 import { RolesGuard } from '../src/auth/roles.guard.js';
+import { MateriasService } from '../src/materias/materias.service.js';
 import { MoodleService } from '../src/moodle/moodle.service.js';
 import { ProgramasService } from '../src/programas/programas.service.js';
 import { PushService } from '../src/push/push.service.js';
@@ -86,6 +87,10 @@ const programasFake = {
   findById: vi.fn().mockResolvedValue(null),
 };
 
+const materiasFake = {
+  verificarPrerequisitos: vi.fn().mockResolvedValue(undefined),
+};
+
 describe('PATCH /usuarios/:id/rol (e2e)', () => {
   let app: INestApplication;
   let jwt: JwtService;
@@ -107,6 +112,7 @@ describe('PATCH /usuarios/:id/rol (e2e)', () => {
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
         { provide: ProgramasService, useValue: programasFake },
+        { provide: MateriasService, useValue: materiasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
@@ -219,6 +225,7 @@ describe('POST /usuarios/:id/matricula (e2e)', () => {
   beforeEach(async () => {
     moodleFake.buscarOCrearUsuarioMoodle.mockReset().mockResolvedValue(999);
     moodleFake.matricularEnCurso.mockReset().mockResolvedValue(undefined);
+    materiasFake.verificarPrerequisitos.mockReset().mockResolvedValue(undefined);
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [UsuariosController],
@@ -230,6 +237,7 @@ describe('POST /usuarios/:id/matricula (e2e)', () => {
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
         { provide: ProgramasService, useValue: programasFake },
+        { provide: MateriasService, useValue: materiasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
@@ -247,6 +255,25 @@ describe('POST /usuarios/:id/matricula (e2e)', () => {
       .post('/usuarios/u-aspirante-nuevo/matricula')
       .send({ cursoShortname: 'IINICIA101-SOFTWARE' });
     expect(res.status).toBe(401);
+  });
+
+  it('bloquea la matrícula (400) si falta un prerequisito de la materia, sin tocar Moodle', async () => {
+    materiasFake.verificarPrerequisitos.mockRejectedValue(
+      new BadRequestException('No puedes matricularte en "Cálculo II": falta aprobar Cálculo I'),
+    );
+    const token = await jwt.signAsync({ sub: 'u-admin', rol: Rol.AdminAcademico });
+    const res = await request(app.getHttpServer())
+      .post('/usuarios/u-aspirante-nuevo/matricula')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ cursoShortname: 'CALCULO2' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.message).toContain('Cálculo I');
+    expect(moodleFake.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+    expect(materiasFake.verificarPrerequisitos).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'u-aspirante-nuevo' }),
+      'CALCULO2',
+    );
   });
 
   it('con rol no autorizado (coordinador) -> 403', async () => {
@@ -345,6 +372,7 @@ describe('GET /usuarios (e2e)', () => {
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
         { provide: ProgramasService, useValue: programasFake },
+        { provide: MateriasService, useValue: materiasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
@@ -448,6 +476,7 @@ describe('GET /usuarios/cursos-moodle (e2e)', () => {
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
         { provide: ProgramasService, useValue: programasFake },
+        { provide: MateriasService, useValue: materiasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
@@ -511,6 +540,7 @@ describe('POST /usuarios/:id/notificar (e2e)', () => {
         { provide: MoodleService, useValue: moodleFake },
         { provide: PushService, useValue: pushFake },
         { provide: ProgramasService, useValue: programasFake },
+        { provide: MateriasService, useValue: materiasFake },
         { provide: ConfigService, useValue: { getOrThrow: () => 'test-secret', get: () => 'IINICIA101' } },
       ],
     }).compile();
