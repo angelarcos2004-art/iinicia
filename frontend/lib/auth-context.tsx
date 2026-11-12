@@ -9,6 +9,7 @@ import {
 } from "react";
 import {
   login as apiLogin,
+  loginConGoogle as apiLoginConGoogle,
   registrarAspirante as apiRegistrarAspirante,
 } from "./api";
 import type { AuthResponse, LoginInput, RegistroAspiranteInput, Usuario } from "./types";
@@ -22,6 +23,7 @@ type AuthContextValue = {
   /** true mientras se lee la sesion guardada en localStorage al cargar. */
   cargando: boolean;
   login: (input: LoginInput) => Promise<void>;
+  loginConGoogle: (idToken: string) => Promise<void>;
   registrarAspirante: (input: RegistroAspiranteInput) => Promise<void>;
   logout: () => void;
 };
@@ -79,6 +81,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     aplicarRespuesta(await apiLogin(input));
   }
 
+  async function loginConGoogle(idToken: string) {
+    aplicarRespuesta(await apiLoginConGoogle(idToken));
+  }
+
   async function registrarAspirante(input: RegistroAspiranteInput) {
     aplicarRespuesta(await apiRegistrarAspirante(input));
   }
@@ -89,7 +95,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ sesion, cargando, login, registrarAspirante, logout }}>
+    <AuthContext.Provider
+      value={{ sesion, cargando, login, loginConGoogle, registrarAspirante, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

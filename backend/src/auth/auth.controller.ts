@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService, type AuthResponse } from './auth.service.js';
+import { GoogleLoginDto } from './dto/google-login.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RecuperarDto } from './dto/recuperar.dto.js';
 import { RegistroDto } from './dto/registro.dto.js';
@@ -27,6 +28,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: LoginDto): Promise<AuthResponse> {
     return this.auth.login(dto);
+  }
+
+  @Throttle({ default: { ttl: 60_000, limit: 5 } })
+  @Post('google')
+  @HttpCode(HttpStatus.OK)
+  loginConGoogle(@Body() dto: GoogleLoginDto): Promise<AuthResponse> {
+    return this.auth.loginConGoogle(dto.idToken);
   }
 
   /** El contrato del portal espera 200 OK (no 201) en el registro. */
