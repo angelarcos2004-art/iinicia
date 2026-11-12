@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import bcrypt from 'bcryptjs';
 import { AppModule } from './app.module.js';
+import type { Materia } from './materias/materia.entity.js';
+import { MateriasService } from './materias/materias.service.js';
 import { vincularYMatricularMoodle } from './moodle/moodle-onboarding.js';
 import { MoodleService } from './moodle/moodle.service.js';
 import type { Programa } from './programas/programa.entity.js';
@@ -92,6 +94,44 @@ const PROGRAMAS_SEMILLA: Programa[] = [
   },
 ];
 
+/**
+ * Seriación real de materias, usando cursos de Moodle que ya existen (ver
+ * infrastructure/moodle-seed-cursos.php y MOODLE_TEST_COURSE): sin esto, el panel
+ * /admin/materias queda vacío y la seriación nunca se puede probar de punta a punta.
+ * Solo lic-software-ia tiene una cadena de prerequisito; las demás carreras quedan con
+ * una materia suelta (sin prerequisitos) para que el catálogo no esté vacío en ellas.
+ */
+const MATERIAS_SEMILLA: Materia[] = [
+  {
+    id: 'soft-induccion',
+    programaId: 'lic-software-ia',
+    nombre: 'Inducción a la Licenciatura',
+    moodleCourseShortname: 'IINICIA101',
+    prerequisitos: [],
+  },
+  {
+    id: 'soft-fundamentos-ia',
+    programaId: 'lic-software-ia',
+    nombre: 'Fundamentos de Ingeniería de Software e IA',
+    moodleCourseShortname: 'IINICIA-SOFT1',
+    prerequisitos: ['soft-induccion'],
+  },
+  {
+    id: 'ciber-fundamentos',
+    programaId: 'cert-ciberseguridad-soc',
+    nombre: 'Ciberseguridad Defensiva y SOC',
+    moodleCourseShortname: 'IINICIA-CIBER1',
+    prerequisitos: [],
+  },
+  {
+    id: 'negocios-fundamentos',
+    programaId: 'lic-admon-negocios',
+    nombre: 'Administración de Negocios Digitales',
+    moodleCourseShortname: 'IINICIA-NEG1',
+    prerequisitos: [],
+  },
+];
+
 const BCRYPT_ROUNDS = 10;
 
 interface UsuarioSemilla {
@@ -155,6 +195,7 @@ async function main(): Promise<void> {
     const moodle = app.get(MoodleService);
     const config = app.get(ConfigService);
     const programas = app.get(ProgramasService);
+    const materias = app.get(MateriasService);
 
     for (const data of PROGRAMAS_SEMILLA) {
       const existente = await programas.findById(data.id);
@@ -164,6 +205,17 @@ async function main(): Promise<void> {
       } else {
         await programas.actualizar(data.id, data);
         logger.log(`Actualizado programa ${data.id}`);
+      }
+    }
+
+    for (const data of MATERIAS_SEMILLA) {
+      const existente = await materias.findById(data.id);
+      if (!existente) {
+        await materias.crear(data);
+        logger.log(`Creada materia ${data.id}`);
+      } else {
+        await materias.actualizar(data.id, data);
+        logger.log(`Actualizada materia ${data.id}`);
       }
     }
 

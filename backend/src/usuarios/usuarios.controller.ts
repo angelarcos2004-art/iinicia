@@ -15,6 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { Roles } from '../auth/roles.decorator.js';
 import { RolesGuard } from '../auth/roles.guard.js';
+import { MateriasService } from '../materias/materias.service.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleCurso, MoodleService } from '../moodle/moodle.service.js';
 import { PushService } from '../push/push.service.js';
@@ -55,6 +56,7 @@ export class UsuariosController {
     private readonly config: ConfigService,
     private readonly push: PushService,
     private readonly programas: ProgramasService,
+    private readonly materias: MateriasService,
   ) {}
 
   /** Lista de usuarios para el panel administrativo; `rol` filtra opcionalmente. */
@@ -135,6 +137,10 @@ export class UsuariosController {
     if (user.rol !== Rol.Aspirante && user.rol !== Rol.Estudiante) {
       throw new BadRequestException('Solo aspirantes o estudiantes pueden matricularse en Moodle');
     }
+    // Si el curso es una materia de la carrera elegida por el usuario (ver MateriasService),
+    // bloquea la matrícula mientras falte aprobar sus prerequisitos. Un curso suelto sin
+    // carrera, o sin materias registradas, no tiene seriación y pasa de largo.
+    await this.materias.verificarPrerequisitos(user, dto.cursoShortname);
 
     const actualizado = await vincularYMatricularMoodle(
       { users: this.users, moodle: this.moodle, config: this.config, logger: this.logger },

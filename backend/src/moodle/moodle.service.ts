@@ -132,6 +132,17 @@ export class MoodleService {
   }
 
   /**
+   * Shortnames de los cursos del usuario completados al 100% (ver `obtenerCursosDeUsuario`):
+   * es la señal que usa la seriación de materias (MateriasService.verificarPrerequisitos)
+   * para decidir si un prerequisito está "aprobado". Moodle no distingue "reprobada" de "en
+   * curso" sin una calificación configurada, así que ambas bloquean el avance por igual.
+   */
+  async obtenerCursosAprobados(moodleUserId: number): Promise<Set<string>> {
+    const cursos = await this.obtenerCursosDeUsuario(moodleUserId);
+    return new Set(cursos.filter((c) => c.progress === 100).map((c) => c.shortname));
+  }
+
+  /**
    * Próximas actividades con fecha límite (tareas, cuestionarios, etc.) del usuario en
    * cualquiera de sus cursos, vía `core_calendar_get_action_events_by_timesort`: la misma
    * función que usa la app móvil oficial de Moodle para "Próximos eventos". Solo trae eventos
