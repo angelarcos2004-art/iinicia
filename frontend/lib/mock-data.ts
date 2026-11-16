@@ -1,5 +1,4 @@
 import type {
-  AuthResponse,
   AvisoInstitucional,
   CursoEstudiante,
   DashboardEstudiante,
@@ -226,18 +225,3 @@ export const MOCK_DASHBOARD_ADMIN: ResumenAdmin = {
   solicitudesPendientes: 12,
   cuentasMoodleVinculadas: 779,
 };
-
-export function buildMockAuthResponse(
-  correo: string,
-  nombre: string,
-): AuthResponse {
-  return {
-    token: "mock-token-sin-backend",
-    usuario: {
-      id: "mock-usuario-001",
-      nombre,
-      correo,
-      rol: "aspirante",
-    },
-  };
-}

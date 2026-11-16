@@ -1,4 +1,4 @@
-import { buildMockAuthResponse, MOCK_PROGRAMAS } from "./mock-data";
+import { MOCK_PROGRAMAS } from "./mock-data";
 import type {
   ActividadProxima,
   AuthResponse,
@@ -161,22 +161,9 @@ function withMockDelay<T>(value: T, ms = 450): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
-/**
- * Inicia sesión contra el backend IINICIA (NEXT_PUBLIC_API_URL).
- * Si el backend aún no existe o no responde, cae a una respuesta simulada
- * para permitir desarrollar y probar la UI de forma aislada. Una vez que
- * el backend exista, los errores de credenciales que sí respondan (401,
- * 400, etc.) se muestran al usuario en vez de enmascararse.
- */
+/** Inicia sesión contra el backend IINICIA (NEXT_PUBLIC_API_URL). */
 export async function login(input: LoginInput): Promise<AuthResponse> {
-  try {
-    return await postJSON<AuthResponse>("/auth/login", input);
-  } catch (error) {
-    if (error instanceof BackendUnavailableError) {
-      return withMockDelay(buildMockAuthResponse(input.correo, "Aspirante IINICIA"));
-    }
-    throw error;
-  }
+  return postJSON<AuthResponse>("/auth/login", input);
 }
 
 /** Inicia sesión con el idToken que entrega Google Identity Services. */
@@ -184,21 +171,11 @@ export async function loginConGoogle(idToken: string): Promise<AuthResponse> {
   return postJSON<AuthResponse>("/auth/google", { idToken });
 }
 
-/**
- * Registra un aspirante contra el backend IINICIA. Mismo criterio de
- * fallback a datos mock que `login`.
- */
+/** Registra un aspirante contra el backend IINICIA. */
 export async function registrarAspirante(
   input: RegistroAspiranteInput,
 ): Promise<AuthResponse> {
-  try {
-    return await postJSON<AuthResponse>("/auth/registro", input);
-  } catch (error) {
-    if (error instanceof BackendUnavailableError) {
-      return withMockDelay(buildMockAuthResponse(input.correo, input.nombreCompleto));
-    }
-    throw error;
-  }
+  return postJSON<AuthResponse>("/auth/registro", input);
 }
 
 /**
