@@ -231,10 +231,11 @@ async function main(): Promise<void> {
         });
         logger.log(`Creado ${data.correo} (${data.rol})`);
       } else {
-        // Reafirma rol y contraseña conocida en cada corrida, aunque la
-        // cuenta ya existiera con otro rol/contraseña (p.ej. un correo que
-        // alguien autorregistró antes como aspirante): el seed siempre deja
-        // un estado conocido y repetible para la demo.
+        // Reafirma nombre, rol y contraseña conocidos en cada corrida, aunque
+        // la cuenta ya existiera con otros datos (p.ej. un correo que alguien
+        // autorregistró antes como aspirante): el seed siempre deja un estado
+        // conocido y repetible para la demo.
+        await users.actualizarNombre(user.id, data.nombre);
         await users.actualizarRol(user.id, data.rol);
         await users.actualizarPasswordHash(user.id, passwordHash);
         user.rol = data.rol;

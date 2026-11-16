@@ -50,6 +50,11 @@ export class UsersService {
     await this.repo.update(id, { passwordHash });
   }
 
+  /** Usado por el script de seed para garantizar un nombre conocido en cada corrida. */
+  async actualizarNombre(id: string, nombre: string): Promise<void> {
+    await this.repo.update(id, { nombre });
+  }
+
   /** El dispositivo Android reemplaza su token anterior cada vez que FCM lo rota. */
   async actualizarFcmToken(id: string, fcmToken: string): Promise<void> {
     await this.repo.update(id, { fcmToken });

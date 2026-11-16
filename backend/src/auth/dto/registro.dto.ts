@@ -25,7 +25,7 @@ export class RegistroDto {
 
   @IsString({ message: 'Selecciona un programa de interés' })
   @IsNotEmpty({ message: 'Selecciona un programa de interés' })
-  @MaxLength(100)
+  @MaxLength(100, { message: 'Selecciona un programa de interés' })
   programaInteresId!: string;
 
   @IsBoolean()
