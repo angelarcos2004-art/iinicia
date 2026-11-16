@@ -1,0 +1,7 @@
+{$API_DOMAIN} {
+	reverse_proxy backend:3001
+}
+
+{$CAMPUS_DOMAIN} {
+	reverse_proxy moodle:80
+}

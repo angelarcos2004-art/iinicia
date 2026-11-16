@@ -1,0 +1,88 @@
+name: iinicia-prod
+
+# Despliegue de produccion (VM gratuita, ver DEPLOY.md). Diferencias clave vs
+# docker-compose.yml (desarrollo local):
+# - backend usa la imagen "runtime" ya compilada (Dockerfile), no "dev" con
+#   hot-reload, y no monta src/ como volumen.
+# - Nada de Postgres/Moodle/backend publica su puerto al host: solo Caddy
+#   (80/443) es publico, y les llega por la red interna de Docker.
+# - El frontend NO esta aqui: se despliega aparte en Vercel.
+# - Caddy agrega HTTPS automatico (Let's Encrypt) para API_DOMAIN y
+#   CAMPUS_DOMAIN (ver infrastructure/.env.prod.example).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: iinicia-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-iinicia}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-iinicia_backend}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-iinicia} -d ${POSTGRES_DB:-iinicia_backend}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  moodle:
+    image: moodlehq/moodle-php-apache:8.3
+    container_name: iinicia-moodle
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./moodle-src:/var/www/html
+      - moodledata_data:/var/www/moodledata
+      - ./moodle-custom/auth/userkey:/var/www/html/auth/userkey
+      - ./moodle-custom/php/opcache-prod.ini:/usr/local/etc/php/conf.d/99-opcache-prod.ini:ro
+
+  backend:
+    build:
+      context: ../backend
+      target: runtime
+    container_name: iinicia-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      moodle:
+        condition: service_started
+    env_file:
+      - ../backend/.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iinicia}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-iinicia_backend}
+      MOODLE_URL: http://moodle
+      # Debe ser el mismo dominio publico de Moodle (CAMPUS_DOMAIN): el
+      # $CFG->wwwroot de la instalacion en produccion ya es ese dominio, no
+      # localhost:8080 como en desarrollo (ver DEPLOY.md paso de instalacion).
+      MOODLE_HOST_HEADER: ${CAMPUS_DOMAIN}
+      PORT: 3001
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: iinicia-caddy
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - moodle
+    environment:
+      API_DOMAIN: ${API_DOMAIN}
+      CAMPUS_DOMAIN: ${CAMPUS_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  postgres_data:
+  moodledata_data:
+  caddy_data:
+  caddy_config:
