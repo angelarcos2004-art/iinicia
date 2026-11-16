@@ -67,7 +67,7 @@ private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
     override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) = Unit
 }
 
-class ExampleUnitTest {
+class IiniciaUnitTest {
     @Test
     fun institutionalColors_areCorrect() {
         assertEquals(0xFF0B2A5BUL, IiniciaPrimary.value shr 32)
@@ -77,7 +77,8 @@ class ExampleUnitTest {
 
     @Test
     fun apiConfig_normalizesBaseUrlCorrectly() {
-        assertEquals("http://10.0.2.2:3001/", ApiConfig.DEFAULT_BASE_URL)
+        // No afirma nada sobre ApiConfig.DEFAULT_BASE_URL: ese valor depende de
+        // android/local.properties (ver README), que cada máquina puede sobreescribir.
         assertEquals("http://10.0.2.2:3001/", ApiConfig.normalizeBaseUrl("http://10.0.2.2:3001"))
         assertEquals("http://10.0.2.2:3001/", ApiConfig.normalizeBaseUrl("http://10.0.2.2:3001/"))
         assertEquals("http://localhost:3001/", ApiConfig.normalizeBaseUrl("http://localhost:3001"))
@@ -88,9 +89,11 @@ class ExampleUnitTest {
     fun retrofitClient_createsApiServiceWithPlaceholderUrl() {
         val service = RetrofitClient.createApiService(baseUrl = "http://10.0.2.2:3001/")
         assertNotNull(service)
+        // El baseUrl real (ApiConfig.DEFAULT_BASE_URL) depende de local.properties por máquina;
+        // solo se verifica que el repositorio lo tome normalizado, no un valor fijo.
         val defaultRepository = IiniciaRepositoryImpl()
         assertTrue(defaultRepository.isConnectToRemoteEnabled)
-        assertEquals("http://10.0.2.2:3001/", defaultRepository.baseUrl)
+        assertTrue(defaultRepository.baseUrl.endsWith("/"))
     }
 
     @Test
