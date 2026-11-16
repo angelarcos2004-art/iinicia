@@ -389,6 +389,9 @@ function DashboardAspirante() {
 
   return (
     <div className="mb-8 flex flex-col gap-4">
+      <p className="text-label-sm italic text-ink-muted/70">
+        Datos de ejemplo — este seguimiento todavía no viene del backend.
+      </p>
       <Reveal>
         <Card className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -427,6 +430,9 @@ function DashboardProfesor() {
 
   return (
     <div className="mb-8 flex flex-col gap-6">
+      <p className="text-label-sm italic text-ink-muted/70">
+        Datos de ejemplo — este resumen todavía no viene del backend.
+      </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card className="flex flex-col gap-1">
           <span className="text-headline-md font-display font-bold text-primary">
@@ -476,6 +482,9 @@ function DashboardCoordinador() {
 
   return (
     <div className="mb-8 flex flex-col gap-6">
+      <p className="text-label-sm italic text-ink-muted/70">
+        Datos de ejemplo — este resumen todavía no viene del backend.
+      </p>
       <Reveal>
         <Card className="flex flex-col gap-1">
           <p className="text-label-sm font-display font-semibold uppercase tracking-wide text-ink-muted">
@@ -537,6 +546,9 @@ function DashboardAdmin({ rol }: { rol: "admin_academico" | "superadmin" }) {
 
   return (
     <div className="mb-8 flex flex-col gap-6">
+      <p className="text-label-sm italic text-ink-muted/70">
+        Datos de ejemplo — este resumen todavía no viene del backend.
+      </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card className="flex flex-col gap-1">
           <span className="text-headline-md font-display font-bold text-primary">
