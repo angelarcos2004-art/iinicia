@@ -22,7 +22,7 @@ type AuthContextValue = {
   sesion: Sesion | null;
   /** true mientras se lee la sesion guardada en localStorage al cargar. */
   cargando: boolean;
-  login: (input: LoginInput) => Promise<void>;
+  login: (input: LoginInput, recordar?: boolean) => Promise<void>;
   loginConGoogle: (idToken: string) => Promise<void>;
   registrarAspirante: (input: RegistroAspiranteInput) => Promise<void>;
   logout: () => void;
@@ -32,23 +32,28 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function leerSesionGuardada(): Sesion | null {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = window.localStorage.getItem(STORAGE_KEY) ?? window.sessionStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as Sesion) : null;
   } catch {
     return null;
   }
 }
 
-function guardarSesion(sesion: Sesion | null) {
+// "Recordarme" desmarcado => sessionStorage (la sesion no sobrevive a cerrar
+// la pestaña); marcado (default) => localStorage, como antes.
+function guardarSesion(sesion: Sesion | null, recordar = true) {
   try {
+    window.localStorage.removeItem(STORAGE_KEY);
+    window.sessionStorage.removeItem(STORAGE_KEY);
     if (sesion) {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sesion));
-    } else {
-      window.localStorage.removeItem(STORAGE_KEY);
+      (recordar ? window.localStorage : window.sessionStorage).setItem(
+        STORAGE_KEY,
+        JSON.stringify(sesion),
+      );
     }
   } catch {
-    // localStorage no disponible (modo privado, etc.): la sesion solo
-    // vive en memoria durante esta pestaña.
+    // localStorage/sessionStorage no disponible (modo privado, etc.): la
+    // sesion solo vive en memoria durante esta pestaña.
   }
 }
 
@@ -71,14 +76,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setCargando(false);
   }, []);
 
-  function aplicarRespuesta(response: AuthResponse) {
+  function aplicarRespuesta(response: AuthResponse, recordar = true) {
     const nueva: Sesion = { token: response.token, usuario: response.usuario };
     setSesion(nueva);
-    guardarSesion(nueva);
+    guardarSesion(nueva, recordar);
   }
 
-  async function login(input: LoginInput) {
-    aplicarRespuesta(await apiLogin(input));
+  async function login(input: LoginInput, recordar = true) {
+    aplicarRespuesta(await apiLogin(input), recordar);
   }
 
   async function loginConGoogle(idToken: string) {
@@ -91,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function logout() {
     setSesion(null);
-    guardarSesion(null);
+    guardarSesion(null, true);
   }
 
   return (
