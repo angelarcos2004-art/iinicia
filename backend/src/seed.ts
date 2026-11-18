@@ -134,14 +134,24 @@ const MATERIAS_SEMILLA: Materia[] = [
 
 const BCRYPT_ROUNDS = 10;
 
+/**
+ * Cursos reales con contenido (páginas, tarea, cuestionario y foro — ver
+ * infrastructure/moodle-seed-cursos.php) en los que se matricula a profesor.prueba como
+ * editingteacher, para que su dashboard muestre cursos reales en vez de datos de ejemplo. Si
+ * ese script todavía no corrió en esta máquina, el curso no existe en Moodle y se omite (warn),
+ * sin tronar el resto del seed.
+ */
+const CURSOS_PROFESOR_PRUEBA = ['IINICIA-SOFT1', 'IINICIA-CIBER1', 'IINICIA-NEG1'];
+
 interface UsuarioSemilla {
   nombre: string;
   correo: string;
   password: string;
   rol: Rol;
-  /** Solo el estudiante de prueba se vincula/matricula en Moodle: los demás
-   * roles todavía no tienen pantallas propias en esta entrega (ver plan). */
+  /** El estudiante de prueba se vincula/matricula como estudiante en su curso. */
   vincularMoodle?: boolean;
+  /** El profesor de prueba se vincula y se matricula como editingteacher en estos cursos. */
+  cursosProfesor?: string[];
 }
 
 /**
@@ -174,6 +184,7 @@ const USUARIOS_PRUEBA: UsuarioSemilla[] = [
     correo: 'profesor.prueba@iinicia.test',
     password: 'Profesor#2026',
     rol: Rol.Profesor,
+    cursosProfesor: CURSOS_PROFESOR_PRUEBA,
   },
   {
     nombre: 'Estudiante Prueba',
@@ -183,6 +194,40 @@ const USUARIOS_PRUEBA: UsuarioSemilla[] = [
     vincularMoodle: true,
   },
 ];
+
+/**
+ * Vincula (si falta) la cuenta Moodle del profesor con su mismo correo del portal y lo
+ * matricula como editingteacher en cada curso dado. A diferencia de `vincularYMatricularMoodle`
+ * (que matricula como estudiante en un solo curso), nunca lanza por curso: si uno no existe
+ * (p. ej. no se corrió infrastructure/moodle-seed-cursos.php todavía) solo lo advierte y sigue
+ * con los demás.
+ */
+async function vincularProfesorComoEditingteacher(
+  { users, moodle, config, logger }: { users: UsersService; moodle: MoodleService; config: ConfigService; logger: Logger },
+  user: { id: string; correo: string; nombre: string },
+  cursos: string[],
+): Promise<void> {
+  let moodleUserId: number;
+  try {
+    moodleUserId = await moodle.buscarOCrearUsuarioMoodle(user.correo, user.nombre);
+    await users.actualizarMoodleUserId(user.id, moodleUserId);
+  } catch (error) {
+    logger.warn(`No se pudo vincular a Moodle al profesor ${user.id}: ${String(error)}`);
+    return;
+  }
+
+  const teacherRoleId = config.get<string>('MOODLE_ROLEID_TEACHER', '3');
+  for (const shortname of cursos) {
+    try {
+      await moodle.matricularEnCurso(moodleUserId, shortname, teacherRoleId);
+      logger.log(`Profesor ${user.correo} matriculado como editingteacher en ${shortname}`);
+    } catch (error) {
+      logger.warn(
+        `No se pudo matricular al profesor ${user.id} en ${shortname} (¿corriste moodle-seed-cursos.php?): ${String(error)}`,
+      );
+    }
+  }
+}
 
 async function main(): Promise<void> {
   const logger = new Logger('Seed');
@@ -244,6 +289,18 @@ async function main(): Promise<void> {
 
       if (data.vincularMoodle && user.moodleUserId === null) {
         await vincularYMatricularMoodle({ users, moodle, config, logger }, user);
+      }
+
+      // Sin el guard de moodleUserId === null de arriba: buscarOCrearUsuarioMoodle y
+      // matricularEnCurso son idempotentes, así que repetir esto en cada corrida del seed
+      // nunca duplica nada y sirve para completar la matrícula de profesor.prueba aunque su
+      // cuenta Moodle ya existiera vinculada sin estar matriculada en estos cursos todavía.
+      if (data.cursosProfesor) {
+        await vincularProfesorComoEditingteacher(
+          { users, moodle, config, logger },
+          user,
+          data.cursosProfesor,
+        );
       }
     }
   } finally {

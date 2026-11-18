@@ -27,6 +27,17 @@ export interface MoodleCurso {
   fullname: string;
 }
 
+interface MoodleUsuarioInscrito {
+  email: string;
+  fullname: string;
+  roles?: { shortname: string }[];
+}
+
+export interface MoodleEstudiante {
+  email: string;
+  fullname: string;
+}
+
 interface MoodleErrorBody {
   exception?: string;
   errorcode?: string;
@@ -96,17 +107,22 @@ export class MoodleService {
 
   /**
    * Matricula al usuario en el curso (por shortname) con el rol de estudiante
-   * (MOODLE_ROLEID_STUDENT, default 5). Moodle no duplica ni falla si ya
-   * estaba matriculado, así que es seguro repetirlo.
+   * (MOODLE_ROLEID_STUDENT, default 5), salvo que se pase `roleId` explícito
+   * (usado por el seed para matricular a profesor.prueba como editingteacher).
+   * Moodle no duplica ni falla si ya estaba matriculado, así que es seguro repetirlo.
    */
-  async matricularEnCurso(moodleUserId: number, courseShortname: string): Promise<void> {
+  async matricularEnCurso(
+    moodleUserId: number,
+    courseShortname: string,
+    roleId?: string,
+  ): Promise<void> {
     const courseId = await this.buscarCursoPorShortname(courseShortname);
     if (courseId === null) {
       throw new BadGatewayException(`No existe el curso "${courseShortname}" en Moodle`);
     }
-    const roleId = this.config.get<string>('MOODLE_ROLEID_STUDENT', '5');
+    const rolAsignado = roleId ?? this.config.get<string>('MOODLE_ROLEID_STUDENT', '5');
     await this.llamar<null>('enrol_manual_enrol_users', {
-      'enrolments[0][roleid]': String(roleId),
+      'enrolments[0][roleid]': String(rolAsignado),
       'enrolments[0][userid]': String(moodleUserId),
       'enrolments[0][courseid]': String(courseId),
     });
@@ -140,6 +156,22 @@ export class MoodleService {
   async obtenerCursosAprobados(moodleUserId: number): Promise<Set<string>> {
     const cursos = await this.obtenerCursosDeUsuario(moodleUserId);
     return new Set(cursos.filter((c) => c.progress === 100).map((c) => c.shortname));
+  }
+
+  /**
+   * Estudiantes (rol `student`, sin incluir profesores ni otro staff) inscritos en un curso,
+   * para que un profesor pueda ver y notificar a sus propios alumnos (ver
+   * UsuariosController.misEstudiantes) sin tener acceso a la lista completa de usuarios de la
+   * plataforma (esa sigue reservada a superadmin/admin_academico/coordinador).
+   */
+  async obtenerEstudiantesDeCurso(courseId: number): Promise<MoodleEstudiante[]> {
+    const usuarios = await this.llamar<MoodleUsuarioInscrito[]>('core_enrol_get_enrolled_users', {
+      courseid: String(courseId),
+    });
+    if (!Array.isArray(usuarios)) return [];
+    return usuarios
+      .filter((u) => u.roles?.some((r) => r.shortname === 'student'))
+      .map((u) => ({ email: u.email, fullname: u.fullname }));
   }
 
   /**

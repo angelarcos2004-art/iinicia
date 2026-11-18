@@ -13,8 +13,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
+import type { UsuarioAutenticado } from '../auth/jwt.strategy.js';
 import { Roles } from '../auth/roles.decorator.js';
 import { RolesGuard } from '../auth/roles.guard.js';
+import { UsuarioActual } from '../auth/usuario-actual.decorator.js';
 import { MateriasService } from '../materias/materias.service.js';
 import { vincularYMatricularMoodle } from '../moodle/moodle-onboarding.js';
 import { MoodleCurso, MoodleService } from '../moodle/moodle.service.js';
@@ -38,6 +40,16 @@ export interface UsuarioListado extends UsuarioActualizado {
   createdAt: Date;
   /** Programa que el usuario eligió al registrarse (ver ProgramasService), o null si no tiene. */
   programaInteresNombre: string | null;
+}
+
+export interface EstudianteDeProfesor {
+  id: string;
+  nombre: string;
+  correo: string;
+  /** Cursos reales (Moodle) que comparte con el profesor que hace la consulta. */
+  cursos: string[];
+  /** false si nunca abrió la app Android con sesión iniciada: notificar le devolvería 400. */
+  tieneDispositivo: boolean;
 }
 
 /**
@@ -87,6 +99,49 @@ export class UsuariosController {
   @Roles(Rol.Superadmin, Rol.AdminAcademico)
   async listarCursosMoodle(): Promise<MoodleCurso[]> {
     return this.moodle.listarCursos();
+  }
+
+  /**
+   * Estudiantes reales (Moodle) de los cursos que imparte el profesor que hace la consulta, para
+   * poder notificarlos (ver POST :id/notificar) sin exponerle la lista completa de usuarios de
+   * la plataforma (docs/requerimientos.md §11: "no puede administrar usuarios globales"). Se
+   * agrupan por correo porque un mismo estudiante puede estar en más de un curso del profesor.
+   * Un estudiante de Moodle sin cuenta de portal vinculada (p. ej. generado por
+   * tool_generator) se omite: no hay a quién notificar en la app.
+   */
+  @Get('mis-estudiantes')
+  @Roles(Rol.Profesor)
+  async misEstudiantes(@UsuarioActual() actual: UsuarioAutenticado): Promise<EstudianteDeProfesor[]> {
+    const profesor = await this.users.findById(actual.id);
+    if (!profesor?.moodleUserId) return [];
+
+    const cursos = await this.moodle.obtenerCursosDeUsuario(profesor.moodleUserId);
+    const porCorreo = new Map<string, { nombre: string; cursos: Set<string> }>();
+    for (const curso of cursos) {
+      const estudiantes = await this.moodle.obtenerEstudiantesDeCurso(curso.id);
+      for (const estudiante of estudiantes) {
+        const entrada = porCorreo.get(estudiante.email) ?? {
+          nombre: estudiante.fullname,
+          cursos: new Set<string>(),
+        };
+        entrada.cursos.add(curso.fullname);
+        porCorreo.set(estudiante.email, entrada);
+      }
+    }
+
+    const resultado: EstudianteDeProfesor[] = [];
+    for (const [correo, { cursos: cursosCompartidos }] of porCorreo) {
+      const usuario = await this.users.findByCorreo(correo);
+      if (!usuario) continue;
+      resultado.push({
+        id: usuario.id,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        cursos: [...cursosCompartidos],
+        tieneDispositivo: usuario.fcmToken !== null,
+      });
+    }
+    return resultado;
   }
 
   @Patch(':id/rol')
