@@ -4,6 +4,7 @@ import type {
   AuthResponse,
   CursoInscrito,
   CursoMoodle,
+  EstudianteDeProfesor,
   LoginInput,
   Materia,
   MateriaInput,
@@ -342,6 +343,14 @@ export async function asignarCursoUsuario(
 /** Catálogo real de cursos de Moodle, para elegirlo de una lista al matricular. */
 export async function obtenerCursosMoodle(token: string): Promise<CursoMoodle[]> {
   return getJSON<CursoMoodle[]>("/usuarios/cursos-moodle", token);
+}
+
+/**
+ * Estudiantes reales de los cursos que imparte el profesor autenticado, para poder
+ * notificarlos sin exponerle la lista completa de usuarios de la plataforma. Solo profesor.
+ */
+export async function obtenerMisEstudiantes(token: string): Promise<EstudianteDeProfesor[]> {
+  return getJSON<EstudianteDeProfesor[]>("/usuarios/mis-estudiantes", token);
 }
 
 /**

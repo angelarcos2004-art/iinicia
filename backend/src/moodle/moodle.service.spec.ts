@@ -180,6 +180,12 @@ describe('MoodleService.matricularEnCurso', () => {
     expect(paramsDeLlamada(fetchFn, 1).get('enrolments[0][roleid]')).toBe('7');
   });
 
+  it('usa el roleId explícito (p. ej. editingteacher) en vez del de estudiante', async () => {
+    const fetchFn = mockFetch(cursoEncontrado, null);
+    await makeService({ MOODLE_ROLEID_STUDENT: '5' }).matricularEnCurso(42, 'IINICIA101', '3');
+    expect(paramsDeLlamada(fetchFn, 1).get('enrolments[0][roleid]')).toBe('3');
+  });
+
   it('usa el id del primer curso si Moodle devuelve varios', async () => {
     const fetchFn = mockFetch({ courses: [{ id: 9 }, { id: 3 }] }, null);
     await makeService().matricularEnCurso(1, 'X');
@@ -317,6 +323,38 @@ describe('MoodleService.obtenerActividadesProximas', () => {
     await expect(makeService().obtenerActividadesProximas(17)).rejects.toBeInstanceOf(
       BadGatewayException,
     );
+  });
+});
+
+describe('MoodleService.obtenerEstudiantesDeCurso', () => {
+  it('excluye profesores y otro staff, solo devuelve rol student', async () => {
+    const fetchFn = mockFetch([
+      { email: 'prof@iinicia.test', fullname: 'Profe Uno', roles: [{ shortname: 'editingteacher' }] },
+      { email: 'ana@iinicia.test', fullname: 'Ana Pérez', roles: [{ shortname: 'student' }] },
+      { email: 'manager@iinicia.test', fullname: 'Manager', roles: [{ shortname: 'manager' }] },
+    ]);
+
+    const estudiantes = await makeService().obtenerEstudiantesDeCurso(6);
+
+    expect(estudiantes).toEqual([{ email: 'ana@iinicia.test', fullname: 'Ana Pérez' }]);
+    const p = paramsDeLlamada(fetchFn, 0);
+    expect(p.get('wsfunction')).toBe('core_enrol_get_enrolled_users');
+    expect(p.get('courseid')).toBe('6');
+  });
+
+  it('devuelve lista vacía si nadie tiene rol student', async () => {
+    mockFetch([{ email: 'prof@iinicia.test', fullname: 'Profe', roles: [{ shortname: 'editingteacher' }] }]);
+    await expect(makeService().obtenerEstudiantesDeCurso(6)).resolves.toEqual([]);
+  });
+
+  it('no truena si un usuario no trae roles', async () => {
+    mockFetch([{ email: 'raro@iinicia.test', fullname: 'Raro' }]);
+    await expect(makeService().obtenerEstudiantesDeCurso(6)).resolves.toEqual([]);
+  });
+
+  it('lanza 502 si Moodle falla', async () => {
+    mockFetch(new Response('boom', { status: 500 }));
+    await expect(makeService().obtenerEstudiantesDeCurso(6)).rejects.toBeInstanceOf(BadGatewayException);
   });
 });
 

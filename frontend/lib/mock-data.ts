@@ -2,10 +2,7 @@ import type {
   AvisoInstitucional,
   CursoEstudiante,
   DashboardEstudiante,
-  GrupoProfesor,
   Programa,
-  ResumenAdmin,
-  ResumenCoordinacion,
   SolicitudAspirante,
 } from "./types";
 
@@ -161,33 +158,6 @@ export const MOCK_DASHBOARD_ESTUDIANTE: DashboardEstudiante = {
   avisos: MOCK_AVISOS,
 };
 
-/** Dashboard del profesor: el backend no expone todavía un reporte propio de grupos/entregas. */
-export const MOCK_DASHBOARD_PROFESOR: { grupos: GrupoProfesor[] } = {
-  grupos: [
-    {
-      id: "grp-ia-3a",
-      curso: "Inteligencia Artificial Aplicada",
-      periodo: "3er cuatrimestre · Grupo A",
-      estudiantes: 28,
-      entregasPendientes: 6,
-    },
-    {
-      id: "grp-bd-3a",
-      curso: "Bases de Datos Relacionales",
-      periodo: "3er cuatrimestre · Grupo A",
-      estudiantes: 31,
-      entregasPendientes: 2,
-    },
-    {
-      id: "grp-ia-3b",
-      curso: "Inteligencia Artificial Aplicada",
-      periodo: "3er cuatrimestre · Grupo B",
-      estudiantes: 25,
-      entregasPendientes: 9,
-    },
-  ],
-};
-
 /** Estado de solicitud del aspirante: la plataforma aún no expone un endpoint de seguimiento. */
 export const MOCK_DASHBOARD_ASPIRANTE: SolicitudAspirante = {
   programaNombre: "Ingeniería de Software e Inteligencia Artificial",
@@ -198,30 +168,4 @@ export const MOCK_DASHBOARD_ASPIRANTE: SolicitudAspirante = {
     { label: "Documentos cargados", completado: false },
     { label: "Dictamen del comité", completado: false },
   ],
-};
-
-/** Resumen del coordinador: cifras agregadas de su programa, aún sin reporte real del backend. */
-export const MOCK_DASHBOARD_COORDINADOR: ResumenCoordinacion = {
-  programa: "Ingeniería de Software e Inteligencia Artificial",
-  estudiantesActivos: 164,
-  profesores: 12,
-  avancePromedio: 58,
-  alertas: [
-    { id: "al-1", mensaje: "9 estudiantes del Grupo B de IA Aplicada llevan 2 o más entregas atrasadas." },
-    { id: "al-2", mensaje: "3 solicitudes de aspirantes esperan dictamen desde hace más de 72 horas." },
-  ],
-};
-
-/** Resumen para admin académico / superadmin: cifras institucionales de ejemplo. */
-export const MOCK_DASHBOARD_ADMIN: ResumenAdmin = {
-  usuariosPorRol: [
-    { rol: "estudiante", total: 842 },
-    { rol: "aspirante", total: 97 },
-    { rol: "profesor", total: 54 },
-    { rol: "coordinador", total: 8 },
-    { rol: "admin_academico", total: 3 },
-    { rol: "superadmin", total: 2 },
-  ],
-  solicitudesPendientes: 12,
-  cuentasMoodleVinculadas: 779,
 };

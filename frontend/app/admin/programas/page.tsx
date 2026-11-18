@@ -12,7 +12,8 @@ import { actualizarPrograma, ApiError, crearPrograma, obtenerProgramas } from "@
 import { useAuth } from "@/lib/auth-context";
 import type { Modalidad, Programa, Rol, TipoPrograma } from "@/lib/types";
 
-const ROLES_CON_ACCESO: Rol[] = ["superadmin", "admin_academico"];
+const ROLES_CON_ACCESO: Rol[] = ["superadmin", "admin_academico", "coordinador"];
+const ROLES_QUE_PUEDEN_EDITAR: Rol[] = ["superadmin", "admin_academico"];
 
 const TIPO_LABEL: Record<TipoPrograma, string> = {
   licenciatura: "Licenciatura",
@@ -133,6 +134,8 @@ export default function AdminProgramasPage() {
     );
   }
 
+  const puedeEditar = ROLES_QUE_PUEDEN_EDITAR.includes(sesion.usuario.rol);
+
   return (
     <section className="relative overflow-hidden">
       <SectionBg image="/images/bg-abstract-1.png" opacity={0.06} />
@@ -140,8 +143,9 @@ export default function AdminProgramasPage() {
         <Reveal className="mb-6">
           <h1 className="text-headline-lg font-display font-bold text-primary">Programas</h1>
           <p className="text-body-md text-ink-muted">
-            Administra la oferta académica y el curso de Moodle al que se matricula cada
-            aspirante admitido en ese programa.
+            {puedeEditar
+              ? "Administra la oferta académica y el curso de Moodle al que se matricula cada aspirante admitido en ese programa."
+              : "Consulta de la oferta académica (solo lectura para tu rol)."}
           </p>
         </Reveal>
 
@@ -161,7 +165,7 @@ export default function AdminProgramasPage() {
                   <th className="px-5 py-3">Modalidad</th>
                   <th className="px-5 py-3">Duración</th>
                   <th className="px-5 py-3">Curso de Moodle</th>
-                  <th className="px-5 py-3" />
+                  {puedeEditar && <th className="px-5 py-3" />}
                 </tr>
               </thead>
               <tbody>
@@ -172,26 +176,34 @@ export default function AdminProgramasPage() {
                     <td className="px-5 py-3 text-body-sm text-ink-muted">{MODALIDAD_LABEL[programa.modalidad]}</td>
                     <td className="px-5 py-3 text-body-sm text-ink-muted">{programa.duracion}</td>
                     <td className="px-5 py-3">
-                      <input
-                        aria-label={`Curso de Moodle para ${programa.nombre}`}
-                        placeholder="Sin asignar"
-                        value={cursoEditado[programa.id] ?? programa.moodleCourseShortname ?? ""}
-                        onChange={(e) =>
-                          setCursoEditado((prev) => ({ ...prev, [programa.id]: e.target.value }))
-                        }
-                        className="h-9 w-40 rounded-md border border-border-subtle bg-surface-canvas px-3 text-body-sm text-ink outline-none focus:border-secondary focus:ring-[3px] focus:ring-secondary/15"
-                      />
+                      {puedeEditar ? (
+                        <input
+                          aria-label={`Curso de Moodle para ${programa.nombre}`}
+                          placeholder="Sin asignar"
+                          value={cursoEditado[programa.id] ?? programa.moodleCourseShortname ?? ""}
+                          onChange={(e) =>
+                            setCursoEditado((prev) => ({ ...prev, [programa.id]: e.target.value }))
+                          }
+                          className="h-9 w-40 rounded-md border border-border-subtle bg-surface-canvas px-3 text-body-sm text-ink outline-none focus:border-secondary focus:ring-[3px] focus:ring-secondary/15"
+                        />
+                      ) : (
+                        <span className="text-body-sm text-ink-muted">
+                          {programa.moodleCourseShortname ?? "Sin asignar"}
+                        </span>
+                      )}
                     </td>
-                    <td className="px-5 py-3">
-                      <Button
-                        variant="outline"
-                        className="h-9 px-3 text-label-sm"
-                        disabled={guardandoId === programa.id}
-                        onClick={() => guardarCurso(programa)}
-                      >
-                        {guardandoId === programa.id ? "Guardando…" : "Guardar"}
-                      </Button>
-                    </td>
+                    {puedeEditar && (
+                      <td className="px-5 py-3">
+                        <Button
+                          variant="outline"
+                          className="h-9 px-3 text-label-sm"
+                          disabled={guardandoId === programa.id}
+                          onClick={() => guardarCurso(programa)}
+                        >
+                          {guardandoId === programa.id ? "Guardando…" : "Guardar"}
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -199,6 +211,7 @@ export default function AdminProgramasPage() {
           </Card>
         )}
 
+        {puedeEditar && (
         <Reveal>
           <Card className="flex flex-col gap-4">
             <h2 className="text-headline-sm font-display font-bold text-primary">Nuevo programa</h2>
@@ -262,6 +275,7 @@ export default function AdminProgramasPage() {
             </form>
           </Card>
         </Reveal>
+        )}
       </div>
     </section>
   );

@@ -44,8 +44,15 @@ autorregistró antes con ese mismo correo como aspirante).
 | `superadmin.prueba@iinicia.test` | `Superadmin#2026` | superadmin |
 | `admin.prueba@iinicia.test` | `AdminAcademico#2026` | admin_academico |
 | `coordinador.prueba@iinicia.test` | `Coordinador#2026` | coordinador |
-| `profesor.prueba@iinicia.test` | `Profesor#2026` | profesor |
+| `profesor.prueba@iinicia.test` | `Profesor#2026` | profesor (vinculado y matriculado como editingteacher en `IINICIA-SOFT1`, `IINICIA-CIBER1` e `IINICIA-NEG1`, si ya corriste `moodle-seed-cursos.php` — ver abajo) |
 | `estudiante.prueba@iinicia.test` | `Estudiante#2026` | estudiante (vinculado y matriculado en `IINICIA101`) |
+
+**Ojo:** esta cuenta Moodle del profesor (creada con el correo del portal,
+`profesor.prueba@iinicia.test`) es distinta del usuario Moodle
+`profesor.prueba` / `...@iinicia.local` que crea a mano la sección "Crear
+curso y usuarios de prueba" de abajo — ese otro solo sirve para entrar
+directo a Moodle sin pasar por el portal. El dashboard de "Mi IINICIA" del
+profesor usa la cuenta vinculada por `npm run seed` (la de arriba).
 
 El rol `aspirante` se obtiene registrándose normalmente desde
 `http://localhost:3000/registro`. Un `superadmin`/`admin_academico` puede
@@ -240,6 +247,53 @@ Idempotente a nivel de curso: si el shortname ya existe, se omite por
 completo (no actualiza contenido). Para rehacer uno, bórralo primero
 desde Moodle y vuelve a correr el script.
 
+### Progreso: por qué hace falta `moodle-habilitar-completion.php`
+
+Por default, un curso recién creado (por `admin/tool/generator` o por
+`moodle-seed-cursos.php`) NO tiene seguimiento de finalización
+(`enablecompletion`) activado, aunque tenga actividades reales. Sin eso,
+Moodle siempre reporta `progress: null` en
+`core_enrol_get_users_courses` — la barra de progreso de Mi IINICIA nunca
+avanza, y peor: la seriación de materias
+(`MoodleService.obtenerCursosAprobados`, que exige `progress === 100`)
+**nunca puede desbloquear a nadie**, aunque el estudiante haya hecho
+todo. Este script habilita seguimiento manual (la casilla que Moodle
+muestra junto a cada actividad) en `IINICIA101`, `IINICIA-SOFT1`,
+`IINICIA-CIBER1` e `IINICIA-NEG1`:
+
+```bash
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < moodle-habilitar-completion.php
+```
+
+Ya está corrido en esta máquina. Es idempotente (se puede repetir sin
+romper nada) — vuelve a correrlo si creas un curso nuevo con contenido
+que también deba seguir progreso/seriación.
+
+### Correo: por qué hace falta `noemailever` en este entorno
+
+Esta imagen de Moodle no trae `sendmail` ni SMTP configurado. La mayoría
+de las operaciones no lo necesitan, pero matricular a alguien con un rol
+"de riesgo" (p. ej. `editingteacher`, que es lo que hace `npm run seed`
+con `profesor.prueba` arriba) dispara una notificación interna de Moodle
+que intenta enviarse por correo. Esa llamada a `/usr/sbin/sendmail`
+falla (`sh: 1: /usr/sbin/sendmail: not found`), y a diferencia de la
+creación de usuario (donde Moodle solo deja un aviso
+`email_to_user(): Invalid address` y sigue), aquí el fallo del
+procesador de mensajes sí se propaga como excepción de la llamada REST
+(`"Message was not sent."`) — aunque la matrícula ya se guardó en la
+base de datos antes de ese paso. Para que esa llamada no truene, en una
+instalación nueva corre:
+
+```bash
+docker compose exec -T moodle php admin/cli/cfg.php --name=noemailever --set=1
+docker compose exec -T moodle php admin/cli/cfg.php --name=noreplyaddress --set="noreply@iinicia.local"
+```
+
+`noemailever` es la bandera oficial de Moodle para entornos de prueba:
+desactiva todo envío de correo saliente (igual que `MailService` en el
+backend, que sin `MAIL_HOST` solo registra el correo en el log en vez de
+enviarlo). Ya está puesto en esta máquina.
+
 ## Habilitar Web Services (para que el backend conecte)
 
 El backend necesita conectarse a Moodle vía Web Services/REST, de forma
@@ -280,6 +334,7 @@ idempotente (ver CLAUDE.md y docs/requerimientos.md sección 13). Pasos:
        'core_enrol_get_users_courses',
        'core_webservice_get_site_info',
        'core_calendar_get_action_events_by_timesort',
+       'core_enrol_get_enrolled_users', // GET /usuarios/mis-estudiantes (profesor)
    ];
 
    $wsmanager = new webservice();

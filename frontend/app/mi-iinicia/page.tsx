@@ -8,25 +8,28 @@ import { Button, ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CountUp } from "@/components/ui/count-up";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionBg } from "@/components/ui/section-bg";
 import {
   ApiError,
+  enviarNotificacion,
   obtenerMisCursos,
+  obtenerMisEstudiantes,
   obtenerProximasActividades,
   obtenerUrlCampus,
   obtenerUrlCampusActividad,
+  obtenerUsuarios,
 } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import {
-  MOCK_DASHBOARD_ADMIN,
-  MOCK_DASHBOARD_ASPIRANTE,
-  MOCK_DASHBOARD_COORDINADOR,
-  MOCK_DASHBOARD_ESTUDIANTE,
-  MOCK_DASHBOARD_PROFESOR,
-} from "@/lib/mock-data";
-import type { ActividadProxima, CursoInscrito, Rol } from "@/lib/types";
+import { MOCK_DASHBOARD_ASPIRANTE, MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
+import type { ActividadProxima, CursoInscrito, EstudianteDeProfesor, Rol, UsuarioListado } from "@/lib/types";
+
+/** Roles que tienen cursos reales de Moodle propios (como alumno o como profesor). */
+const ROLES_CON_CURSOS: Rol[] = ["estudiante", "profesor"];
+/** Roles que ven el resumen institucional (GET /usuarios), igual que /admin/usuarios. */
+const ROLES_CON_RESUMEN: Rol[] = ["superadmin", "admin_academico", "coordinador"];
 
 const ROL_LABEL: Record<Rol, string> = {
   superadmin: "Superadministrador",
@@ -77,6 +80,9 @@ export default function MiIiniciaPage() {
   const [cargandoActividades, setCargandoActividades] = useState(true);
   const [errorActividades, setErrorActividades] = useState<string | null>(null);
   const [abriendoActividadId, setAbriendoActividadId] = useState<number | null>(null);
+  const [usuariosResumen, setUsuariosResumen] = useState<UsuarioListado[] | null>(null);
+  const [cargandoResumen, setCargandoResumen] = useState(true);
+  const [errorResumen, setErrorResumen] = useState<string | null>(null);
 
   /**
    * SSO vía auth_userkey (backend/src/moodle/moodle.service.ts): la url de
@@ -129,7 +135,7 @@ export default function MiIiniciaPage() {
   }, [cargando, sesion, router]);
 
   useEffect(() => {
-    if (!sesion || sesion.usuario.rol !== "estudiante") return;
+    if (!sesion || !ROLES_CON_CURSOS.includes(sesion.usuario.rol)) return;
     let cancelado = false;
 
     obtenerMisCursos(sesion.token)
@@ -155,7 +161,7 @@ export default function MiIiniciaPage() {
   }, [sesion]);
 
   useEffect(() => {
-    if (!sesion || sesion.usuario.rol !== "estudiante") return;
+    if (!sesion || !ROLES_CON_CURSOS.includes(sesion.usuario.rol)) return;
     let cancelado = false;
 
     obtenerProximasActividades(sesion.token)
@@ -173,6 +179,33 @@ export default function MiIiniciaPage() {
       })
       .finally(() => {
         if (!cancelado) setCargandoActividades(false);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [sesion]);
+
+  /** Mismos datos reales que /admin/usuarios (GET /usuarios), para el resumen de admin/coordinador. */
+  useEffect(() => {
+    if (!sesion || !ROLES_CON_RESUMEN.includes(sesion.usuario.rol)) return;
+    let cancelado = false;
+
+    obtenerUsuarios(sesion.token)
+      .then((data) => {
+        if (!cancelado) setUsuariosResumen(data);
+      })
+      .catch((error) => {
+        if (cancelado) return;
+        if (manejarNoAutorizado(error)) return;
+        setErrorResumen(
+          error instanceof ApiError
+            ? error.message
+            : "No se pudo cargar el resumen de usuarios. Intenta más tarde.",
+        );
+      })
+      .finally(() => {
+        if (!cancelado) setCargandoResumen(false);
       });
 
     return () => {
@@ -242,14 +275,21 @@ export default function MiIiniciaPage() {
       )}
 
       {rol === "aspirante" && <DashboardAspirante />}
-      {rol === "profesor" && <DashboardProfesor />}
-      {rol === "coordinador" && <DashboardCoordinador />}
-      {(rol === "admin_academico" || rol === "superadmin") && <DashboardAdmin rol={rol} />}
+      {ROLES_CON_RESUMEN.includes(rol) && (
+        <DashboardResumen
+          rol={rol}
+          usuarios={usuariosResumen}
+          cargando={cargandoResumen}
+          error={errorResumen}
+        />
+      )}
 
-      {rol === "estudiante" && (
+      {ROLES_CON_CURSOS.includes(rol) && (
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
-          <h2 className="text-headline-sm font-display font-bold text-primary">Mis cursos</h2>
+          <h2 className="text-headline-sm font-display font-bold text-primary">
+            {rol === "profesor" ? "Mis cursos como profesor" : "Mis cursos"}
+          </h2>
 
           {cargandoCursos ? (
             <p className="text-body-sm text-ink-muted">Consultando tus cursos en Moodle…</p>
@@ -257,8 +297,9 @@ export default function MiIiniciaPage() {
             <Card className="text-body-sm text-error">{errorCursos}</Card>
           ) : !cursos || cursos.length === 0 ? (
             <Card className="text-body-sm text-ink-muted">
-              Aún no tienes cursos asignados. Cuando tu programa sea
-              autorizado, aparecerán aquí automáticamente.
+              {rol === "profesor"
+                ? "Todavía no tienes cursos asignados como profesor en Moodle."
+                : "Aún no tienes cursos asignados. Cuando tu programa sea autorizado, aparecerán aquí automáticamente."}
             </Card>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -271,10 +312,10 @@ export default function MiIiniciaPage() {
                         <h3 className="text-title font-display font-bold text-primary">
                           {curso.nombre}
                         </h3>
-                        <Badge variant={estado.variant}>{estado.label}</Badge>
+                        {rol !== "profesor" && <Badge variant={estado.variant}>{estado.label}</Badge>}
                       </div>
                       <p className="text-body-sm text-ink-muted">{curso.shortname}</p>
-                      {curso.progreso === null ? (
+                      {rol === "profesor" ? null : curso.progreso === null ? (
                         <span className="text-label-sm font-display font-semibold text-ink-muted">
                           Sin seguimiento de progreso en este curso
                         </span>
@@ -374,6 +415,10 @@ export default function MiIiniciaPage() {
         </div>
       </div>
       )}
+
+      {rol === "profesor" && (
+        <MisEstudiantesProfesor token={sesion.token} manejarNoAutorizado={manejarNoAutorizado} />
+      )}
       </div>
     </section>
   );
@@ -423,136 +468,45 @@ function DashboardAspirante() {
   );
 }
 
-function DashboardProfesor() {
-  const { grupos } = MOCK_DASHBOARD_PROFESOR;
-  const totalEstudiantes = grupos.reduce((acc, g) => acc + g.estudiantes, 0);
-  const totalPendientes = grupos.reduce((acc, g) => acc + g.entregasPendientes, 0);
+/**
+ * Resumen real de superadmin/admin_academico/coordinador, construido a partir de GET /usuarios
+ * (los mismos datos que /admin/usuarios). Coordinador todavía no tiene un "ámbito"/programa
+ * propio en el backend (ver docs/requerimientos.md §11), así que ve el mismo resumen
+ * institucional que admin académico, con enlaces de solo lectura en vez de "Administrar".
+ */
+function DashboardResumen({
+  rol,
+  usuarios,
+  cargando,
+  error,
+}: {
+  rol: Rol;
+  usuarios: UsuarioListado[] | null;
+  cargando: boolean;
+  error: string | null;
+}) {
+  if (cargando) {
+    return <p className="mb-8 text-body-sm text-ink-muted">Consultando resumen de usuarios…</p>;
+  }
+  if (error) {
+    return <Card className="mb-8 text-body-sm text-error">{error}</Card>;
+  }
+  if (!usuarios) return null;
+
+  const puedeAdministrar = rol === "superadmin" || rol === "admin_academico";
+  const usuariosPorRol = (Object.keys(ROL_LABEL) as Rol[]).map((r) => ({
+    rol: r,
+    total: usuarios.filter((u) => u.rol === r).length,
+  }));
+  const solicitudesPendientes = usuarios.filter((u) => u.rol === "aspirante").length;
+  const cuentasMoodleVinculadas = usuarios.filter((u) => u.moodleUserId !== null).length;
 
   return (
     <div className="mb-8 flex flex-col gap-6">
-      <p className="text-label-sm italic text-ink-muted/70">
-        Datos de ejemplo — este resumen todavía no viene del backend.
-      </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card className="flex flex-col gap-1">
           <span className="text-headline-md font-display font-bold text-primary">
-            <CountUp value={`${grupos.length}`} />
-          </span>
-          <span className="text-label-sm text-ink-muted">Grupos activos</span>
-        </Card>
-        <Card className="flex flex-col gap-1">
-          <span className="text-headline-md font-display font-bold text-primary">
-            <CountUp value={`${totalEstudiantes}`} />
-          </span>
-          <span className="text-label-sm text-ink-muted">Estudiantes en total</span>
-        </Card>
-        <Card className="flex flex-col gap-1">
-          <span className="text-headline-md font-display font-bold text-secondary">
-            <CountUp value={`${totalPendientes}`} />
-          </span>
-          <span className="text-label-sm text-ink-muted">Entregas por calificar</span>
-        </Card>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <h2 className="text-headline-sm font-display font-bold text-primary">Mis grupos</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {grupos.map((grupo, i) => (
-            <Reveal key={grupo.id} delay={i * 90}>
-              <Card hoverable className="flex h-full flex-col gap-2">
-                <h3 className="text-title font-display font-bold text-primary">{grupo.curso}</h3>
-                <p className="text-body-sm text-ink-muted">{grupo.periodo}</p>
-                <div className="mt-1 flex items-center justify-between text-label-sm text-ink-muted">
-                  <span>{grupo.estudiantes} estudiantes</span>
-                  {grupo.entregasPendientes > 0 && (
-                    <Badge variant="admission">{grupo.entregasPendientes} por calificar</Badge>
-                  )}
-                </div>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DashboardCoordinador() {
-  const { programa, estudiantesActivos, profesores, avancePromedio, alertas } = MOCK_DASHBOARD_COORDINADOR;
-
-  return (
-    <div className="mb-8 flex flex-col gap-6">
-      <p className="text-label-sm italic text-ink-muted/70">
-        Datos de ejemplo — este resumen todavía no viene del backend.
-      </p>
-      <Reveal>
-        <Card className="flex flex-col gap-1">
-          <p className="text-label-sm font-display font-semibold uppercase tracking-wide text-ink-muted">
-            Programa a tu cargo
-          </p>
-          <h2 className="text-headline-sm font-display font-bold text-primary">{programa}</h2>
-        </Card>
-      </Reveal>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card className="flex flex-col gap-1">
-          <span className="text-headline-md font-display font-bold text-primary">
-            <CountUp value={`${estudiantesActivos}`} />
-          </span>
-          <span className="text-label-sm text-ink-muted">Estudiantes activos</span>
-        </Card>
-        <Card className="flex flex-col gap-1">
-          <span className="text-headline-md font-display font-bold text-primary">
-            <CountUp value={`${profesores}`} />
-          </span>
-          <span className="text-label-sm text-ink-muted">Profesores</span>
-        </Card>
-        <Card className="flex flex-col gap-2">
-          <span className="text-label-sm text-ink-muted">Avance promedio</span>
-          <ProgressBar value={avancePromedio} />
-          <span className="text-label-sm font-display font-semibold text-secondary">
-            <CountUp value={`${avancePromedio}%`} />
-          </span>
-        </Card>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <h2 className="text-headline-sm font-display font-bold text-primary">Alertas</h2>
-        <div className="flex flex-col gap-3">
-          {alertas.map((alerta) => (
-            <Card key={alerta.id} className="flex items-start gap-2 text-body-sm text-ink-muted">
-              <Icon name="warning" className="mt-0.5 text-body-md text-accent" />
-              {alerta.mensaje}
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-3">
-        <ButtonLink href="/admin/usuarios" variant="outline" className="w-fit">
-          Ver usuarios
-        </ButtonLink>
-        <ButtonLink href="/admin/programas" variant="outline" className="w-fit">
-          Ver programas
-        </ButtonLink>
-      </div>
-    </div>
-  );
-}
-
-function DashboardAdmin({ rol }: { rol: "admin_academico" | "superadmin" }) {
-  const { usuariosPorRol, solicitudesPendientes, cuentasMoodleVinculadas } = MOCK_DASHBOARD_ADMIN;
-  const totalUsuarios = usuariosPorRol.reduce((acc, r) => acc + r.total, 0);
-
-  return (
-    <div className="mb-8 flex flex-col gap-6">
-      <p className="text-label-sm italic text-ink-muted/70">
-        Datos de ejemplo — este resumen todavía no viene del backend.
-      </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card className="flex flex-col gap-1">
-          <span className="text-headline-md font-display font-bold text-primary">
-            <CountUp value={`${totalUsuarios}`} />
+            <CountUp value={`${usuarios.length}`} />
           </span>
           <span className="text-label-sm text-ink-muted">Usuarios totales</span>
         </Card>
@@ -586,10 +540,10 @@ function DashboardAdmin({ rol }: { rol: "admin_academico" | "superadmin" }) {
 
       <div className="flex flex-wrap gap-3">
         <ButtonLink href="/admin/usuarios" variant="outline" className="w-fit">
-          Administrar usuarios
+          {puedeAdministrar ? "Administrar usuarios" : "Ver usuarios"}
         </ButtonLink>
         <ButtonLink href="/admin/programas" variant="outline" className="w-fit">
-          Administrar programas
+          {puedeAdministrar ? "Administrar programas" : "Ver programas"}
         </ButtonLink>
         {rol === "superadmin" && (
           <Badge variant="neutral" className="self-center">
@@ -597,6 +551,153 @@ function DashboardAdmin({ rol }: { rol: "admin_academico" | "superadmin" }) {
           </Badge>
         )}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Estudiantes reales (GET /usuarios/mis-estudiantes) de los cursos que imparte el profesor, con
+ * notificación push directa — sin esto, "notificar" existía en el backend pero el profesor no
+ * tenía ninguna pantalla desde la que llegar a usarlo (no tiene acceso a /admin/usuarios).
+ */
+function MisEstudiantesProfesor({
+  token,
+  manejarNoAutorizado,
+}: {
+  token: string;
+  manejarNoAutorizado: (error: unknown) => boolean;
+}) {
+  const [estudiantes, setEstudiantes] = useState<EstudianteDeProfesor[] | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [notificandoId, setNotificandoId] = useState<string | null>(null);
+  const [form, setForm] = useState({ titulo: "", mensaje: "" });
+  const [enviando, setEnviando] = useState(false);
+  const [resultado, setResultado] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    let cancelado = false;
+    obtenerMisEstudiantes(token)
+      .then((data) => {
+        if (!cancelado) setEstudiantes(data);
+      })
+      .catch((err) => {
+        if (cancelado) return;
+        if (manejarNoAutorizado(err)) return;
+        setError(err instanceof ApiError ? err.message : "No se pudieron cargar tus estudiantes.");
+      })
+      .finally(() => {
+        if (!cancelado) setCargando(false);
+      });
+    return () => {
+      cancelado = true;
+    };
+    // manejarNoAutorizado se recrea en cada render (no es estable); mismo patrón ya usado en
+    // los otros efectos de esta página.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  function alternarNotificar(estudiante: EstudianteDeProfesor) {
+    setNotificandoId((prev) => (prev === estudiante.id ? null : estudiante.id));
+    setForm({ titulo: "", mensaje: "" });
+  }
+
+  async function enviar(estudiante: EstudianteDeProfesor) {
+    if (!form.titulo.trim() || !form.mensaje.trim()) {
+      setResultado((prev) => ({ ...prev, [estudiante.id]: "Completa el título y el mensaje." }));
+      return;
+    }
+    setEnviando(true);
+    try {
+      await enviarNotificacion(token, estudiante.id, {
+        titulo: form.titulo.trim(),
+        mensaje: form.mensaje.trim(),
+      });
+      setResultado((prev) => ({ ...prev, [estudiante.id]: "Notificación enviada." }));
+      setForm({ titulo: "", mensaje: "" });
+    } catch (err) {
+      setResultado((prev) => ({
+        ...prev,
+        [estudiante.id]: err instanceof ApiError ? err.message : "No se pudo enviar la notificación.",
+      }));
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  return (
+    <div className="mt-4 flex flex-col gap-4">
+      <h2 className="text-headline-sm font-display font-bold text-primary">Mis estudiantes</h2>
+      {cargando ? (
+        <p className="text-body-sm text-ink-muted">Consultando tus estudiantes en Moodle…</p>
+      ) : error ? (
+        <Card className="text-body-sm text-error">{error}</Card>
+      ) : !estudiantes || estudiantes.length === 0 ? (
+        <Card className="text-body-sm text-ink-muted">
+          Todavía no tienes estudiantes matriculados en tus cursos.
+        </Card>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {estudiantes.map((estudiante) => (
+            <Card key={estudiante.id} className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <p className="text-body-sm font-semibold text-ink">{estudiante.nombre}</p>
+                  <p className="text-label-sm text-ink-muted">{estudiante.cursos.join(", ")}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="h-9 px-3 text-label-sm"
+                  disabled={!estudiante.tieneDispositivo}
+                  title={
+                    estudiante.tieneDispositivo
+                      ? undefined
+                      : "Este estudiante todavía no abrió la app Android con su sesión"
+                  }
+                  onClick={() => alternarNotificar(estudiante)}
+                >
+                  {!estudiante.tieneDispositivo
+                    ? "Sin dispositivo"
+                    : notificandoId === estudiante.id
+                      ? "Cancelar"
+                      : "Notificar"}
+                </Button>
+              </div>
+              {notificandoId === estudiante.id && (
+                <div className="flex flex-col gap-3 border-t border-border-subtle pt-3 md:flex-row md:items-end">
+                  <Input
+                    id={`notif-titulo-${estudiante.id}`}
+                    label="Título"
+                    placeholder="Aviso"
+                    value={form.titulo}
+                    onChange={(e) => setForm({ ...form, titulo: e.target.value })}
+                    className="md:w-56"
+                  />
+                  <Input
+                    id={`notif-mensaje-${estudiante.id}`}
+                    label="Mensaje"
+                    placeholder="Tu entrega de la Tarea 1 está casi vencida."
+                    value={form.mensaje}
+                    onChange={(e) => setForm({ ...form, mensaje: e.target.value })}
+                    className="md:w-80"
+                  />
+                  <Button
+                    variant="primary"
+                    disabled={enviando}
+                    onClick={() => enviar(estudiante)}
+                    className="h-11"
+                  >
+                    {enviando ? "Enviando…" : "Enviar"}
+                  </Button>
+                </div>
+              )}
+              {resultado[estudiante.id] && (
+                <p className="text-body-sm text-ink-muted">{resultado[estudiante.id]}</p>
+              )}
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
