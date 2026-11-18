@@ -41,7 +41,7 @@ export default function LoginPage() {
 
     setSubmitting(true);
     try {
-      await login({ correo, password });
+      await login({ correo, password }, recordarme);
       router.push("/mi-iinicia");
     } catch (error) {
       setSubmitError(
