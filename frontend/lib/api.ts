@@ -4,6 +4,7 @@ import type {
   AuthResponse,
   CursoInscrito,
   CursoMoodle,
+  DocumentoListado,
   EstudianteDeProfesor,
   LoginInput,
   Materia,
@@ -12,6 +13,8 @@ import type {
   ProgramaInput,
   RegistroAspiranteInput,
   Rol,
+  SolicitudAspirante,
+  TipoDocumento,
   UsuarioListado,
 } from "./types";
 
@@ -95,6 +98,36 @@ async function sendAuthJSON<T>(
 
 function patchJSON<T>(path: string, token: string, body: unknown): Promise<T> {
   return sendAuthJSON<T>("PATCH", path, token, body);
+}
+
+/** Como sendAuthJSON, pero con multipart/form-data (subida de archivos): nunca fija Content-Type, el navegador pone el boundary. */
+async function postAuthFormData<T>(path: string, token: string, body: FormData): Promise<T> {
+  if (!API_URL) {
+    throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body,
+    });
+  } catch (networkError) {
+    throw new BackendUnavailableError(
+      `No se pudo conectar con el backend (${String(networkError)})`,
+    );
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new ApiError(
+      data?.message ?? `El backend respondió con error ${response.status}`,
+      response.status,
+    );
+  }
+
+  return response.json() as Promise<T>;
 }
 
 function postAuthJSON<T>(path: string, token: string, body: unknown): Promise<T> {
@@ -325,6 +358,70 @@ export async function actualizarRolUsuario(
   rol: Rol,
 ): Promise<UsuarioListado> {
   return patchJSON<UsuarioListado>(`/usuarios/${id}/rol`, token, { rol });
+}
+
+/** Seguimiento real de la solicitud del aspirante autenticado. Solo rol aspirante. */
+export async function obtenerSolicitudAspirante(token: string): Promise<SolicitudAspirante> {
+  return getJSON<SolicitudAspirante>("/aspirante/solicitud", token);
+}
+
+/** Documentos de admisión que el aspirante autenticado ya subió. Solo rol aspirante. */
+export async function obtenerMisDocumentos(token: string): Promise<DocumentoListado[]> {
+  return getJSON<DocumentoListado[]>("/aspirante/documentos", token);
+}
+
+/** Sube un documento de admisión (PDF/JPG/PNG, máx. 5 MB). Solo rol aspirante. */
+export async function subirDocumento(
+  token: string,
+  tipo: TipoDocumento,
+  archivo: File,
+): Promise<DocumentoListado> {
+  const formData = new FormData();
+  formData.append("tipo", tipo);
+  formData.append("archivo", archivo);
+  return postAuthFormData<DocumentoListado>("/aspirante/documentos", token, formData);
+}
+
+/** Documentos de admisión de un aspirante, para revisión. Solo superadmin/admin_academico/coordinador. */
+export async function obtenerDocumentosDeUsuario(
+  token: string,
+  userId: string,
+): Promise<DocumentoListado[]> {
+  return getJSON<DocumentoListado[]>(`/documentos/usuario/${userId}`, token);
+}
+
+/** Aprueba o rechaza un documento de admisión. Solo superadmin/admin_academico. */
+export async function revisarDocumento(
+  token: string,
+  id: string,
+  estado: "aprobado" | "rechazado",
+): Promise<DocumentoListado> {
+  return patchJSON<DocumentoListado>(`/documentos/${id}/estado`, token, { estado });
+}
+
+/** Abre el archivo original de un documento en una pestaña nueva (requiere Authorization, por eso no es un <a href> directo). */
+export async function abrirDocumento(token: string, id: string): Promise<void> {
+  if (!API_URL) {
+    throw new BackendUnavailableError("NEXT_PUBLIC_API_URL no está configurado");
+  }
+  const response = await fetch(`${API_URL}/documentos/${id}/archivo`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new ApiError("No se pudo abrir el documento.", response.status);
+  }
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+}
+
+/** Asigna (o quita, con programaId null) el ámbito de un coordinador. Solo superadmin/admin_academico. */
+export async function asignarProgramaCoordinado(
+  token: string,
+  id: string,
+  programaId: string | null,
+): Promise<UsuarioListado> {
+  return patchJSON<UsuarioListado>(`/usuarios/${id}/programa-coordinado`, token, { programaId });
 }
 
 /**

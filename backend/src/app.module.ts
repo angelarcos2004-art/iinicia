@@ -3,7 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AspiranteModule } from './aspirante/aspirante.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { Documento } from './documentos/documento.entity.js';
+import { DocumentosModule } from './documentos/documentos.module.js';
 import { EstudianteModule } from './estudiante/estudiante.module.js';
 import { Materia } from './materias/materia.entity.js';
 import { MateriasModule } from './materias/materias.module.js';
@@ -26,7 +29,7 @@ import { UsuariosModule } from './usuarios/usuarios.module.js';
       useFactory: (config: ConfigService) => ({
         type: 'postgres' as const,
         url: config.getOrThrow<string>('DATABASE_URL'),
-        entities: [User, Programa, Materia],
+        entities: [User, Programa, Materia, Documento],
         // Solo para desarrollo de la primera entrega; usar migraciones en producción.
         synchronize: config.get<string>('DB_SYNCHRONIZE', 'true') === 'true',
       }),
@@ -38,6 +41,8 @@ import { UsuariosModule } from './usuarios/usuarios.module.js';
     UsuariosModule,
     ProgramasModule,
     MateriasModule,
+    DocumentosModule,
+    AspiranteModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

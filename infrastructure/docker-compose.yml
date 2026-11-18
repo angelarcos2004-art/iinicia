@@ -75,6 +75,7 @@ services:
     volumes:
       - ../backend/src:/app/src
       - ../backend/test:/app/test
+      - backend_uploads:/app/uploads
     ports:
       - "3001:3001"
 
@@ -100,3 +101,4 @@ services:
 volumes:
   postgres_data:
   moodledata_data:
+  backend_uploads:

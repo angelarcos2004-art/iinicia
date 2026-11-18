@@ -45,6 +45,11 @@ export class UsersService {
     await this.repo.update(id, { rol });
   }
 
+  /** Asigna o quita el programa que un coordinador puede ver (ver UsuariosController.listar). */
+  async actualizarProgramaCoordinado(id: string, programaId: string | null): Promise<void> {
+    await this.repo.update(id, { programaCoordinadoId: programaId });
+  }
+
   /** Usado por el script de seed para garantizar credenciales conocidas. */
   async actualizarPasswordHash(id: string, passwordHash: string): Promise<void> {
     await this.repo.update(id, { passwordHash });

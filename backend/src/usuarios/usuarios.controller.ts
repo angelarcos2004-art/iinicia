@@ -26,6 +26,7 @@ import { Rol } from '../users/rol.enum.js';
 import { UsersService } from '../users/users.service.js';
 import { ActualizarRolDto } from './dto/actualizar-rol.dto.js';
 import { AsignarCursoDto } from './dto/asignar-curso.dto.js';
+import { AsignarProgramaCoordinadoDto } from './dto/asignar-programa-coordinado.dto.js';
 import { NotificarDto } from './dto/notificar.dto.js';
 
 export interface UsuarioActualizado {
@@ -40,6 +41,9 @@ export interface UsuarioListado extends UsuarioActualizado {
   createdAt: Date;
   /** Programa que el usuario eligió al registrarse (ver ProgramasService), o null si no tiene. */
   programaInteresNombre: string | null;
+  /** Ámbito del coordinador (solo relevante si rol = coordinador); null = sin ámbito/ve todo. */
+  programaCoordinadoId: string | null;
+  programaCoordinadoNombre: string | null;
 }
 
 export interface EstudianteDeProfesor {
@@ -71,14 +75,29 @@ export class UsuariosController {
     private readonly materias: MateriasService,
   ) {}
 
-  /** Lista de usuarios para el panel administrativo; `rol` filtra opcionalmente. */
+  /**
+   * Lista de usuarios para el panel administrativo; `rol` filtra opcionalmente. Un coordinador
+   * con ámbito asignado (ver PATCH :id/programa-coordinado) solo ve usuarios de ese programa
+   * (docs/requerimientos.md §11: "acceso limitado al programa o unidad asignada"); sin ámbito,
+   * ve todo igual que hoy.
+   */
   @Get()
   @Roles(Rol.Superadmin, Rol.AdminAcademico, Rol.Coordinador)
-  async listar(@Query('rol') rol?: string): Promise<UsuarioListado[]> {
+  async listar(
+    @UsuarioActual() actual: UsuarioAutenticado,
+    @Query('rol') rol?: string,
+  ): Promise<UsuarioListado[]> {
     if (rol && !Object.values(Rol).includes(rol as Rol)) {
       throw new BadRequestException('Rol inválido');
     }
-    const usuarios = await this.users.listar(rol as Rol | undefined);
+    let usuarios = await this.users.listar(rol as Rol | undefined);
+    if (actual.rol === Rol.Coordinador) {
+      const coordinador = await this.users.findById(actual.id);
+      const ambito = coordinador?.programaCoordinadoId ?? null;
+      if (ambito) {
+        usuarios = usuarios.filter((u) => u.programaInteresId === ambito);
+      }
+    }
     const programas = await this.programas.listar();
     const nombrePorProgramaId = new Map(programas.map((p) => [p.id, p.nombre]));
     return usuarios.map((u) => ({
@@ -90,6 +109,10 @@ export class UsuariosController {
       createdAt: u.createdAt,
       programaInteresNombre: u.programaInteresId
         ? nombrePorProgramaId.get(u.programaInteresId) ?? u.programaInteresId
+        : null,
+      programaCoordinadoId: u.programaCoordinadoId,
+      programaCoordinadoNombre: u.programaCoordinadoId
+        ? nombrePorProgramaId.get(u.programaCoordinadoId) ?? u.programaCoordinadoId
         : null,
     }));
   }
@@ -142,6 +165,37 @@ export class UsuariosController {
       });
     }
     return resultado;
+  }
+
+  /** Asigna (o quita, con programaId null) el ámbito de un coordinador. Ver GET /usuarios. */
+  @Patch(':id/programa-coordinado')
+  @Roles(Rol.Superadmin, Rol.AdminAcademico)
+  async asignarProgramaCoordinado(
+    @Param('id') id: string,
+    @Body() dto: AsignarProgramaCoordinadoDto,
+  ): Promise<UsuarioListado> {
+    const user = await this.users.findById(id);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    if (user.rol !== Rol.Coordinador) {
+      throw new BadRequestException('Solo los coordinadores tienen ámbito de programa');
+    }
+    if (dto.programaId && !(await this.programas.findById(dto.programaId))) {
+      throw new BadRequestException('Programa no encontrado');
+    }
+    await this.users.actualizarProgramaCoordinado(id, dto.programaId ?? null);
+    return {
+      id: user.id,
+      nombre: user.nombre,
+      correo: user.correo,
+      rol: user.rol,
+      moodleUserId: user.moodleUserId,
+      createdAt: user.createdAt,
+      programaInteresNombre: await this.nombrePrograma(user.programaInteresId),
+      programaCoordinadoId: dto.programaId ?? null,
+      programaCoordinadoNombre: await this.nombrePrograma(dto.programaId ?? null),
+    };
   }
 
   @Patch(':id/rol')
@@ -211,6 +265,8 @@ export class UsuariosController {
       moodleUserId: actualizado.moodleUserId,
       createdAt: actualizado.createdAt,
       programaInteresNombre: await this.nombrePrograma(actualizado.programaInteresId),
+      programaCoordinadoId: actualizado.programaCoordinadoId,
+      programaCoordinadoNombre: await this.nombrePrograma(actualizado.programaCoordinadoId),
     };
   }
 

@@ -1,10 +1,4 @@
-import type {
-  AvisoInstitucional,
-  CursoEstudiante,
-  DashboardEstudiante,
-  Programa,
-  SolicitudAspirante,
-} from "./types";
+import type { AvisoInstitucional, CursoEstudiante, DashboardEstudiante, Programa } from "./types";
 
 /**
  * Catálogo de oferta académica de respaldo: solo se usa si el backend (GET /programas) no
@@ -156,16 +150,4 @@ export const MOCK_DASHBOARD_ESTUDIANTE: DashboardEstudiante = {
   progresoCurricular: 49,
   cursos: MOCK_CURSOS,
   avisos: MOCK_AVISOS,
-};
-
-/** Estado de solicitud del aspirante: la plataforma aún no expone un endpoint de seguimiento. */
-export const MOCK_DASHBOARD_ASPIRANTE: SolicitudAspirante = {
-  programaNombre: "Ingeniería de Software e Inteligencia Artificial",
-  estado: "en_revision",
-  pasos: [
-    { label: "Cuenta creada", completado: true },
-    { label: "Perfil y programa seleccionados", completado: true },
-    { label: "Documentos cargados", completado: false },
-    { label: "Dictamen del comité", completado: false },
-  ],
 };

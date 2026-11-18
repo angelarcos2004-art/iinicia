@@ -11,14 +11,31 @@ import { SectionBg } from "@/components/ui/section-bg";
 import { Select } from "@/components/ui/select";
 import {
   ApiError,
+  abrirDocumento,
   actualizarRolUsuario,
   asignarCursoUsuario,
+  asignarProgramaCoordinado,
   enviarNotificacion,
   obtenerCursosMoodle,
+  obtenerDocumentosDeUsuario,
+  obtenerProgramas,
   obtenerUsuarios,
+  revisarDocumento,
 } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import type { CursoMoodle, Rol, UsuarioListado } from "@/lib/types";
+import type { CursoMoodle, DocumentoListado, Programa, Rol, UsuarioListado } from "@/lib/types";
+
+const TIPO_DOCUMENTO_LABEL: Record<DocumentoListado["tipo"], string> = {
+  identificacion: "Identificación oficial",
+  comprobante_estudios: "Comprobante de estudios",
+  otro: "Otro documento",
+};
+
+const ESTADO_DOCUMENTO_LABEL: Record<DocumentoListado["estado"], string> = {
+  pendiente: "Pendiente",
+  aprobado: "Aprobado",
+  rechazado: "Rechazado",
+};
 
 const ROL_LABEL: Record<Rol, string> = {
   superadmin: "Superadministrador",
@@ -67,6 +84,18 @@ export default function AdminUsuariosPage() {
   const [cursosMoodle, setCursosMoodle] = useState<CursoMoodle[] | null>(null);
   const [errorCursos, setErrorCursos] = useState<string | null>(null);
 
+  const [programas, setProgramas] = useState<Programa[] | null>(null);
+  const [ambitoId, setAmbitoId] = useState<string | null>(null);
+  const [programaAmbito, setProgramaAmbito] = useState("");
+  const [guardandoAmbito, setGuardandoAmbito] = useState(false);
+  const [resultadoAmbito, setResultadoAmbito] = useState<Record<string, string>>({});
+
+  const [documentosId, setDocumentosId] = useState<string | null>(null);
+  const [documentos, setDocumentos] = useState<DocumentoListado[] | null>(null);
+  const [cargandoDocumentos, setCargandoDocumentos] = useState(false);
+  const [errorDocumentos, setErrorDocumentos] = useState<string | null>(null);
+  const [revisandoId, setRevisandoId] = useState<string | null>(null);
+
   useEffect(() => {
     if (cargando) return;
     if (!sesion || !ROLES_CON_ACCESO.includes(sesion.usuario.rol)) {
@@ -95,6 +124,19 @@ export default function AdminUsuariosPage() {
       cancelado = true;
     };
   }, [tieneAcceso, sesion, filtroRol]);
+
+  useEffect(() => {
+    if (!sesion || !ROLES_QUE_PUEDEN_CAMBIAR_ROL.includes(sesion.usuario.rol)) return;
+    let cancelado = false;
+    obtenerProgramas()
+      .then((data) => {
+        if (!cancelado) setProgramas(data);
+      })
+      .catch(() => {});
+    return () => {
+      cancelado = true;
+    };
+  }, [sesion]);
 
   useEffect(() => {
     if (!sesion || !ROLES_QUE_PUEDEN_CAMBIAR_ROL.includes(sesion.usuario.rol)) return;
@@ -161,6 +203,93 @@ export default function AdminUsuariosPage() {
       }));
     } finally {
       setEnviandoNotif(false);
+    }
+  }
+
+  function alternarPanelAmbito(usuario: UsuarioListado) {
+    if (ambitoId === usuario.id) {
+      setAmbitoId(null);
+      return;
+    }
+    setAmbitoId(usuario.id);
+    setProgramaAmbito(usuario.programaCoordinadoId ?? "");
+    setResultadoAmbito((prev) => ({ ...prev, [usuario.id]: "" }));
+  }
+
+  async function handleGuardarAmbito(usuario: UsuarioListado) {
+    if (!sesion) return;
+    setGuardandoAmbito(true);
+    try {
+      const actualizado = await asignarProgramaCoordinado(
+        sesion.token,
+        usuario.id,
+        programaAmbito || null,
+      );
+      setUsuarios(
+        (prev) =>
+          prev?.map((u) =>
+            u.id === usuario.id
+              ? {
+                  ...u,
+                  programaCoordinadoId: actualizado.programaCoordinadoId,
+                  programaCoordinadoNombre: actualizado.programaCoordinadoNombre,
+                }
+              : u,
+          ) ?? prev,
+      );
+      setResultadoAmbito((prev) => ({
+        ...prev,
+        [usuario.id]: actualizado.programaCoordinadoNombre
+          ? `Ámbito: ${actualizado.programaCoordinadoNombre}.`
+          : "Sin ámbito: vuelve a ver todos los usuarios.",
+      }));
+    } catch (err) {
+      setResultadoAmbito((prev) => ({
+        ...prev,
+        [usuario.id]: err instanceof ApiError ? err.message : "No se pudo asignar el ámbito.",
+      }));
+    } finally {
+      setGuardandoAmbito(false);
+    }
+  }
+
+  function alternarPanelDocumentos(usuario: UsuarioListado) {
+    if (documentosId === usuario.id) {
+      setDocumentosId(null);
+      return;
+    }
+    setDocumentosId(usuario.id);
+    setDocumentos(null);
+    setErrorDocumentos(null);
+    if (!sesion) return;
+    setCargandoDocumentos(true);
+    obtenerDocumentosDeUsuario(sesion.token, usuario.id)
+      .then(setDocumentos)
+      .catch((err) => {
+        setErrorDocumentos(err instanceof ApiError ? err.message : "No se pudieron cargar los documentos.");
+      })
+      .finally(() => setCargandoDocumentos(false));
+  }
+
+  async function handleAbrirDocumento(doc: DocumentoListado) {
+    if (!sesion) return;
+    try {
+      await abrirDocumento(sesion.token, doc.id);
+    } catch (err) {
+      setErrorDocumentos(err instanceof ApiError ? err.message : "No se pudo abrir el documento.");
+    }
+  }
+
+  async function handleRevisarDocumento(doc: DocumentoListado, estado: "aprobado" | "rechazado") {
+    if (!sesion) return;
+    setRevisandoId(doc.id);
+    try {
+      const actualizado = await revisarDocumento(sesion.token, doc.id, estado);
+      setDocumentos((prev) => prev?.map((d) => (d.id === doc.id ? actualizado : d)) ?? prev);
+    } catch (err) {
+      setErrorDocumentos(err instanceof ApiError ? err.message : "No se pudo revisar el documento.");
+    } finally {
+      setRevisandoId(null);
     }
   }
 
@@ -259,6 +388,7 @@ export default function AdminUsuariosPage() {
                   <th className="px-5 py-3">Correo</th>
                   <th className="px-5 py-3">Rol</th>
                   <th className="px-5 py-3">Programa de interés</th>
+                  <th className="px-5 py-3">Ámbito (coordinador)</th>
                   <th className="px-5 py-3">Moodle</th>
                   <th className="px-5 py-3">Alta</th>
                   {(puedeEditar || puedeNotificar) && <th className="px-5 py-3" />}
@@ -293,6 +423,9 @@ export default function AdminUsuariosPage() {
                         {usuario.programaInteresNombre ?? "—"}
                       </td>
                       <td className="px-5 py-3 text-body-sm text-ink-muted">
+                        {usuario.rol === "coordinador" ? usuario.programaCoordinadoNombre ?? "Todos" : "—"}
+                      </td>
+                      <td className="px-5 py-3 text-body-sm text-ink-muted">
                         {usuario.moodleUserId ? `#${usuario.moodleUserId}` : "—"}
                       </td>
                       <td className="px-5 py-3 text-body-sm text-ink-muted">
@@ -301,6 +434,24 @@ export default function AdminUsuariosPage() {
                       {(puedeEditar || puedeNotificar) && (
                         <td className="px-5 py-3">
                           <div className="flex gap-2">
+                            {puedeEditar && usuario.rol === "coordinador" && (
+                              <Button
+                                variant="outline"
+                                className="h-9 px-3 text-label-sm"
+                                onClick={() => alternarPanelAmbito(usuario)}
+                              >
+                                {ambitoId === usuario.id ? "Cancelar" : "Ámbito"}
+                              </Button>
+                            )}
+                            {usuario.rol === "aspirante" && (
+                              <Button
+                                variant="outline"
+                                className="h-9 px-3 text-label-sm"
+                                onClick={() => alternarPanelDocumentos(usuario)}
+                              >
+                                {documentosId === usuario.id ? "Cancelar" : "Documentos"}
+                              </Button>
+                            )}
                             {puedeEditar && ROLES_MATRICULABLES.includes(usuario.rol) && (
                               <Button
                                 variant="outline"
@@ -323,9 +474,101 @@ export default function AdminUsuariosPage() {
                         </td>
                       )}
                     </tr>
+                    {documentosId === usuario.id && (
+                      <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
+                        <td colSpan={8} className="px-5 py-4">
+                          {cargandoDocumentos ? (
+                            <p className="text-body-sm text-ink-muted">Consultando documentos…</p>
+                          ) : errorDocumentos ? (
+                            <p className="text-body-sm text-error">{errorDocumentos}</p>
+                          ) : !documentos || documentos.length === 0 ? (
+                            <p className="text-body-sm text-ink-muted">
+                              Este aspirante todavía no ha subido documentos.
+                            </p>
+                          ) : (
+                            <ul className="flex flex-col gap-2">
+                              {documentos.map((doc) => (
+                                <li
+                                  key={doc.id}
+                                  className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border-subtle bg-surface-canvas px-3 py-2 text-body-sm"
+                                >
+                                  <span className="text-ink">
+                                    {TIPO_DOCUMENTO_LABEL[doc.tipo]} · {doc.nombreOriginal} ·{" "}
+                                    <span className="text-ink-muted">{ESTADO_DOCUMENTO_LABEL[doc.estado]}</span>
+                                  </span>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      variant="outline"
+                                      className="h-8 px-3 text-label-sm"
+                                      onClick={() => handleAbrirDocumento(doc)}
+                                    >
+                                      Ver
+                                    </Button>
+                                    {puedeEditar && doc.estado !== "aprobado" && (
+                                      <Button
+                                        variant="outline"
+                                        className="h-8 px-3 text-label-sm"
+                                        disabled={revisandoId === doc.id}
+                                        onClick={() => handleRevisarDocumento(doc, "aprobado")}
+                                      >
+                                        Aprobar
+                                      </Button>
+                                    )}
+                                    {puedeEditar && doc.estado !== "rechazado" && (
+                                      <Button
+                                        variant="outline"
+                                        className="h-8 px-3 text-label-sm"
+                                        disabled={revisandoId === doc.id}
+                                        onClick={() => handleRevisarDocumento(doc, "rechazado")}
+                                      >
+                                        Rechazar
+                                      </Button>
+                                    )}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {ambitoId === usuario.id && (
+                      <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
+                        <td colSpan={8} className="px-5 py-4">
+                          <div className="flex flex-col gap-3 md:flex-row md:items-end">
+                            <Select
+                              id={`ambito-${usuario.id}`}
+                              label="Programa que puede ver"
+                              hint="Sin selección: vuelve a ver todos los usuarios, como hoy."
+                              value={programaAmbito}
+                              onChange={(e) => setProgramaAmbito(e.target.value)}
+                              className="md:w-72"
+                            >
+                              <option value="">Todos (sin ámbito)</option>
+                              {(programas ?? []).map((programa) => (
+                                <option key={programa.id} value={programa.id}>
+                                  {programa.nombre}
+                                </option>
+                              ))}
+                            </Select>
+                            <Button
+                              variant="primary"
+                              disabled={guardandoAmbito}
+                              onClick={() => handleGuardarAmbito(usuario)}
+                              className="h-12"
+                            >
+                              {guardandoAmbito ? "Guardando…" : "Guardar"}
+                            </Button>
+                          </div>
+                          {resultadoAmbito[usuario.id] && (
+                            <p className="mt-2 text-body-sm text-ink-muted">{resultadoAmbito[usuario.id]}</p>
+                          )}
+                        </td>
+                      </tr>
+                    )}
                     {matriculandoId === usuario.id && (
                       <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
-                        <td colSpan={7} className="px-5 py-4">
+                        <td colSpan={8} className="px-5 py-4">
                           <div className="flex flex-col gap-3 md:flex-row md:items-end">
                             {cursosMoodle ? (
                               <Select
@@ -373,7 +616,7 @@ export default function AdminUsuariosPage() {
                     )}
                     {notificandoId === usuario.id && (
                       <tr className="border-b border-border-subtle last:border-0 bg-surface-subtle/40">
-                        <td colSpan={7} className="px-5 py-4">
+                        <td colSpan={8} className="px-5 py-4">
                           <div className="flex flex-col gap-3 md:flex-row md:items-end">
                             <Input
                               id={`notif-titulo-${usuario.id}`}

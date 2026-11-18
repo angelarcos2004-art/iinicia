@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,15 +16,27 @@ import {
   ApiError,
   enviarNotificacion,
   obtenerMisCursos,
+  obtenerMisDocumentos,
   obtenerMisEstudiantes,
   obtenerProximasActividades,
+  obtenerSolicitudAspirante,
   obtenerUrlCampus,
   obtenerUrlCampusActividad,
   obtenerUsuarios,
+  subirDocumento,
 } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import { MOCK_DASHBOARD_ASPIRANTE, MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
-import type { ActividadProxima, CursoInscrito, EstudianteDeProfesor, Rol, UsuarioListado } from "@/lib/types";
+import { MOCK_DASHBOARD_ESTUDIANTE } from "@/lib/mock-data";
+import type {
+  ActividadProxima,
+  CursoInscrito,
+  DocumentoListado,
+  EstudianteDeProfesor,
+  Rol,
+  SolicitudAspirante,
+  TipoDocumento,
+  UsuarioListado,
+} from "@/lib/types";
 
 /** Roles que tienen cursos reales de Moodle propios (como alumno o como profesor). */
 const ROLES_CON_CURSOS: Rol[] = ["estudiante", "profesor"];
@@ -274,7 +286,9 @@ export default function MiIiniciaPage() {
         </Reveal>
       )}
 
-      {rol === "aspirante" && <DashboardAspirante />}
+      {rol === "aspirante" && (
+        <DashboardAspirante token={sesion.token} manejarNoAutorizado={manejarNoAutorizado} />
+      )}
       {ROLES_CON_RESUMEN.includes(rol) && (
         <DashboardResumen
           rol={rol}
@@ -424,19 +438,104 @@ export default function MiIiniciaPage() {
   );
 }
 
-function DashboardAspirante() {
-  const { programaNombre, estado, pasos } = MOCK_DASHBOARD_ASPIRANTE;
-  const estadoLabel: Record<typeof estado, string> = {
-    en_revision: "En revisión",
-    admitido: "Admitido",
-    rechazado: "No admitido",
-  };
+const ESTADO_LABEL_SOLICITUD: Record<SolicitudAspirante["estado"], string> = {
+  en_revision: "En revisión",
+  admitido: "Admitido",
+};
+
+const ESTADO_LABEL_DOCUMENTO: Record<DocumentoListado["estado"], string> = {
+  pendiente: "Pendiente de revisión",
+  aprobado: "Aprobado",
+  rechazado: "Rechazado",
+};
+
+const TIPO_DOCUMENTO_LABEL: Record<TipoDocumento, string> = {
+  identificacion: "Identificación oficial",
+  comprobante_estudios: "Comprobante de estudios",
+  otro: "Otro documento",
+};
+
+/**
+ * Seguimiento real de la solicitud del aspirante (GET /aspirante/solicitud) más la subida de
+ * documentos de admisión (GET/POST /aspirante/documentos) que el comité revisará desde
+ * /admin/usuarios (ver RevisionDocumentosAspirante en esa pantalla).
+ */
+function DashboardAspirante({
+  token,
+  manejarNoAutorizado,
+}: {
+  token: string;
+  manejarNoAutorizado: (error: unknown) => boolean;
+}) {
+  const [solicitud, setSolicitud] = useState<SolicitudAspirante | null>(null);
+  const [documentos, setDocumentos] = useState<DocumentoListado[] | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [tipo, setTipo] = useState<TipoDocumento>("identificacion");
+  const [archivo, setArchivo] = useState<File | null>(null);
+  const [subiendo, setSubiendo] = useState(false);
+  const [errorSubida, setErrorSubida] = useState<string | null>(null);
+  const [inputKey, setInputKey] = useState(0);
+
+  useEffect(() => {
+    let cancelado = false;
+    Promise.all([obtenerSolicitudAspirante(token), obtenerMisDocumentos(token)])
+      .then(([solicitudData, documentosData]) => {
+        if (cancelado) return;
+        setSolicitud(solicitudData);
+        setDocumentos(documentosData);
+      })
+      .catch((err) => {
+        if (cancelado) return;
+        if (manejarNoAutorizado(err)) return;
+        setError(err instanceof ApiError ? err.message : "No se pudo cargar tu solicitud.");
+      })
+      .finally(() => {
+        if (!cancelado) setCargando(false);
+      });
+    return () => {
+      cancelado = true;
+    };
+    // manejarNoAutorizado se recrea en cada render (no es estable); mismo patrón ya usado en
+    // los otros efectos de esta página.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  async function handleSubirDocumento(event: FormEvent) {
+    event.preventDefault();
+    if (!archivo) {
+      setErrorSubida("Selecciona un archivo (PDF, JPG o PNG, máx. 5 MB).");
+      return;
+    }
+    setSubiendo(true);
+    setErrorSubida(null);
+    try {
+      const nuevo = await subirDocumento(token, tipo, archivo);
+      setDocumentos((prev) => [nuevo, ...(prev ?? [])]);
+      setArchivo(null);
+      setInputKey((k) => k + 1);
+      // El paso "Documentos cargados" depende de tener al menos uno: refresca la solicitud.
+      obtenerSolicitudAspirante(token)
+        .then(setSolicitud)
+        .catch(() => {});
+    } catch (err) {
+      setErrorSubida(err instanceof ApiError ? err.message : "No se pudo subir el documento.");
+    } finally {
+      setSubiendo(false);
+    }
+  }
+
+  if (cargando) {
+    return <p className="mb-8 text-body-sm text-ink-muted">Consultando tu solicitud…</p>;
+  }
+  if (error) {
+    return <Card className="mb-8 text-body-sm text-error">{error}</Card>;
+  }
+  if (!solicitud) return null;
 
   return (
     <div className="mb-8 flex flex-col gap-4">
-      <p className="text-label-sm italic text-ink-muted/70">
-        Datos de ejemplo — este seguimiento todavía no viene del backend.
-      </p>
       <Reveal>
         <Card className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -444,12 +543,14 @@ function DashboardAspirante() {
               <p className="text-label-sm font-display font-semibold uppercase tracking-wide text-ink-muted">
                 Tu solicitud
               </p>
-              <h2 className="text-headline-sm font-display font-bold text-primary">{programaNombre}</h2>
+              <h2 className="text-headline-sm font-display font-bold text-primary">
+                {solicitud.programaNombre}
+              </h2>
             </div>
-            <Badge variant="admission">{estadoLabel[estado]}</Badge>
+            <Badge variant="admission">{ESTADO_LABEL_SOLICITUD[solicitud.estado]}</Badge>
           </div>
           <ul className="flex flex-col gap-2.5">
-            {pasos.map((paso) => (
+            {solicitud.pasos.map((paso) => (
               <li key={paso.label} className="flex items-center gap-2 text-body-sm text-ink-muted">
                 <Icon
                   name={paso.completado ? "check_circle" : "radio_button_unchecked"}
@@ -459,9 +560,66 @@ function DashboardAspirante() {
               </li>
             ))}
           </ul>
-          <ButtonLink href="/registro" variant="outline" className="mt-1 w-fit">
-            Continuar mi solicitud
-          </ButtonLink>
+        </Card>
+      </Reveal>
+
+      <Reveal>
+        <Card className="flex flex-col gap-4">
+          <h3 className="text-headline-sm font-display font-bold text-primary">
+            Documentos de admisión
+          </h3>
+
+          {documentos && documentos.length > 0 && (
+            <ul className="flex flex-col gap-2">
+              {documentos.map((doc) => (
+                <li
+                  key={doc.id}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border-subtle px-3 py-2 text-body-sm"
+                >
+                  <span className="text-ink">
+                    {TIPO_DOCUMENTO_LABEL[doc.tipo]} · {doc.nombreOriginal}
+                  </span>
+                  <Badge
+                    variant={doc.estado === "aprobado" ? "active" : "neutral"}
+                    className={doc.estado === "rechazado" ? "text-error" : undefined}
+                  >
+                    {ESTADO_LABEL_DOCUMENTO[doc.estado]}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <form onSubmit={handleSubirDocumento} className="flex flex-col gap-3 md:flex-row md:items-end">
+            <label className="flex flex-col gap-1.5 text-body-sm md:w-56">
+              <span className="font-semibold text-ink">Tipo de documento</span>
+              <select
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value as TipoDocumento)}
+                className="h-11 rounded-md border border-border-subtle bg-surface-canvas px-3 text-body-sm text-ink outline-none focus:border-secondary focus:ring-[3px] focus:ring-secondary/15"
+              >
+                {Object.entries(TIPO_DOCUMENTO_LABEL).map(([valor, etiqueta]) => (
+                  <option key={valor} value={valor}>
+                    {etiqueta}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5 text-body-sm md:w-64">
+              <span className="font-semibold text-ink">Archivo (PDF, JPG o PNG, máx. 5 MB)</span>
+              <input
+                key={inputKey}
+                type="file"
+                accept="application/pdf,image/jpeg,image/png"
+                onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
+                className="text-body-sm text-ink-muted"
+              />
+            </label>
+            <Button type="submit" variant="primary" disabled={subiendo} className="h-11">
+              {subiendo ? "Subiendo…" : "Subir documento"}
+            </Button>
+          </form>
+          {errorSubida && <p className="text-body-sm text-error">{errorSubida}</p>}
         </Card>
       </Reveal>
     </div>
@@ -470,8 +628,8 @@ function DashboardAspirante() {
 
 /**
  * Resumen real de superadmin/admin_academico/coordinador, construido a partir de GET /usuarios
- * (los mismos datos que /admin/usuarios). Coordinador todavía no tiene un "ámbito"/programa
- * propio en el backend (ver docs/requerimientos.md §11), así que ve el mismo resumen
+ * (los mismos datos que /admin/usuarios). Si el coordinador tiene un ámbito/programa asignado
+ * (ver /admin/usuarios), el backend ya filtra la lista; sin ámbito ve el mismo resumen
  * institucional que admin académico, con enlaces de solo lectura en vez de "Administrar".
  */
 function DashboardResumen({

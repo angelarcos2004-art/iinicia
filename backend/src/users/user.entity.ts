@@ -36,6 +36,14 @@ export class User {
   @Column({ name: 'programa_interes_id', type: 'varchar', length: 100, nullable: true })
   programaInteresId!: string | null;
 
+  /**
+   * Ámbito del coordinador (docs/requerimientos.md §11: "acceso limitado al
+   * programa o unidad asignada"). Solo tiene efecto cuando rol = coordinador;
+   * null = sin ámbito asignado todavía.
+   */
+  @Column({ name: 'programa_coordinado_id', type: 'varchar', length: 100, nullable: true })
+  programaCoordinadoId!: string | null;
+
   @Column({ name: 'acepta_aviso_privacidad', type: 'boolean', default: false })
   aceptaAvisoPrivacidad!: boolean;
 
