@@ -55,6 +55,9 @@ export interface UsuarioListado extends Usuario {
   createdAt: string;
   /** Programa que el usuario eligió al registrarse, o null si no tiene. */
   programaInteresNombre: string | null;
+  /** Ámbito del coordinador (solo relevante si rol = coordinador); null = sin ámbito/ve todo. */
+  programaCoordinadoId: string | null;
+  programaCoordinadoNombre: string | null;
 }
 
 /** Estudiante real de un curso del profesor (GET /usuarios/mis-estudiantes), para notificarlo. */
@@ -144,8 +147,21 @@ export interface DashboardEstudiante {
   avisos: AvisoInstitucional[];
 }
 
+/** Seguimiento real de la solicitud del aspirante (GET /aspirante/solicitud). */
 export interface SolicitudAspirante {
   programaNombre: string;
-  estado: "en_revision" | "admitido" | "rechazado";
+  estado: "en_revision" | "admitido";
   pasos: { label: string; completado: boolean }[];
+}
+
+export type TipoDocumento = "identificacion" | "comprobante_estudios" | "otro";
+export type EstadoDocumento = "pendiente" | "aprobado" | "rechazado";
+
+/** Documento de admisión subido por un aspirante (GET /aspirante/documentos, GET /documentos/usuario/:id). */
+export interface DocumentoListado {
+  id: string;
+  tipo: TipoDocumento;
+  nombreOriginal: string;
+  estado: EstadoDocumento;
+  createdAt: string;
 }
