@@ -12,6 +12,7 @@ import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.EstadoCurso
+import org.iinicia.android.data.model.GoogleLoginRequest
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.MoodleSsoResponse
 import org.iinicia.android.data.model.RegistrarPushTokenRequest
@@ -42,6 +43,7 @@ private class FakeApiService(
     private val actividadesFallan: Boolean = false
 ) : IiniciaApiService {
     override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
+    override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
     override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> = cursos
@@ -57,6 +59,7 @@ private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
     override suspend fun login(request: LoginRequest): AuthResponse =
         AuthResponse(token = "jwt-falso", usuario = Usuario(id = "u1", nombre = "Ana", correo = request.correo))
 
+    override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
     override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> =
@@ -239,6 +242,7 @@ class IiniciaUnitTest {
         var actividadUrlRecibida: String? = null
         val fakeApi = object : IiniciaApiService {
             override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
             override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
             override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
             override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
@@ -289,6 +293,7 @@ class IiniciaUnitTest {
         var tokenRecibido: String? = null
         val fakeApi = object : IiniciaApiService {
             override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
             override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
             override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
             override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
@@ -359,6 +364,10 @@ class IiniciaUnitTest {
                 val errorJson = """{"message":"Correo o contraseña incorrectos"}"""
                 val errorBody = errorJson.toResponseBody("application/json".toMediaType())
                 throw HttpException(Response.error<AuthResponse>(401, errorBody))
+            }
+
+            override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse {
+                throw UnsupportedOperationException()
             }
 
             override suspend fun registro(request: RegistroRequest): AuthResponse {

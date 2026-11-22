@@ -143,6 +143,35 @@ class MainViewModel(
     }
 
     /**
+     * Envía el idToken de Google (obtenido vía Credential Manager en [LoginScreen]) al backend.
+     * Misma ruta de éxito/error que [iniciarSesion]: el backend ya crea la cuenta como aspirante
+     * si es la primera vez que ese correo inicia sesión así.
+     */
+    fun iniciarSesionConGoogle(idToken: String, onLoginSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+
+            repository.loginConGoogle(idToken)
+                .onSuccess { authResponse ->
+                    _uiState.update {
+                        it.copy(isLoading = false, usuarioAutenticado = authResponse.usuario)
+                    }
+                    cargarCursos()
+                    registrarTokenPushActual()
+                    onLoginSuccess()
+                }
+                .onFailure { error ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = error.message ?: "No se pudo iniciar sesión con Google."
+                        )
+                    }
+                }
+        }
+    }
+
+    /**
      * Carga (o recarga, p. ej. tras un error con "Reintentar") el dashboard del usuario ya
      * autenticado. Si falla, lo deja explícito en `errorCursos` en vez de mostrar "0 cursos"
      * como si de verdad no tuviera ninguno (p. ej. un timeout real contra Moodle).

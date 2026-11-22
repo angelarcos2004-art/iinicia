@@ -25,16 +25,19 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,6 +46,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.launch
+import org.iinicia.android.data.remote.ApiConfig
 import org.iinicia.android.ui.theme.IiniciaAccent
 import org.iinicia.android.ui.theme.IiniciaPrimary
 import org.iinicia.android.ui.theme.IiniciaTheme
@@ -59,11 +69,36 @@ fun LoginScreen(
     uiState: MainUiState,
     onFieldEdited: () -> Unit,
     onSubmitLogin: (correo: String, password: String) -> Unit,
+    onGoogleCredential: (idToken: String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var correo by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var googleError by rememberSaveable { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    fun iniciarSesionConGoogle() {
+        googleError = null
+        coroutineScope.launch {
+            try {
+                val googleIdOption = GetGoogleIdOption.Builder()
+                    .setFilterByAuthorizedAccounts(false)
+                    .setServerClientId(ApiConfig.GOOGLE_ANDROID_CLIENT_ID)
+                    .build()
+                val request = GetCredentialRequest.Builder()
+                    .addCredentialOption(googleIdOption)
+                    .build()
+                val result = CredentialManager.create(context).getCredential(context, request)
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
+                onGoogleCredential(googleIdTokenCredential.idToken)
+            } catch (e: GetCredentialException) {
+                googleError = "No se pudo iniciar sesión con Google. Intenta de nuevo."
+            }
+        }
+    }
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -239,6 +274,32 @@ fun LoginScreen(
                         }
                     }
                 }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "o", style = MaterialTheme.typography.bodySmall)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedButton(
+                onClick = { iniciarSesionConGoogle() },
+                enabled = !uiState.isLoading,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text(text = "Continuar con Google", style = MaterialTheme.typography.labelLarge)
+            }
+
+            if (googleError != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = googleError.orEmpty(),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

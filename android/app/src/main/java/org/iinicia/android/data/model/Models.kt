@@ -47,6 +47,12 @@ data class LoginRequest(
     val password: String
 )
 
+/** Cuerpo de `POST /auth/google`: idToken emitido por Google (Credential Manager en Android,
+ * Google Identity Services en el portal web), verificado por el backend. */
+data class GoogleLoginRequest(
+    val idToken: String
+)
+
 data class RegistroRequest(
     val nombreCompleto: String,
     val correo: String,
