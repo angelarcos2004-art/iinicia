@@ -52,13 +52,21 @@ export class AuthService {
   }
 
   /**
-   * Verifica el idToken de Google (firma + audiencia GOOGLE_CLIENT_ID) y entra con la cuenta
-   * cuyo correo coincida, creándola como aspirante si es la primera vez que inicia sesión así.
+   * Verifica el idToken de Google (firma + audiencia) y entra con la cuenta cuyo correo
+   * coincida, creándola como aspirante si es la primera vez que inicia sesión así. Acepta el
+   * idToken tanto del cliente web (GOOGLE_CLIENT_ID) como del cliente Android
+   * (GOOGLE_ANDROID_CLIENT_ID, opcional), porque cada plataforma de OAuth tiene su propio
+   * client ID pero comparten el mismo endpoint.
    */
   async loginConGoogle(idToken: string): Promise<AuthResponse> {
+    const audiencias = [
+      this.config.getOrThrow<string>('GOOGLE_CLIENT_ID'),
+      this.config.get<string>('GOOGLE_ANDROID_CLIENT_ID'),
+    ].filter((id): id is string => Boolean(id));
+
     const ticket = await this.googleClient.verifyIdToken({
       idToken,
-      audience: this.config.getOrThrow<string>('GOOGLE_CLIENT_ID'),
+      audience: audiencias,
     }).catch(() => {
       throw new UnauthorizedException('Token de Google inválido');
     });

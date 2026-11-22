@@ -3,6 +3,7 @@ package org.iinicia.android.data.remote
 import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
+import org.iinicia.android.data.model.GoogleLoginRequest
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.MoodleSsoResponse
 import org.iinicia.android.data.model.RegistrarPushTokenRequest
@@ -19,6 +20,7 @@ import retrofit2.http.Query
  *
  * Endpoints soportados actualmente por el backend:
  * - POST /auth/login
+ * - POST /auth/google
  * - POST /auth/registro
  * - GET /auth/me
  * - GET /estudiante/cursos
@@ -33,6 +35,9 @@ interface IiniciaApiService {
 
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): AuthResponse
+
+    @POST("auth/google")
+    suspend fun loginConGoogle(@Body request: GoogleLoginRequest): AuthResponse
 
     @POST("auth/registro")
     suspend fun registro(@Body request: RegistroRequest): AuthResponse

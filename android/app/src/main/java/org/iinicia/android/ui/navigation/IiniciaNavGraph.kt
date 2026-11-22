@@ -104,6 +104,17 @@ fun IiniciaNavGraph(
                             }
                         }
                     )
+                },
+                onGoogleCredential = { idToken ->
+                    viewModel.iniciarSesionConGoogle(
+                        idToken = idToken,
+                        onLoginSuccess = {
+                            navController.navigate(Screen.Dashboard.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        }
+                    )
                 }
             )
         }

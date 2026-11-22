@@ -11,6 +11,7 @@ import org.iinicia.android.data.model.CursoEstudiante
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.EstadoCurso
+import org.iinicia.android.data.model.GoogleLoginRequest
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.RegistrarPushTokenRequest
 import org.iinicia.android.data.model.Usuario
@@ -34,6 +35,7 @@ interface IiniciaRepository {
 
     fun getCurrentSessionUser(): Usuario?
     suspend fun login(correo: String, password: String): Result<AuthResponse>
+    suspend fun loginConGoogle(idToken: String): Result<AuthResponse>
     suspend fun getDashboardEstudiante(): Result<DashboardEstudiante>
     suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>>
     suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante>
@@ -106,6 +108,34 @@ class IiniciaRepositoryImpl(
             // `tokenStorage` persiste esto en EncryptedSharedPreferences (ver
             // EncryptedSessionTokenStorage, usada por defecto desde MainActivity).
             // PROHIBIDO almacenar `password` en texto plano o guardar tokens de Moodle.
+            tokenStorage.saveSession(response.token, response.usuario)
+            Result.success(response)
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (httpException: HttpException) {
+            val rawErrorBody = runCatching {
+                httpException.response()?.errorBody()?.string()
+            }.getOrNull()
+            val fallbackMessage = httpException.message().takeIf { it.isNotBlank() }
+                ?: "El servidor respondió con un error (${httpException.code()})."
+            val parsedMessage = parseErrorMessage(rawErrorBody, fallbackMessage)
+            Result.failure(Exception(parsedMessage, httpException))
+        } catch (e: Exception) {
+            val fallback = e.message?.takeIf { it.isNotBlank() }
+                ?: "No se pudo conectar con el servidor. Verifica tu conexión."
+            Result.failure(Exception(fallback, e))
+        }
+    }
+
+    override suspend fun loginConGoogle(idToken: String): Result<AuthResponse> {
+        return try {
+            val response = if (isConnectToRemoteEnabled) {
+                apiService.loginConGoogle(GoogleLoginRequest(idToken = idToken))
+            } else {
+                // Respaldo simulado para pruebas unitarias locales
+                delay(300)
+                MockDataSource.buildMockAuthResponse(correo = "google@iinicia.edu.mx")
+            }
             tokenStorage.saveSession(response.token, response.usuario)
             Result.success(response)
         } catch (cancellation: CancellationException) {
