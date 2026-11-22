@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { ApiError, obtenerProgramas } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import type { Programa } from "@/lib/types";
@@ -35,7 +36,7 @@ const INITIAL_STATE: FormState = {
 
 export default function RegistroPage() {
   const router = useRouter();
-  const { registrarAspirante } = useAuth();
+  const { registrarAspirante, loginConGoogle } = useAuth();
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -82,6 +83,20 @@ export default function RegistroPage() {
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
+  }
+
+  async function handleGoogleCredential(idToken: string) {
+    setSubmitError(null);
+    try {
+      await loginConGoogle(idToken);
+      router.push("/mi-iinicia");
+    } catch (error) {
+      setSubmitError(
+        error instanceof ApiError
+          ? error.message
+          : "No pudimos crear tu cuenta con Google. Intenta de nuevo.",
+      );
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -260,6 +275,14 @@ export default function RegistroPage() {
             {submitting ? "Creando cuenta…" : "Crear mi cuenta"}
           </Button>
           </form>
+
+          <div className="flex items-center gap-3 text-body-sm text-ink-muted">
+            <span className="h-px flex-1 bg-border-subtle" />
+            <span>o</span>
+            <span className="h-px flex-1 bg-border-subtle" />
+          </div>
+
+          <GoogleLoginButton onCredential={handleGoogleCredential} />
 
           <p className="text-center text-body-sm text-ink-muted">
             ¿Ya tienes cuenta?{" "}
