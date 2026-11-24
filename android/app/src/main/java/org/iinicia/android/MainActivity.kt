@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.iinicia.android.data.local.EncryptedSessionTokenStorage
+import org.iinicia.android.data.remote.ServerConfig
 import org.iinicia.android.data.repository.IiniciaRepositoryImpl
 import org.iinicia.android.ui.navigation.IiniciaNavGraph
 import org.iinicia.android.ui.theme.IiniciaTheme
@@ -40,6 +41,7 @@ class MainActivity : ComponentActivity() {
                 val mainViewModel: MainViewModel = viewModel(
                     factory = MainViewModel.provideFactory(
                         repository = IiniciaRepositoryImpl(
+                            baseUrl = ServerConfig.getBaseUrl(applicationContext),
                             tokenStorage = EncryptedSessionTokenStorage(applicationContext)
                         )
                     )
