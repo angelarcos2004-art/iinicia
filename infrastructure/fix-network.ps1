@@ -17,6 +17,23 @@
 # (./gradlew installDebug) para tomar el valor nuevo - lo imprime este script al final.
 $ErrorActionPreference = "Stop"
 
+# Set-Content -Encoding utf8 siempre agrega BOM, y utf8NoBOM no existe en Windows
+# PowerShell 5.1 (solo en pwsh 6+) - de ahi que Gradle no encontrara sdk.dir en
+# local.properties (leia la clave como "﻿sdk.dir"). Este helper escribe UTF-8 sin BOM
+# en ambas versiones de PowerShell.
+function Set-Utf8NoBom {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory, ValueFromPipeline)][string[]]$Content
+    )
+    begin { $lines = @() }
+    process { $lines += $Content }
+    end {
+        $text = ($lines -join "`r`n") + "`r`n"
+        [System.IO.File]::WriteAllText($Path, $text, (New-Object System.Text.UTF8Encoding($false)))
+    }
+}
+
 $route = Get-NetRoute -DestinationPrefix "0.0.0.0/0" -ErrorAction SilentlyContinue |
     Sort-Object -Property RouteMetric |
     Select-Object -First 1
@@ -43,19 +60,19 @@ services:
   backend:
     environment:
       MOODLE_HOST_HEADER: ${ip}:8080
-"@ | Set-Content -Path (Join-Path $PSScriptRoot "docker-compose.override.yml") -Encoding utf8
+"@ | Set-Utf8NoBom -Path (Join-Path $PSScriptRoot "docker-compose.override.yml")
 
 # 2. backend/.env
 $backendEnvPath = Join-Path $PSScriptRoot "..\backend\.env"
 (Get-Content $backendEnvPath) -replace '^ALLOWED_ORIGIN=.*$', "ALLOWED_ORIGIN=http://localhost:3000,http://${ip}:3000" |
-    Set-Content -Path $backendEnvPath -Encoding utf8
+    Set-Utf8NoBom -Path $backendEnvPath
 
 # 3. frontend/.env.local
 $frontendEnvPath = Join-Path $PSScriptRoot "..\frontend\.env.local"
 (Get-Content $frontendEnvPath) `
     -replace '^NEXT_PUBLIC_API_URL=.*$', "NEXT_PUBLIC_API_URL=http://${ip}:3001" `
     -replace '^NEXT_PUBLIC_MOODLE_URL=.*$', "NEXT_PUBLIC_MOODLE_URL=http://${ip}:8080" |
-    Set-Content -Path $frontendEnvPath -Encoding utf8
+    Set-Utf8NoBom -Path $frontendEnvPath
 
 # 4. wwwroot de Moodle: es un valor forzado en config.php (no vive en la BD), por eso no
 # alcanza con admin/cli/cfg.php. preg_replace de una sola linea via stdin, mismo patron que
@@ -81,7 +98,7 @@ if (Test-Path $localPropsPath) {
     } else {
         $contenido += $lineaApiBaseUrl
     }
-    $contenido | Set-Content -Path $localPropsPath -Encoding utf8
+    $contenido | Set-Utf8NoBom -Path $localPropsPath
     Write-Host "android/local.properties actualizado - vuelve a instalar el APK (./gradlew installDebug) para que tome efecto." -ForegroundColor Yellow
 }
 
