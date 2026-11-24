@@ -1,5 +1,7 @@
 package org.iinicia.android.ui.screens
 
+import android.app.Activity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -29,6 +32,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +57,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 import org.iinicia.android.data.remote.ApiConfig
+import org.iinicia.android.data.remote.ServerConfig
 import org.iinicia.android.ui.theme.IiniciaAccent
 import org.iinicia.android.ui.theme.IiniciaPrimary
 import org.iinicia.android.ui.theme.IiniciaTheme
@@ -76,6 +81,8 @@ fun LoginScreen(
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var googleError by rememberSaveable { mutableStateOf<String?>(null) }
+    var mostrarDialogoServidor by rememberSaveable { mutableStateOf(false) }
+    var servidorEditado by rememberSaveable { mutableStateOf(uiState.baseUrl) }
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -301,7 +308,48 @@ fun LoginScreen(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Permite apuntar a otro servidor sin recompilar el APK: la IP de la laptop que
+            // corre el backend cambia con cada red (hotspot, wifi de la escuela, etc).
+            Text(
+                text = "Servidor: ${uiState.baseUrl}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.outline,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.clickable {
+                    servidorEditado = uiState.baseUrl
+                    mostrarDialogoServidor = true
+                }
+            )
         }
+    }
+
+    if (mostrarDialogoServidor) {
+        AlertDialog(
+            onDismissRequest = { mostrarDialogoServidor = false },
+            title = { Text("Dirección del servidor") },
+            text = {
+                OutlinedTextField(
+                    value = servidorEditado,
+                    onValueChange = { servidorEditado = it },
+                    placeholder = { Text("http://192.168.1.10:3001/") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    ServerConfig.setBaseUrl(context, servidorEditado)
+                    mostrarDialogoServidor = false
+                    (context as? Activity)?.recreate()
+                }) { Text("Guardar") }
+            },
+            dismissButton = {
+                TextButton(onClick = { mostrarDialogoServidor = false }) { Text("Cancelar") }
+            }
+        )
     }
 }
 
