@@ -116,7 +116,7 @@ docker compose up -d moodle
 # 4. Instalar Moodle via CLI (una sola vez; crea config.php y las tablas)
 #    En Windows/Git Bash, con MSYS_NO_PATHCONV=1 adelante:
 docker compose exec -T moodle php admin/cli/install.php \
-  --lang=en \
+  --lang=es \
   --wwwroot=http://localhost:8080 \
   --dataroot=/var/www/moodledata \
   --dbtype=pgsql \
@@ -137,6 +137,34 @@ docker compose exec -T moodle php admin/cli/install.php \
 
 Cuando termine, Moodle queda disponible en **http://localhost:8080**
 (usuario `admin`, la contraseña que hayas puesto arriba).
+
+Si tu instancia ya quedó instalada en inglés (instalada antes de este
+cambio, con `--lang=en`), no hace falta reinstalar — eso borraría el
+curso y usuarios de prueba. Importa el paquete de idioma y cambia el
+default. Moodle 4.5 ya no trae un script CLI para esto
+(`admin/tool/langimport/cli/install.php` no existe), así que se usa el
+controller del plugin directamente (mismo patrón que los demás scripts
+de este README):
+
+```bash
+cat > install-lang-es.php << 'EOF'
+<?php
+define('CLI_SCRIPT', true);
+require('/var/www/html/config.php');
+require_once($CFG->dirroot . '/admin/tool/langimport/classes/controller.php');
+
+$controller = new \tool_langimport\controller();
+$controller->install_languagepacks(['es']);
+foreach ($controller->info as $m) { echo strip_tags($m) . "\n"; }
+foreach ($controller->errors as $m) { echo "ERROR: " . strip_tags($m) . "\n"; }
+
+set_config('lang', 'es');
+echo "Default lang set to es\n";
+EOF
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < install-lang-es.php
+rm install-lang-es.php
+docker compose exec -T moodle php admin/cli/purge_caches.php
+```
 
 > Las credenciales de ejemplo de este README (`iinicia` /
 > `iinicia_dev_password`) son solo para desarrollo local. No las
@@ -246,6 +274,56 @@ del panel admin para probarlo.
 Idempotente a nivel de curso: si el shortname ya existe, se omite por
 completo (no actualiza contenido). Para rehacer uno, bórralo primero
 desde Moodle y vuelve a correr el script.
+
+Para probar con varios estudiantes a la vez (p. ej. un foro con más de
+una voz), este script crea 5 cuentas más (`estudiante1.prueba` ...
+`estudiante5.prueba`, contraseña `Estudiante{N}#2026`) matriculadas en
+`IINICIA-SOFT1`:
+
+```bash
+cat > seed-5-estudiantes.php << 'EOF'
+<?php
+define('CLI_SCRIPT', true);
+require('/var/www/html/config.php');
+require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . '/lib/enrollib.php');
+
+function make_user(string $username, string $first, string $last, string $email, string $password): int {
+    global $CFG, $DB;
+    if ($existing = $DB->get_record('user', ['username' => $username, 'deleted' => 0])) {
+        return (int) $existing->id;
+    }
+    $u = new stdClass();
+    $u->auth = 'manual';
+    $u->username = $username;
+    $u->firstname = $first;
+    $u->lastname = $last;
+    $u->email = $email;
+    $u->password = $password;
+    $u->confirmed = 1;
+    $u->mnethostid = $CFG->mnet_localhost_id;
+    return (int) user_create_user($u, false, false);
+}
+
+$course = $DB->get_record('course', ['shortname' => 'IINICIA-SOFT1'], '*', MUST_EXIST);
+$studentrole = $DB->get_record('role', ['shortname' => 'student'], '*', MUST_EXIST);
+
+$plugin = enrol_get_plugin('manual');
+$instance = null;
+foreach (enrol_get_instances($course->id, true) as $i) {
+    if ($i->enrol === 'manual') { $instance = $i; break; }
+}
+
+for ($n = 1; $n <= 5; $n++) {
+    $username = "estudiante$n.prueba";
+    $id = make_user($username, "Estudiante$n", 'Prueba', "estudiante$n.prueba@iinicia.local", "Estudiante{$n}#2026");
+    $plugin->enrol_user($instance, $id, $studentrole->id);
+    echo "OK $username (id $id) matriculado en IINICIA-SOFT1\n";
+}
+EOF
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle php < seed-5-estudiantes.php
+rm seed-5-estudiantes.php
+```
 
 ### Progreso: por qué hace falta `moodle-habilitar-completion.php`
 
@@ -456,8 +534,12 @@ se suben vía la API de archivos de Moodle (no hay forma de subir un
 archivo con `admin/cli/cfg.php`, ese solo sirve para valores simples):
 
 ```bash
-# 1. Copiar los mismos assets que ya usa el portal (frontend/public/) al contenedor
-MSYS_NO_PATHCONV=1 docker cp ../frontend/public/logo-inicia.png iinicia-moodle:/tmp/logo-inicia.png
+# 1. Copiar los mismos assets que ya usa el portal (frontend/public/) al contenedor.
+# Ojo: logo-inicia.png tiene letras BLANCAS sobre fondo transparente (pensado
+# para el navbar oscuro del portal) - en el recuadro de fondo claro que usa
+# Moodle para el logo se ve lavado/casi invisible. Usa la version de letras
+# oscuras para que se vea bien ahi.
+MSYS_NO_PATHCONV=1 docker cp ../frontend/public/logo-iinicia-oscuro-letras.jpg iinicia-moodle:/tmp/logo-iinicia-oscuro-letras.jpg
 MSYS_NO_PATHCONV=1 docker cp ../frontend/public/logo-iinicia-oscuro-letras.ico iinicia-moodle:/tmp/favicon.ico
 
 # 2. Registrarlos como logo/logocompact/favicon vía la API de archivos
@@ -481,8 +563,8 @@ function set_stored_file(string $setting, string $filearea, string $path, string
     set_config($setting, '/' . $filename, 'core_admin');
 }
 
-set_stored_file('logo', 'logo', '/tmp/logo-inicia.png', 'logo-inicia.png');
-set_stored_file('logocompact', 'logocompact', '/tmp/logo-inicia.png', 'logo-inicia.png');
+set_stored_file('logo', 'logo', '/tmp/logo-iinicia-oscuro-letras.jpg', 'logo-iinicia-oscuro-letras.jpg');
+set_stored_file('logocompact', 'logocompact', '/tmp/logo-iinicia-oscuro-letras.jpg', 'logo-iinicia-oscuro-letras.jpg');
 set_stored_file('favicon', 'favicon', '/tmp/favicon.ico', 'favicon.ico');
 theme_reset_all_caches();
 echo "OK\n";
@@ -531,6 +613,51 @@ header `Host` correcto mientras conecta físicamente a `moodle` — con
 (la spec Fetch lo prohíbe). Sin Docker (backend corriendo local con
 `npm run start:dev`), no se define esta variable y todo sigue igual que
 antes (vía `fetch`, sin cambios).
+
+## Arrancar todo y cambiar de red sin editar nada a mano
+
+Dos scripts de PowerShell, para dos problemas distintos:
+
+- **`start.ps1`** — prende Docker Desktop (si está apagado) y sube los 4
+  servicios (`docker compose up -d`). Se corre una vez por sesión/reboot.
+- **`fix-network.ps1`** — se corre cada vez que cambias de red (otros
+  datos celulares, wifi de la escuela, otro hotspot). Detecta la IP de
+  la interfaz con salida a internet y reescribe lo que depende de ella:
+  `docker-compose.override.yml` (`MOODLE_HOST_HEADER`), `backend/.env`
+  (`ALLOWED_ORIGIN`), `frontend/.env.local`
+  (`NEXT_PUBLIC_API_URL`/`NEXT_PUBLIC_MOODLE_URL`) y el `wwwroot` forzado
+  en el `config.php` de Moodle — luego reinicia `moodle` (OPcache corre
+  con `validate_timestamps=0`, ver `moodle-custom/php/opcache-dev.ini`:
+  sin este restart Apache sigue sirviendo el `config.php` viejo desde
+  memoria y Moodle redirige de vuelta a la IP anterior) y recrea
+  `backend`/`frontend`. Antes había que editar los cuatro a mano cada vez.
+
+```powershell
+cd infrastructure
+./start.ps1          # una vez por sesión
+./fix-network.ps1    # cada vez que cambies de red
+```
+
+Para la app Android no hace falta recompilar el APK: en la pantalla de
+login, toca el texto "Servidor" al fondo y pega la URL de Backend que
+imprime `fix-network.ps1` (ver `ServerConfig.kt`, que persiste esa URL
+en SharedPreferences y sustituye el valor de `local.properties`/
+`BuildConfig.API_BASE_URL` en runtime).
+
+Esto sigue exigiendo que todos los dispositivos (laptop, celular)
+estén en la MISMA red — no resuelve demos desde una red que no
+controlas tú. Para eso, la opción es un túnel con hostname fijo
+(Cloudflare Tunnel) o el despliegue real a producción (ver `DEPLOY.md`).
+
+**Ojo con el portal en blanco al abrirlo por IP:** Next 16 bloquea por
+default los recursos de dev (`_next/hmr`, bundles JS) si el `Host` de
+la petición no está en `allowedDevOrigins` — la página carga el HTML
+pero nunca hidrata, se ve vacía (sin error visible; el aviso solo sale
+en `docker compose logs frontend`: "Blocked cross-origin request to
+Next.js dev resource"). `frontend/next.config.ts` ya deriva ese host de
+`NEXT_PUBLIC_API_URL`, así que `fix-network.ps1` lo resuelve solo (no
+hace falta tocar nada aparte) — pero si alguna vez vuelve a pasar,
+revisa esos logs primero.
 
 ## Comandos útiles
 

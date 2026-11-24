@@ -67,10 +67,11 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-iinicia}:${POSTGRES_PASSWORD:-iinicia_dev_password}@postgres:5432/${POSTGRES_DB:-iinicia_backend}
       MOODLE_URL: http://moodle
       # Moodle redirige cualquier peticion cuyo Host no coincida con su
-      # $CFG->wwwroot (localhost:8080). Este Host "falso" hace que el backend,
-      # aunque conecte por el nombre interno "moodle", pase esa validacion
-      # (ver backend/src/moodle/moodle.service.ts).
-      MOODLE_HOST_HEADER: localhost:8080
+      # $CFG->wwwroot actual. Este Host "falso" hace que el backend, aunque
+      # conecte por el nombre interno "moodle", pase esa validacion (ver
+      # backend/src/moodle/moodle.service.ts). Debe coincidir con el wwwroot
+      # real configurado en Moodle (hoy la IP de LAN, para que Android llegue).
+      MOODLE_HOST_HEADER: 172.20.10.5:8080
       PORT: 3001
     volumes:
       - ../backend/src:/app/src

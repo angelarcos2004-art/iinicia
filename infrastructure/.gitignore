@@ -2,3 +2,8 @@
 # versiona aqui (cientos de MB). moodle-custom/ (temas y plugins propios)
 # si se versiona normalmente, en la raiz del repo.
 moodle-src/
+
+# Override local y temporal (p. ej. para apuntar MOODLE_HOST_HEADER a una IP
+# de red/hotspot al probar desde un telefono fisico). Nunca se versiona:
+# docker compose lo mezcla solo si existe.
+docker-compose.override.yml
