@@ -1,19 +1,20 @@
 # Detecta la IP de LAN actual (la de la red con salida a internet: hotspot, wifi de casa,
 # wifi de la escuela, lo que sea) y reescribe todo lo que depende de ella, para no tener que
-# editar 4 archivos a mano cada vez que la laptop cambia de red:
+# editar 5 archivos a mano cada vez que la laptop cambia de red:
 #   - infrastructure/docker-compose.override.yml (MOODLE_HOST_HEADER)
 #   - backend/.env (ALLOWED_ORIGIN)
 #   - frontend/.env.local (NEXT_PUBLIC_API_URL / NEXT_PUBLIC_MOODLE_URL)
+#   - android/local.properties (apiBaseUrl), si ya existe en esta maquina
 #   - el wwwroot forzado en el config.php de Moodle
 #
-# Requiere que los servicios ya esten corriendo (./start.ps1 primero). No reinicia
-# postgres/moodle: solo recrea backend y frontend, que son los que leen esas variables.
+# Requiere que los servicios ya esten corriendo (./start.ps1 primero).
 #
 # Uso: parado en infrastructure/, cada vez que cambies de red
 #   ./fix-network.ps1
 #
-# Android: no hace falta recompilar el APK. Abre la app, toca el texto "Servidor" al fondo
-# de la pantalla de login y pega la URL de Backend que este script imprime al final.
+# Android en un dispositivo fisico: el apiBaseUrl queda actualizado solo en
+# local.properties, pero el APK sigue necesitando recompilarse/reinstalarse
+# (./gradlew installDebug) para tomar el valor nuevo - lo imprime este script al final.
 $ErrorActionPreference = "Stop"
 
 $route = Get-NetRoute -DestinationPrefix "0.0.0.0/0" -ErrorAction SilentlyContinue |
@@ -69,13 +70,28 @@ echo "wwwroot de Moodle actualizado\n";
 '@
 ($phpTemplate.Replace('IPPLACEHOLDER', $ip)) | docker compose exec -T moodle php
 
-# 5. Reiniciar moodle: OPcache corre con opcache.validate_timestamps=0 (ver
+# 5. android/local.properties (apiBaseUrl) - solo si el archivo ya existe (es por maquina,
+# no se versiona; si no existe, Android usa el default del emulador y no hace falta tocarlo).
+$localPropsPath = Join-Path $PSScriptRoot "..\android\local.properties"
+if (Test-Path $localPropsPath) {
+    $lineaApiBaseUrl = "apiBaseUrl=http://${ip}:3001/"
+    $contenido = Get-Content $localPropsPath
+    if ($contenido -match '^apiBaseUrl=') {
+        $contenido = $contenido -replace '^apiBaseUrl=.*$', $lineaApiBaseUrl
+    } else {
+        $contenido += $lineaApiBaseUrl
+    }
+    $contenido | Set-Content -Path $localPropsPath -Encoding utf8
+    Write-Host "android/local.properties actualizado - vuelve a instalar el APK (./gradlew installDebug) para que tome efecto." -ForegroundColor Yellow
+}
+
+# 6. Reiniciar moodle: OPcache corre con opcache.validate_timestamps=0 (ver
 # moodle-custom/php/opcache-dev.ini), asi que Apache/PHP sigue sirviendo el config.php
 # viejo desde memoria aunque el archivo ya se reescribio arriba - sin este restart, Moodle
 # redirige (303) de vuelta a la IP anterior.
 docker compose restart moodle
 
-# 6. Recrear backend/frontend para que relean su .env
+# 7. Recrear backend/frontend para que relean su .env
 docker compose up -d --force-recreate backend frontend
 
 Write-Host ""
@@ -83,5 +99,7 @@ Write-Host "Listo. Nueva direccion de esta sesion:" -ForegroundColor Green
 Write-Host "  Portal:  http://${ip}:3000"
 Write-Host "  Moodle:  http://${ip}:8080"
 Write-Host "  Backend: http://${ip}:3001/"
-Write-Host ""
-Write-Host "Android: toca 'Servidor' en la pantalla de login y pega http://${ip}:3001/" -ForegroundColor Yellow
+if (Test-Path $localPropsPath) {
+    Write-Host ""
+    Write-Host "Android fisico: corre '.\gradlew installDebug' para reinstalar con la IP nueva." -ForegroundColor Yellow
+}
