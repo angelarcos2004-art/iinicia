@@ -638,11 +638,10 @@ cd infrastructure
 ./fix-network.ps1    # cada vez que cambies de red
 ```
 
-Para la app Android no hace falta recompilar el APK: en la pantalla de
-login, toca el texto "Servidor" al fondo y pega la URL de Backend que
-imprime `fix-network.ps1` (ver `ServerConfig.kt`, que persiste esa URL
-en SharedPreferences y sustituye el valor de `local.properties`/
-`BuildConfig.API_BASE_URL` en runtime).
+Para la app Android en un dispositivo físico sí hay que recompilar:
+actualiza `apiBaseUrl` en `android/local.properties` con la URL de
+Backend que imprime `fix-network.ps1` (ver el comentario en
+`android/app/build.gradle.kts`) y vuelve a instalar el APK.
 
 Esto sigue exigiendo que todos los dispositivos (laptop, celular)
 estén en la MISMA red — no resuelve demos desde una red que no
