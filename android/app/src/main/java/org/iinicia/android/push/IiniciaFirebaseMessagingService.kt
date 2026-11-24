@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.iinicia.android.MainActivity
 import org.iinicia.android.data.local.EncryptedSessionTokenStorage
-import org.iinicia.android.data.remote.ServerConfig
 import org.iinicia.android.data.repository.IiniciaRepositoryImpl
 
 private const val CANAL_AVISOS_ID = "iinicia_avisos"
@@ -33,10 +32,7 @@ class IiniciaFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        val repository = IiniciaRepositoryImpl(
-            baseUrl = ServerConfig.getBaseUrl(applicationContext),
-            tokenStorage = EncryptedSessionTokenStorage(applicationContext)
-        )
+        val repository = IiniciaRepositoryImpl(tokenStorage = EncryptedSessionTokenStorage(applicationContext))
         if (repository.getCurrentSessionUser() == null) return
         // shortcut: fire-and-forget sin reintentos; si falla, se reintentará en el próximo
         // onNewToken o login. Suficiente para esta fase sin backend de cola de reintentos.
