@@ -2,7 +2,6 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import type { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
-import { OAuth2Client } from 'google-auth-library';
 import { AuthService } from './auth.service.js';
 import type { MailService } from '../mail/mail.service.js';
 import { Rol } from '../users/rol.enum.js';
@@ -16,6 +15,8 @@ function makeService(existing: User | null, env: Record<string, string> = {}) {
     guardarTokenRecuperacion: vi.fn().mockResolvedValue(undefined),
     limpiarTokenRecuperacion: vi.fn().mockResolvedValue(undefined),
     actualizarPasswordHash: vi.fn().mockResolvedValue(undefined),
+    guardarCodigo2FA: vi.fn().mockResolvedValue(undefined),
+    limpiarCodigo2FA: vi.fn().mockResolvedValue(undefined),
   };
   const jwt = { signAsync: vi.fn().mockResolvedValue('tok') } as unknown as JwtService;
   const config = {
@@ -25,7 +26,10 @@ function makeService(existing: User | null, env: Record<string, string> = {}) {
       return env[key];
     },
   } as unknown as ConfigService;
-  const mail = { enviarRecuperacion: vi.fn().mockResolvedValue(undefined) };
+  const mail = {
+    enviarRecuperacion: vi.fn().mockResolvedValue(undefined),
+    enviarCodigo2FA: vi.fn().mockResolvedValue(undefined),
+  };
   return {
     service: new AuthService(users as unknown as UsersService, jwt, config, mail as unknown as MailService),
     users,
@@ -74,9 +78,9 @@ describe('AuthService', () => {
     );
   });
 
-  it('login correcto devuelve token y usuario', async () => {
+  it('login correcto no entrega el token todavía: genera y envía el código 2FA', async () => {
     const hash = await bcrypt.hash('buena', 4);
-    const { service } = makeService({
+    const { service, users, mail } = makeService({
       id: 'u',
       correo: 'a@b.com',
       nombre: 'Ana',
@@ -84,49 +88,62 @@ describe('AuthService', () => {
       rol: Rol.Aspirante,
     } as User);
     const res = await service.login({ correo: 'a@b.com', password: 'buena' });
-    expect(res.token).toBe('tok');
-    expect(res.usuario.rol).toBe(Rol.Aspirante);
+
+    expect(res.correo).toBe('a@b.com');
+    expect(users.guardarCodigo2FA).toHaveBeenCalledTimes(1);
+    const [id, codigoHash, expira] = users.guardarCodigo2FA.mock.calls[0];
+    expect(id).toBe('u');
+    expect(typeof codigoHash).toBe('string');
+    expect(expira.getTime()).toBeGreaterThan(Date.now());
+
+    expect(mail.enviarCodigo2FA).toHaveBeenCalledTimes(1);
+    const [correoDestino, codigo] = mail.enviarCodigo2FA.mock.calls[0];
+    expect(correoDestino).toBe('a@b.com');
+    expect(codigo).toMatch(/^\d{6}$/);
+    expect(await bcrypt.compare(codigo, codigoHash)).toBe(true);
   });
 
-  describe('loginConGoogle', () => {
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
+  describe('verificar2FA', () => {
+    async function makeServiceConCodigoVigente(codigo: string, expiraEnMs = 5 * 60 * 1000) {
+      const codigoHash = await bcrypt.hash(codigo, 4);
+      return makeService({
+        id: 'u',
+        correo: 'a@b.com',
+        nombre: 'Ana',
+        rol: Rol.Aspirante,
+        twoFactorCodeHash: codigoHash,
+        twoFactorCodeExpira: new Date(Date.now() + expiraEnMs),
+      } as User);
+    }
 
-    it('con un idToken válido de un correo nuevo, crea la cuenta como aspirante', async () => {
-      vi.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
-        getPayload: () => ({ email: 'nueva@b.com', email_verified: true, name: 'Nueva' }),
-      } as never);
-      const { service, users } = makeService(null, { GOOGLE_CLIENT_ID: 'cid' });
+    it('con código correcto, devuelve token y usuario, y limpia el código', async () => {
+      const { service, users } = await makeServiceConCodigoVigente('123456');
+      const res = await service.verificar2FA({ correo: 'a@b.com', codigo: '123456' });
 
-      const res = await service.loginConGoogle('token-google');
-
-      expect(users.create).toHaveBeenCalledWith(
-        expect.objectContaining({ correo: 'nueva@b.com', nombre: 'Nueva', rol: Rol.Aspirante }),
-      );
       expect(res.token).toBe('tok');
+      expect(res.usuario.rol).toBe(Rol.Aspirante);
+      expect(users.limpiarCodigo2FA).toHaveBeenCalledWith('u');
     });
 
-    it('con un idToken válido de un correo existente, entra sin crear otra cuenta', async () => {
-      vi.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
-        getPayload: () => ({ email: 'a@b.com', email_verified: true, name: 'Ana' }),
-      } as never);
-      const { service, users } = makeService(
-        { id: 'u', correo: 'a@b.com', nombre: 'Ana', rol: Rol.Aspirante } as User,
-        { GOOGLE_CLIENT_ID: 'cid' },
-      );
-
-      const res = await service.loginConGoogle('token-google');
-
-      expect(users.create).not.toHaveBeenCalled();
-      expect(res.usuario.correo).toBe('a@b.com');
+    it('rechaza un código que no coincide', async () => {
+      const { service } = await makeServiceConCodigoVigente('123456');
+      await expect(
+        service.verificar2FA({ correo: 'a@b.com', codigo: '000000' }),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
     });
 
-    it('rechaza un idToken inválido o sin verificar', async () => {
-      vi.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockRejectedValue(new Error('firma inválida'));
-      const { service } = makeService(null, { GOOGLE_CLIENT_ID: 'cid' });
+    it('rechaza un código ya vencido', async () => {
+      const { service } = await makeServiceConCodigoVigente('123456', -1000);
+      await expect(
+        service.verificar2FA({ correo: 'a@b.com', codigo: '123456' }),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
+    });
 
-      await expect(service.loginConGoogle('token-malo')).rejects.toBeInstanceOf(UnauthorizedException);
+    it('rechaza si el correo no existe', async () => {
+      const { service } = makeService(null);
+      await expect(
+        service.verificar2FA({ correo: 'no-existe@b.com', codigo: '123456' }),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
     });
   });
 
