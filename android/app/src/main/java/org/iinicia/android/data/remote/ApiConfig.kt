@@ -13,9 +13,6 @@ object ApiConfig {
      */
     const val DEFAULT_BASE_URL: String = BuildConfig.API_BASE_URL
 
-    /** Client ID de OAuth 2.0 tipo "Android" para el botón de Google del login. No es secreto. */
-    const val GOOGLE_ANDROID_CLIENT_ID: String = BuildConfig.GOOGLE_ANDROID_CLIENT_ID
-
     const val CONNECT_TIMEOUT_SECONDS: Long = 10L
     const val READ_TIMEOUT_SECONDS: Long = 15L
 

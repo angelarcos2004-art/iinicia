@@ -12,6 +12,7 @@ import type {
   Programa,
   ProgramaInput,
   RegistroAspiranteInput,
+  Requiere2FAResponse,
   Rol,
   SolicitudAspirante,
   TipoDocumento,
@@ -195,14 +196,18 @@ function withMockDelay<T>(value: T, ms = 450): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
-/** Inicia sesión contra el backend IINICIA (NEXT_PUBLIC_API_URL). */
-export async function login(input: LoginInput): Promise<AuthResponse> {
-  return postJSON<AuthResponse>("/auth/login", input);
+/**
+ * Primer factor del login (correo + contraseña) contra el backend IINICIA
+ * (NEXT_PUBLIC_API_URL). Nunca entrega el token directo: el backend manda un código de
+ * verificación al correo, que se confirma con `verificarCodigo2FA`.
+ */
+export async function login(input: LoginInput): Promise<Requiere2FAResponse> {
+  return postJSON<Requiere2FAResponse>("/auth/login", input);
 }
 
-/** Inicia sesión con el idToken que entrega Google Identity Services. */
-export async function loginConGoogle(idToken: string): Promise<AuthResponse> {
-  return postJSON<AuthResponse>("/auth/google", { idToken });
+/** Segundo factor del login: el código de 6 dígitos que llegó al correo. */
+export async function verificarCodigo2FA(correo: string, codigo: string): Promise<AuthResponse> {
+  return postJSON<AuthResponse>("/auth/login/verificar", { correo, codigo });
 }
 
 /** Registra un aspirante contra el backend IINICIA. */

@@ -54,11 +54,26 @@ class InMemoryUsers {
     const user = this.items.find((u) => u.id === id);
     if (user) user.passwordHash = passwordHash;
   }
+  async guardarCodigo2FA(id: string, codigoHash: string, expira: Date) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) {
+      user.twoFactorCodeHash = codigoHash;
+      user.twoFactorCodeExpira = expira;
+    }
+  }
+  async limpiarCodigo2FA(id: string) {
+    const user = this.items.find((u) => u.id === id);
+    if (user) {
+      user.twoFactorCodeHash = null;
+      user.twoFactorCodeExpira = null;
+    }
+  }
 }
 
-/** MailService falso: captura el enlace en vez de intentar enviar un correo real. */
+/** MailService falso: captura el enlace/código en vez de intentar enviar un correo real. */
 const mailFake = {
   enviarRecuperacion: vi.fn().mockResolvedValue(undefined),
+  enviarCodigo2FA: vi.fn().mockResolvedValue(undefined),
 };
 
 const registroValido = {
@@ -76,6 +91,7 @@ describe('Auth (e2e)', () => {
 
   beforeEach(async () => {
     mailFake.enviarRecuperacion.mockClear();
+    mailFake.enviarCodigo2FA.mockClear();
     const moduleRef = await Test.createTestingModule({
       imports: [JwtModule.register({ secret: 'test-secret', signOptions: { expiresIn: '1h' } })],
       controllers: [AuthController],
@@ -145,14 +161,43 @@ describe('Auth (e2e)', () => {
     expect(typeof res.body.message).toBe('string');
   });
 
-  it('POST /auth/login correcto -> 200 con token y usuario', async () => {
+  it('POST /auth/login correcto -> 200, manda el código 2FA y no entrega el token todavía', async () => {
     await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ correo: 'ANA@correo.com', password: 'secreto123' });
     expect(res.status).toBe(200);
+    expect(res.body.token).toBeUndefined();
+    expect(res.body.correo).toBe('ana@correo.com');
+    expect(mailFake.enviarCodigo2FA).toHaveBeenCalledWith('ana@correo.com', expect.stringMatching(/^\d{6}$/));
+  });
+
+  it('POST /auth/login/verificar con el código correcto -> 200 con token y usuario', async () => {
+    await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+    await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ correo: 'ANA@correo.com', password: 'secreto123' });
+    const codigo = mailFake.enviarCodigo2FA.mock.calls.at(-1)?.[1] as string;
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/login/verificar')
+      .send({ correo: 'ana@correo.com', codigo });
+    expect(res.status).toBe(200);
     expect(res.body.token).toEqual(expect.any(String));
     expect(res.body.usuario.rol).toBe('aspirante');
+  });
+
+  it('POST /auth/login/verificar con un código incorrecto -> 401 { message }', async () => {
+    await request(app.getHttpServer()).post('/auth/registro').send(registroValido);
+    await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ correo: 'ana@correo.com', password: 'secreto123' });
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/login/verificar')
+      .send({ correo: 'ana@correo.com', codigo: '000000' });
+    expect(res.status).toBe(401);
+    expect(typeof res.body.message).toBe('string');
   });
 
   it('POST /auth/login con contraseña incorrecta -> 401 { message }', async () => {

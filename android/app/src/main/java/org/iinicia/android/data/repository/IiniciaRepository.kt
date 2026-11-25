@@ -11,10 +11,11 @@ import org.iinicia.android.data.model.CursoEstudiante
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.DashboardEstudiante
 import org.iinicia.android.data.model.EstadoCurso
-import org.iinicia.android.data.model.GoogleLoginRequest
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.RegistrarPushTokenRequest
+import org.iinicia.android.data.model.Requiere2FAResponse
 import org.iinicia.android.data.model.Usuario
+import org.iinicia.android.data.model.Verificar2FARequest
 import org.iinicia.android.data.remote.ApiConfig
 import org.iinicia.android.data.remote.IiniciaApiService
 import org.iinicia.android.data.remote.RetrofitClient
@@ -34,8 +35,10 @@ interface IiniciaRepository {
     val isConnectToRemoteEnabled: Boolean
 
     fun getCurrentSessionUser(): Usuario?
-    suspend fun login(correo: String, password: String): Result<AuthResponse>
-    suspend fun loginConGoogle(idToken: String): Result<AuthResponse>
+    /** Primer factor: no abre sesión, solo confirma que el código 2FA se mandó al correo. */
+    suspend fun login(correo: String, password: String): Result<Requiere2FAResponse>
+    /** Segundo factor: con el código correcto, recién aquí se guarda la sesión. */
+    suspend fun verificar2FA(correo: String, codigo: String): Result<AuthResponse>
     suspend fun getDashboardEstudiante(): Result<DashboardEstudiante>
     suspend fun getCursosAutorizados(): Result<List<CursoEstudiante>>
     suspend fun getDetalleCurso(cursoId: String): Result<CursoEstudiante>
@@ -96,19 +99,18 @@ class IiniciaRepositoryImpl(
 
     override fun getCurrentSessionUser(): Usuario? = tokenStorage.getUsuario()
 
-    override suspend fun login(correo: String, password: String): Result<AuthResponse> {
+    override suspend fun login(correo: String, password: String): Result<Requiere2FAResponse> {
         return try {
             val response = if (isConnectToRemoteEnabled) {
                 apiService.login(LoginRequest(correo = correo.trim(), password = password))
             } else {
                 // Respaldo simulado para pruebas unitarias locales
                 delay(300)
-                MockDataSource.buildMockAuthResponse(correo = correo.trim())
+                Requiere2FAResponse(
+                    correo = correo.trim(),
+                    mensaje = "Enviamos un código de verificación a tu correo.",
+                )
             }
-            // `tokenStorage` persiste esto en EncryptedSharedPreferences (ver
-            // EncryptedSessionTokenStorage, usada por defecto desde MainActivity).
-            // PROHIBIDO almacenar `password` en texto plano o guardar tokens de Moodle.
-            tokenStorage.saveSession(response.token, response.usuario)
             Result.success(response)
         } catch (cancellation: CancellationException) {
             throw cancellation
@@ -127,15 +129,18 @@ class IiniciaRepositoryImpl(
         }
     }
 
-    override suspend fun loginConGoogle(idToken: String): Result<AuthResponse> {
+    override suspend fun verificar2FA(correo: String, codigo: String): Result<AuthResponse> {
         return try {
             val response = if (isConnectToRemoteEnabled) {
-                apiService.loginConGoogle(GoogleLoginRequest(idToken = idToken))
+                apiService.verificar2FA(Verificar2FARequest(correo = correo.trim(), codigo = codigo))
             } else {
                 // Respaldo simulado para pruebas unitarias locales
                 delay(300)
-                MockDataSource.buildMockAuthResponse(correo = "google@iinicia.edu.mx")
+                MockDataSource.buildMockAuthResponse(correo = correo.trim())
             }
+            // `tokenStorage` persiste esto en EncryptedSharedPreferences (ver
+            // EncryptedSessionTokenStorage, usada por defecto desde MainActivity).
+            // PROHIBIDO almacenar `password` en texto plano o guardar tokens de Moodle.
             tokenStorage.saveSession(response.token, response.usuario)
             Result.success(response)
         } catch (cancellation: CancellationException) {

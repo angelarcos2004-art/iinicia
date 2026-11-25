@@ -61,6 +61,13 @@ export class User {
   @Column({ name: 'reset_password_expira', type: 'timestamp', nullable: true })
   resetPasswordExpira!: Date | null;
 
+  /** Hash (bcrypt) del código de verificación en dos pasos vigente, si hay uno. */
+  @Column({ name: 'two_factor_code_hash', type: 'varchar', length: 100, nullable: true })
+  twoFactorCodeHash!: string | null;
+
+  @Column({ name: 'two_factor_code_expira', type: 'timestamp', nullable: true })
+  twoFactorCodeExpira!: Date | null;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 

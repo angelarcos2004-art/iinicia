@@ -2,8 +2,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
-import { OAuth2Client } from 'google-auth-library';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomInt } from 'node:crypto';
 import { MailService } from '../mail/mail.service.js';
 import { Rol } from '../users/rol.enum.js';
 import type { User } from '../users/user.entity.js';
@@ -11,6 +10,7 @@ import { UsersService } from '../users/users.service.js';
 import type { LoginDto } from './dto/login.dto.js';
 import type { RegistroDto } from './dto/registro.dto.js';
 import type { RestablecerDto } from './dto/restablecer.dto.js';
+import type { Verificar2FADto } from './dto/verificar-2fa.dto.js';
 
 export interface UsuarioPublico {
   id: string;
@@ -24,67 +24,58 @@ export interface AuthResponse {
   usuario: UsuarioPublico;
 }
 
+export interface Requiere2FAResponse {
+  correo: string;
+  mensaje: string;
+}
+
 const BCRYPT_ROUNDS = 10;
 /** Hash válido de relleno para igualar tiempos cuando el correo no existe. */
 const DUMMY_HASH = bcrypt.hashSync('iinicia-dummy-password', BCRYPT_ROUNDS);
+const DOS_FA_VIGENCIA_MS = 5 * 60 * 1000;
 
 @Injectable()
 export class AuthService {
-  private readonly googleClient: OAuth2Client;
-
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
-  ) {
-    this.googleClient = new OAuth2Client(this.config.get<string>('GOOGLE_CLIENT_ID'));
-  }
+  ) {}
 
-  async login(dto: LoginDto): Promise<AuthResponse> {
+  /**
+   * Primer factor (correo + contraseña). Si son correctos, no entrega el JWT todavía: genera
+   * un código de 6 dígitos, lo guarda hasheado (igual que el token de recuperación) y lo manda
+   * por correo. El segundo factor se completa en `verificar2FA`.
+   */
+  async login(dto: LoginDto): Promise<Requiere2FAResponse> {
     const user = await this.users.findByCorreo(dto.correo);
     const hash = user?.passwordHash ?? DUMMY_HASH;
     const ok = await bcrypt.compare(dto.password, hash);
     if (!user || !ok) {
       throw new UnauthorizedException('Correo o contraseña incorrectos');
     }
-    return this.buildResponse(user);
+
+    const codigo = randomInt(0, 1_000_000).toString().padStart(6, '0');
+    const codigoHash = await bcrypt.hash(codigo, BCRYPT_ROUNDS);
+    const expira = new Date(Date.now() + DOS_FA_VIGENCIA_MS);
+    await this.users.guardarCodigo2FA(user.id, codigoHash, expira);
+    await this.mail.enviarCodigo2FA(user.correo, codigo);
+
+    return { correo: user.correo, mensaje: 'Enviamos un código de verificación a tu correo.' };
   }
 
-  /**
-   * Verifica el idToken de Google (firma + audiencia) y entra con la cuenta cuyo correo
-   * coincida, creándola como aspirante si es la primera vez que inicia sesión así. Acepta el
-   * idToken tanto del cliente web (GOOGLE_CLIENT_ID) como del cliente Android
-   * (GOOGLE_ANDROID_CLIENT_ID, opcional), porque cada plataforma de OAuth tiene su propio
-   * client ID pero comparten el mismo endpoint.
-   */
-  async loginConGoogle(idToken: string): Promise<AuthResponse> {
-    const audiencias = [
-      this.config.getOrThrow<string>('GOOGLE_CLIENT_ID'),
-      this.config.get<string>('GOOGLE_ANDROID_CLIENT_ID'),
-    ].filter((id): id is string => Boolean(id));
-
-    const ticket = await this.googleClient.verifyIdToken({
-      idToken,
-      audience: audiencias,
-    }).catch(() => {
-      throw new UnauthorizedException('Token de Google inválido');
-    });
-    const payload = ticket.getPayload();
-    if (!payload?.email || !payload.email_verified) {
-      throw new UnauthorizedException('Token de Google inválido');
+  /** Segundo factor: verifica el código (hash + expiración) y entrega el JWT. */
+  async verificar2FA(dto: Verificar2FADto): Promise<AuthResponse> {
+    const user = await this.users.findByCorreo(dto.correo);
+    const vencido = !user?.twoFactorCodeExpira || user.twoFactorCodeExpira.getTime() < Date.now();
+    const coincide =
+      user?.twoFactorCodeHash && (await bcrypt.compare(dto.codigo, user.twoFactorCodeHash));
+    if (!user || !coincide || vencido) {
+      throw new UnauthorizedException('El código es inválido o ya venció');
     }
 
-    let user = await this.users.findByCorreo(payload.email);
-    if (!user) {
-      const passwordHash = await bcrypt.hash(randomBytes(32).toString('base64url'), BCRYPT_ROUNDS);
-      user = await this.users.create({
-        nombre: payload.name ?? payload.email,
-        correo: payload.email,
-        passwordHash,
-        rol: Rol.Aspirante,
-      });
-    }
+    await this.users.limpiarCodigo2FA(user.id);
     return this.buildResponse(user);
   }
 

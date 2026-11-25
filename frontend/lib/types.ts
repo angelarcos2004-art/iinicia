@@ -81,6 +81,13 @@ export interface AuthResponse {
   usuario: Usuario;
 }
 
+/** Respuesta de POST /auth/login: nunca entrega el token todavía, solo confirma que se envió
+ * el código de verificación en dos pasos al correo. */
+export interface Requiere2FAResponse {
+  correo: string;
+  mensaje: string;
+}
+
 export interface LoginInput {
   correo: string;
   password: string;

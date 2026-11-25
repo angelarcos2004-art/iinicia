@@ -7,19 +7,24 @@ import { useState, type FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
-import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, loginConGoogle } = useAuth();
+  const { login, verificarCodigo2FA } = useAuth();
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [recordarme, setRecordarme] = useState(true);
   const [errors, setErrors] = useState<{ correo?: string; password?: string }>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Segundo factor: una vez que el correo/contraseña son correctos, el backend manda un
+  // código de 6 dígitos y el formulario pasa a pedirlo en vez de abrir la sesión de una vez.
+  const [esperandoCodigo, setEsperandoCodigo] = useState(false);
+  const [codigo, setCodigo] = useState("");
+  const [codigoError, setCodigoError] = useState<string | null>(null);
 
   function validate(): boolean {
     const nextErrors: { correo?: string; password?: string } = {};
@@ -41,8 +46,8 @@ export default function LoginPage() {
 
     setSubmitting(true);
     try {
-      await login({ correo, password }, recordarme);
-      router.push("/mi-iinicia");
+      await login({ correo, password });
+      setEsperandoCodigo(true);
     } catch (error) {
       setSubmitError(
         error instanceof ApiError
@@ -54,17 +59,28 @@ export default function LoginPage() {
     }
   }
 
-  async function handleGoogleCredential(idToken: string) {
-    setSubmitError(null);
+  function handleVolverAlPaso1() {
+    setEsperandoCodigo(false);
+    setCodigo("");
+    setCodigoError(null);
+  }
+
+  async function handleSubmitCodigo(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setCodigoError(null);
+
+    setSubmitting(true);
     try {
-      await loginConGoogle(idToken);
+      await verificarCodigo2FA(correo, codigo, recordarme);
       router.push("/mi-iinicia");
     } catch (error) {
-      setSubmitError(
+      setCodigoError(
         error instanceof ApiError
           ? error.message
-          : "No pudimos iniciar tu sesión con Google. Intenta de nuevo.",
+          : "No pudimos verificar el código. Intenta de nuevo.",
       );
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -100,58 +116,82 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
-            <Input
-              id="correo"
-              type="email"
-              label="Correo institucional o de aspirante"
-              placeholder="ejemplo@iinicia.edu.mx"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              error={errors.correo}
-              autoComplete="email"
-            />
+          {esperandoCodigo ? (
+            <form className="flex flex-col gap-4" onSubmit={handleSubmitCodigo} noValidate>
+              <p className="text-body-sm text-ink-muted">
+                Enviamos un código de verificación de 6 dígitos a <strong>{correo}</strong>.
+              </p>
 
-            <Input
-              id="password"
-              type="password"
-              label="Contraseña"
-              placeholder="Ingresa tu contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={errors.password}
-              autoComplete="current-password"
-            />
+              <Input
+                id="codigo"
+                type="text"
+                label="Código de verificación"
+                placeholder="123456"
+                value={codigo}
+                onChange={(e) => setCodigo(e.target.value)}
+                error={codigoError ?? undefined}
+                autoComplete="one-time-code"
+                inputMode="numeric"
+              />
 
-            <div className="flex items-center justify-between text-body-sm">
-              <label className="flex items-center gap-2 text-ink-muted">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-border-subtle text-secondary"
-                  checked={recordarme}
-                  onChange={(e) => setRecordarme(e.target.checked)}
-                />
-                Recordarme
-              </label>
-              <Link href="/recuperar" className="font-semibold text-secondary hover:underline">
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
+              <Button type="submit" variant="primary" disabled={submitting} className="mt-2">
+                {submitting ? "Verificando…" : "Verificar"}
+              </Button>
 
-            {submitError && <p className="text-body-sm text-error">{submitError}</p>}
+              <button
+                type="button"
+                onClick={handleVolverAlPaso1}
+                className="text-center text-body-sm font-semibold text-secondary hover:underline"
+              >
+                Volver
+              </button>
+            </form>
+          ) : (
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
+              <Input
+                id="correo"
+                type="email"
+                label="Correo institucional o de aspirante"
+                placeholder="ejemplo@iinicia.edu.mx"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                error={errors.correo}
+                autoComplete="email"
+              />
 
-            <Button type="submit" variant="primary" disabled={submitting} className="mt-2">
-              {submitting ? "Iniciando sesión…" : "Iniciar sesión"}
-            </Button>
-          </form>
+              <Input
+                id="password"
+                type="password"
+                label="Contraseña"
+                placeholder="Ingresa tu contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={errors.password}
+                autoComplete="current-password"
+              />
 
-          <div className="flex items-center gap-3 text-body-sm text-ink-muted">
-            <span className="h-px flex-1 bg-border-subtle" />
-            <span>o</span>
-            <span className="h-px flex-1 bg-border-subtle" />
-          </div>
+              <div className="flex items-center justify-between text-body-sm">
+                <label className="flex items-center gap-2 text-ink-muted">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-border-subtle text-secondary"
+                    checked={recordarme}
+                    onChange={(e) => setRecordarme(e.target.checked)}
+                  />
+                  Recordarme
+                </label>
+                <Link href="/recuperar" className="font-semibold text-secondary hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
 
-          <GoogleLoginButton onCredential={handleGoogleCredential} />
+              {submitError && <p className="text-body-sm text-error">{submitError}</p>}
+
+              <Button type="submit" variant="primary" disabled={submitting} className="mt-2">
+                {submitting ? "Iniciando sesión…" : "Iniciar sesión"}
+              </Button>
+            </form>
+          )}
 
           <p className="text-center text-body-sm text-ink-muted">
             ¿Aún no tienes cuenta?{" "}

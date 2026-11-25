@@ -8,12 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { AuthService, type AuthResponse } from './auth.service.js';
-import { GoogleLoginDto } from './dto/google-login.dto.js';
+import { AuthService, type AuthResponse, type Requiere2FAResponse } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RecuperarDto } from './dto/recuperar.dto.js';
 import { RegistroDto } from './dto/registro.dto.js';
 import { RestablecerDto } from './dto/restablecer.dto.js';
+import { Verificar2FADto } from './dto/verificar-2fa.dto.js';
 import { JwtAuthGuard } from './jwt-auth.guard.js';
 import type { UsuarioAutenticado } from './jwt.strategy.js';
 import { UsuarioActual } from './usuario-actual.decorator.js';
@@ -22,19 +22,20 @@ import { UsuarioActual } from './usuario-actual.decorator.js';
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
-  /** Límite estricto: evita fuerza bruta de contraseñas (docs/requerimientos.md Sec. 16). */
+  /** Primer factor. Límite estricto: evita fuerza bruta de contraseñas (docs/requerimientos.md Sec. 16). */
   @Throttle({ default: { ttl: 60_000, limit: 5 } })
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: LoginDto): Promise<AuthResponse> {
+  login(@Body() dto: LoginDto): Promise<Requiere2FAResponse> {
     return this.auth.login(dto);
   }
 
+  /** Segundo factor. Mismo límite estricto: evita fuerza bruta del código de 6 dígitos. */
   @Throttle({ default: { ttl: 60_000, limit: 5 } })
-  @Post('google')
+  @Post('login/verificar')
   @HttpCode(HttpStatus.OK)
-  loginConGoogle(@Body() dto: GoogleLoginDto): Promise<AuthResponse> {
-    return this.auth.loginConGoogle(dto.idToken);
+  verificar2FA(@Body() dto: Verificar2FADto): Promise<AuthResponse> {
+    return this.auth.verificar2FA(dto);
   }
 
   /** El contrato del portal espera 200 OK (no 201) en el registro. */
