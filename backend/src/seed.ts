@@ -130,6 +130,58 @@ const MATERIAS_SEMILLA: Materia[] = [
     moodleCourseShortname: 'IINICIA-NEG1',
     prerequisitos: [],
   },
+  // IINICIA102/IINICIA103 ya existían en Moodle con contenido real (instalación base), pero
+  // nunca se habían registrado como materias: sin esto, ese contenido quedaba sin usar y la
+  // seriación de lic-software-ia se quedaba en solo 2 pasos.
+  {
+    id: 'soft-fundamentos-prog',
+    programaId: 'lic-software-ia',
+    nombre: 'Fundamentos de Programación',
+    moodleCourseShortname: 'IINICIA102',
+    prerequisitos: ['soft-induccion'],
+  },
+  {
+    id: 'soft-calculo-diferencial',
+    programaId: 'lic-software-ia',
+    nombre: 'Cálculo Diferencial',
+    moodleCourseShortname: 'IINICIA103',
+    prerequisitos: ['soft-induccion'],
+  },
+  {
+    id: 'cloud-fundamentos',
+    programaId: 'dip-cloud-kubernetes',
+    nombre: 'Cloud Architecture & Kubernetes: Fundamentos',
+    moodleCourseShortname: 'IINICIA-CLOUD1',
+    prerequisitos: [],
+  },
+  {
+    id: 'pm-fundamentos',
+    programaId: 'dip-gestion-proyectos',
+    nombre: 'Gestión de Proyectos Digitales: Fundamentos',
+    moodleCourseShortname: 'IINICIA-PM1',
+    prerequisitos: [],
+  },
+  {
+    id: 'datos-fundamentos',
+    programaId: 'lic-ciencia-datos',
+    nombre: 'Fundamentos de Ciencia de Datos',
+    moodleCourseShortname: 'IINICIA-DATOS1',
+    prerequisitos: [],
+  },
+  {
+    id: 'ux-fundamentos',
+    programaId: 'dip-ux-ui',
+    nombre: 'UX/UI y Diseño de Producto: Fundamentos',
+    moodleCourseShortname: 'IINICIA-UX1',
+    prerequisitos: [],
+  },
+  {
+    id: 'devops-fundamentos',
+    programaId: 'cert-devops-cicd',
+    nombre: 'DevOps y CI/CD: Fundamentos',
+    moodleCourseShortname: 'IINICIA-DEVOPS1',
+    prerequisitos: [],
+  },
 ];
 
 const BCRYPT_ROUNDS = 10;
@@ -141,7 +193,16 @@ const BCRYPT_ROUNDS = 10;
  * ese script todavía no corrió en esta máquina, el curso no existe en Moodle y se omite (warn),
  * sin tronar el resto del seed.
  */
-const CURSOS_PROFESOR_PRUEBA = ['IINICIA-SOFT1', 'IINICIA-CIBER1', 'IINICIA-NEG1'];
+const CURSOS_PROFESOR_PRUEBA = [
+  'IINICIA-SOFT1',
+  'IINICIA-CIBER1',
+  'IINICIA-NEG1',
+  'IINICIA-CLOUD1',
+  'IINICIA-PM1',
+  'IINICIA-DATOS1',
+  'IINICIA-UX1',
+  'IINICIA-DEVOPS1',
+];
 
 interface UsuarioSemilla {
   nombre: string;

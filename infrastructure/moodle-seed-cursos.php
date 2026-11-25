@@ -252,6 +252,309 @@ $CURSOS = [
             ],
         ],
     ],
+    [
+        'shortname' => 'IINICIA-CLOUD1',
+        'fullname' => 'Cloud Architecture & Kubernetes: Fundamentos',
+        'summary' => 'Contenedores, orquestación y arquitecturas en la nube listas para producción.',
+        'secciones' => [
+            1 => [
+                'nombre' => 'Tema 1: Contenedores y Docker',
+                'pagina' => [
+                    'nombre' => '¿Qué es un contenedor?',
+                    'contenido' => '<p>Un contenedor empaqueta una aplicación junto con todas sus '
+                        . 'dependencias en una unidad aislada y portable, a diferencia de una máquina '
+                        . 'virtual, que virtualiza el hardware completo.</p>',
+                ],
+                'tarea' => [
+                    'nombre' => 'Tarea 1: Dockeriza una aplicación simple',
+                    'intro' => '<p>Escribe un Dockerfile para una aplicación sencilla (a tu elección) y '
+                        . 'documenta los comandos para construir y correr la imagen.</p>',
+                ],
+            ],
+            2 => [
+                'nombre' => 'Tema 2: Orquestación con Kubernetes',
+                'pagina' => [
+                    'nombre' => 'Pods, Deployments y Services',
+                    'contenido' => '<p>Un Pod es la unidad mínima desplegable en Kubernetes. Un '
+                        . 'Deployment gestiona réplicas de Pods, y un Service les da una dirección de '
+                        . 'red estable aunque los Pods cambien.</p>',
+                ],
+                'cuestionario' => [
+                    'nombre' => 'Cuestionario 1: Conceptos de Kubernetes',
+                    'intro' => '<p>Dos preguntas cortas sobre los objetos básicos de Kubernetes.</p>',
+                    'preguntas' => [
+                        [
+                            'tipo' => 'truefalse',
+                            'nombre' => 'CLOUD-P1 Escalado de réplicas',
+                            'texto' => 'Un Deployment puede escalar el número de réplicas de un Pod sin '
+                                . 'tiempo de inactividad.',
+                            'correcta' => true,
+                        ],
+                        [
+                            'tipo' => 'shortanswer',
+                            'nombre' => 'CLOUD-P2 Objeto de red',
+                            'texto' => '¿Qué objeto de Kubernetes da una dirección de red estable a un '
+                                . 'grupo de Pods? (una palabra, en inglés)',
+                            'respuestas' => ['service', '*'],
+                            'fracciones' => ['1.0', '0.0'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'foro' => [
+            'nombre' => 'Foro de Cloud y Kubernetes',
+            'intro' => '<p>Comparte dudas o hallazgos sobre Docker y Kubernetes.</p>',
+            'discusion' => [
+                'titulo' => 'Proveedores de Kubernetes administrado',
+                'mensaje' => '<p>¿Qué proveedor de Kubernetes administrado (EKS, GKE, AKS...) conocen '
+                    . 'o han usado? Compartan su experiencia.</p>',
+            ],
+        ],
+    ],
+    [
+        'shortname' => 'IINICIA-PM1',
+        'fullname' => 'Gestión de Proyectos Digitales: Fundamentos',
+        'summary' => 'Metodologías ágiles y seguimiento de proyectos tecnológicos.',
+        'secciones' => [
+            1 => [
+                'nombre' => 'Tema 1: Metodologías ágiles',
+                'pagina' => [
+                    'nombre' => 'Scrum y Kanban',
+                    'contenido' => '<p>Scrum organiza el trabajo en sprints de duración fija con roles '
+                        . 'definidos (Product Owner, Scrum Master, equipo). Kanban, en cambio, usa un '
+                        . 'flujo continuo visualizado en un tablero, sin sprints fijos.</p>',
+                ],
+                'tarea' => [
+                    'nombre' => 'Tarea 1: Backlog de producto',
+                    'intro' => '<p>Elabora un backlog de producto con al menos 8 historias de usuario '
+                        . 'para un proyecto digital de tu elección, priorizadas.</p>',
+                ],
+            ],
+            2 => [
+                'nombre' => 'Tema 2: Seguimiento y métricas de proyecto',
+                'pagina' => [
+                    'nombre' => 'Velocity y burndown chart',
+                    'contenido' => '<p>La velocity mide cuánto trabajo completa un equipo por sprint. '
+                        . 'Un burndown chart grafica el trabajo restante contra el tiempo, para '
+                        . 'detectar a tiempo si un sprint va atrasado.</p>',
+                ],
+                'cuestionario' => [
+                    'nombre' => 'Cuestionario 1: Métricas ágiles',
+                    'intro' => '<p>Dos preguntas cortas sobre seguimiento de proyectos ágiles.</p>',
+                    'preguntas' => [
+                        [
+                            'tipo' => 'truefalse',
+                            'nombre' => 'PM-P1 Burndown ideal',
+                            'texto' => 'En un burndown chart, la línea ideal desciende de forma '
+                                . 'constante hasta llegar a cero al final del sprint.',
+                            'correcta' => true,
+                        ],
+                        [
+                            'tipo' => 'shortanswer',
+                            'nombre' => 'PM-P2 Unidad de velocity',
+                            'texto' => '¿Con qué unidad se suele medir la velocity de un equipo Scrum? '
+                                . '(dos palabras, en español)',
+                            'respuestas' => ['puntos de historia', 'puntos historia', '*'],
+                            'fracciones' => ['1.0', '1.0', '0.0'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'foro' => [
+            'nombre' => 'Foro de gestión de proyectos',
+            'intro' => '<p>Comparte dudas sobre el backlog o las métricas ágiles.</p>',
+            'discusion' => [
+                'titulo' => 'Herramientas de gestión ágil',
+                'mensaje' => '<p>¿Qué herramienta usan para llevar su tablero (Jira, Trello, '
+                    . 'Azure Boards...)? Compartan ventajas y desventajas.</p>',
+            ],
+        ],
+    ],
+    [
+        'shortname' => 'IINICIA-DATOS1',
+        'fullname' => 'Fundamentos de Ciencia de Datos',
+        'summary' => 'Estadística aplicada y primeros pasos en machine learning para la toma de decisiones.',
+        'secciones' => [
+            1 => [
+                'nombre' => 'Tema 1: Estadística descriptiva',
+                'pagina' => [
+                    'nombre' => 'Medidas de tendencia central y dispersión',
+                    'contenido' => '<p>Media, mediana y moda resumen un conjunto de datos en un solo '
+                        . 'valor; la varianza y la desviación estándar describen qué tan dispersos '
+                        . 'están los datos respecto a ese valor central.</p>',
+                ],
+                'tarea' => [
+                    'nombre' => 'Tarea 1: Análisis descriptivo de un dataset',
+                    'intro' => '<p>Elige un dataset público pequeño y calcula sus medidas de tendencia '
+                        . 'central y dispersión, con una interpretación breve de los resultados.</p>',
+                ],
+            ],
+            2 => [
+                'nombre' => 'Tema 2: Introducción al machine learning aplicado',
+                'pagina' => [
+                    'nombre' => 'Entrenamiento, validación y prueba',
+                    'contenido' => '<p>Un dataset se divide típicamente en entrenamiento, validación y '
+                        . 'prueba, para medir qué tan bien generaliza un modelo a datos que nunca vio, '
+                        . 'en vez de solo memorizarlos.</p>',
+                ],
+                'cuestionario' => [
+                    'nombre' => 'Cuestionario 1: Fundamentos de ML',
+                    'intro' => '<p>Dos preguntas cortas sobre evaluación de modelos.</p>',
+                    'preguntas' => [
+                        [
+                            'tipo' => 'truefalse',
+                            'nombre' => 'DATOS-P1 Conjunto de prueba',
+                            'texto' => 'El conjunto de prueba (test set) nunca debe usarse para ajustar '
+                                . 'los hiperparámetros del modelo.',
+                            'correcta' => true,
+                        ],
+                        [
+                            'tipo' => 'shortanswer',
+                            'nombre' => 'DATOS-P2 Medida de tendencia central',
+                            'texto' => '¿Qué medida de tendencia central es más robusta ante valores '
+                                . 'extremos (outliers): la media o la mediana?',
+                            'respuestas' => ['mediana', '*'],
+                            'fracciones' => ['1.0', '0.0'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'foro' => [
+            'nombre' => 'Foro de ciencia de datos',
+            'intro' => '<p>Comparte dudas sobre el análisis descriptivo o el flujo de ML.</p>',
+            'discusion' => [
+                'titulo' => 'Datasets públicos recomendados',
+                'mensaje' => '<p>¿Qué dataset público usaron para la Tarea 1? Compartan el enlace y de '
+                    . 'qué trata.</p>',
+            ],
+        ],
+    ],
+    [
+        'shortname' => 'IINICIA-UX1',
+        'fullname' => 'UX/UI y Diseño de Producto: Fundamentos',
+        'summary' => 'Investigación de usuarios, prototipado y sistemas de diseño para productos digitales.',
+        'secciones' => [
+            1 => [
+                'nombre' => 'Tema 1: Investigación de usuarios',
+                'pagina' => [
+                    'nombre' => 'Entrevistas y mapas de empatía',
+                    'contenido' => '<p>Una entrevista de usuario busca entender necesidades reales, no '
+                        . 'validar ideas propias. Un mapa de empatía organiza lo que el usuario dice, '
+                        . 'piensa, hace y siente para encontrar patrones.</p>',
+                ],
+                'tarea' => [
+                    'nombre' => 'Tarea 1: Entrevistas de usuario',
+                    'intro' => '<p>Realiza 3 entrevistas cortas a usuarios potenciales de un producto '
+                        . 'digital y documenta los hallazgos principales en un mapa de empatía.</p>',
+                ],
+            ],
+            2 => [
+                'nombre' => 'Tema 2: Prototipado y sistemas de diseño',
+                'pagina' => [
+                    'nombre' => 'Fidelidad de prototipos',
+                    'contenido' => '<p>Un prototipo de baja fidelidad (wireframe en papel) permite '
+                        . 'probar ideas rápido y barato; uno de alta fidelidad simula la apariencia y '
+                        . 'parte de la interacción real del producto final.</p>',
+                ],
+                'cuestionario' => [
+                    'nombre' => 'Cuestionario 1: Prototipado',
+                    'intro' => '<p>Dos preguntas cortas sobre fidelidad de prototipos.</p>',
+                    'preguntas' => [
+                        [
+                            'tipo' => 'truefalse',
+                            'nombre' => 'UX-P1 Prototipos de baja fidelidad',
+                            'texto' => 'Los prototipos de baja fidelidad son más rápidos y baratos de '
+                                . 'producir que los de alta fidelidad.',
+                            'correcta' => true,
+                        ],
+                        [
+                            'tipo' => 'shortanswer',
+                            'nombre' => 'UX-P2 Herramienta de mapa de usuario',
+                            'texto' => '¿Cómo se llama la herramienta de investigación que organiza lo '
+                                . 'que el usuario dice, piensa, hace y siente? (dos palabras, en '
+                                . 'español)',
+                            'respuestas' => ['mapa de empatia', 'mapa empatia', '*'],
+                            'fracciones' => ['1.0', '1.0', '0.0'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'foro' => [
+            'nombre' => 'Foro de UX/UI',
+            'intro' => '<p>Comparte dudas sobre las entrevistas de usuario o el prototipado.</p>',
+            'discusion' => [
+                'titulo' => 'Herramientas de prototipado',
+                'mensaje' => '<p>¿Qué herramienta usan para prototipar (Figma, Adobe XD...)? Compartan '
+                    . 'su flujo de trabajo.</p>',
+            ],
+        ],
+    ],
+    [
+        'shortname' => 'IINICIA-DEVOPS1',
+        'fullname' => 'DevOps y CI/CD: Fundamentos',
+        'summary' => 'Integración continua, despliegue continuo y monitoreo de aplicaciones.',
+        'secciones' => [
+            1 => [
+                'nombre' => 'Tema 1: Integración continua',
+                'pagina' => [
+                    'nombre' => '¿Qué es la integración continua (CI)?',
+                    'contenido' => '<p>La integración continua automatiza la compilación y las pruebas '
+                        . 'de cada cambio de código, para detectar errores de integración apenas '
+                        . 'ocurren en vez de acumularlos hasta el final del proyecto.</p>',
+                ],
+                'tarea' => [
+                    'nombre' => 'Tarea 1: Pipeline de CI básico',
+                    'intro' => '<p>Configura un pipeline de integración continua (GitHub Actions, '
+                        . 'GitLab CI o similar) que corra las pruebas automatizadas de un proyecto '
+                        . 'propio en cada push.</p>',
+                ],
+            ],
+            2 => [
+                'nombre' => 'Tema 2: Despliegue continuo y monitoreo',
+                'pagina' => [
+                    'nombre' => 'Despliegue continuo vs. entrega continua',
+                    'contenido' => '<p>En la entrega continua, cada cambio queda listo para desplegarse '
+                        . 'pero requiere una aprobación manual; en el despliegue continuo, ese paso '
+                        . 'también se automatiza y el cambio llega a producción sin intervención '
+                        . 'humana.</p>',
+                ],
+                'cuestionario' => [
+                    'nombre' => 'Cuestionario 1: CI/CD',
+                    'intro' => '<p>Dos preguntas cortas sobre integración y despliegue continuo.</p>',
+                    'preguntas' => [
+                        [
+                            'tipo' => 'truefalse',
+                            'nombre' => 'DEVOPS-P1 Despliegue continuo',
+                            'texto' => 'En el despliegue continuo, un cambio puede llegar a producción '
+                                . 'sin aprobación manual si pasa todas las pruebas automatizadas.',
+                            'correcta' => true,
+                        ],
+                        [
+                            'tipo' => 'shortanswer',
+                            'nombre' => 'DEVOPS-P2 Sigla CI',
+                            'texto' => '¿Qué significan las siglas "CI" en el contexto de DevOps? (dos '
+                                . 'palabras, en español, sin acentos)',
+                            'respuestas' => ['integracion continua', '*'],
+                            'fracciones' => ['1.0', '0.0'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'foro' => [
+            'nombre' => 'Foro de DevOps',
+            'intro' => '<p>Comparte dudas sobre el pipeline de CI o el despliegue continuo.</p>',
+            'discusion' => [
+                'titulo' => 'Herramientas de CI/CD',
+                'mensaje' => '<p>¿Qué herramienta de CI/CD usan (GitHub Actions, GitLab CI, Jenkins...)? '
+                    . 'Compartan su experiencia.</p>',
+            ],
+        ],
+    ],
 ];
 
 $generator = phpunit_util::get_data_generator();
