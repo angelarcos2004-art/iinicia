@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Logger,
   NotFoundException,
@@ -12,6 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { verificarAmbitoCoordinador } from '../auth/ambito-coordinador.js';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import type { UsuarioAutenticado } from '../auth/jwt.strategy.js';
 import { Roles } from '../auth/roles.decorator.js';
@@ -23,6 +25,7 @@ import { MoodleCurso, MoodleService } from '../moodle/moodle.service.js';
 import { PushService } from '../push/push.service.js';
 import { ProgramasService } from '../programas/programas.service.js';
 import { Rol } from '../users/rol.enum.js';
+import type { User } from '../users/user.entity.js';
 import { UsersService } from '../users/users.service.js';
 import { ActualizarRolDto } from './dto/actualizar-rol.dto.js';
 import { AsignarCursoDto } from './dto/asignar-curso.dto.js';
@@ -136,7 +139,18 @@ export class UsuariosController {
   @Roles(Rol.Profesor)
   async misEstudiantes(@UsuarioActual() actual: UsuarioAutenticado): Promise<EstudianteDeProfesor[]> {
     const profesor = await this.users.findById(actual.id);
-    if (!profesor?.moodleUserId) return [];
+    if (!profesor) return [];
+    return this.estudiantesRealesDe(profesor);
+  }
+
+  /**
+   * Estudiantes reales (Moodle) de un profesor. Extraído de `misEstudiantes` para poder
+   * reutilizarlo como chequeo de ámbito en `notificar`: un profesor solo puede notificar a
+   * alguien que de verdad comparte un curso con él (ver vuln de notification spoofing,
+   * auditoría de seguridad).
+   */
+  private async estudiantesRealesDe(profesor: User): Promise<EstudianteDeProfesor[]> {
+    if (!profesor.moodleUserId) return [];
 
     const cursos = await this.moodle.obtenerCursosDeUsuario(profesor.moodleUserId);
     const porCorreo = new Map<string, { nombre: string; cursos: Set<string> }>();
@@ -284,10 +298,24 @@ export class UsuariosController {
    */
   @Post(':id/notificar')
   @Roles(Rol.Superadmin, Rol.AdminAcademico, Rol.Coordinador, Rol.Profesor)
-  async notificar(@Param('id') id: string, @Body() dto: NotificarDto): Promise<{ enviado: true }> {
+  async notificar(
+    @UsuarioActual() actual: UsuarioAutenticado,
+    @Param('id') id: string,
+    @Body() dto: NotificarDto,
+  ): Promise<{ enviado: true }> {
     const user = await this.users.findById(id);
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
+    }
+    if (actual.rol === Rol.Coordinador) {
+      await verificarAmbitoCoordinador(this.users, actual, user.programaInteresId);
+    }
+    if (actual.rol === Rol.Profesor) {
+      const profesor = await this.users.findById(actual.id);
+      const estudiantes = profesor ? await this.estudiantesRealesDe(profesor) : [];
+      if (!estudiantes.some((e) => e.id === id)) {
+        throw new ForbiddenException('Este estudiante no está en tus cursos');
+      }
     }
     if (!user.fcmToken) {
       throw new BadRequestException('Este usuario no tiene un dispositivo registrado para notificaciones');

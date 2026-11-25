@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Solo se fusiona en builds debug (Android Studio "Run", como se usa hoy para desarrollo y
+    demos). Permite tráfico sin cifrar porque el backend de desarrollo (emulador 10.0.2.2 o la IP
+    de LAN, ver app/build.gradle.kts) todavía no sirve HTTPS. El build release (AndroidManifest.xml
+    principal) no lo permite: en producción el backend ya tiene HTTPS automático (ver
+    infrastructure/docker-compose.prod.yml, Caddy).
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31" />
+</manifest>
