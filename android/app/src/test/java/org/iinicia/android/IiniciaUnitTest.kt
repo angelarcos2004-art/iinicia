@@ -12,12 +12,13 @@ import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
 import org.iinicia.android.data.model.EstadoCurso
-import org.iinicia.android.data.model.GoogleLoginRequest
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.MoodleSsoResponse
 import org.iinicia.android.data.model.RegistrarPushTokenRequest
 import org.iinicia.android.data.model.RegistroRequest
+import org.iinicia.android.data.model.Requiere2FAResponse
 import org.iinicia.android.data.model.Usuario
+import org.iinicia.android.data.model.Verificar2FARequest
 import org.iinicia.android.data.remote.ApiConfig
 import org.iinicia.android.data.remote.IiniciaApiService
 import org.iinicia.android.data.remote.RetrofitClient
@@ -42,8 +43,8 @@ private class FakeApiService(
     private val actividades: List<ActividadProximaDto> = emptyList(),
     private val actividadesFallan: Boolean = false
 ) : IiniciaApiService {
-    override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
-    override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
+    override suspend fun login(request: LoginRequest): Requiere2FAResponse = throw NotImplementedError()
+    override suspend fun verificar2FA(request: Verificar2FARequest): AuthResponse = throw NotImplementedError()
     override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> = cursos
@@ -56,10 +57,12 @@ private class FakeApiService(
 
 /** Login que siempre funciona, pero `getCursos()` falla (p. ej. timeout real contra Moodle). */
 private class FakeApiServiceConCursosQueFallan : IiniciaApiService {
-    override suspend fun login(request: LoginRequest): AuthResponse =
+    override suspend fun login(request: LoginRequest): Requiere2FAResponse =
+        Requiere2FAResponse(correo = request.correo, mensaje = "Enviamos un código de verificación a tu correo.")
+
+    override suspend fun verificar2FA(request: Verificar2FARequest): AuthResponse =
         AuthResponse(token = "jwt-falso", usuario = Usuario(id = "u1", nombre = "Ana", correo = request.correo))
 
-    override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
     override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
     override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
     override suspend fun getCursos(): List<CursoInscritoDto> =
@@ -140,6 +143,10 @@ class IiniciaUnitTest {
 
         val loginResult = repository.login("rodrigo.hernandez@iinicia.edu.mx", "Secreto123!")
         assertTrue(loginResult.isSuccess)
+        assertNull(tokenStorage.getToken()) // el primer factor no abre sesión todavía
+
+        val verificarResult = repository.verificar2FA("rodrigo.hernandez@iinicia.edu.mx", "123456")
+        assertTrue(verificarResult.isSuccess)
         assertNotNull(tokenStorage.getToken())
         assertEquals("rodrigo.hernandez@iinicia.edu.mx", tokenStorage.getUsuario()?.correo)
 
@@ -241,8 +248,8 @@ class IiniciaUnitTest {
         var cursoIdRecibido: Int? = -1
         var actividadUrlRecibida: String? = null
         val fakeApi = object : IiniciaApiService {
-            override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
-            override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun login(request: LoginRequest): Requiere2FAResponse = throw NotImplementedError()
+            override suspend fun verificar2FA(request: Verificar2FARequest): AuthResponse = throw NotImplementedError()
             override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
             override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
             override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
@@ -292,8 +299,8 @@ class IiniciaUnitTest {
     fun repository_registrarTokenPush_envíaElTokenAlBackend() = runTest {
         var tokenRecibido: String? = null
         val fakeApi = object : IiniciaApiService {
-            override suspend fun login(request: LoginRequest): AuthResponse = throw NotImplementedError()
-            override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun login(request: LoginRequest): Requiere2FAResponse = throw NotImplementedError()
+            override suspend fun verificar2FA(request: Verificar2FARequest): AuthResponse = throw NotImplementedError()
             override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
             override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
             override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
@@ -342,6 +349,10 @@ class IiniciaUnitTest {
             val viewModel = MainViewModel(repository)
 
             viewModel.iniciarSesion("ana@iinicia.test", "Secreto123")
+            assertTrue(viewModel.uiState.value.esperandoCodigo2FA) // primer factor ok, pide código
+            assertNull(viewModel.uiState.value.usuarioAutenticado)
+
+            viewModel.verificarCodigo2FA("123456")
 
             val estado = viewModel.uiState.value
             assertNotNull(estado.usuarioAutenticado) // el login sí funcionó
@@ -360,13 +371,13 @@ class IiniciaUnitTest {
     @Test
     fun repository_loginHttpException_parsesBackendJsonMessageInSpanish() = runTest {
         val fakeApi = object : IiniciaApiService {
-            override suspend fun login(request: LoginRequest): AuthResponse {
+            override suspend fun login(request: LoginRequest): Requiere2FAResponse {
                 val errorJson = """{"message":"Correo o contraseña incorrectos"}"""
                 val errorBody = errorJson.toResponseBody("application/json".toMediaType())
-                throw HttpException(Response.error<AuthResponse>(401, errorBody))
+                throw HttpException(Response.error<Requiere2FAResponse>(401, errorBody))
             }
 
-            override suspend fun loginConGoogle(request: GoogleLoginRequest): AuthResponse {
+            override suspend fun verificar2FA(request: Verificar2FARequest): AuthResponse {
                 throw UnsupportedOperationException()
             }
 
@@ -409,5 +420,119 @@ class IiniciaUnitTest {
         // Verifica también el respaldo cuando el cuerpo no es JSON válido
         val fallback = IiniciaRepositoryImpl.parseErrorMessage("no-es-json", "Error genérico de respaldo")
         assertEquals("Error genérico de respaldo", fallback)
+    }
+
+    @Test
+    fun viewModel_cerrarSesion_limpiaElEstadoYLaSesionPersistida() = runTest {
+        val tokenStorage = InMemorySessionTokenStorage()
+        tokenStorage.saveSession("jwt-previo", Usuario(id = "u1", nombre = "Ana", correo = "ana@iinicia.test"))
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            tokenStorage = tokenStorage,
+            isConnectToRemoteEnabled = true,
+            apiService = FakeApiService(cursos = emptyList())
+        )
+        val viewModel = MainViewModel(repository)
+        assertNotNull(viewModel.uiState.value.usuarioAutenticado)
+
+        viewModel.cerrarSesion()
+
+        assertNull(viewModel.uiState.value.usuarioAutenticado)
+        assertTrue(viewModel.uiState.value.cursos.isEmpty())
+        assertNull(tokenStorage.getToken())
+    }
+
+    @Test
+    fun viewModel_alternarNotificaciones_delegaAlRepositorioYActualizaElEstado() {
+        val tokenStorage = InMemorySessionTokenStorage()
+        val repository = IiniciaRepositoryImpl(tokenStorage = tokenStorage)
+        val viewModel = MainViewModel(repository)
+        assertTrue(viewModel.uiState.value.notificacionesHabilitadas)
+
+        viewModel.alternarNotificaciones(false)
+
+        assertFalse(viewModel.uiState.value.notificacionesHabilitadas)
+        assertFalse(tokenStorage.notificacionesHabilitadas())
+    }
+
+    @Test
+    fun viewModel_fijarUrlCampus_guardaYLimpiaLaUrlDeUnSoloUso() {
+        val viewModel = MainViewModel(IiniciaRepositoryImpl(tokenStorage = InMemorySessionTokenStorage()))
+
+        viewModel.fijarUrlCampus("http://localhost:8080/auth/userkey/login.php?key=abc")
+        assertEquals("http://localhost:8080/auth/userkey/login.php?key=abc", viewModel.uiState.value.urlCampusActual)
+
+        viewModel.fijarUrlCampus(null)
+        assertNull(viewModel.uiState.value.urlCampusActual)
+    }
+
+    @Test
+    fun viewModel_limpiarErroresFormulario_limpiaCorreoPasswordYErrorGeneral() {
+        val viewModel = MainViewModel(IiniciaRepositoryImpl(tokenStorage = InMemorySessionTokenStorage()))
+        viewModel.iniciarSesion("correo-invalido", "123") // deja correoError y passwordError en el estado
+        assertNotNull(viewModel.uiState.value.correoError)
+        assertNotNull(viewModel.uiState.value.passwordError)
+
+        viewModel.limpiarErroresFormulario()
+
+        assertNull(viewModel.uiState.value.correoError)
+        assertNull(viewModel.uiState.value.passwordError)
+        assertNull(viewModel.uiState.value.errorMessage)
+    }
+
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    @Test
+    fun viewModel_volverAlPaso1Login_reseteaElPasoDeCodigo2FA() = runTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher(testScheduler))
+        try {
+            val repository = IiniciaRepositoryImpl(
+                baseUrl = "http://10.0.2.2:3001/",
+                isConnectToRemoteEnabled = true,
+                apiService = FakeApiServiceConCursosQueFallan()
+            )
+            val viewModel = MainViewModel(repository)
+            viewModel.iniciarSesion("ana@iinicia.test", "Secreto123")
+            assertTrue(viewModel.uiState.value.esperandoCodigo2FA)
+
+            viewModel.volverAlPaso1Login()
+
+            assertFalse(viewModel.uiState.value.esperandoCodigo2FA)
+            assertNull(viewModel.uiState.value.correoPendiente2FA)
+            assertNull(viewModel.uiState.value.errorMessage)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun viewModel_obtenerUrlCampus_siLaSesionExpiro_cierraLaSesionEnElEstado() = runTest {
+        val tokenStorage = InMemorySessionTokenStorage()
+        tokenStorage.saveSession("jwt-vencido", Usuario(id = "u1", nombre = "Ana", correo = "ana@iinicia.test"))
+        val fakeApi = object : IiniciaApiService {
+            override suspend fun login(request: LoginRequest): Requiere2FAResponse = throw NotImplementedError()
+            override suspend fun verificar2FA(request: Verificar2FARequest): AuthResponse = throw NotImplementedError()
+            override suspend fun registro(request: RegistroRequest): AuthResponse = throw NotImplementedError()
+            override suspend fun getPerfilActual(): Usuario = throw NotImplementedError()
+            override suspend fun getCursos(): List<CursoInscritoDto> = emptyList()
+            override suspend fun getActividadesProximas(): List<ActividadProximaDto> = emptyList()
+            override suspend fun getMoodleSsoUrl(cursoId: Int?, actividadUrl: String?): MoodleSsoResponse {
+                val errorBody = "{}".toResponseBody("application/json".toMediaType())
+                throw HttpException(Response.error<MoodleSsoResponse>(401, errorBody))
+            }
+            override suspend fun registrarPushToken(request: RegistrarPushTokenRequest) = Unit
+        }
+        val repository = IiniciaRepositoryImpl(
+            baseUrl = "http://10.0.2.2:3001/",
+            tokenStorage = tokenStorage,
+            isConnectToRemoteEnabled = true,
+            apiService = fakeApi
+        )
+        val viewModel = MainViewModel(repository)
+        assertNotNull(viewModel.uiState.value.usuarioAutenticado)
+
+        val result = viewModel.obtenerUrlCampus("2")
+
+        assertTrue(result.isFailure)
+        assertNull(viewModel.uiState.value.usuarioAutenticado) // JWT vencido: NavGraph redirige a Login
     }
 }

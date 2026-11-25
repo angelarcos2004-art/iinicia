@@ -319,6 +319,7 @@ describe('POST /usuarios/:id/matricula (e2e)', () => {
       moodleUserId: 999,
       createdAt: '2026-01-03T00:00:00.000Z',
       programaInteresNombre: 'lic-software-ia',
+      programaCoordinadoNombre: null,
     });
     expect(moodleFake.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith(
       'aspirante@correo.com',
@@ -413,6 +414,7 @@ describe('GET /usuarios (e2e)', () => {
       moodleUserId: null,
       createdAt: '2026-01-01T00:00:00.000Z',
       programaInteresNombre: null,
+      programaCoordinadoNombre: null,
     });
   });
 
