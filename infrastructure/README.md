@@ -526,6 +526,71 @@ son exactamente los que necesitamos. El `key` que genera expira en 60s
 y sirve una sola vez: el backend lo pide justo antes de redirigir,
 nunca lo guarda (ver `MoodleService.solicitarUrlAutologin`).
 
+### Correr las pruebas del plugin (PHPUnit)
+
+`moodle-custom/auth/userkey/tests/` ya trae 76 pruebas (herencia del
+plugin de Catalyst), pero el contenedor de Moodle **no trae PHPUnit
+instalado** — hay que montarlo una vez por instalación. No toca las
+tablas ni los datos reales: usa un prefijo de tabla distinto
+(`phpu_` en vez de `mdl_`) y un `dataroot` aparte.
+
+```bash
+# 1. Composer temporal dentro del contenedor (no modifica la imagen; se
+#    pierde si el contenedor se recrea, hay que repetir este paso).
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle bash -lc "
+  cd /tmp &&
+  php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" &&
+  php composer-setup.php --quiet
+"
+
+# 2. Trae PHPUnit (y el resto de dependencias de dev) al checkout de
+#    Moodle. moodle-src no se versiona, así que esto también se pierde
+#    si se vuelve a clonar desde cero.
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle bash -lc "
+  cd /var/www/html && php /tmp/composer.phar install --no-interaction --prefer-dist
+"
+```
+
+Agrega a mano estas dos líneas en `moodle-src/config.php` (no se
+versiona, hay que repetirlo si se reinstala Moodle desde cero):
+
+```php
+$CFG->phpunit_dataroot = '/var/www/moodledata_phpunit';
+$CFG->phpunit_prefix   = 'phpu_';
+```
+
+Luego inicializa el entorno de pruebas (tarda bastante — 20 a 40
+minutos en un disco de Windows por el bind mount — pero solo hace
+falta una vez por instalación):
+
+```bash
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle bash -lc "
+  mkdir -p /var/www/moodledata_phpunit && chmod 0777 /var/www/moodledata_phpunit &&
+  php /var/www/html/admin/tool/phpunit/cli/init.php
+"
+```
+
+Para correr las pruebas: pásalas **archivo por archivo** (apuntar
+`vendor/bin/phpunit` directo a la carpeta `tests/` da "No tests
+executed!" sin razón aparente; el archivo `fake_userkey_manager.php` no
+es una prueba, es un doble usado por las otras tres):
+
+```bash
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle bash -lc "
+  cd /var/www/html && vendor/bin/phpunit --testdox auth/userkey/tests/core_userkey_manager_test.php
+"
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle bash -lc "
+  cd /var/www/html && vendor/bin/phpunit --testdox auth/userkey/tests/auth_plugin_test.php
+"
+MSYS_NO_PATHCONV=1 docker compose exec -T moodle bash -lc "
+  cd /var/www/html && vendor/bin/phpunit --testdox auth/userkey/tests/externallib_test.php
+"
+```
+
+Resultado esperado (verificado 2026-11-25): 76 pruebas, 220
+aserciones, todas en verde (16 + 53 + 7 respectivamente). Ver
+`presentacion/pruebas-moodle.pdf` para el detalle completo.
+
 ## Identidad visual de Moodle (CA-15: logo, favicon, color de marca)
 
 Moodle trae su tema Boost por defecto, sin tocar ningún archivo de
