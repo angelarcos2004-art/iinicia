@@ -70,6 +70,39 @@ describe('AuthService', () => {
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 
+  it('registro rechaza correo duplicado por condición de carrera (23505 de Postgres), aunque findByCorreo no lo haya visto', async () => {
+    const { service, users } = makeService(null);
+    users.create.mockRejectedValue({ code: '23505' });
+
+    await expect(
+      service.registro({
+        nombreCompleto: 'Ana',
+        correo: 'a@b.com',
+        password: 'secreto123',
+        programaInteresId: 'p1',
+        aceptaAvisoPrivacidad: true,
+        deseaInformacionBecas: false,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('registro no convierte en "correo duplicado" un error de base de datos distinto', async () => {
+    const { service, users } = makeService(null);
+    const otroError = new Error('conexión perdida con la base de datos');
+    users.create.mockRejectedValue(otroError);
+
+    await expect(
+      service.registro({
+        nombreCompleto: 'Ana',
+        correo: 'a@b.com',
+        password: 'secreto123',
+        programaInteresId: 'p1',
+        aceptaAvisoPrivacidad: true,
+        deseaInformacionBecas: false,
+      }),
+    ).rejects.toBe(otroError);
+  });
+
   it('login rechaza contraseña incorrecta', async () => {
     const hash = await bcrypt.hash('buena', 4);
     const { service } = makeService({ id: 'u', passwordHash: hash } as User);
