@@ -32,12 +32,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,58 +44,36 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.credentials.CredentialManager
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.exceptions.GetCredentialException
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import kotlinx.coroutines.launch
-import org.iinicia.android.data.remote.ApiConfig
 import org.iinicia.android.ui.theme.IiniciaAccent
 import org.iinicia.android.ui.theme.IiniciaPrimary
 import org.iinicia.android.ui.theme.IiniciaTheme
 import org.iinicia.android.ui.viewmodel.MainUiState
 
 /**
- * Pantalla 1 - Login:
- * - Campos de correo electrónico y contraseña con validación de formato en el cliente.
- * - Envía las credenciales a `POST /auth/login` en el BFF (ver `IiniciaRepositoryImpl`); el JWT
- *   recibido se guarda cifrado (`EncryptedSessionTokenStorage`). La contraseña nunca se persiste.
+ * Pantalla 1 - Login (dos factores):
+ * - Paso 1: correo electrónico y contraseña con validación de formato en el cliente, enviados a
+ *   `POST /auth/login` en el BFF (ver `IiniciaRepositoryImpl`). El backend no entrega el JWT
+ *   todavía: manda un código de 6 dígitos al correo.
+ * - Paso 2: ese código, verificado en `POST /auth/login/verificar`; recién ahí se guarda el JWT
+ *   cifrado (`EncryptedSessionTokenStorage`). La contraseña nunca se persiste.
  */
 @Composable
 fun LoginScreen(
     uiState: MainUiState,
     onFieldEdited: () -> Unit,
     onSubmitLogin: (correo: String, password: String) -> Unit,
-    onGoogleCredential: (idToken: String) -> Unit = {},
+    onSubmitCodigo: (codigo: String) -> Unit,
+    onVolverAlPaso1: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var correo by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var googleError by rememberSaveable { mutableStateOf<String?>(null) }
+    var codigo by rememberSaveable { mutableStateOf("") }
 
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-
-    fun iniciarSesionConGoogle() {
-        googleError = null
-        coroutineScope.launch {
-            try {
-                val googleIdOption = GetGoogleIdOption.Builder()
-                    .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(ApiConfig.GOOGLE_ANDROID_CLIENT_ID)
-                    .build()
-                val request = GetCredentialRequest.Builder()
-                    .addCredentialOption(googleIdOption)
-                    .build()
-                val result = CredentialManager.create(context).getCredential(context, request)
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
-                onGoogleCredential(googleIdTokenCredential.idToken)
-            } catch (e: GetCredentialException) {
-                googleError = "No se pudo iniciar sesión con Google. Intenta de nuevo."
-            }
-        }
+    fun volverAlPaso1() {
+        codigo = ""
+        onVolverAlPaso1()
     }
 
     Surface(
@@ -158,148 +134,189 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .padding(20.dp)
                 ) {
-                    OutlinedTextField(
-                        value = correo,
-                        onValueChange = {
-                            correo = it
-                            onFieldEdited()
-                        },
-                        label = { Text("Correo institucional") },
-                        placeholder = { Text("ejemplo@iinicia.edu.mx") },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Email,
-                                contentDescription = "Icono de correo"
-                            )
-                        },
-                        isError = uiState.correoError != null,
-                        supportingText = {
-                            uiState.correoError?.let { error ->
-                                Text(text = error, color = MaterialTheme.colorScheme.error)
-                            }
-                        },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = {
-                            password = it
-                            onFieldEdited()
-                        },
-                        label = { Text("Contraseña") },
-                        placeholder = { Text("Ingresa tu contraseña") },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = "Icono de contraseña"
-                            )
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Icon(
-                                    imageVector = if (passwordVisible) {
-                                        Icons.Default.VisibilityOff
-                                    } else {
-                                        Icons.Default.Visibility
-                                    },
-                                    contentDescription = if (passwordVisible) {
-                                        "Ocultar contraseña"
-                                    } else {
-                                        "Mostrar contraseña"
-                                    }
-                                )
-                            }
-                        },
-                        visualTransformation = if (passwordVisible) {
-                            VisualTransformation.None
-                        } else {
-                            PasswordVisualTransformation()
-                        },
-                        isError = uiState.passwordError != null,
-                        supportingText = {
-                            uiState.passwordError?.let { error ->
-                                Text(text = error, color = MaterialTheme.colorScheme.error)
-                            }
-                        },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    if (uiState.errorMessage != null) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                    if (uiState.esperandoCodigo2FA) {
                         Text(
-                            text = uiState.errorMessage,
-                            color = MaterialTheme.colorScheme.error,
+                            text = "Enviamos un código de verificación de 6 dígitos a " +
+                                "${uiState.correoPendiente2FA}.",
                             style = MaterialTheme.typography.bodyMedium
                         )
-                    }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                    Button(
-                        onClick = { onSubmitLogin(correo, password) },
-                        enabled = !uiState.isLoading,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                    ) {
-                        if (uiState.isLoading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(22.dp),
-                                strokeWidth = 2.dp,
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        } else {
+                        OutlinedTextField(
+                            value = codigo,
+                            onValueChange = { codigo = it },
+                            label = { Text("Código de verificación") },
+                            placeholder = { Text("123456") },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        if (uiState.errorMessage != null) {
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Iniciar sesión",
-                                style = MaterialTheme.typography.labelLarge
+                                text = uiState.errorMessage,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
                             )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Button(
+                            onClick = { onSubmitCodigo(codigo) },
+                            enabled = !uiState.isLoading,
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                        ) {
+                            if (uiState.isLoading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(22.dp),
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            } else {
+                                Text(text = "Verificar", style = MaterialTheme.typography.labelLarge)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        OutlinedButton(
+                            onClick = { volverAlPaso1() },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Volver", style = MaterialTheme.typography.labelLarge)
+                        }
+                    } else {
+                        OutlinedTextField(
+                            value = correo,
+                            onValueChange = {
+                                correo = it
+                                onFieldEdited()
+                            },
+                            label = { Text("Correo institucional") },
+                            placeholder = { Text("ejemplo@iinicia.edu.mx") },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Email,
+                                    contentDescription = "Icono de correo"
+                                )
+                            },
+                            isError = uiState.correoError != null,
+                            supportingText = {
+                                uiState.correoError?.let { error ->
+                                    Text(text = error, color = MaterialTheme.colorScheme.error)
+                                }
+                            },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Email,
+                                imeAction = ImeAction.Next
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        OutlinedTextField(
+                            value = password,
+                            onValueChange = {
+                                password = it
+                                onFieldEdited()
+                            },
+                            label = { Text("Contraseña") },
+                            placeholder = { Text("Ingresa tu contraseña") },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Lock,
+                                    contentDescription = "Icono de contraseña"
+                                )
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                    Icon(
+                                        imageVector = if (passwordVisible) {
+                                            Icons.Default.VisibilityOff
+                                        } else {
+                                            Icons.Default.Visibility
+                                        },
+                                        contentDescription = if (passwordVisible) {
+                                            "Ocultar contraseña"
+                                        } else {
+                                            "Mostrar contraseña"
+                                        }
+                                    )
+                                }
+                            },
+                            visualTransformation = if (passwordVisible) {
+                                VisualTransformation.None
+                            } else {
+                                PasswordVisualTransformation()
+                            },
+                            isError = uiState.passwordError != null,
+                            supportingText = {
+                                uiState.passwordError?.let { error ->
+                                    Text(text = error, color = MaterialTheme.colorScheme.error)
+                                }
+                            },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Done
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        if (uiState.errorMessage != null) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = uiState.errorMessage,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Button(
+                            onClick = { onSubmitLogin(correo, password) },
+                            enabled = !uiState.isLoading,
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                        ) {
+                            if (uiState.isLoading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(22.dp),
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            } else {
+                                Text(
+                                    text = "Iniciar sesión",
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
                         }
                     }
                 }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = "o", style = MaterialTheme.typography.bodySmall)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedButton(
-                onClick = { iniciarSesionConGoogle() },
-                enabled = !uiState.isLoading,
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(text = "Continuar con Google", style = MaterialTheme.typography.labelLarge)
-            }
-
-            if (googleError != null) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = googleError.orEmpty(),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium
-                )
             }
         }
     }
@@ -312,7 +329,9 @@ fun LoginScreenPreview() {
         LoginScreen(
             uiState = MainUiState(baseUrl = "http://localhost:3001/"),
             onFieldEdited = {},
-            onSubmitLogin = { _, _ -> }
+            onSubmitLogin = { _, _ -> },
+            onSubmitCodigo = {},
+            onVolverAlPaso1 = {}
         )
     }
 }

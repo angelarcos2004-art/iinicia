@@ -74,6 +74,15 @@ export class UsersService {
     await this.repo.update(id, { resetPasswordTokenHash: null, resetPasswordExpira: null });
   }
 
+  async guardarCodigo2FA(id: string, codigoHash: string, expira: Date): Promise<void> {
+    await this.repo.update(id, { twoFactorCodeHash: codigoHash, twoFactorCodeExpira: expira });
+  }
+
+  /** Se llama tras una verificación exitosa (o al generar un código nuevo que invalida el anterior). */
+  async limpiarCodigo2FA(id: string): Promise<void> {
+    await this.repo.update(id, { twoFactorCodeHash: null, twoFactorCodeExpira: null });
+  }
+
   create(data: CrearUsuarioData): Promise<User> {
     const user = this.repo.create({
       nombre: data.nombre.trim(),

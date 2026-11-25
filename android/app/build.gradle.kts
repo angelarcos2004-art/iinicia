@@ -34,15 +34,6 @@ android {
         // dispositivo físico eso no resuelve a nada: define `apiBaseUrl` en
         // local.properties con la IP de red de la máquina del backend.
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
-
-        // Client ID de OAuth 2.0 tipo "Android" (Google Cloud Console > Credentials), atado al
-        // nombre de paquete + SHA-1 de firma del APK. No es secreto (va en el APK de cualquier
-        // forma), por eso se puede fijar aquí igual que API_BASE_URL.
-        buildConfigField(
-            "String",
-            "GOOGLE_ANDROID_CLIENT_ID",
-            "\"595202386197-6q737hula9qtn0m5rflgegqdotki695q.apps.googleusercontent.com\""
-        )
     }
 
     buildTypes {
@@ -89,12 +80,6 @@ dependencies {
 
     // Almacenamiento cifrado del token de sesión (Requerimiento 9.3: nunca contraseñas en texto plano)
     implementation(libs.androidx.security.crypto)
-
-    // Inicio de sesión con Google (Credential Manager). El idToken resultante se verifica en
-    // el backend (POST /auth/google), igual que el botón de Google del portal web.
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
-    implementation(libs.googleid)
 
     // Notificaciones push (Requerimiento 9.1/9.2). google-services.json en este repo es un
     // placeholder (ver su comentario): compila y corre, pero no recibe push reales hasta que

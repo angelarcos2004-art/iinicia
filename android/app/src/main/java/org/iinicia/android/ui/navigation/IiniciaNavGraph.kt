@@ -94,9 +94,11 @@ fun IiniciaNavGraph(
                 uiState = uiState,
                 onFieldEdited = { viewModel.limpiarErroresFormulario() },
                 onSubmitLogin = { correo, password ->
-                    viewModel.iniciarSesion(
-                        correo = correo,
-                        password = password,
+                    viewModel.iniciarSesion(correo = correo, password = password)
+                },
+                onSubmitCodigo = { codigo ->
+                    viewModel.verificarCodigo2FA(
+                        codigo = codigo,
                         onLoginSuccess = {
                             navController.navigate(Screen.Dashboard.route) {
                                 popUpTo(Screen.Login.route) { inclusive = true }
@@ -105,17 +107,7 @@ fun IiniciaNavGraph(
                         }
                     )
                 },
-                onGoogleCredential = { idToken ->
-                    viewModel.iniciarSesionConGoogle(
-                        idToken = idToken,
-                        onLoginSuccess = {
-                            navController.navigate(Screen.Dashboard.route) {
-                                popUpTo(Screen.Login.route) { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        }
-                    )
-                }
+                onVolverAlPaso1 = { viewModel.volverAlPaso1Login() }
             )
         }
 

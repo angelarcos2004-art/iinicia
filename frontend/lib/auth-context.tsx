@@ -9,10 +9,16 @@ import {
 } from "react";
 import {
   login as apiLogin,
-  loginConGoogle as apiLoginConGoogle,
   registrarAspirante as apiRegistrarAspirante,
+  verificarCodigo2FA as apiVerificarCodigo2FA,
 } from "./api";
-import type { AuthResponse, LoginInput, RegistroAspiranteInput, Usuario } from "./types";
+import type {
+  AuthResponse,
+  LoginInput,
+  RegistroAspiranteInput,
+  Requiere2FAResponse,
+  Usuario,
+} from "./types";
 
 const STORAGE_KEY = "iinicia.sesion";
 
@@ -22,8 +28,11 @@ type AuthContextValue = {
   sesion: Sesion | null;
   /** true mientras se lee la sesion guardada en localStorage al cargar. */
   cargando: boolean;
-  login: (input: LoginInput, recordar?: boolean) => Promise<void>;
-  loginConGoogle: (idToken: string) => Promise<void>;
+  /** Primer factor (correo + contraseña). No abre sesión: el backend manda un código al
+   * correo, que se confirma con `verificarCodigo2FA`. */
+  login: (input: LoginInput) => Promise<Requiere2FAResponse>;
+  /** Segundo factor: el código de 6 dígitos que llegó al correo. Recién aquí se abre sesión. */
+  verificarCodigo2FA: (correo: string, codigo: string, recordar?: boolean) => Promise<void>;
   registrarAspirante: (input: RegistroAspiranteInput) => Promise<void>;
   logout: () => void;
 };
@@ -82,12 +91,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     guardarSesion(nueva, recordar);
   }
 
-  async function login(input: LoginInput, recordar = true) {
-    aplicarRespuesta(await apiLogin(input), recordar);
+  async function login(input: LoginInput): Promise<Requiere2FAResponse> {
+    return apiLogin(input);
   }
 
-  async function loginConGoogle(idToken: string) {
-    aplicarRespuesta(await apiLoginConGoogle(idToken));
+  async function verificarCodigo2FA(correo: string, codigo: string, recordar = true) {
+    aplicarRespuesta(await apiVerificarCodigo2FA(correo, codigo), recordar);
   }
 
   async function registrarAspirante(input: RegistroAspiranteInput) {
@@ -101,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ sesion, cargando, login, loginConGoogle, registrarAspirante, logout }}
+      value={{ sesion, cargando, login, verificarCodigo2FA, registrarAspirante, logout }}
     >
       {children}
     </AuthContext.Provider>

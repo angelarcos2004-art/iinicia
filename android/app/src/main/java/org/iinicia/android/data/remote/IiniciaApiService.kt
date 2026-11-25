@@ -3,12 +3,13 @@ package org.iinicia.android.data.remote
 import org.iinicia.android.data.model.ActividadProximaDto
 import org.iinicia.android.data.model.AuthResponse
 import org.iinicia.android.data.model.CursoInscritoDto
-import org.iinicia.android.data.model.GoogleLoginRequest
 import org.iinicia.android.data.model.LoginRequest
 import org.iinicia.android.data.model.MoodleSsoResponse
 import org.iinicia.android.data.model.RegistrarPushTokenRequest
 import org.iinicia.android.data.model.RegistroRequest
+import org.iinicia.android.data.model.Requiere2FAResponse
 import org.iinicia.android.data.model.Usuario
+import org.iinicia.android.data.model.Verificar2FARequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -20,7 +21,7 @@ import retrofit2.http.Query
  *
  * Endpoints soportados actualmente por el backend:
  * - POST /auth/login
- * - POST /auth/google
+ * - POST /auth/login/verificar
  * - POST /auth/registro
  * - GET /auth/me
  * - GET /estudiante/cursos
@@ -33,11 +34,13 @@ import retrofit2.http.Query
  */
 interface IiniciaApiService {
 
+    /** Primer factor: no entrega el token todavía, el backend manda el código por correo. */
     @POST("auth/login")
-    suspend fun login(@Body request: LoginRequest): AuthResponse
+    suspend fun login(@Body request: LoginRequest): Requiere2FAResponse
 
-    @POST("auth/google")
-    suspend fun loginConGoogle(@Body request: GoogleLoginRequest): AuthResponse
+    /** Segundo factor: el código de 6 dígitos que llegó al correo. */
+    @POST("auth/login/verificar")
+    suspend fun verificar2FA(@Body request: Verificar2FARequest): AuthResponse
 
     @POST("auth/registro")
     suspend fun registro(@Body request: RegistroRequest): AuthResponse

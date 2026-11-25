@@ -49,4 +49,27 @@ export class MailService {
       this.logger.error(`No se pudo enviar el correo de recuperación: ${String(error)}`);
     }
   }
+
+  /**
+   * Código de verificación en dos pasos (login). Nunca lanza: igual que enviarRecuperacion,
+   * un correo que no se pudo enviar no debe tumbar /auth/login.
+   */
+  async enviarCodigo2FA(correo: string, codigo: string): Promise<void> {
+    const asunto = 'Tu código de verificación de IINICIA';
+    const texto = `Tu código de verificación es: ${codigo}\n\nExpira en 5 minutos. Si no intentaste iniciar sesión, ignora este correo.`;
+    if (!this.transporter) {
+      this.logger.log(`[correo simulado] Para: ${correo} · ${asunto}\n${texto}`);
+      return;
+    }
+    try {
+      await this.transporter.sendMail({
+        from: this.config.get<string>('MAIL_FROM', 'no-responder@iinicia.org'),
+        to: correo,
+        subject: asunto,
+        text: texto,
+      });
+    } catch (error) {
+      this.logger.error(`No se pudo enviar el código de verificación: ${String(error)}`);
+    }
+  }
 }

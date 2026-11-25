@@ -47,10 +47,17 @@ data class LoginRequest(
     val password: String
 )
 
-/** Cuerpo de `POST /auth/google`: idToken emitido por Google (Credential Manager en Android,
- * Google Identity Services en el portal web), verificado por el backend. */
-data class GoogleLoginRequest(
-    val idToken: String
+/** Respuesta de `POST /auth/login`: nunca entrega el token todavía, solo confirma que el
+ * backend mandó un código de verificación en dos pasos al correo. */
+data class Requiere2FAResponse(
+    val correo: String,
+    val mensaje: String
+)
+
+/** Cuerpo de `POST /auth/login/verificar`: el código de 6 dígitos que llegó al correo. */
+data class Verificar2FARequest(
+    val correo: String,
+    val codigo: String
 )
 
 data class RegistroRequest(

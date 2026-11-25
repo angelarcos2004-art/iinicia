@@ -38,6 +38,12 @@ data class MainUiState(
     val actividades: List<ActividadProximaDto> = emptyList(),
     val dashboard: DashboardEstudiante? = null,
     val errorMessage: String? = null,
+    /** Segundo factor: true entre que el backend confirma el correo/contraseña y manda el
+     * código, y que ese código se verifica (ver [MainViewModel.iniciarSesion]). */
+    val esperandoCodigo2FA: Boolean = false,
+    /** Correo al que se mandó el código, para que [MainViewModel.verificarCodigo2FA] no lo
+     * necesite repetir desde la UI. */
+    val correoPendiente2FA: String? = null,
     /** Null = sin error. "Mis cursos (0)" solo significa "sin cursos" cuando esto es null. */
     val cargandoCursos: Boolean = false,
     val errorCursos: String? = null,
@@ -92,14 +98,12 @@ class MainViewModel(
     }
 
     /**
-     * Valida los campos en el cliente y envía el login al repositorio (BFF real por defecto,
-     * ver `IiniciaRepositoryImpl.isConnectToRemoteEnabled`).
+     * Valida los campos en el cliente y envía el primer factor (correo + contraseña) al
+     * repositorio (BFF real por defecto, ver `IiniciaRepositoryImpl.isConnectToRemoteEnabled`).
+     * No abre sesión todavía: si son correctos, el backend manda un código de verificación al
+     * correo y la UI pasa a pedirlo (ver [verificarCodigo2FA]).
      */
-    fun iniciarSesion(
-        correo: String,
-        password: String,
-        onLoginSuccess: () -> Unit = {}
-    ) {
+    fun iniciarSesion(correo: String, password: String) {
         val validation = validarFormularioLogin(correo, password)
         if (!validation.isValid) {
             _uiState.update {
@@ -123,13 +127,14 @@ class MainViewModel(
             }
 
             repository.login(correo.trim(), password)
-                .onSuccess { authResponse ->
+                .onSuccess { respuesta ->
                     _uiState.update {
-                        it.copy(isLoading = false, usuarioAutenticado = authResponse.usuario)
+                        it.copy(
+                            isLoading = false,
+                            esperandoCodigo2FA = true,
+                            correoPendiente2FA = respuesta.correo
+                        )
                     }
-                    cargarCursos()
-                    registrarTokenPushActual()
-                    onLoginSuccess()
                 }
                 .onFailure { error ->
                     _uiState.update {
@@ -142,19 +147,23 @@ class MainViewModel(
         }
     }
 
-    /**
-     * Envía el idToken de Google (obtenido vía Credential Manager en [LoginScreen]) al backend.
-     * Misma ruta de éxito/error que [iniciarSesion]: el backend ya crea la cuenta como aspirante
-     * si es la primera vez que ese correo inicia sesión así.
-     */
-    fun iniciarSesionConGoogle(idToken: String, onLoginSuccess: () -> Unit = {}) {
+    /** Segundo factor: verifica el código de 6 dígitos que llegó al correo y, si es correcto,
+     * recién aquí abre la sesión. */
+    fun verificarCodigo2FA(codigo: String, onLoginSuccess: () -> Unit = {}) {
+        val correo = _uiState.value.correoPendiente2FA ?: return
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            repository.loginConGoogle(idToken)
+            repository.verificar2FA(correo, codigo)
                 .onSuccess { authResponse ->
                     _uiState.update {
-                        it.copy(isLoading = false, usuarioAutenticado = authResponse.usuario)
+                        it.copy(
+                            isLoading = false,
+                            usuarioAutenticado = authResponse.usuario,
+                            esperandoCodigo2FA = false,
+                            correoPendiente2FA = null
+                        )
                     }
                     cargarCursos()
                     registrarTokenPushActual()
@@ -164,10 +173,17 @@ class MainViewModel(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = error.message ?: "No se pudo iniciar sesión con Google."
+                            errorMessage = error.message ?: "No pudimos verificar el código."
                         )
                     }
                 }
+        }
+    }
+
+    /** Vuelve al paso de correo/contraseña (botón "Volver" en el paso del código). */
+    fun volverAlPaso1Login() {
+        _uiState.update {
+            it.copy(esperandoCodigo2FA = false, correoPendiente2FA = null, errorMessage = null)
         }
     }
 
@@ -274,7 +290,9 @@ class MainViewModel(
                 errorMessage = null,
                 cargandoCursos = false,
                 errorCursos = null,
-                urlCampusActual = null
+                urlCampusActual = null,
+                esperandoCodigo2FA = false,
+                correoPendiente2FA = null
             )
         }
     }
