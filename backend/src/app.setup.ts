@@ -4,10 +4,18 @@ import { AllExceptionsFilter } from './common/all-exceptions.filter.js';
 
 /** Configuración compartida entre main.ts y las pruebas e2e. */
 export function setupApp(app: INestApplication, allowedOrigin: string | string[]): void {
-  // Cabeceras de seguridad HTTP base (docs/requerimientos.md Sec. 16): API
-  // JSON pura, sin contentSecurityPolicy (es para HTML servido por el
-  // propio backend, que aquí no aplica).
-  app.use(helmet({ contentSecurityPolicy: false }));
+  // Cabeceras de seguridad HTTP base (docs/requerimientos.md Sec. 16). API JSON
+  // pura salvo GET /documentos/:id/archivo, que sirve el PDF/JPG/PNG subido con
+  // Content-Disposition: inline (documentos.controller.ts) — CSP restrictiva por
+  // defecto para que ese archivo nunca pueda ejecutar nada en el origen del backend.
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        useDefaults: false,
+        directives: { defaultSrc: ["'none'"], frameAncestors: ["'none'"], objectSrc: ["'none'"] },
+      },
+    }),
+  );
   app.enableCors({ origin: allowedOrigin });
   app.useGlobalPipes(
     new ValidationPipe({
