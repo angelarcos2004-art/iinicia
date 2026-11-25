@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ConAuth, sembrarSesion } from "@/test-utils/auth";
 import * as api from "@/lib/api";
 import MiIiniciaPage from "./page";
@@ -8,6 +9,8 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ replace }) }));
 
 const ESTUDIANTE = { id: "u1", nombre: "Ana Pérez", correo: "ana@correo.com", rol: "estudiante" as const };
 const ASPIRANTE = { id: "u2", nombre: "Luis Soto", correo: "luis@correo.com", rol: "aspirante" as const };
+const PROFESOR = { id: "u3", nombre: "Marco Villagómez", correo: "marco@correo.com", rol: "profesor" as const };
+const ADMIN = { id: "u4", nombre: "Admin Académico", correo: "admin@correo.com", rol: "admin_academico" as const };
 
 describe("MiIiniciaPage", () => {
   beforeEach(() => {
@@ -93,5 +96,64 @@ describe("MiIiniciaPage", () => {
     expect(await screen.findByText("Ingeniería de Software e IA")).toBeInTheDocument();
     expect(screen.getByText("En revisión")).toBeInTheDocument();
     expect(screen.getByText("Cuenta creada")).toBeInTheDocument();
+  });
+
+  it("profesor: ve sus cursos (sin progreso) y puede notificar a sus estudiantes", async () => {
+    sembrarSesion({ token: "jwt-x", usuario: PROFESOR });
+    vi.spyOn(api, "obtenerMisCursos").mockResolvedValue([
+      { id: 2, nombre: "Fundamentos de IA", shortname: "IA1", progreso: null },
+    ]);
+    vi.spyOn(api, "obtenerMisEstudiantes").mockResolvedValue([
+      { id: "e1", nombre: "Luis Soto", correo: "luis@correo.com", cursos: ["Fundamentos de IA"], tieneDispositivo: true },
+    ]);
+    const notificarSpy = vi.spyOn(api, "enviarNotificacion").mockResolvedValue(undefined);
+
+    render(
+      <ConAuth>
+        <MiIiniciaPage />
+      </ConAuth>,
+    );
+
+    expect(await screen.findByText("Mis cursos como profesor")).toBeInTheDocument();
+    expect(screen.getAllByText("Fundamentos de IA").length).toBeGreaterThan(0);
+    expect(await screen.findByText("Luis Soto")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Notificar" }));
+    await userEvent.type(screen.getByLabelText("Título"), "Aviso");
+    await userEvent.type(screen.getByLabelText("Mensaje"), "Tu tarea está casi vencida.");
+    await userEvent.click(screen.getByRole("button", { name: "Enviar" }));
+
+    await waitFor(() =>
+      expect(notificarSpy).toHaveBeenCalledWith("jwt-x", "e1", {
+        titulo: "Aviso",
+        mensaje: "Tu tarea está casi vencida.",
+      }),
+    );
+    expect(await screen.findByText("Notificación enviada.")).toBeInTheDocument();
+  });
+
+  it("admin_academico: ve el resumen institucional con enlaces para administrar", async () => {
+    sembrarSesion({ token: "jwt-x", usuario: ADMIN });
+    vi.spyOn(api, "obtenerUsuarios").mockResolvedValue([
+      { ...ESTUDIANTE, moodleUserId: 1, createdAt: "2026-01-01T00:00:00.000Z", programaInteresNombre: null, programaCoordinadoId: null, programaCoordinadoNombre: null },
+      { ...ASPIRANTE, moodleUserId: null, createdAt: "2026-01-02T00:00:00.000Z", programaInteresNombre: "Ingeniería de Software e IA", programaCoordinadoId: null, programaCoordinadoNombre: null },
+    ]);
+
+    render(
+      <ConAuth>
+        <MiIiniciaPage />
+      </ConAuth>,
+    );
+
+    expect(await screen.findByText("Usuarios totales")).toBeInTheDocument();
+    expect(screen.getByText("Usuarios por rol")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Administrar usuarios" })).toHaveAttribute(
+      "href",
+      "/admin/usuarios",
+    );
+    expect(screen.getByRole("link", { name: "Administrar programas" })).toHaveAttribute(
+      "href",
+      "/admin/programas",
+    );
   });
 });
