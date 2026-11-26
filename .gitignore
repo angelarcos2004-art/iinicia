@@ -12,5 +12,6 @@ coverage/
 android/.gradle/
 android/build/
 android/local.properties
+android/app/google-services.json
 moodle_data/
 backend/uploads/

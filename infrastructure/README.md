@@ -66,12 +66,11 @@ crea/vincula y lo matricula en el curso de prueba automáticamente.
   - Servicio: `IINICIA Backend` (shortname `iinicia_backend`), con las
     9 funciones que el backend va a necesitar (ver script en "Habilitar
     Web Services" abajo).
-  - Token del usuario `admin` para ese servicio:
-    `REDACTED_MOODLE_TOKEN` — úsalo tal cual en
-    `backend/.env` (`MOODLE_URL=http://localhost:8080`,
-    `MOODLE_TOKEN=REDACTED_MOODLE_TOKEN`) si trabajas en esta
-    misma máquina. En una instalación nueva, el script de la sección
-    "Habilitar Web Services" genera uno distinto.
+  - Token del usuario `admin` para ese servicio: lo genera el script de
+    la sección "Habilitar Web Services" abajo, es distinto en cada
+    instalación. Pégalo en `backend/.env`
+    (`MOODLE_URL=http://localhost:8080`, `MOODLE_TOKEN=<tu_token>`).
+    No lo documentes aquí ni lo subas al repositorio.
 
 ## Por qué esta estructura
 
