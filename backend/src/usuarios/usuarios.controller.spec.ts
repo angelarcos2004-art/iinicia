@@ -177,4 +177,259 @@ describe('UsuariosController.notificar (control de acceso)', () => {
 
     expect(push.enviar).toHaveBeenCalledWith('tok', DTO.titulo, DTO.mensaje, undefined);
   });
+
+  it('404 si el usuario a notificar no existe', async () => {
+    const { controller } = makeNotificarController({ porId: {} });
+
+    await expect(
+      controller.notificar(
+        { id: 'admin', nombre: 'Admin', correo: 'a@a.com', rol: Rol.AdminAcademico },
+        'fantasma',
+        DTO,
+      ),
+    ).rejects.toThrow('Usuario no encontrado');
+  });
+
+  it('400 si el destinatario no tiene dispositivo registrado', async () => {
+    const sinToken = makeUser({ id: 'e1', fcmToken: null });
+    const { controller, push } = makeNotificarController({ porId: { e1: sinToken } });
+
+    await expect(
+      controller.notificar(
+        { id: 'admin', nombre: 'Admin', correo: 'a@a.com', rol: Rol.AdminAcademico },
+        'e1',
+        DTO,
+      ),
+    ).rejects.toThrow('no tiene un dispositivo registrado');
+    expect(push.enviar).not.toHaveBeenCalled();
+  });
+});
+
+describe('UsuariosController.misEstudiantes / listarCursosMoodle', () => {
+  it('misEstudiantes devuelve [] si el profesor autenticado ya no existe', async () => {
+    const users = { findById: vi.fn().mockResolvedValue(null) };
+    const controller = new UsuariosController(
+      users as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    const resultado = await controller.misEstudiantes({
+      id: 'prof',
+      nombre: 'Prof',
+      correo: 'p@a.com',
+      rol: Rol.Profesor,
+    });
+
+    expect(resultado).toEqual([]);
+  });
+
+  it('listarCursosMoodle delega en MoodleService.listarCursos', async () => {
+    const cursos = [{ id: 1, fullname: 'IA', shortname: 'ia' }];
+    const moodle = { listarCursos: vi.fn().mockResolvedValue(cursos) };
+    const controller = new UsuariosController(
+      {} as never,
+      moodle as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    await expect(controller.listarCursosMoodle()).resolves.toBe(cursos);
+  });
+});
+
+describe('UsuariosController.asignarProgramaCoordinado', () => {
+  function makeController(usuario: User | null) {
+    const users = {
+      findById: vi.fn().mockResolvedValue(usuario),
+      actualizarProgramaCoordinado: vi.fn().mockResolvedValue(undefined),
+    };
+    const programas = {
+      findById: vi.fn((id: string) => Promise.resolve(id === 'soft' ? { id: 'soft', nombre: 'Software' } : null)),
+    };
+    const controller = new UsuariosController(
+      users as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      programas as never,
+      {} as never,
+    );
+    return { controller, users };
+  }
+
+  it('404 si el usuario no existe', async () => {
+    const { controller } = makeController(null);
+    await expect(controller.asignarProgramaCoordinado('x', { programaId: 'soft' })).rejects.toThrow(
+      'Usuario no encontrado',
+    );
+  });
+
+  it('400 si el usuario no es coordinador', async () => {
+    const { controller } = makeController(makeUser({ rol: Rol.Profesor }));
+    await expect(controller.asignarProgramaCoordinado('x', { programaId: 'soft' })).rejects.toThrow(
+      'Solo los coordinadores',
+    );
+  });
+
+  it('400 si el programa no existe', async () => {
+    const { controller } = makeController(makeUser({ rol: Rol.Coordinador }));
+    await expect(controller.asignarProgramaCoordinado('x', { programaId: 'no-existe' })).rejects.toThrow(
+      'Programa no encontrado',
+    );
+  });
+
+  it('asigna el ámbito y lo refleja en la respuesta', async () => {
+    const { controller, users } = makeController(makeUser({ id: 'coord', rol: Rol.Coordinador }));
+
+    const resultado = await controller.asignarProgramaCoordinado('coord', { programaId: 'soft' });
+
+    expect(users.actualizarProgramaCoordinado).toHaveBeenCalledWith('coord', 'soft');
+    expect(resultado.programaCoordinadoId).toBe('soft');
+    expect(resultado.programaCoordinadoNombre).toBe('Software');
+  });
+
+  it('programaId null quita el ámbito', async () => {
+    const { controller, users } = makeController(makeUser({ id: 'coord', rol: Rol.Coordinador }));
+
+    const resultado = await controller.asignarProgramaCoordinado('coord', { programaId: null });
+
+    expect(users.actualizarProgramaCoordinado).toHaveBeenCalledWith('coord', null);
+    expect(resultado.programaCoordinadoId).toBeNull();
+  });
+});
+
+describe('UsuariosController.actualizarRol', () => {
+  it('404 si el usuario no existe', async () => {
+    const users = { findById: vi.fn().mockResolvedValue(null) };
+    const controller = new UsuariosController(
+      users as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    await expect(controller.actualizarRol('x', { rol: Rol.Estudiante })).rejects.toThrow(
+      'Usuario no encontrado',
+    );
+  });
+
+  it('cambia el rol sin tocar Moodle si el usuario ya tiene cuenta vinculada', async () => {
+    const existente = makeUser({ id: 'u1', rol: Rol.Aspirante, moodleUserId: 42 });
+    const users = {
+      findById: vi.fn().mockResolvedValue(existente),
+      actualizarRol: vi.fn().mockResolvedValue(undefined),
+    };
+    const moodle = { buscarOCrearUsuarioMoodle: vi.fn() };
+    const controller = new UsuariosController(
+      users as never,
+      moodle as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    const resultado = await controller.actualizarRol('u1', { rol: Rol.Estudiante });
+
+    expect(users.actualizarRol).toHaveBeenCalledWith('u1', Rol.Estudiante);
+    expect(moodle.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+    expect(resultado.rol).toBe(Rol.Estudiante);
+  });
+
+  it('al admitir como estudiante sin cuenta Moodle previa, vincula y matricula', async () => {
+    const existente = makeUser({ id: 'u1', rol: Rol.Aspirante, moodleUserId: null, programaInteresId: 'soft' });
+    const users = {
+      findById: vi.fn().mockResolvedValue(existente),
+      actualizarRol: vi.fn().mockResolvedValue(undefined),
+      actualizarMoodleUserId: vi.fn().mockResolvedValue(undefined),
+    };
+    const moodle = {
+      buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(99),
+      matricularEnCurso: vi.fn().mockResolvedValue(undefined),
+    };
+    const programas = {
+      obtenerMoodleCourseShortname: vi.fn().mockResolvedValue('soft-101'),
+    };
+    const config = { get: vi.fn().mockReturnValue('IINICIA101') };
+    const controller = new UsuariosController(
+      users as never,
+      moodle as never,
+      config as never,
+      {} as never,
+      programas as never,
+      {} as never,
+    );
+
+    const resultado = await controller.actualizarRol('u1', { rol: Rol.Estudiante });
+
+    expect(moodle.buscarOCrearUsuarioMoodle).toHaveBeenCalledWith(existente.correo, existente.nombre);
+    expect(moodle.matricularEnCurso).toHaveBeenCalledWith(99, 'soft-101');
+    expect(resultado.id).toBe('u1');
+  });
+});
+
+describe('UsuariosController.asignarCurso', () => {
+  function makeController(usuario: User | null, verificarPrerequisitos = vi.fn().mockResolvedValue(undefined)) {
+    const users = {
+      findById: vi.fn().mockResolvedValue(usuario),
+      actualizarMoodleUserId: vi.fn().mockResolvedValue(undefined),
+    };
+    const moodle = {
+      buscarOCrearUsuarioMoodle: vi.fn().mockResolvedValue(7),
+      matricularEnCurso: vi.fn().mockResolvedValue(undefined),
+    };
+    const materias = { verificarPrerequisitos };
+    const config = { get: vi.fn().mockReturnValue('IINICIA101') };
+    const controller = new UsuariosController(
+      users as never,
+      moodle as never,
+      config as never,
+      {} as never,
+      {} as never,
+      materias as never,
+    );
+    return { controller, moodle, verificarPrerequisitos };
+  }
+
+  it('404 si el usuario no existe', async () => {
+    const { controller } = makeController(null);
+    await expect(controller.asignarCurso('x', { cursoShortname: 'ia' })).rejects.toThrow(
+      'Usuario no encontrado',
+    );
+  });
+
+  it('400 si el usuario no es aspirante ni estudiante', async () => {
+    const { controller } = makeController(makeUser({ rol: Rol.Profesor }));
+    await expect(controller.asignarCurso('x', { cursoShortname: 'ia' })).rejects.toThrow(
+      'Solo aspirantes o estudiantes',
+    );
+  });
+
+  it('bloquea la matrícula si faltan prerequisitos', async () => {
+    const bloqueado = vi.fn().mockRejectedValue(new Error('falta aprobar X'));
+    const { controller, moodle } = makeController(makeUser({ rol: Rol.Estudiante }), bloqueado);
+
+    await expect(controller.asignarCurso('u1', { cursoShortname: 'ia' })).rejects.toThrow('falta aprobar X');
+    expect(moodle.buscarOCrearUsuarioMoodle).not.toHaveBeenCalled();
+  });
+
+  it('matricula cuando no hay prerequisitos pendientes', async () => {
+    const { controller, moodle, verificarPrerequisitos } = makeController(
+      makeUser({ id: 'u1', rol: Rol.Estudiante }),
+    );
+
+    const resultado = await controller.asignarCurso('u1', { cursoShortname: 'ia' });
+
+    expect(verificarPrerequisitos).toHaveBeenCalled();
+    expect(moodle.matricularEnCurso).toHaveBeenCalledWith(7, 'ia');
+    expect(resultado.id).toBe('u1');
+  });
 });
