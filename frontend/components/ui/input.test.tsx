@@ -35,4 +35,21 @@ describe("Input", () => {
     await userEvent.type(screen.getByLabelText("Correo"), "a");
     expect(onChange).toHaveBeenCalled();
   });
+
+  it("type=password: el botón de mostrar/ocultar alterna el type del input", async () => {
+    render(<Input id="password" label="Contraseña" type="password" />);
+    const input = screen.getByLabelText("Contraseña");
+    expect(input).toHaveAttribute("type", "password");
+
+    await userEvent.click(screen.getByRole("button", { name: "Mostrar contraseña" }));
+    expect(input).toHaveAttribute("type", "text");
+
+    await userEvent.click(screen.getByRole("button", { name: "Ocultar contraseña" }));
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("sin type=password, no muestra el botón de mostrar/ocultar", () => {
+    render(<Input id="correo" label="Correo" type="email" />);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
 });
