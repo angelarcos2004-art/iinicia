@@ -65,6 +65,22 @@ export interface MoodleActividadProxima {
 const TIMEOUT_MS = 10_000;
 
 /**
+ * Los campos de texto que devuelven las funciones de Moodle Web Services ya vienen
+ * "escapados para HTML" (p. ej. "Cloud & Kubernetes" -> "Cloud &amp; Kubernetes"), porque
+ * Moodle asume que se van a insertar directo en una página. El portal y Android los muestran
+ * como texto plano, así que sin decodificar esto el usuario ve el símbolo &amp; literal en
+ * vez de &.
+ */
+function decodificarHtml(texto: string): string {
+  return texto
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;/g, "'");
+}
+
+/**
  * Cliente de Moodle Web Services (REST). Todo token vive solo aquí, en el
  * backend, leído de MOODLE_TOKEN; nunca se registra en logs ni se devuelve.
  */
@@ -142,7 +158,7 @@ export class MoodleService {
     return cursos.map((c) => ({
       id: c.id,
       shortname: c.shortname,
-      fullname: c.fullname,
+      fullname: decodificarHtml(c.fullname),
       progress: typeof c.progress === 'number' ? c.progress : null,
     }));
   }
@@ -171,7 +187,7 @@ export class MoodleService {
     if (!Array.isArray(usuarios)) return [];
     return usuarios
       .filter((u) => u.roles?.some((r) => r.shortname === 'student'))
-      .map((u) => ({ email: u.email, fullname: u.fullname }));
+      .map((u) => ({ email: u.email, fullname: decodificarHtml(u.fullname) }));
   }
 
   /**
@@ -194,8 +210,8 @@ export class MoodleService {
     if (!Array.isArray(eventos)) return [];
     return eventos.map((e) => ({
       id: e.id,
-      titulo: e.name,
-      curso: e.course?.fullname ?? '',
+      titulo: decodificarHtml(e.name),
+      curso: e.course?.fullname ? decodificarHtml(e.course.fullname) : '',
       fecha: new Date(e.timesort * 1000).toISOString(),
       url: e.action?.url ?? e.url ?? null,
     }));
@@ -263,7 +279,7 @@ export class MoodleService {
     if (!Array.isArray(cursos)) return [];
     return cursos
       .filter((c) => c.id !== 1)
-      .map((c) => ({ id: c.id, shortname: c.shortname, fullname: c.fullname }));
+      .map((c) => ({ id: c.id, shortname: c.shortname, fullname: decodificarHtml(c.fullname) }));
   }
 
   private async buscarCursoPorShortname(shortname: string): Promise<number | null> {

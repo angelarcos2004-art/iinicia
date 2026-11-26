@@ -259,6 +259,14 @@ describe('MoodleService.obtenerCursosDeUsuario', () => {
       BadGatewayException,
     );
   });
+
+  it('decodifica el HTML con el que Moodle escapa el fullname (ej. "Cloud &amp; Kubernetes")', async () => {
+    mockFetch([
+      { id: 2, shortname: 'IINICIA-CLOUD1', fullname: 'Cloud Architecture &amp; Kubernetes', progress: 0 },
+    ]);
+    const cursos = await makeService().obtenerCursosDeUsuario(17);
+    expect(cursos[0].fullname).toBe('Cloud Architecture & Kubernetes');
+  });
 });
 
 describe('MoodleService.obtenerCursosAprobados', () => {
@@ -324,6 +332,22 @@ describe('MoodleService.obtenerActividadesProximas', () => {
       BadGatewayException,
     );
   });
+
+  it('decodifica el HTML del título y del nombre del curso', async () => {
+    mockFetch({
+      events: [
+        {
+          id: 1,
+          name: 'Tarea &quot;final&quot;',
+          timesort: 1_700_000_000,
+          course: { fullname: 'DevOps &amp; CI/CD' },
+        },
+      ],
+    });
+    const actividades = await makeService().obtenerActividadesProximas(17);
+    expect(actividades[0].titulo).toBe('Tarea "final"');
+    expect(actividades[0].curso).toBe('DevOps & CI/CD');
+  });
 });
 
 describe('MoodleService.obtenerEstudiantesDeCurso', () => {
@@ -356,6 +380,14 @@ describe('MoodleService.obtenerEstudiantesDeCurso', () => {
     mockFetch(new Response('boom', { status: 500 }));
     await expect(makeService().obtenerEstudiantesDeCurso(6)).rejects.toBeInstanceOf(BadGatewayException);
   });
+
+  it('decodifica el HTML del nombre del estudiante', async () => {
+    mockFetch([
+      { email: 'ana@iinicia.test', fullname: 'Ana &amp; Cía', roles: [{ shortname: 'student' }] },
+    ]);
+    const estudiantes = await makeService().obtenerEstudiantesDeCurso(6);
+    expect(estudiantes[0].fullname).toBe('Ana & Cía');
+  });
 });
 
 describe('MoodleService.listarCursos', () => {
@@ -375,6 +407,12 @@ describe('MoodleService.listarCursos', () => {
   it('lanza 502 si Moodle falla', async () => {
     mockFetch(new Response('boom', { status: 500 }));
     await expect(makeService().listarCursos()).rejects.toBeInstanceOf(BadGatewayException);
+  });
+
+  it('decodifica el HTML del fullname', async () => {
+    mockFetch([{ id: 2, shortname: 'IINICIA-CLOUD1', fullname: 'Cloud Architecture &amp; Kubernetes' }]);
+    const cursos = await makeService().listarCursos();
+    expect(cursos[0].fullname).toBe('Cloud Architecture & Kubernetes');
   });
 });
 
