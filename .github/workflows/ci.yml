@@ -56,5 +56,6 @@ jobs:
           distribution: "temurin"
           java-version: "21"
       - uses: android-actions/setup-android@v4
+      - run: cp app/google-services.json.example app/google-services.json
       - run: chmod +x gradlew
       - run: ./gradlew testDebugUnitTest --no-daemon
