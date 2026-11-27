@@ -39,13 +39,19 @@ correr otra vez cuando se quiera, siempre deja estas credenciales conocidas
 aunque la cuenta ya existiera con otra contraseña (p. ej. si alguien se
 autorregistró antes con ese mismo correo como aspirante).
 
-| Correo | Contraseña | Rol |
-| --- | --- | --- |
-| `superadmin.prueba@iinicia.test` | `Superadmin#2026` | superadmin |
-| `admin.prueba@iinicia.test` | `AdminAcademico#2026` | admin_academico |
-| `coordinador.prueba@iinicia.test` | `Coordinador#2026` | coordinador |
-| `profesor.prueba@iinicia.test` | `Profesor#2026` | profesor (vinculado y matriculado como editingteacher en `IINICIA-SOFT1`, `IINICIA-CIBER1` e `IINICIA-NEG1`, si ya corriste `moodle-seed-cursos.php` — ver abajo) |
-| `estudiante.prueba@iinicia.test` | `Estudiante#2026` | estudiante (vinculado y matriculado en `IINICIA101`) |
+La contraseña de cada cuenta sale de una variable en `backend/.env`
+(`SEED_PASSWORD_SUPERADMIN`, `SEED_PASSWORD_ADMIN_ACADEMICO`,
+`SEED_PASSWORD_COORDINADOR`, `SEED_PASSWORD_PROFESOR`,
+`SEED_PASSWORD_ESTUDIANTE`); si no la defines, `npm run seed` genera una
+aleatoria y la imprime en el log de esa corrida.
+
+| Correo | Rol |
+| --- | --- |
+| `superadmin.prueba@iinicia.test` | superadmin |
+| `admin.prueba@iinicia.test` | admin_academico |
+| `coordinador.prueba@iinicia.test` | coordinador |
+| `profesor.prueba@iinicia.test` | profesor (vinculado y matriculado como editingteacher en `IINICIA-SOFT1`, `IINICIA-CIBER1` e `IINICIA-NEG1`, si ya corriste `moodle-seed-cursos.php` — ver abajo) |
+| `estudiante.prueba@iinicia.test` | estudiante (vinculado y matriculado en `IINICIA101`) |
 
 **Ojo:** esta cuenta Moodle del profesor (creada con el correo del portal,
 `profesor.prueba@iinicia.test`) es distinta del usuario Moodle

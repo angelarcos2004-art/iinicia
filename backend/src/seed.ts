@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import bcrypt from 'bcryptjs';
+import { randomBytes } from 'node:crypto';
 import { AppModule } from './app.module.js';
 import type { Materia } from './materias/materia.entity.js';
 import { MateriasService } from './materias/materias.service.js';
@@ -207,7 +208,8 @@ const CURSOS_PROFESOR_PRUEBA = [
 interface UsuarioSemilla {
   nombre: string;
   correo: string;
-  password: string;
+  /** Variable de entorno con la contraseña; si no está definida, se genera una aleatoria y se imprime en el log. */
+  envPassword: string;
   rol: Rol;
   /** El estudiante de prueba se vincula/matricula como estudiante en su curso. */
   vincularMoodle?: boolean;
@@ -219,38 +221,40 @@ interface UsuarioSemilla {
  * Cuentas de prueba, una por rol (aspirante ya se crea vía POST
  * /auth/registro). Permite iniciar sesión con cada rol y ver que el portal
  * lo reconoce (badge de rol en Mi IINICIA), sin depender de alta manual por
- * SQL. Documentadas también en infrastructure/README.md.
+ * SQL. Documentadas también en infrastructure/README.md. Las contraseñas
+ * salen de backend/.env (nunca se suben al repo); sin esas variables se
+ * genera una aleatoria distinta en cada corrida y se imprime en el log.
  */
 const USUARIOS_PRUEBA: UsuarioSemilla[] = [
   {
     nombre: 'Superadmin Prueba',
     correo: 'superadmin.prueba@iinicia.test',
-    password: 'Superadmin#2026',
+    envPassword: 'SEED_PASSWORD_SUPERADMIN',
     rol: Rol.Superadmin,
   },
   {
     nombre: 'Admin Académico Prueba',
     correo: 'admin.prueba@iinicia.test',
-    password: 'AdminAcademico#2026',
+    envPassword: 'SEED_PASSWORD_ADMIN_ACADEMICO',
     rol: Rol.AdminAcademico,
   },
   {
     nombre: 'Coordinador Prueba',
     correo: 'coordinador.prueba@iinicia.test',
-    password: 'Coordinador#2026',
+    envPassword: 'SEED_PASSWORD_COORDINADOR',
     rol: Rol.Coordinador,
   },
   {
     nombre: 'Profesor Prueba',
     correo: 'profesor.prueba@iinicia.test',
-    password: 'Profesor#2026',
+    envPassword: 'SEED_PASSWORD_PROFESOR',
     rol: Rol.Profesor,
     cursosProfesor: CURSOS_PROFESOR_PRUEBA,
   },
   {
     nombre: 'Estudiante Prueba',
     correo: 'estudiante.prueba@iinicia.test',
-    password: 'Estudiante#2026',
+    envPassword: 'SEED_PASSWORD_ESTUDIANTE',
     rol: Rol.Estudiante,
     vincularMoodle: true,
   },
@@ -326,7 +330,12 @@ async function main(): Promise<void> {
     }
 
     for (const data of USUARIOS_PRUEBA) {
-      const passwordHash = await bcrypt.hash(data.password, BCRYPT_ROUNDS);
+      let password = config.get<string>(data.envPassword);
+      if (!password) {
+        password = randomBytes(9).toString('base64url');
+        logger.warn(`${data.envPassword} no está definida; contraseña generada para ${data.correo}: ${password}`);
+      }
+      const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
       let user = await users.findByCorreo(data.correo);
       if (!user) {
         user = await users.create({
